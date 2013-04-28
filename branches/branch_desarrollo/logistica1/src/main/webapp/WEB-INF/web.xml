@@ -1,29 +1,63 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app version="3.0" xmlns="http://java.sun.com/xml/ns/javaee"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd">
-
-	<!-- Set the PROJECT_STAGE to 'Development' to receive constructive error 
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd">
+ <!-- Set the PROJECT_STAGE to 'Development' to receive constructive error 
 		messages during development. Change the PROJECT_STAGE to 'Production' when 
 		putting the application into production -->
-	<context-param>
-		<param-name>javax.faces.PROJECT_STAGE</param-name>
-		<param-value>Production</param-value>
-	</context-param>
-
-	<context-param>
-		<param-name>org.richfaces.skin</param-name>
-		<param-value>classic</param-value>
-	</context-param>
-
-	<context-param>
-		<param-name>org.richfaces.resourceOptimization.enabled</param-name>
-		<param-value>true</param-value>
-	</context-param>
-
-	<!-- add a welcome-file-list entry to allow JSF pages to be sued as welcome 
+ <context-param>
+  <param-name>javax.faces.PROJECT_STAGE</param-name>
+  <param-value>Development</param-value>
+ </context-param>
+ <context-param>
+  <param-name>org.richfaces.resourceOptimization.enabled</param-name>
+  <param-value>true</param-value>
+ </context-param>
+ <context-param>
+  <param-name>org.richfaces.skin</param-name>
+  <param-value>classic</param-value>
+ </context-param>
+ <servlet>
+  <servlet-name>Faces Servlet</servlet-name>
+  <servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
+  <load-on-startup>1</load-on-startup>
+ </servlet>
+ <servlet-mapping>
+  <servlet-name>Faces Servlet</servlet-name>
+  <url-pattern>*.jsf</url-pattern>
+ </servlet-mapping>
+ <servlet-mapping>
+  <servlet-name>Faces Servlet</servlet-name>
+  <url-pattern>/faces/</url-pattern>
+ </servlet-mapping>
+ <servlet-mapping>
+  <servlet-name>Faces Servlet</servlet-name>
+  <url-pattern>*.xhtml</url-pattern>
+ </servlet-mapping>
+ <!-- add a welcome-file-list entry to allow JSF pages to be sued as welcome 
 		files -->
-	<welcome-file-list>
-		<welcome-file>index.jsf</welcome-file>
-	</welcome-file-list>
+ <welcome-file-list>
+  <welcome-file>paginas/inicio.xhtml</welcome-file>
+ </welcome-file-list>
+ <security-constraint>
+  <web-resource-collection>
+   <web-resource-name>All resources</web-resource-name>
+   <description>Protects all resources</description>
+   <url-pattern>/paginas/*</url-pattern>
+  </web-resource-collection>
+  <auth-constraint>
+   <role-name>admin</role-name>
+  </auth-constraint>
+ </security-constraint>
+ <login-config>
+  <auth-method>FORM</auth-method>
+  <realm-name>logistica</realm-name>
+  <form-login-config>
+   <form-login-page>/index.xhtml</form-login-page>
+   <form-error-page>/index.xhtml</form-error-page>
+  </form-login-config>
+ </login-config>
+ <security-role>
+  <role-name>admin</role-name>
+ </security-role>
+
 </web-app>

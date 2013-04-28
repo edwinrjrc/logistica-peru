@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <ui:composition template="/templates/plantilla.xhtml"
 	xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
@@ -9,12 +9,26 @@
 	xmlns:my="http://java.sun.com/jsf/composite/components">
 
 	<ui:define name="cuerpo">
-		<rich:panel title="Inicio">
+		<rich:panel title="Inicio" style="width:500px">
 			<f:facet name="header">
 				<h:outputText value="Inicio" />
 			</f:facet>
-			
-			<h:outputText value="Inicio del Sistema" />
+
+			<form action="j_security_check">
+				<table border="0" cellpadding="0" cellspacing="0" width="300">
+					<tr>
+						<td><h:outputText value="USUARIO" /></td>
+						<td><h:inputText id="j_username" /></td>
+					</tr>
+					<tr>
+						<td><h:outputText value="CLAVE" /></td>
+						<td><h:inputSecret id="j_password" /></td>
+					</tr>
+					<tr>
+						<td colspan="2"><h:commandButton value=":: INGRESAR ::" /></td>
+					</tr>
+				</table>
+			</form>
 		</rich:panel>
 	</ui:define>
 </ui:composition>
