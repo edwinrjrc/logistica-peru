@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PROCESS model-entity="JSFProcess">
+ <PROCESS-ITEM NAME="rules:*" PATH="*" SHAPE="32,72,53,42" model-entity="JSFProcessGroup">
+  <PROCESS-ITEM ID="rules:*:0" NAME="item" PATH="*" model-entity="JSFProcessItem">
+   <PROCESS-ITEM-OUTPUT
+    ID="irAdministrarUsuarios::#paginas#seguridad#usuario#administrar.xhtml"
+    NAME="output" PATH="/paginas/seguridad/usuario/administrar.xhtml"
+    TARGET="rules:#paginas#seguridad#usuario#administrar.xhtml"
+    TITLE="irAdministrarUsuarios" model-entity="JSFProcessItemOutput"/>
+  </PROCESS-ITEM>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM NAME="rules:#paginas#seguridad#usuario#administrar.xhtml"
+  PATH="/paginas/seguridad/usuario/administrar.xhtml" SHAPE="240,33,0,0" model-entity="JSFProcessGroup"/>
+</PROCESS>
