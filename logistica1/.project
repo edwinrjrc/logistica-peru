@@ -3,6 +3,7 @@
 	<name>logistica1</name>
 	<comment></comment>
 	<projects>
+		<project>Logistica1NegocioClient</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>
