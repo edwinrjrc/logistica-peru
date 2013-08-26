@@ -7,6 +7,7 @@ import java.util.List;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.model.SelectItem;
+import javax.naming.NamingException;
 
 import pe.com.logistica.bean.base.BaseVO;
 import pe.com.logistica.web.servicio.SeguridadServicio;
@@ -25,7 +26,11 @@ public class CatalogoMBean {
 	private SeguridadServicio seguridadServicio;
 	
 	public CatalogoMBean() {
-		seguridadServicio = new SeguridadServicioImpl();
+		try {
+			seguridadServicio = new SeguridadServicioImpl();
+		} catch (NamingException e) {
+			e.printStackTrace();
+		}
 	}
 
 	/**

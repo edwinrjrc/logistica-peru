@@ -18,7 +18,7 @@ public class Base implements Serializable{
 	
 	private String codigoCadena;
 	private Integer codigoEntero;
-	private String estado;
+	private BaseVO estado;
 	/**
 	 * 
 	 */
@@ -52,14 +52,18 @@ public class Base implements Serializable{
 	/**
 	 * @return the estado
 	 */
-	public String getEstado() {
+	public BaseVO getEstado() {
+		if (estado == null){
+			estado = new BaseVO();
+		}
 		return estado;
 	}
 	/**
 	 * @param estado the estado to set
 	 */
-	public void setEstado(String estado) {
+	public void setEstado(BaseVO estado) {
 		this.estado = estado;
 	}
+	
 
 }
