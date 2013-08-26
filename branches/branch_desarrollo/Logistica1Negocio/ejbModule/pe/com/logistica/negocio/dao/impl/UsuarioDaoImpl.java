@@ -29,7 +29,7 @@ public class UsuarioDaoImpl implements UsuarioDao{
 	}
 
 	@Override
-	public boolean registrarUsuario(Usuario usuario) {
+	public boolean registrarUsuario(Usuario usuario) throws SQLException {
 		boolean resultado = false;
 		Connection conn = null;
 		CallableStatement cs = null;
@@ -53,7 +53,7 @@ public class UsuarioDaoImpl implements UsuarioDao{
 			resultado = cs.getBoolean(1);
 		} catch (SQLException e) {
 			resultado = false;
-			e.printStackTrace();
+			throw new SQLException(e);
 		} finally{
 			try {
 				if (cs != null){
@@ -67,8 +67,9 @@ public class UsuarioDaoImpl implements UsuarioDao{
 					if (conn != null){
 						conn.close();
 					}
+					throw new SQLException(e);
 				} catch (SQLException e1) {
-					e1.printStackTrace();
+					throw new SQLException(e);
 				}
 			}
 		}
@@ -78,7 +79,7 @@ public class UsuarioDaoImpl implements UsuarioDao{
 	}
 	
 	@Override
-	public boolean actualizarUsuario(Usuario usuario) {
+	public boolean actualizarUsuario(Usuario usuario) throws SQLException {
 		boolean resultado = false;
 		Connection conn = null;
 		CallableStatement cs = null;
@@ -102,7 +103,7 @@ public class UsuarioDaoImpl implements UsuarioDao{
 			resultado = cs.getBoolean(1);
 		} catch (SQLException e) {
 			resultado = false;
-			e.printStackTrace();
+			throw new SQLException(e);
 		} finally{
 			try {	
 				if (cs != null){
@@ -116,8 +117,9 @@ public class UsuarioDaoImpl implements UsuarioDao{
 					if (conn != null){
 						conn.close();
 					}
+					throw new SQLException(e);
 				} catch (SQLException e1) {
-					e1.printStackTrace();
+					throw new SQLException(e);
 				}
 			}
 		}
@@ -127,7 +129,7 @@ public class UsuarioDaoImpl implements UsuarioDao{
 	}
 
 	@Override
-	public List<Usuario> listarUsuarios() {
+	public List<Usuario> listarUsuarios() throws SQLException {
 		List<Usuario> resultado = null;
 		Connection conn = null;
 		CallableStatement cs = null;
@@ -154,7 +156,7 @@ public class UsuarioDaoImpl implements UsuarioDao{
 			}
 		} catch (SQLException e) {
 			resultado = null;
-			e.printStackTrace();
+			throw new SQLException(e);
 		} finally{
 			try {
 				if (cs != null){
@@ -168,8 +170,9 @@ public class UsuarioDaoImpl implements UsuarioDao{
 					if (conn != null){
 						conn.close();
 					}
+					throw new SQLException(e);
 				} catch (SQLException e1) {
-					e1.printStackTrace();
+					throw new SQLException(e);
 				}
 			}
 		}
@@ -178,7 +181,7 @@ public class UsuarioDaoImpl implements UsuarioDao{
 	}
 	
 	@Override
-	public Usuario consultarUsuario(int id) {
+	public Usuario consultarUsuario(int id) throws SQLException {
 		Usuario resultado = null;
 		Connection conn = null;
 		CallableStatement cs = null;
@@ -205,7 +208,7 @@ public class UsuarioDaoImpl implements UsuarioDao{
 			}
 		} catch (SQLException e) {
 			resultado = null;
-			e.printStackTrace();
+			throw new SQLException(e);
 		} finally{
 			try {
 				if (cs != null){
@@ -219,8 +222,9 @@ public class UsuarioDaoImpl implements UsuarioDao{
 					if (conn != null){
 						conn.close();
 					}
+					throw new SQLException(e);
 				} catch (SQLException e1) {
-					e1.printStackTrace();
+					throw new SQLException(e);
 				}
 			}
 		}

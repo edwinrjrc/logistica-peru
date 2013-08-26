@@ -11,13 +11,13 @@
 <ui:composition template="/templates/plantillainicio.xhtml">
 	<ui:define name="cuerpo">
 
-		<h:form id="idformadmusuario">
+		<h:form id="idformadmparametro">
 			<h:panelGrid columns="1" border="0" cellpadding="0" cellspacing="0"
 				width="100%">
 				<f:facet name="header">
 					<h:panelGrid width="100%" border="0" cellpadding="0"
 						cellspacing="0" style="text-align: left;vertical-align: top; ">
-						<h:outputText value="Administrar Usuarios" style="height: 100px"
+						<h:outputText value="Administrar Parametros" style="height: 100px"
 							styleClass="subtitulo" />
 						<hr width="100%" />
 					</h:panelGrid>
@@ -26,50 +26,43 @@
 					width="80%">
 					<tr>
 						<td align="center"><rich:dataTable var="row"
-								value="#{usuarioMBean.listaUsuarios}" style="width:100%;">
+								value="#{parametroMBean.listaParametros}" style="width:100%;">
 								<rich:column>
 									<f:facet name="header">
-										<h:outputText value="Usuario" />
+										<h:outputText value="Nombre" />
 									</f:facet>
-									<h:outputText value="#{row.usuario}" />
+									<h:outputText value="#{row.nombre}" />
 								</rich:column>
 
 								<rich:column>
 									<f:facet name="header">
-										<h:outputText value="Rol" />
+										<h:outputText value="Descripcion" />
 									</f:facet>
-									<h:outputText value="#{row.rol.nombre}" />
+									<h:outputText value="#{row.descripcion}" />
 								</rich:column>
 
 								<rich:column>
 									<f:facet name="header">
-										<h:outputText value="Nombres" />
+										<h:outputText value="Valor" />
 									</f:facet>
-									<h:outputText value="#{row.nombres}" />
+									<h:outputText value="#{row.valor}" />
 								</rich:column>
 
 								<rich:column>
 									<f:facet name="header">
-										<h:outputText value="Apellido Paterno" />
+										<h:outputText value="Estado" />
 									</f:facet>
-									<h:outputText value="#{row.apellidoPaterno}" />
-								</rich:column>
-
-								<rich:column>
-									<f:facet name="header">
-										<h:outputText value="Apellido Materno" />
-									</f:facet>
-									<h:outputText value="#{row.apellidoMaterno}" />
+									<h:outputText value="#{row.estado.nombre}" />
 								</rich:column>
 
 								<rich:column>
 									<f:facet name="header">
 										<h:outputText value="Opciones" />
 									</f:facet>
-									<a4j:commandLink
-										action="#{usuarioMBean.consultarUsuario(row.codigoEntero)}"
-										oncomplete="#{rich:component('idModalformusuario')}.show()"
-										render="idGridFormUsuario, idNomModal">
+									<a4j:commandLink rendered="#{row.editable}"
+										render="idGridFormParametro, idNomModal"
+										action="#{parametroMBean.consultarParametro(row.codigoEntero)}"
+										oncomplete="#{rich:component('idModalformparametro')}.show()">
 										<h:graphicImage height="25" width="20"
 											url="/resources/img/editar2.png" style="border:0" />
 									</a4j:commandLink>
@@ -78,36 +71,35 @@
 							</rich:dataTable></td>
 					</tr>
 				</table>
-
+				
 				<f:facet name="footer">
 					<h:panelGroup style="text-align:center;">
 						<h:panelGrid border="0" cellpadding="0" cellspacing="0"
 							style="height: 50px" width="100%">
-							<a4j:commandButton value="NUEVO USUARIO"
-								action="#{usuarioMBean.nuevoUsuario()}"
-								style="height:20px; width:150px" render="idGridFormUsuario, idNomModal"
-								onclick="#{rich:component('idModalformusuario')}.show()">
+							<a4j:commandButton value="NUEVO PARAMETRO"
+								action="#{parametroMBean.nuevoParametro()}"
+								style="height:20px; width:150px" render="idGridFormParametro, idNomModal"
+								oncomplete="#{rich:component('idModalformparametro')}.show()">
 							</a4j:commandButton>
 						</h:panelGrid>
 					</h:panelGroup>
 				</f:facet>
-
 			</h:panelGrid>
+			
 			<h:panelGroup id="idPanelHidden">
-				<h:inputHidden id="idTipoModal" value="#{usuarioMBean.tipoModal}" />
-				<h:inputHidden id="idMsjeModal" value="#{usuarioMBean.mensajeModal}" />
-				<h:inputHidden id="idShowModal" value="#{usuarioMBean.showModal}" />
+				<h:inputHidden id="idTipoModal" value="#{parametroMBean.tipoModal}" />
+				<h:inputHidden id="idMsjeModal" value="#{parametroMBean.mensajeModal}" />
+				<h:inputHidden id="idShowModal" value="#{parametroMBean.showModal}" />
 			</h:panelGroup>
 		</h:form>
-
+		
 		<ui:include src="/paginas/parametro/formparametro.xhtml" />
 		<ui:include src="/resources/modal/modalcorrecto.xhtml" >
-		<ui:param name="msjeModalCorrecto" value="#{usuarioMBean.mensajeModal}" />
+		<ui:param name="msjeModalCorrecto" value="#{parametroMBean.mensajeModal}" />
 		</ui:include>
 		<ui:include src="/resources/modal/modalerror.xhtml" >
-		<ui:param name="msjeModalError" value="#{usuarioMBean.mensajeModal}" />
+		<ui:param name="msjeModalError" value="#{parametroMBean.mensajeModal}" />
 		</ui:include>
-
 	</ui:define>
 </ui:composition>
 </html>

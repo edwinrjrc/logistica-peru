@@ -6,14 +6,14 @@
 	xmlns:a4j="http://richfaces.org/a4j"
 	xmlns:rich="http://richfaces.org/rich">
 
-	<rich:popupPanel id="idModalcorrecto" modal="true" height="150"
+	<rich:popupPanel id="idModalError" modal="true" height="150"
 		resizeable="false" followByScroll="false" width="500">
 		<f:facet name="header">
 			<h:outputText value="Mensaje" />
 		</f:facet>
 		<f:facet name="controls">
 			<h:outputLink value="#" style="border:0"
-				onclick="#{rich:component('idModalcorrecto')}.hide(); return false;">
+				onclick="#{rich:component('idModalError')}.hide(); return false;">
 				<h:graphicImage height="18" width="18"
 					url="/resources/img/close.png" style="border:0" />
 			</h:outputLink>
@@ -25,16 +25,16 @@
 			<table align="center" border="0" cellpadding="0" cellspacing="0" width="60%">
 			<tr><td align="center"><h:panelGrid border="0" cellpadding="0" cellspacing="0" columns="2">
 					<h:graphicImage height="54" width="70"
-						url="/resources/img/check.gif" />
-					<h:outputText value="#{msjeModalCorrecto}" />
+						url="/resources/img/error.jpg" />
+					<h:outputText value="#{msjeModalError}" />
 				</h:panelGrid></td></tr>
 			</table>
 				
 			<f:facet name="footer">
 				<h:panelGrid width="100%" style="text-align:center;">
 					<a4j:commandButton value="Aceptar"
-					  onclick="Richfaces.hideModalPanel('idModalcorrecto')"
-					  oncomplete="Richfaces.hideModalPanel('idModalcorrecto')"></a4j:commandButton>
+					  onclick="Richfaces.hideModalPanel('idModalError')"
+					  oncomplete="Richfaces.hideModalPanel('idModalError')"></a4j:commandButton>
 				</h:panelGrid>
 				
 			</f:facet>

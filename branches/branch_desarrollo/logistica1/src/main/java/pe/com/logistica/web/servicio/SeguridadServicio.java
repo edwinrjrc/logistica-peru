@@ -3,6 +3,7 @@
  */
 package pe.com.logistica.web.servicio;
 
+import java.sql.SQLException;
 import java.util.List;
 
 import pe.com.logistica.bean.base.BaseVO;
@@ -15,9 +16,9 @@ import pe.com.logistica.bean.negocio.Usuario;
 public interface SeguridadServicio {
 
 	
-	public boolean registrarUsuario(Usuario usuario);
-	public List<Usuario> listarUsuarios();
+	public boolean registrarUsuario(Usuario usuario) throws SQLException;
+	public List<Usuario> listarUsuarios() throws SQLException;
 	public List<BaseVO> listarRoles();
-	public Usuario consultarUsuario(int id);
-	boolean actualizarUsuario(Usuario usuario);
+	public Usuario consultarUsuario(int id) throws SQLException;
+	boolean actualizarUsuario(Usuario usuario) throws SQLException;
 }

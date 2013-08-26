@@ -1,5 +1,6 @@
 package pe.com.logistica.negocio.ejb;
 
+import java.sql.SQLException;
 import java.util.List;
 
 import javax.ejb.Stateless;
@@ -15,25 +16,25 @@ import pe.com.logistica.negocio.dao.impl.UsuarioDaoImpl;
  * Session Bean implementation class Seguridad
  */
 @Stateless(name="SeguridadSession")
-public class Seguridad implements SeguridadRemote, SeguridadLocal {
+public class SeguridadSession implements SeguridadRemote, SeguridadLocal {
 
 	UsuarioDao usuarioDao = null;
 	CatalogoDao catalogoDao = null;
     /**
      * Default constructor. 
      */
-    public Seguridad() {
+    public SeguridadSession() {
     	
     }
     
     @Override
-    public boolean registrarUsuario(Usuario usuario){
+    public boolean registrarUsuario(Usuario usuario) throws SQLException{
     	usuarioDao = new UsuarioDaoImpl();
     	return usuarioDao.registrarUsuario(usuario);
     }
 
 	@Override
-	public List<Usuario> listarUsuarios() {
+	public List<Usuario> listarUsuarios() throws SQLException {
 		usuarioDao = new UsuarioDaoImpl();
 		return usuarioDao.listarUsuarios();
 	}
@@ -45,12 +46,12 @@ public class Seguridad implements SeguridadRemote, SeguridadLocal {
 	}
 
 	@Override
-	public Usuario consultarUsuario(int id) {
+	public Usuario consultarUsuario(int id) throws SQLException {
 		return usuarioDao.consultarUsuario(id);
 	}
 
 	@Override
-	public boolean actualizarUsuario(Usuario usuario) {
+	public boolean actualizarUsuario(Usuario usuario) throws SQLException {
 		usuarioDao = new UsuarioDaoImpl();
     	return usuarioDao.actualizarUsuario(usuario);
 	}

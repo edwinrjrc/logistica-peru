@@ -3,11 +3,13 @@
  */
 package pe.com.logistica.web.faces;
 
+import java.sql.SQLException;
 import java.util.List;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.event.ActionEvent;
+import javax.naming.NamingException;
 
 import pe.com.logistica.bean.negocio.Usuario;
 import pe.com.logistica.web.servicio.SeguridadServicio;
@@ -29,16 +31,29 @@ public class UsuarioMBean {
 	
 	private String reCredencial;
 	private String nombreFormulario;
+	private String msjeError;
+	
+	private String mensajeModal;
+	private String tipoModal;
+	private String modalNombre;
 	
 	private boolean nuevoUsuario;
 	private boolean editarUsuario;
+	
+	private boolean showError;
+	private boolean showModal;
+	
 	
 	private SeguridadServicio seguridadServicio;
 	/**
 	 * 
 	 */
 	public UsuarioMBean() {
-		seguridadServicio = new SeguridadServicioImpl();
+		try {
+			seguridadServicio = new SeguridadServicioImpl();
+		} catch (NamingException e) {
+			e.printStackTrace();
+		}
 		usuario = new Usuario();
 	}
 	
@@ -50,34 +65,49 @@ public class UsuarioMBean {
 	}
 	
 	public void consultarUsuario(Integer id){
-		this.setNombreFormulario("Editar Usuario");
-		this.setEditarUsuario(true);
-		this.setNuevoUsuario(false);
-		this.setUsuario(this.seguridadServicio.consultarUsuario(id));
-		System.out.println("clave ::"+this.getUsuario().getCredencial());
-		this.setReCredencial(this.getUsuario().getCredencial());
+		try {
+			this.setNombreFormulario("Editar Usuario");
+			this.setEditarUsuario(true);
+			this.setNuevoUsuario(false);
+			this.setUsuario(this.seguridadServicio.consultarUsuario(id));
+			System.out.println("clave ::"+this.getUsuario().getCredencial());
+			this.setReCredencial(this.getUsuario().getCredencial());
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public void registrarUsuario(){
-		seguridadServicio.registrarUsuario(getUsuario());
+		try {
+			seguridadServicio.registrarUsuario(getUsuario());
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	public void ejecutarMetodo(ActionEvent e){
-		System.out.println("ejecutar metodo:.");
-		System.out.println("nuevo ::"+this.isNuevoUsuario());
-		System.out.println("editar ::"+this.isEditarUsuario());
-		if (this.isNuevoUsuario()){
-			seguridadServicio.registrarUsuario(getUsuario());
-		}
-		else if(this.isEditarUsuario()){
-			seguridadServicio.actualizarUsuario(usuario);
+		try {
+			if (this.isNuevoUsuario()){
+				seguridadServicio.registrarUsuario(getUsuario());
+			}
+			else if(this.isEditarUsuario()){
+				seguridadServicio.actualizarUsuario(usuario);
+			}
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
 		}
 	}
 	/**
 	 * @return the listaUsuarios
 	 */
 	public List<Usuario> getListaUsuarios() {
-		listaUsuarios = seguridadServicio.listarUsuarios();
+		try {
+			listaUsuarios = seguridadServicio.listarUsuarios();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 		return listaUsuarios;
 	}
 	/**
@@ -154,6 +184,104 @@ public class UsuarioMBean {
 	 */
 	public void setNombreFormulario(String nombreFormulario) {
 		this.nombreFormulario = nombreFormulario;
+	}
+
+	/**
+	 * @return the showError
+	 */
+	public boolean isShowError() {
+		return showError;
+	}
+
+	/**
+	 * @param showError the showError to set
+	 */
+	public void setShowError(boolean showError) {
+		this.showError = showError;
+	}
+
+	/**
+	 * @return the msjeError
+	 */
+	public String getMsjeError() {
+		return msjeError;
+	}
+
+	/**
+	 * @param msjeError the msjeError to set
+	 */
+	public void setMsjeError(String msjeError) {
+		this.msjeError = msjeError;
+	}
+
+	/**
+	 * @return the mensajeModal
+	 */
+	public String getMensajeModal() {
+		return mensajeModal;
+	}
+
+	/**
+	 * @param mensajeModal the mensajeModal to set
+	 */
+	public void setMensajeModal(String mensajeModal) {
+		this.mensajeModal = mensajeModal;
+	}
+
+	/**
+	 * @return the tipoModal
+	 */
+	public String getTipoModal() {
+		return tipoModal;
+	}
+
+	/**
+	 * @param tipoModal the tipoModal to set
+	 */
+	public void setTipoModal(String tipoModal) {
+		this.tipoModal = tipoModal;
+	}
+
+	/**
+	 * @return the modalNombre
+	 */
+	public String getModalNombre() {
+		return modalNombre;
+	}
+
+	/**
+	 * @param modalNombre the modalNombre to set
+	 */
+	public void setModalNombre(String modalNombre) {
+		this.modalNombre = modalNombre;
+	}
+
+	/**
+	 * @return the showModal
+	 */
+	public boolean isShowModal() {
+		return showModal;
+	}
+
+	/**
+	 * @param showModal the showModal to set
+	 */
+	public void setShowModal(boolean showModal) {
+		this.showModal = showModal;
+	}
+
+	/**
+	 * @return the seguridadServicio
+	 */
+	public SeguridadServicio getSeguridadServicio() {
+		return seguridadServicio;
+	}
+
+	/**
+	 * @param seguridadServicio the seguridadServicio to set
+	 */
+	public void setSeguridadServicio(SeguridadServicio seguridadServicio) {
+		this.seguridadServicio = seguridadServicio;
 	}
 
 }
