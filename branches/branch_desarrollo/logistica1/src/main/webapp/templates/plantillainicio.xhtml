@@ -9,7 +9,7 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<h:outputStylesheet name="screen.css" library="css" />
 	<h:outputStylesheet name="app.css" library="css" />
-	<h:outputScript library="js" name="script.js"/>
+	<h:outputScript library="js" name="script.js" />
 </h:head>
 <h:body style="background: #FFFFFF">
 	<table border="0" cellpadding="0" cellspacing="1" bgcolor="#F1F1F1"
@@ -23,16 +23,21 @@
 							</ui:insert></td>
 					</tr>
 					<tr>
-						<td align="center" height="20" valign="top"><ui:include src="/templates/menu.xhtml" /></td>
+						<td align="center" height="20" valign="top"><ui:include
+								src="/templates/menu.xhtml" /></td>
 					</tr>
 					<tr>
-						<td valign="top" align="center" height="550"><ui:insert name="cuerpo">Cuerpo</ui:insert></td>
+						<td valign="top" align="center" height="550"><ui:insert
+								name="cuerpo">Cuerpo</ui:insert></td>
 					</tr>
 					<tr>
-						<td height="10" valign="bottom"><ui:insert name="pie"><ui:include src="/templates/pie.xhtml" /></ui:insert></td>
+						<td height="10" valign="bottom"><ui:insert name="pie">
+								<ui:include src="/templates/pie.xhtml" />
+							</ui:insert></td>
 					</tr>
 				</table></td>
 		</tr>
 	</table>
+
 </h:body>
 </html>

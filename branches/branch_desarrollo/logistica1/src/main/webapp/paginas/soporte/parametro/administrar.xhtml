@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
@@ -25,8 +26,12 @@
 				<table border="0" cellpadding="0" cellspacing="0" align="center"
 					width="80%">
 					<tr>
-						<td align="center"><rich:dataTable var="row"
+						<td align="center"><rich:dataTable
+								var="row" id="idTabla" rows="10"
 								value="#{parametroMBean.listaParametros}" style="width:100%;">
+								<f:facet name="noData">
+									<h:outputText value="No se encontraron registros" />
+								</f:facet>
 								<rich:column>
 									<f:facet name="header">
 										<h:outputText value="Nombre" />
@@ -68,38 +73,44 @@
 									</a4j:commandLink>
 								</rich:column>
 
-							</rich:dataTable></td>
+							</rich:dataTable>
+							<rich:dataScroller for="idTabla" /></td>
 					</tr>
 				</table>
-				
+
 				<f:facet name="footer">
 					<h:panelGroup style="text-align:center;">
 						<h:panelGrid border="0" cellpadding="0" cellspacing="0"
 							style="height: 50px" width="100%">
 							<a4j:commandButton value="NUEVO PARAMETRO"
 								action="#{parametroMBean.nuevoParametro()}"
-								style="height:20px; width:150px" render="idGridFormParametro, idNomModal"
+								style="height:20px; width:150px"
+								render="idGridFormParametro, idNomModal"
 								oncomplete="#{rich:component('idModalformparametro')}.show()">
 							</a4j:commandButton>
+							<a4j:commandButton id="idBotonModalCorrecto"
+								style="display:none;" type="button"
+								onclick="alert('boton modal')"
+								oncomplete="#{rich:component('idModalcorrecto')}.show();" />
+							<a4j:commandButton id="idBotonModalError" style="display:none;"
+								type="button"
+								oncomplete="#{rich:component('idModalError')}.show();" />
 						</h:panelGrid>
 					</h:panelGroup>
 				</f:facet>
 			</h:panelGrid>
-			
-			<h:panelGroup id="idPanelHidden">
-				<h:inputHidden id="idTipoModal" value="#{parametroMBean.tipoModal}" />
-				<h:inputHidden id="idMsjeModal" value="#{parametroMBean.mensajeModal}" />
-				<h:inputHidden id="idShowModal" value="#{parametroMBean.showModal}" />
-			</h:panelGroup>
+
 		</h:form>
-		
-		<ui:include src="/paginas/parametro/formparametro.xhtml" />
-		<ui:include src="/resources/modal/modalcorrecto.xhtml" >
-		<ui:param name="msjeModalCorrecto" value="#{parametroMBean.mensajeModal}" />
+		<ui:include src="/paginas/soporte/parametro/formparametro.xhtml" />
+		<ui:include src="/resources/includes/includemensaje.xhtml">
+			<ui:param name="backBean" value="#{parametroMBean}" />
+			<ui:param name="idModalForm" value="idModalformparametro" />
+			<ui:param name="idrender" value="idTabla" />
 		</ui:include>
-		<ui:include src="/resources/modal/modalerror.xhtml" >
-		<ui:param name="msjeModalError" value="#{parametroMBean.mensajeModal}" />
-		</ui:include>
+		<script type="text/javascript">
+		mostrarModal('idformadmparametro');
+		</script>
 	</ui:define>
 </ui:composition>
+
 </html>
