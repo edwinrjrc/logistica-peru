@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:h="http://java.sun.com/jsf/html"
@@ -85,15 +86,11 @@
 										<a4j:commandButton value="Grabar"
 											style="height:20px; width:100px"
 											actionListener="#{parametroMBean.ejecutarMetodo}"
-											render="idFormUsuario,idPanelHidden,idPanelBotones,idModalcorrecto,idModalError" 
-											oncomplete="mostrarModal()"/>
-										<a4j:commandButton value="Cancelar"
+											render="idFormHidden,idPanelHidden,idPanelBotones,idModalcorrecto,idModalError" 
+											oncomplete="mostrarModal('idformadmparametro')"/>
+										<a4j:commandButton value="Cancelar" type="button"
 											style="height:20px; width:100px"
-											oncomplete="#{rich:component('idModalformparametro')}.hide();" />
-										<a4j:commandButton onclick="alert('hola3')" id="idBotonModalCorrecto" style="display:none;"
-										oncomplete="#{rich:component('idModalcorrecto')}.show();" />
-										<a4j:commandButton id="idBotonModalError" style="display:none;"
-										oncomplete="#{rich:component('idModalError')}.show();" />
+											oncomplete="#{rich:component('idModalformparametro')}.hide();return false;" />
 									</h:panelGrid></td>
 							</tr>
 						</table>

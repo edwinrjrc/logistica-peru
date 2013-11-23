@@ -20,20 +20,15 @@ import pe.com.logistica.web.servicio.impl.ParametroServicioImpl;
  */
 @ManagedBean(name="parametroMBean")
 @SessionScoped()
-public class ParametroMBean {
+public class ParametroMBean extends BaseMBean {
 
 	private List<Parametro> listaParametros;
 	
 	private Parametro parametro;
 	
-	private String nombreFormulario;
-	private String mensajeModal;
-	private String tipoModal;
-	private String modalNombre;
-	
 	private boolean nuevoParametro;
 	private boolean editarParametro;
-	private boolean showModal;
+	
 	
 	private ParametroServicio parametroServicio;
 	/**
@@ -64,6 +59,9 @@ public class ParametroMBean {
 			}
 			else if(this.isEditarParametro()){
 				parametroServicio.actualizarParametro(parametro);
+				this.setShowModal(true);
+				this.setTipoModal("1");
+				this.setMensajeModal("Parametro actualizado Satisfactoriamente");
 			}
 		} catch (Exception e) {
 			this.setShowModal(true);
@@ -92,8 +90,12 @@ public class ParametroMBean {
 		try {
 			parametroServicio = new ParametroServicioImpl();
 			listaParametros = parametroServicio.listarParametros();
+			this.setShowModal(false);
 		} catch (NamingException | SQLException e) {
 			e.printStackTrace();
+			this.setShowModal(true);
+			this.setTipoModal("2");
+			this.setMensajeModal(e.getMessage());
 		}
 		return listaParametros;
 	}
@@ -119,18 +121,6 @@ public class ParametroMBean {
 		this.parametro = parametro;
 	}
 	/**
-	 * @return the nombreFormulario
-	 */
-	public String getNombreFormulario() {
-		return nombreFormulario;
-	}
-	/**
-	 * @param nombreFormulario the nombreFormulario to set
-	 */
-	public void setNombreFormulario(String nombreFormulario) {
-		this.nombreFormulario = nombreFormulario;
-	}
-	/**
 	 * @return the nuevoParametro
 	 */
 	public boolean isNuevoParametro() {
@@ -153,62 +143,6 @@ public class ParametroMBean {
 	 */
 	public void setEditarParametro(boolean editarParametro) {
 		this.editarParametro = editarParametro;
-	}
-
-	/**
-	 * @return the mensajeModal
-	 */
-	public String getMensajeModal() {
-		return mensajeModal;
-	}
-
-	/**
-	 * @param mensajeModal the mensajeModal to set
-	 */
-	public void setMensajeModal(String mensajeModal) {
-		this.mensajeModal = mensajeModal;
-	}
-
-	/**
-	 * @return the showModal
-	 */
-	public boolean isShowModal() {
-		return showModal;
-	}
-
-	/**
-	 * @param showModal the showModal to set
-	 */
-	public void setShowModal(boolean showModal) {
-		this.showModal = showModal;
-	}
-
-	/**
-	 * @return the tipoModal
-	 */
-	public String getTipoModal() {
-		return tipoModal;
-	}
-
-	/**
-	 * @param tipoModal the tipoModal to set
-	 */
-	public void setTipoModal(String tipoModal) {
-		this.tipoModal = tipoModal;
-	}
-
-	/**
-	 * @return the modalNombre
-	 */
-	public String getModalNombre() {
-		return modalNombre;
-	}
-
-	/**
-	 * @param modalNombre the modalNombre to set
-	 */
-	public void setModalNombre(String modalNombre) {
-		this.modalNombre = modalNombre;
 	}
 
 }

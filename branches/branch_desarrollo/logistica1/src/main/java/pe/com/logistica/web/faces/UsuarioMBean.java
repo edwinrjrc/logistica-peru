@@ -22,7 +22,7 @@ import pe.com.logistica.web.servicio.impl.SeguridadServicioImpl;
  */
 @ManagedBean(name="usuarioMBean")
 @SessionScoped()
-public class UsuarioMBean {
+public class UsuarioMBean extends BaseMBean {
 
 	
 	private List<Usuario> listaUsuarios;
@@ -30,18 +30,12 @@ public class UsuarioMBean {
 	private Usuario usuario;
 	
 	private String reCredencial;
-	private String nombreFormulario;
 	private String msjeError;
 	
-	private String mensajeModal;
-	private String tipoModal;
 	private String modalNombre;
 	
 	private boolean nuevoUsuario;
 	private boolean editarUsuario;
-	
-	private boolean showError;
-	private boolean showModal;
 	
 	
 	private SeguridadServicio seguridadServicio;
@@ -173,34 +167,6 @@ public class UsuarioMBean {
 	}
 
 	/**
-	 * @return the nombreFormulario
-	 */
-	public String getNombreFormulario() {
-		return nombreFormulario;
-	}
-
-	/**
-	 * @param nombreFormulario the nombreFormulario to set
-	 */
-	public void setNombreFormulario(String nombreFormulario) {
-		this.nombreFormulario = nombreFormulario;
-	}
-
-	/**
-	 * @return the showError
-	 */
-	public boolean isShowError() {
-		return showError;
-	}
-
-	/**
-	 * @param showError the showError to set
-	 */
-	public void setShowError(boolean showError) {
-		this.showError = showError;
-	}
-
-	/**
 	 * @return the msjeError
 	 */
 	public String getMsjeError() {
@@ -215,34 +181,6 @@ public class UsuarioMBean {
 	}
 
 	/**
-	 * @return the mensajeModal
-	 */
-	public String getMensajeModal() {
-		return mensajeModal;
-	}
-
-	/**
-	 * @param mensajeModal the mensajeModal to set
-	 */
-	public void setMensajeModal(String mensajeModal) {
-		this.mensajeModal = mensajeModal;
-	}
-
-	/**
-	 * @return the tipoModal
-	 */
-	public String getTipoModal() {
-		return tipoModal;
-	}
-
-	/**
-	 * @param tipoModal the tipoModal to set
-	 */
-	public void setTipoModal(String tipoModal) {
-		this.tipoModal = tipoModal;
-	}
-
-	/**
 	 * @return the modalNombre
 	 */
 	public String getModalNombre() {
@@ -254,20 +192,6 @@ public class UsuarioMBean {
 	 */
 	public void setModalNombre(String modalNombre) {
 		this.modalNombre = modalNombre;
-	}
-
-	/**
-	 * @return the showModal
-	 */
-	public boolean isShowModal() {
-		return showModal;
-	}
-
-	/**
-	 * @param showModal the showModal to set
-	 */
-	public void setShowModal(boolean showModal) {
-		this.showModal = showModal;
 	}
 
 	/**
