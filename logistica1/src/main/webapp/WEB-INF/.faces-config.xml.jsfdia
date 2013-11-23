@@ -7,8 +7,41 @@
     NAME="output" PATH="/paginas/seguridad/usuario/administrar.xhtml"
     TARGET="rules:#paginas#seguridad#usuario#administrar.xhtml"
     TITLE="irAdministrarUsuarios" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT
+    ID="irAdministrarParametros::#paginas#soporte#parametro#administrar.xhtml"
+    NAME="output1" PATH="/paginas/soporte/parametro/administrar.xhtml"
+    TARGET="rules:#paginas#soporte#parametro#administrar.xhtml"
+    TITLE="irAdministrarParametros" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT
+    ID="irAdministrarMaestros::#paginas#soporte#maestro#administrar.xhtml"
+    NAME="output2" PATH="/paginas/soporte/maestro/administrar.xhtml"
+    TARGET="rules:#paginas#soporte#maestro#administrar.xhtml"
+    TITLE="irAdministrarMaestros" model-entity="JSFProcessItemOutput"/>
   </PROCESS-ITEM>
  </PROCESS-ITEM>
  <PROCESS-ITEM NAME="rules:#paginas#seguridad#usuario#administrar.xhtml"
   PATH="/paginas/seguridad/usuario/administrar.xhtml" SHAPE="240,33,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#paginas#soporte#parametro#administrar.xhtml"
+  PATH="/paginas/soporte/parametro/administrar.xhtml"
+  SHAPE="240,145,0,0" model-entity="JSFProcessGroup">
+  <PROCESS-ITEM
+   ID="rules:#paginas#soporte#parametro#administrar.xhtml:0" NAME="item"
+   PATH="/paginas/soporte/parametro/administrar.xhtml" model-entity="JSFProcessItem"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM NAME="rules:#paginas#soporte#maestro#administrar.xhtml"
+  PATH="/paginas/soporte/maestro/administrar.xhtml" SHAPE="278,323,0,0"
+  model-entity="JSFProcessGroup" persistent="true">
+  <PROCESS-ITEM ID="rules:#paginas#soporte#maestro#administrar.xhtml:0"
+   NAME="item" PATH="/paginas/soporte/maestro/administrar.xhtml" model-entity="JSFProcessItem">
+   <PROCESS-ITEM-OUTPUT
+    ID="irHijoMaestro::#paginas#soporte#maestro#hijo#administrar.xhtml"
+    NAME="output" PATH="/paginas/soporte/maestro/hijo/administrar.xhtml"
+    TARGET="rules:#paginas#soporte#maestro#hijo#administrar.xhtml"
+    TITLE="irHijoMaestro" model-entity="JSFProcessItemOutput"/>
+  </PROCESS-ITEM>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM
+  NAME="rules:#paginas#soporte#maestro#hijo#administrar.xhtml"
+  PATH="/paginas/soporte/maestro/hijo/administrar.xhtml"
+  SHAPE="672,128,50,25" model-entity="JSFProcessGroup" persistent="true"/>
 </PROCESS>

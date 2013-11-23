@@ -19,7 +19,7 @@
 			</h:outputLink>
 		</f:facet>
 
-		<h:form>
+		<h:form id="idFormModalError">
 		<h:panelGrid border="0" cellpadding="0" cellspacing="0" columns="1"
 			width="100%">
 			<table align="center" border="0" cellpadding="0" cellspacing="0" width="60%">
@@ -33,7 +33,7 @@
 			<f:facet name="footer">
 				<h:panelGrid width="100%" style="text-align:center;">
 					<a4j:commandButton value="Aceptar"
-					  onclick="Richfaces.hideModalPanel('idModalError')"
+					  action="#{backBean.aceptarBoton}"
 					  oncomplete="Richfaces.hideModalPanel('idModalError')"></a4j:commandButton>
 				</h:panelGrid>
 				
