@@ -70,8 +70,8 @@
 									<f:facet name="header">
 										<h:outputText value="Opciones" />
 									</f:facet>
-									<a4j:commandLink render="idGridFormMaestro, idNomModal"
-										action="#{maestroMBean.consultarMaestro(row.codigoEntero)}"
+									<a4j:commandLink render="idGridFormHijoMaestro, idNomModal"
+										action="#{maestroMBean.consultarHijoMaestro(row.codigoEntero)}"
 										oncomplete="#{rich:component('idModalforhijommaestro')}.show()">
 										<h:graphicImage height="25" width="20"
 											url="/resources/img/editar2.png" style="border:0" />
