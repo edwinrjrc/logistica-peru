@@ -36,20 +36,32 @@ public class SoporteSession implements SoporteRemote, SoporteLocal {
 	}
 
 	@Override
-	public void ingresarMaestro(Maestro maestro) throws SQLException {
+	public boolean ingresarMaestro(Maestro maestro) throws SQLException {
 		maestroDao = new MaestroDaoImpl();
-		maestroDao.ingresarMaestro(maestro);
+		return maestroDao.ingresarMaestro(maestro);
 	}
-
+	
 	@Override
-	public void ingresarHijoMaestro(Maestro maestro) throws SQLException {
+	public boolean ingresarHijoMaestro(Maestro maestro) throws SQLException {
 		maestroDao = new MaestroDaoImpl();
-		maestroDao.ingresarHijoMaestro(maestro);
+		return maestroDao.ingresarHijoMaestro(maestro);
 	}
 
 	@Override
 	public Maestro consultarMaestro(int id) throws SQLException {
 		maestroDao = new MaestroDaoImpl();
 		return maestroDao.consultarMaestro(id);
+	}
+	
+	@Override
+	public Maestro consultarHijoMaestro(Maestro hijo) throws SQLException {
+		maestroDao = new MaestroDaoImpl();
+		return maestroDao.consultarHijoMaestro(hijo);
+	}
+	
+	@Override
+	public boolean actualizarMaestro(Maestro maestro) throws SQLException {
+		maestroDao = new MaestroDaoImpl();
+		return maestroDao.actualizarMaestro(maestro);
 	}
 }

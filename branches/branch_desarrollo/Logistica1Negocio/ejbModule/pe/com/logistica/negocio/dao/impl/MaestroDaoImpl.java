@@ -18,7 +18,7 @@ import pe.com.logistica.negocio.util.UtilJdbc;
 
 /**
  * @author Edwin
- *
+ * 
  */
 public class MaestroDaoImpl implements MaestroDao {
 
@@ -29,7 +29,9 @@ public class MaestroDaoImpl implements MaestroDao {
 		// TODO Auto-generated constructor stub
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see pe.com.logistica.negocio.dao.MaestroDao#listarMaestros()
 	 */
 	@Override
@@ -39,37 +41,40 @@ public class MaestroDaoImpl implements MaestroDao {
 		CallableStatement cs = null;
 		ResultSet rs = null;
 		String sql = "select * from soporte.vw_listamaestros";
-		
+
 		try {
 			conn = UtilConexion.obtenerConexion();
 			cs = conn.prepareCall(sql);
 			rs = cs.executeQuery();
-			
+
 			resultado = new ArrayList<Maestro>();
 			Maestro maestro = null;
-			while(rs.next()){
+			while (rs.next()) {
 				maestro = new Maestro();
 				maestro.setCodigoEntero(rs.getInt("id"));
 				maestro.setNombre(UtilJdbc.obtenerCadena(rs, "nombre"));
-				maestro.setDescripcion(UtilJdbc.obtenerCadena(rs,"descripcion"));
-				maestro.getEstado().setCodigoCadena(UtilJdbc.obtenerCadena(rs, "estado"));
-				maestro.getEstado().setNombre(UtilJdbc.obtenerCadena(rs, "descestado"));
+				maestro.setDescripcion(UtilJdbc
+						.obtenerCadena(rs, "descripcion"));
+				maestro.getEstado().setCodigoCadena(
+						UtilJdbc.obtenerCadena(rs, "estado"));
+				maestro.getEstado().setNombre(
+						UtilJdbc.obtenerCadena(rs, "descestado"));
 				resultado.add(maestro);
 			}
 		} catch (SQLException e) {
 			resultado = null;
 			throw new SQLException(e);
-		} finally{
+		} finally {
 			try {
-				if (cs != null){
+				if (cs != null) {
 					cs.close();
 				}
-				if (conn != null){
+				if (conn != null) {
 					conn.close();
 				}
 			} catch (SQLException e) {
 				try {
-					if (conn != null){
+					if (conn != null) {
 						conn.close();
 					}
 					throw new SQLException(e);
@@ -78,10 +83,10 @@ public class MaestroDaoImpl implements MaestroDao {
 				}
 			}
 		}
-		
+
 		return resultado;
 	}
-	
+
 	@Override
 	public Maestro consultarMaestro(int id) throws SQLException {
 		Connection conn = null;
@@ -94,29 +99,32 @@ public class MaestroDaoImpl implements MaestroDao {
 			cs = conn.prepareCall(sql);
 			cs.setInt(1, id);
 			rs = cs.executeQuery();
-			
-			
-			if(rs.next()){
+
+			if (rs.next()) {
 				maestro = new Maestro();
 				maestro.setCodigoEntero(rs.getInt("id"));
+				maestro.setCodigoMaestro(rs.getInt("idmaestro"));
 				maestro.setNombre(UtilJdbc.obtenerCadena(rs, "nombre"));
-				maestro.setDescripcion(UtilJdbc.obtenerCadena(rs,"descripcion"));
-				maestro.getEstado().setCodigoCadena(UtilJdbc.obtenerCadena(rs, "estado"));
-				maestro.getEstado().setNombre(UtilJdbc.obtenerCadena(rs, "descestado"));
+				maestro.setDescripcion(UtilJdbc
+						.obtenerCadena(rs, "descripcion"));
+				maestro.getEstado().setCodigoCadena(
+						UtilJdbc.obtenerCadena(rs, "estado"));
+				maestro.getEstado().setNombre(
+						UtilJdbc.obtenerCadena(rs, "descestado"));
 			}
 		} catch (SQLException e) {
 			throw new SQLException(e);
-		} finally{
+		} finally {
 			try {
-				if (cs != null){
+				if (cs != null) {
 					cs.close();
 				}
-				if (conn != null){
+				if (conn != null) {
 					conn.close();
 				}
 			} catch (SQLException e) {
 				try {
-					if (conn != null){
+					if (conn != null) {
 						conn.close();
 					}
 					throw new SQLException(e);
@@ -125,11 +133,13 @@ public class MaestroDaoImpl implements MaestroDao {
 				}
 			}
 		}
-		
+
 		return maestro;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see pe.com.logistica.negocio.dao.MaestroDao#listarHijosMaestro(int)
 	 */
 	@Override
@@ -139,38 +149,41 @@ public class MaestroDaoImpl implements MaestroDao {
 		CallableStatement cs = null;
 		ResultSet rs = null;
 		String sql = "select * from soporte.vw_listahijosmaestro where idmaestro = ?";
-		
+
 		try {
 			conn = UtilConexion.obtenerConexion();
 			cs = conn.prepareCall(sql);
 			cs.setInt(1, idmaestro);
 			rs = cs.executeQuery();
-			
+
 			resultado = new ArrayList<Maestro>();
 			Maestro maestro = null;
-			while(rs.next()){
+			while (rs.next()) {
 				maestro = new Maestro();
 				maestro.setCodigoEntero(rs.getInt("id"));
 				maestro.setNombre(UtilJdbc.obtenerCadena(rs, "nombre"));
-				maestro.setDescripcion(UtilJdbc.obtenerCadena(rs,"descripcion"));
-				maestro.getEstado().setCodigoCadena(UtilJdbc.obtenerCadena(rs, "estado"));
-				maestro.getEstado().setNombre(UtilJdbc.obtenerCadena(rs, "descestado"));
+				maestro.setDescripcion(UtilJdbc
+						.obtenerCadena(rs, "descripcion"));
+				maestro.getEstado().setCodigoCadena(
+						UtilJdbc.obtenerCadena(rs, "estado"));
+				maestro.getEstado().setNombre(
+						UtilJdbc.obtenerCadena(rs, "descestado"));
 				resultado.add(maestro);
 			}
 		} catch (SQLException e) {
 			resultado = null;
 			throw new SQLException(e);
-		} finally{
+		} finally {
 			try {
-				if (cs != null){
+				if (cs != null) {
 					cs.close();
 				}
-				if (conn != null){
+				if (conn != null) {
 					conn.close();
 				}
 			} catch (SQLException e) {
 				try {
-					if (conn != null){
+					if (conn != null) {
 						conn.close();
 					}
 					throw new SQLException(e);
@@ -179,42 +192,50 @@ public class MaestroDaoImpl implements MaestroDao {
 				}
 			}
 		}
-		
+
 		return resultado;
 	}
 
-	/* (non-Javadoc)
-	 * @see pe.com.logistica.negocio.dao.MaestroDao#ingresarMaestro(pe.com.logistica.bean.negocio.Maestro)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * pe.com.logistica.negocio.dao.MaestroDao#ingresarMaestro(pe.com.logistica
+	 * .bean.negocio.Maestro)
 	 */
 	@Override
-	public void ingresarMaestro(Maestro maestro) throws SQLException {
+	public boolean ingresarMaestro(Maestro maestro) throws SQLException {
+		boolean resultado = false;
 		Connection conn = null;
 		CallableStatement cs = null;
 		String sql = "{ ? = call soporte.fn_ingresarmaestro(?,?) }";
-		
+
 		try {
 			conn = UtilConexion.obtenerConexion();
 			cs = conn.prepareCall(sql);
-			int i=1;
+			int i = 1;
 			cs.registerOutParameter(i++, Types.BOOLEAN);
 			cs.setString(i++, maestro.getNombre());
 			cs.setString(i++, maestro.getDescripcion());
-			
+
 			cs.execute();
 			
+			resultado = cs.getBoolean(1);
+
 		} catch (SQLException e) {
+			resultado = false;
 			throw new SQLException(e);
-		} finally{
+		} finally {
 			try {
-				if (cs != null){
+				if (cs != null) {
 					cs.close();
 				}
-				if (conn != null){
+				if (conn != null) {
 					conn.close();
 				}
 			} catch (SQLException e) {
 				try {
-					if (conn != null){
+					if (conn != null) {
 						conn.close();
 					}
 					throw new SQLException(e);
@@ -223,41 +244,50 @@ public class MaestroDaoImpl implements MaestroDao {
 				}
 			}
 		}
+		return resultado;
 	}
 
-	/* (non-Javadoc)
-	 * @see pe.com.logistica.negocio.dao.MaestroDao#ingresarHijoMaestro(pe.com.logistica.bean.negocio.Maestro)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * pe.com.logistica.negocio.dao.MaestroDao#ingresarHijoMaestro(pe.com.logistica
+	 * .bean.negocio.Maestro)
 	 */
 	@Override
-	public void ingresarHijoMaestro(Maestro maestro) throws SQLException {
+	public boolean ingresarHijoMaestro(Maestro maestro) throws SQLException {
+		boolean resultado = false;
 		Connection conn = null;
 		CallableStatement cs = null;
 		String sql = "{ ? = call soporte.fn_ingresarhijomaestro(?,?,?) }";
-		
+
 		try {
 			conn = UtilConexion.obtenerConexion();
 			cs = conn.prepareCall(sql);
-			int i=1;
+			int i = 1;
 			cs.registerOutParameter(i++, Types.BOOLEAN);
 			cs.setInt(i++, maestro.getCodigoMaestro());
 			cs.setString(i++, maestro.getNombre());
 			cs.setString(i++, maestro.getDescripcion());
-			
+
 			cs.execute();
 			
+			resultado = cs.getBoolean(1);
+
 		} catch (SQLException e) {
+			resultado = false;
 			throw new SQLException(e);
-		} finally{
+		} finally {
 			try {
-				if (cs != null){
+				if (cs != null) {
 					cs.close();
 				}
-				if (conn != null){
+				if (conn != null) {
 					conn.close();
 				}
 			} catch (SQLException e) {
 				try {
-					if (conn != null){
+					if (conn != null) {
 						conn.close();
 					}
 					throw new SQLException(e);
@@ -266,5 +296,105 @@ public class MaestroDaoImpl implements MaestroDao {
 				}
 			}
 		}
+		return resultado;
+	}
+
+	@Override
+	public Maestro consultarHijoMaestro(Maestro hijoMaestro)
+			throws SQLException {
+		Connection conn = null;
+		CallableStatement cs = null;
+		ResultSet rs = null;
+		String sql = "select * from soporte.vw_listahijosmaestro where idmaestro = ? and id = ?";
+		Maestro maestro = null;
+		try {
+			conn = UtilConexion.obtenerConexion();
+			cs = conn.prepareCall(sql);
+			cs.setInt(1, hijoMaestro.getCodigoMaestro());
+			cs.setInt(2, hijoMaestro.getCodigoEntero());
+			rs = cs.executeQuery();
+
+			if (rs.next()) {
+				maestro = new Maestro();
+				maestro.setCodigoEntero(rs.getInt("id"));
+				maestro.setNombre(UtilJdbc.obtenerCadena(rs, "nombre"));
+				maestro.setCodigoMaestro(rs.getInt("idmaestro"));
+				maestro.setDescripcion(UtilJdbc
+						.obtenerCadena(rs, "descripcion"));
+				maestro.getEstado().setCodigoCadena(
+						UtilJdbc.obtenerCadena(rs, "estado"));
+				maestro.getEstado().setNombre(
+						UtilJdbc.obtenerCadena(rs, "descestado"));
+			}
+		} catch (SQLException e) {
+			throw new SQLException(e);
+		} finally {
+			try {
+				if (cs != null) {
+					cs.close();
+				}
+				if (conn != null) {
+					conn.close();
+				}
+			} catch (SQLException e) {
+				try {
+					if (conn != null) {
+						conn.close();
+					}
+					throw new SQLException(e);
+				} catch (SQLException e1) {
+					throw new SQLException(e);
+				}
+			}
+		}
+
+		return maestro;
+	}
+
+	@Override
+	public boolean actualizarMaestro(Maestro maestro) throws SQLException {
+		boolean resultado = false;
+		Connection conn = null;
+		CallableStatement cs = null;
+		String sql = "{? = call soporte.fn_actualizarmaestro(?,?,?,?,?,?)}";
+
+		try {
+			conn = UtilConexion.obtenerConexion();
+			cs = conn.prepareCall(sql);
+			int i = 1;
+			cs.registerOutParameter(i++, Types.BOOLEAN);
+			cs.setInt(i++, maestro.getCodigoEntero());
+			cs.setInt(i++, maestro.getCodigoMaestro());
+			cs.setString(i++, maestro.getNombre());
+			cs.setString(i++, maestro.getDescripcion());
+			cs.setString(i++, maestro.getEstado().getCodigoCadena());
+			cs.setInt(i++, maestro.getOrden());
+			cs.execute();
+			
+			resultado = cs.getBoolean(1);
+			
+		} catch (SQLException e) {
+			resultado = false;
+			throw new SQLException(e);
+		} finally {
+			try {
+				if (cs != null) {
+					cs.close();
+				}
+				if (conn != null) {
+					conn.close();
+				}
+			} catch (SQLException e) {
+				try {
+					if (conn != null) {
+						conn.close();
+					}
+					throw new SQLException(e);
+				} catch (SQLException e1) {
+					throw new SQLException(e);
+				}
+			}
+		}
+		return resultado;
 	}
 }

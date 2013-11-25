@@ -67,6 +67,24 @@ public class MaestroMBean extends BaseMBean {
 		return "";
 	}
 	
+	public String consultarHijoMaestro(Integer idMaestro){
+		try {
+			this.getHijoMaestro().setCodigoEntero(idMaestro);
+			this.getHijoMaestro().setCodigoMaestro(this.getMaestro().getCodigoEntero());
+			
+			this.setHijoMaestro(soporteServicio.consultarHijoMaestro(this.getHijoMaestro()));
+			this.setListaHijosMaestro(soporteServicio.listarHijosMaestro(idMaestro));
+			this.setNombreFormulario("Editar Hijo Maestro");
+			this.setEditarMaestro(true);
+			this.setNuevoMaestro(false);
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return "";
+	}
+	
 	public void nuevoMaestro(){
 		this.setNuevoMaestro(true);
 		this.setEditarMaestro(false);
@@ -85,14 +103,12 @@ public class MaestroMBean extends BaseMBean {
 	public void ejecutarMetodo(){
 		try {
 			if (this.isNuevoMaestro()){
-				soporteServicio.ingresarMaestro(maestro);
-				this.setShowModal(true);
+				this.setShowModal(soporteServicio.ingresarMaestro(maestro));
 				this.setTipoModal("1");
 				this.setMensajeModal("Maestro registrado Satisfactoriamente");
 			}
 			else if(this.isEditarMaestro()){
-				soporteServicio.ingresarMaestro(maestro);
-				this.setShowModal(true);
+				this.setShowModal(soporteServicio.actualizarMaestro(getMaestro()));
 				this.setTipoModal("1");
 				this.setMensajeModal("Maestro actualizado Satisfactoriamente");
 			}
@@ -112,8 +128,7 @@ public class MaestroMBean extends BaseMBean {
 				this.setMensajeModal("Hijo Maestro registrado Satisfactoriamente");
 			}
 			else if(this.isEditarMaestro()){
-				soporteServicio.ingresarHijoMaestro(this.getHijoMaestro());
-				this.setShowModal(true);
+				this.setShowModal(soporteServicio.actualizarMaestro(this.getHijoMaestro()));
 				this.setTipoModal("1");
 				this.setMensajeModal("Hijo Maestro actualizado Satisfactoriamente");
 			}
