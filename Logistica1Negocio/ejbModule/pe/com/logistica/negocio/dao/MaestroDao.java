@@ -18,9 +18,13 @@ public interface MaestroDao {
 	
 	public List<Maestro> listarHijosMaestro(int idmaestro) throws SQLException;
 	
-	public void ingresarMaestro(Maestro maestro) throws SQLException;
+	public boolean ingresarMaestro(Maestro maestro) throws SQLException;
 	
-	public void ingresarHijoMaestro(Maestro maestro) throws SQLException;
+	public boolean ingresarHijoMaestro(Maestro maestro) throws SQLException;
 
 	public Maestro consultarMaestro(int id) throws SQLException;
+
+	public Maestro consultarHijoMaestro(Maestro hijoMaestro) throws SQLException;
+
+	public boolean actualizarMaestro(Maestro maestro) throws SQLException;
 }

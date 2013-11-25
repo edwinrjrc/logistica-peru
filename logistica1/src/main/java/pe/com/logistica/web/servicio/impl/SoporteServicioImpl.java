@@ -34,7 +34,6 @@ public class SoporteServicioImpl implements SoporteServicio {
         props.put(Context.URL_PKG_PREFIXES, "org.jboss.ejb.client.naming");
         
 		Context ctx = new InitialContext(props);
-		//String lookup = "ejb:Logistica1EAR/Logistica1Negocio/SeguridadSession!pe.com.logistica.negocio.ejb.SeguridadRemote";
 		String lookup = "java:jboss/exported/Logistica1EAR/Logistica1Negocio/SoporteSession!pe.com.logistica.negocio.ejb.SoporteRemote";
 		ejbSession = (SoporteRemote) ctx.lookup(lookup);
 	}
@@ -59,13 +58,18 @@ public class SoporteServicioImpl implements SoporteServicio {
 	public Maestro consultarMaestro(int idmaestro) throws SQLException {
 		return ejbSession.consultarMaestro(idmaestro);
 	}
+	
+	@Override
+	public Maestro consultarHijoMaestro(Maestro hijo) throws SQLException {
+		return ejbSession.consultarHijoMaestro(hijo);
+	}
 
 	/* (non-Javadoc)
 	 * @see pe.com.logistica.web.servicio.SoporteServicio#ingresarMaestro(pe.com.logistica.bean.negocio.Maestro)
 	 */
 	@Override
-	public void ingresarMaestro(Maestro maestro) throws SQLException {
-		ejbSession.ingresarMaestro(maestro);
+	public boolean ingresarMaestro(Maestro maestro) throws SQLException {
+		return ejbSession.ingresarMaestro(maestro);
 
 	}
 
@@ -73,8 +77,13 @@ public class SoporteServicioImpl implements SoporteServicio {
 	 * @see pe.com.logistica.web.servicio.SoporteServicio#ingresarHijoMaestro(pe.com.logistica.bean.negocio.Maestro)
 	 */
 	@Override
-	public void ingresarHijoMaestro(Maestro maestro) throws SQLException {
-		ejbSession.ingresarHijoMaestro(maestro);
+	public boolean ingresarHijoMaestro(Maestro maestro) throws SQLException {
+		return ejbSession.ingresarHijoMaestro(maestro);
+	}
+
+	@Override
+	public boolean actualizarMaestro(Maestro maestro) throws SQLException {
+		return ejbSession.actualizarMaestro(maestro);
 	}
 
 }
