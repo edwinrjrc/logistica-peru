@@ -7,7 +7,7 @@ import java.util.Date;
 
 /**
  * @author Edwin
- *
+ * 
  */
 public class BaseNegocio extends Base {
 
@@ -15,15 +15,13 @@ public class BaseNegocio extends Base {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	
-	
+
 	private String usuarioCreacion;
 	private Date fechaCreacion;
 	private String ipCreacion;
 	private String usuarioModificacion;
 	private Date fechaModificacion;
 	private String ipModificacion;
-	
 
 	/**
 	 * 
@@ -32,7 +30,6 @@ public class BaseNegocio extends Base {
 		// TODO Auto-generated constructor stub
 	}
 
-
 	/**
 	 * @return the usuarioCreacion
 	 */
@@ -40,14 +37,13 @@ public class BaseNegocio extends Base {
 		return usuarioCreacion;
 	}
 
-
 	/**
-	 * @param usuarioCreacion the usuarioCreacion to set
+	 * @param usuarioCreacion
+	 *            the usuarioCreacion to set
 	 */
 	public void setUsuarioCreacion(String usuarioCreacion) {
 		this.usuarioCreacion = usuarioCreacion;
 	}
-
 
 	/**
 	 * @return the fechaCreacion
@@ -56,14 +52,13 @@ public class BaseNegocio extends Base {
 		return fechaCreacion;
 	}
 
-
 	/**
-	 * @param fechaCreacion the fechaCreacion to set
+	 * @param fechaCreacion
+	 *            the fechaCreacion to set
 	 */
 	public void setFechaCreacion(Date fechaCreacion) {
 		this.fechaCreacion = fechaCreacion;
 	}
-
 
 	/**
 	 * @return the ipCreacion
@@ -72,14 +67,13 @@ public class BaseNegocio extends Base {
 		return ipCreacion;
 	}
 
-
 	/**
-	 * @param ipCreacion the ipCreacion to set
+	 * @param ipCreacion
+	 *            the ipCreacion to set
 	 */
 	public void setIpCreacion(String ipCreacion) {
 		this.ipCreacion = ipCreacion;
 	}
-
 
 	/**
 	 * @return the usuarioModificacion
@@ -88,14 +82,13 @@ public class BaseNegocio extends Base {
 		return usuarioModificacion;
 	}
 
-
 	/**
-	 * @param usuarioModificacion the usuarioModificacion to set
+	 * @param usuarioModificacion
+	 *            the usuarioModificacion to set
 	 */
 	public void setUsuarioModificacion(String usuarioModificacion) {
 		this.usuarioModificacion = usuarioModificacion;
 	}
-
 
 	/**
 	 * @return the fechaModificacion
@@ -104,14 +97,13 @@ public class BaseNegocio extends Base {
 		return fechaModificacion;
 	}
 
-
 	/**
-	 * @param fechaModificacion the fechaModificacion to set
+	 * @param fechaModificacion
+	 *            the fechaModificacion to set
 	 */
 	public void setFechaModificacion(Date fechaModificacion) {
 		this.fechaModificacion = fechaModificacion;
 	}
-
 
 	/**
 	 * @return the ipModificacion
@@ -120,9 +112,9 @@ public class BaseNegocio extends Base {
 		return ipModificacion;
 	}
 
-
 	/**
-	 * @param ipModificacion the ipModificacion to set
+	 * @param ipModificacion
+	 *            the ipModificacion to set
 	 */
 	public void setIpModificacion(String ipModificacion) {
 		this.ipModificacion = ipModificacion;

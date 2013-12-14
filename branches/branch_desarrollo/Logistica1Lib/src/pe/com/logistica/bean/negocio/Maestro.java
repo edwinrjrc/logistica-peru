@@ -7,7 +7,7 @@ import pe.com.logistica.bean.base.BaseVO;
 
 /**
  * @author Edwin
- *
+ * 
  */
 public class Maestro extends BaseVO {
 
@@ -15,12 +15,11 @@ public class Maestro extends BaseVO {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	
-	
+
 	private String descripcion;
 	private int orden;
 	private Integer codigoMaestro;
-	
+
 	/**
 	 * 
 	 */
@@ -36,7 +35,8 @@ public class Maestro extends BaseVO {
 	}
 
 	/**
-	 * @param descripcion the descripcion to set
+	 * @param descripcion
+	 *            the descripcion to set
 	 */
 	public void setDescripcion(String descripcion) {
 		this.descripcion = descripcion;
@@ -50,7 +50,8 @@ public class Maestro extends BaseVO {
 	}
 
 	/**
-	 * @param orden the orden to set
+	 * @param orden
+	 *            the orden to set
 	 */
 	public void setOrden(int orden) {
 		this.orden = orden;
@@ -64,7 +65,8 @@ public class Maestro extends BaseVO {
 	}
 
 	/**
-	 * @param codigoMaestro the codigoMaestro to set
+	 * @param codigoMaestro
+	 *            the codigoMaestro to set
 	 */
 	public void setCodigoMaestro(Integer codigoMaestro) {
 		this.codigoMaestro = codigoMaestro;
