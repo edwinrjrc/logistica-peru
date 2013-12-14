@@ -8,16 +8,15 @@ import pe.com.logistica.bean.base.DocumentoIdentidad;
 
 /**
  * @author Edwin
- *
+ * 
  */
-public class Persona extends BaseNegocio{
+public class Persona extends BaseNegocio {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	
-	
+
 	private DocumentoIdentidad documentoIdentidad;
 	private String nombres;
 	private String apellidoPaterno;
@@ -39,7 +38,8 @@ public class Persona extends BaseNegocio{
 	}
 
 	/**
-	 * @param documentoIdentidad the documentoIdentidad to set
+	 * @param documentoIdentidad
+	 *            the documentoIdentidad to set
 	 */
 	public void setDocumentoIdentidad(DocumentoIdentidad documentoIdentidad) {
 		this.documentoIdentidad = documentoIdentidad;
@@ -53,7 +53,8 @@ public class Persona extends BaseNegocio{
 	}
 
 	/**
-	 * @param nombres the nombres to set
+	 * @param nombres
+	 *            the nombres to set
 	 */
 	public void setNombres(String nombres) {
 		this.nombres = nombres;
@@ -67,7 +68,8 @@ public class Persona extends BaseNegocio{
 	}
 
 	/**
-	 * @param apellidoPaterno the apellidoPaterno to set
+	 * @param apellidoPaterno
+	 *            the apellidoPaterno to set
 	 */
 	public void setApellidoPaterno(String apellidoPaterno) {
 		this.apellidoPaterno = apellidoPaterno;
@@ -81,7 +83,8 @@ public class Persona extends BaseNegocio{
 	}
 
 	/**
-	 * @param apellidoMaterno the apellidoMaterno to set
+	 * @param apellidoMaterno
+	 *            the apellidoMaterno to set
 	 */
 	public void setApellidoMaterno(String apellidoMaterno) {
 		this.apellidoMaterno = apellidoMaterno;
@@ -95,7 +98,8 @@ public class Persona extends BaseNegocio{
 	}
 
 	/**
-	 * @param razonSocial the razonSocial to set
+	 * @param razonSocial
+	 *            the razonSocial to set
 	 */
 	public void setRazonSocial(String razonSocial) {
 		this.razonSocial = razonSocial;
