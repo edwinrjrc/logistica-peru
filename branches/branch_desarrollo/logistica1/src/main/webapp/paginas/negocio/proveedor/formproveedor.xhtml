@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich">
+
+	<rich:popupPanel id="idModalformproveedor" modal="true" width="800"
+		height="500" style="background-color: #FFFFFF">
+
+		<f:facet name="header">
+			<h:outputText id="idNomModal"
+				value="#{proveedorMBean.nombreFormulario}" />
+		</f:facet>
+		<f:facet name="controls">
+			<h:outputLink value="#" style="border:0"
+				onclick="#{rich:component('idModalformproveedor')}.hide(); return false;">
+				<h:graphicImage height="18" width="18"
+					url="/resources/img/close.png" style="border:0" />
+			</h:outputLink>
+		</f:facet>
+
+		<h:form id="idFormProveedor">
+			<rich:tabPanel switchType="client" style="width:100%;">
+				<rich:tab header="Información Basica">
+					<h:panelGrid border="0" cellpadding="0" cellspacing="0"
+						style="width:100%;" columns="1">
+						<h:panelGrid border="0" cellpadding="0" cellspacing="0"
+							style="width:100%;" columns="4"
+							columnClasses="col1fil1proveedor,col2fil1proveedor,col3fil1proveedor,col4fil1proveedor">
+							<h:outputText value="Tipo Documento" />
+							<h:selectOneMenu
+								value="#{proveedorMBean.proveedor.documentoIdentidad.tipoDocumento.codigoEntero}">
+								<f:selectItem itemLabel="-Seleccione-" />
+								<f:selectItems value="#{catalogoMBean.catalogoTipoDocumento}" />
+							</h:selectOneMenu>
+							<h:outputText value="Numero Documento" />
+							<h:inputText
+								value="#{proveedorMBean.proveedor.documentoIdentidad.numeroDocumento}" />
+							<h:outputText value="Apellido Paterno" />
+							<h:inputText value="#{proveedorMBean.proveedor.apellidoPaterno}" />
+							<h:outputText value="Apellido Materno" />
+							<h:inputText value="#{proveedorMBean.proveedor.apellidoMaterno}" />
+						</h:panelGrid>
+						<h:panelGrid border="0" cellpadding="0" cellspacing="0"
+							style="width:100%;" columns="2"
+							columnClasses="col1fil2proveedor,col2fil2proveedor">
+							<h:outputText value="Nombres" for="idForProNom" />
+							<h:inputText id="idForProNom"
+								value="#{proveedorMBean.proveedor.nombres}" />
+							<h:outputText value="Razon Social" />
+							<h:inputText value="#{proveedorMBean.proveedor.nombres}" />
+							<h:outputText value="Rubro" />
+							<h:selectOneMenu
+								value="#{proveedorMBean.proveedor.rubro.codigoEntero}">
+								<f:selectItem itemLabel="-Seleccione-" />
+								<f:selectItems value="#{catalogoMBean.catalogoRubro}" />
+							</h:selectOneMenu>
+							<h:outputText value="Fecha Registro" />
+
+							<h:panelGrid border="0" columns="1">
+								<h:outputText value="#{proveedorMBean.proveedor.fechaCreacion}">
+									<f:convertDateTime pattern="dd/MM/yyyy" />
+								</h:outputText>
+							</h:panelGrid>
+
+						</h:panelGrid>
+					</h:panelGrid>
+				</rich:tab>
+				<rich:tab header="Direcciones">
+					<h:panelGrid border="0" cellpadding="o" cellspacing="0"
+						style="width:100%;" columns="1">
+
+						<rich:dataTable style="width:100%;" id="idTablaDirecciones"
+							value="#{proveedorMBean.proveedor.listaDirecciones}" var="fila">
+							<rich:column>
+								<f:facet name="header">
+									<h:outputText value="Direccion" />
+								</f:facet>
+								<h:outputText value="#{fila.direccion}" />
+							</rich:column>
+							<rich:column>
+								<f:facet name="header">
+									<h:outputText value="Departamento" />
+								</f:facet>
+								<h:outputText value="#{fila.ubigeo.departamento.nombre}" />
+							</rich:column>
+							<rich:column>
+								<f:facet name="header">
+									<h:outputText value="Provincia" />
+								</f:facet>
+								<h:outputText value="#{fila.ubigeo.provincia.nombre}" />
+							</rich:column>
+							<rich:column>
+								<f:facet name="header">
+									<h:outputText value="Distrito" />
+								</f:facet>
+								<h:outputText value="#{fila.ubigeo.distrito.nombre}" />
+							</rich:column>
+							<f:facet name="header">
+								<h:panelGrid columns="1" style="width:100%;text-align:right;">
+									<a4j:commandButton value="Agregar"
+										action="#{proveedorMBean.nuevaDireccion()}"
+										oncomplete="#{rich:component('idModalFormDireccion')}.show();"
+										render="idNomModalDireccion" />
+								</h:panelGrid>
+							</f:facet>
+						</rich:dataTable>
+
+					</h:panelGrid>
+				</rich:tab>
+				<rich:tab header="Contactos">
+					<h:panelGrid border="0" cellpadding="o" cellspacing="0"
+						style="width:100%;" columns="4">
+						<rich:dataTable style="width:100%;" id="idTablaContactos"
+							value="#{proveedorMBean.proveedor.listaContactos}" var="fila">
+							<rich:column>
+								<f:facet name="header">
+									<h:outputText value="Nombre	" />
+								</f:facet>
+								<h:outputText value="#{fila.nombreCompleto}" />
+							</rich:column>
+							<rich:column>
+								<f:facet name="header">
+									<h:outputText value="Area" />
+								</f:facet>
+								<h:outputText value="#{fila.area.nombre}" />
+							</rich:column>
+							<rich:column>
+								<f:facet name="header">
+									<h:outputText value="Anexo" />
+								</f:facet>
+								<h:outputText value="#{fila.anexo}" />
+							</rich:column>	
+							<f:facet name="header">
+								<h:panelGrid columns="1" style="width:100%;text-align:right;">
+									<a4j:commandButton value="Agregar"
+										action="#{proveedorMBean.nuevoContacto()}"
+										oncomplete="#{rich:component('idModalFormContacto')}.show();"
+										render="idNomModalContacto" />
+								</h:panelGrid>
+							</f:facet>
+						</rich:dataTable>
+					</h:panelGrid>
+				</rich:tab>
+			</rich:tabPanel>
+		</h:form>
+
+		<ui:include src="/paginas/negocio/proveedor/formdireccion.xhtml" />
+		<ui:include src="/paginas/negocio/proveedor/formcontacto.xhtml" />
+	</rich:popupPanel>
+</ui:composition>

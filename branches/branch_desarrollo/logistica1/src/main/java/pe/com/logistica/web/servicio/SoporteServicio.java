@@ -6,6 +6,7 @@ package pe.com.logistica.web.servicio;
 import java.sql.SQLException;
 import java.util.List;
 
+import pe.com.logistica.bean.base.BaseVO;
 import pe.com.logistica.bean.negocio.Maestro;
 
 /**
@@ -27,4 +28,12 @@ public interface SoporteServicio {
 	public Maestro consultarHijoMaestro(Maestro hijo) throws SQLException;
 	
 	public boolean actualizarMaestro(Maestro hijo) throws SQLException;
+
+	public List<BaseVO> listarCatalogoMaestro(int idmaestro) throws SQLException;
+	
+	public List<BaseVO> listarCatalogoDepartamento() throws SQLException;
+	
+	public List<BaseVO> listarCatalogoProvincia(String idProvincia) throws SQLException;
+	
+	public List<BaseVO> listarCatalogoDistrito(String idDepartamento, String idProvincia) throws SQLException;
 }

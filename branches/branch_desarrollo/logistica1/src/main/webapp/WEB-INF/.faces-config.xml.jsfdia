@@ -17,6 +17,11 @@
     NAME="output2" PATH="/paginas/soporte/maestro/administrar.xhtml"
     TARGET="rules:#paginas#soporte#maestro#administrar.xhtml"
     TITLE="irAdministrarMaestros" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT
+    ID="irAdministrarProveedor::#paginas#negocio#proveedor#administrar.xhtml"
+    NAME="output3" PATH="/paginas/negocio/proveedor/administrar.xhtml"
+    TARGET="rules:#paginas#negocio#proveedor#administrar.xhtml"
+    TITLE="irAdministrarProveedor" model-entity="JSFProcessItemOutput"/>
   </PROCESS-ITEM>
  </PROCESS-ITEM>
  <PROCESS-ITEM NAME="rules:#paginas#seguridad#usuario#administrar.xhtml"
@@ -29,8 +34,8 @@
    PATH="/paginas/soporte/parametro/administrar.xhtml" model-entity="JSFProcessItem"/>
  </PROCESS-ITEM>
  <PROCESS-ITEM NAME="rules:#paginas#soporte#maestro#administrar.xhtml"
-  PATH="/paginas/soporte/maestro/administrar.xhtml" SHAPE="278,323,0,0"
-  model-entity="JSFProcessGroup" persistent="true">
+  PATH="/paginas/soporte/maestro/administrar.xhtml"
+  SHAPE="328,248,50,41" model-entity="JSFProcessGroup" persistent="true">
   <PROCESS-ITEM ID="rules:#paginas#soporte#maestro#administrar.xhtml:0"
    NAME="item" PATH="/paginas/soporte/maestro/administrar.xhtml" model-entity="JSFProcessItem">
    <PROCESS-ITEM-OUTPUT
@@ -44,4 +49,7 @@
   NAME="rules:#paginas#soporte#maestro#hijo#administrar.xhtml"
   PATH="/paginas/soporte/maestro/hijo/administrar.xhtml"
   SHAPE="672,128,50,25" model-entity="JSFProcessGroup" persistent="true"/>
+ <PROCESS-ITEM NAME="rules:#paginas#negocio#proveedor#administrar.xhtml"
+  PATH="/paginas/negocio/proveedor/administrar.xhtml"
+  SHAPE="201,356,0,0" model-entity="JSFProcessGroup" persistent="true"/>
 </PROCESS>

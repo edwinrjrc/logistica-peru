@@ -3,7 +3,13 @@
  */
 package pe.com.logistica.bean.negocio;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.commons.lang3.StringUtils;
+
 import pe.com.logistica.bean.base.BaseNegocio;
+import pe.com.logistica.bean.base.Direccion;
 import pe.com.logistica.bean.base.DocumentoIdentidad;
 
 /**
@@ -22,6 +28,7 @@ public class Persona extends BaseNegocio {
 	private String apellidoPaterno;
 	private String apellidoMaterno;
 	private String razonSocial;
+	private List<Direccion> listaDirecciones;
 
 	/**
 	 * 
@@ -34,6 +41,9 @@ public class Persona extends BaseNegocio {
 	 * @return the documentoIdentidad
 	 */
 	public DocumentoIdentidad getDocumentoIdentidad() {
+		if (documentoIdentidad == null){
+			documentoIdentidad = new DocumentoIdentidad();
+		}
 		return documentoIdentidad;
 	}
 
@@ -103,6 +113,30 @@ public class Persona extends BaseNegocio {
 	 */
 	public void setRazonSocial(String razonSocial) {
 		this.razonSocial = razonSocial;
+	}
+
+	/**
+	 * @return the listaDirecciones
+	 */
+	public List<Direccion> getListaDirecciones() {
+		if (listaDirecciones == null){
+			listaDirecciones = new ArrayList<Direccion>();
+		}
+		return listaDirecciones;
+	}
+
+	/**
+	 * @param listaDirecciones the listaDirecciones to set
+	 */
+	public void setListaDirecciones(List<Direccion> listaDirecciones) {
+		this.listaDirecciones = listaDirecciones;
+	}
+	
+	public String getNombreCompleto(){
+		String nombreCompleto = StringUtils.trim(getNombres())+ " "+ StringUtils.trim(getApellidoPaterno())+ " "+StringUtils.trim(getApellidoMaterno());
+		nombreCompleto = StringUtils.normalizeSpace(nombreCompleto);
+		
+		return nombreCompleto;
 	}
 
 }

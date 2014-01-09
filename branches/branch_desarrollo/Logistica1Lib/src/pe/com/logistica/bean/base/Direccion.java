@@ -1,7 +1,9 @@
 package pe.com.logistica.bean.base;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import pe.com.logistica.bean.negocio.Telefono;
 import pe.com.logistica.bean.negocio.Ubigeo;
 
 /**
@@ -23,11 +25,13 @@ public class Direccion extends BaseNegocio {
 	private String numero;
 	private String observaciones;
 	private String referencia;
-	private List<String> telefonos;
+	private List<Telefono> telefonos;
 	private BaseVO tipoDireccion;
 	private Ubigeo ubigeo;
 	private BaseVO via;
 	private BaseVO zona;
+	private String manzana;
+	private String lote;
 
 	public Direccion() {
 
@@ -145,7 +149,13 @@ public class Direccion extends BaseNegocio {
 	/**
 	 * @return the telefonos
 	 */
-	public List<String> getTelefonos() {
+	public List<Telefono> getTelefonos() {
+		if (telefonos == null){
+			telefonos = new ArrayList<Telefono>();
+			Telefono telefono = new Telefono();
+			telefono.setId(1);
+			telefonos.add(telefono);
+		}
 		return telefonos;
 	}
 
@@ -153,7 +163,7 @@ public class Direccion extends BaseNegocio {
 	 * @param telefonos
 	 *            the telefonos to set
 	 */
-	public void setTelefonos(List<String> telefonos) {
+	public void setTelefonos(List<Telefono> telefonos) {
 		this.telefonos = telefonos;
 	}
 
@@ -161,6 +171,9 @@ public class Direccion extends BaseNegocio {
 	 * @return the tipoDireccion
 	 */
 	public BaseVO getTipoDireccion() {
+		if (tipoDireccion == null){
+			tipoDireccion = new BaseVO();
+		}
 		return tipoDireccion;
 	}
 
@@ -176,6 +189,9 @@ public class Direccion extends BaseNegocio {
 	 * @return the ubigeo
 	 */
 	public Ubigeo getUbigeo() {
+		if (ubigeo == null){
+			ubigeo = new Ubigeo();
+		}
 		return ubigeo;
 	}
 
@@ -191,6 +207,9 @@ public class Direccion extends BaseNegocio {
 	 * @return the via
 	 */
 	public BaseVO getVia() {
+		if (via == null){
+			via = new BaseVO();
+		}
 		return via;
 	}
 
@@ -206,6 +225,9 @@ public class Direccion extends BaseNegocio {
 	 * @return the zona
 	 */
 	public BaseVO getZona() {
+		if (zona == null){
+			zona = new BaseVO();
+		}
 		return zona;
 	}
 
@@ -215,6 +237,34 @@ public class Direccion extends BaseNegocio {
 	 */
 	public void setZona(BaseVO zona) {
 		this.zona = zona;
+	}
+
+	/**
+	 * @return the manzana
+	 */
+	public String getManzana() {
+		return manzana;
+	}
+
+	/**
+	 * @param manzana the manzana to set
+	 */
+	public void setManzana(String manzana) {
+		this.manzana = manzana;
+	}
+
+	/**
+	 * @return the lote
+	 */
+	public String getLote() {
+		return lote;
+	}
+
+	/**
+	 * @param lote the lote to set
+	 */
+	public void setLote(String lote) {
+		this.lote = lote;
 	}
 
 }
