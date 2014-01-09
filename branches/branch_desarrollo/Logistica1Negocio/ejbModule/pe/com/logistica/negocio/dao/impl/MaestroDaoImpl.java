@@ -259,7 +259,7 @@ public class MaestroDaoImpl implements MaestroDao {
 		boolean resultado = false;
 		Connection conn = null;
 		CallableStatement cs = null;
-		String sql = "{ ? = call soporte.fn_ingresarhijomaestro(?,?,?) }";
+		String sql = "{ ? = call soporte.fn_ingresarhijomaestro(?,?,?,?) }";
 
 		try {
 			conn = UtilConexion.obtenerConexion();
@@ -269,6 +269,7 @@ public class MaestroDaoImpl implements MaestroDao {
 			cs.setInt(i++, maestro.getCodigoMaestro());
 			cs.setString(i++, maestro.getNombre());
 			cs.setString(i++, maestro.getDescripcion());
+			cs.setString(i++, maestro.getAbreviatura());
 
 			cs.execute();
 			
@@ -325,6 +326,7 @@ public class MaestroDaoImpl implements MaestroDao {
 						UtilJdbc.obtenerCadena(rs, "estado"));
 				maestro.getEstado().setNombre(
 						UtilJdbc.obtenerCadena(rs, "descestado"));
+				maestro.setAbreviatura(UtilJdbc.obtenerCadena(rs, "abreviatura"));
 			}
 		} catch (SQLException e) {
 			throw new SQLException(e);

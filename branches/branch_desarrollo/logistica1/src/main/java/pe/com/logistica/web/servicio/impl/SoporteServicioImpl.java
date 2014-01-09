@@ -11,6 +11,7 @@ import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
+import pe.com.logistica.bean.base.BaseVO;
 import pe.com.logistica.bean.negocio.Maestro;
 import pe.com.logistica.negocio.ejb.SoporteRemote;
 import pe.com.logistica.web.servicio.SoporteServicio;
@@ -86,4 +87,25 @@ public class SoporteServicioImpl implements SoporteServicio {
 		return ejbSession.actualizarMaestro(maestro);
 	}
 
+	@Override
+	public List<BaseVO> listarCatalogoMaestro(int idmaestro) throws SQLException {
+		return ejbSession.listarCatalogoMaestro(idmaestro);
+	}
+
+	@Override
+	public List<BaseVO> listarCatalogoDepartamento() throws SQLException {
+		return ejbSession.listarCatalogoDepartamento();
+	}
+
+	@Override
+	public List<BaseVO> listarCatalogoProvincia(String idProvincia)
+			throws SQLException {
+		return ejbSession.listarCatalogoProvincia(idProvincia);
+	}
+
+	@Override
+	public List<BaseVO> listarCatalogoDistrito(String idDepartamento,
+			String idProvincia) throws SQLException {
+		return ejbSession.listarCatalogoDistrito(idDepartamento, idProvincia);
+	}
 }

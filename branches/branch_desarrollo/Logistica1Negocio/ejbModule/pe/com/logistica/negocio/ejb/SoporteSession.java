@@ -5,8 +5,11 @@ import java.util.List;
 
 import javax.ejb.Stateless;
 
+import pe.com.logistica.bean.base.BaseVO;
 import pe.com.logistica.bean.negocio.Maestro;
+import pe.com.logistica.negocio.dao.CatalogoDao;
 import pe.com.logistica.negocio.dao.MaestroDao;
+import pe.com.logistica.negocio.dao.impl.CatalogoDaoImpl;
 import pe.com.logistica.negocio.dao.impl.MaestroDaoImpl;
 
 /**
@@ -16,6 +19,7 @@ import pe.com.logistica.negocio.dao.impl.MaestroDaoImpl;
 public class SoporteSession implements SoporteRemote, SoporteLocal {
 
 	MaestroDao maestroDao = null;
+	CatalogoDao catalogoDao = null;
     /**
      * Default constructor. 
      */
@@ -63,5 +67,29 @@ public class SoporteSession implements SoporteRemote, SoporteLocal {
 	public boolean actualizarMaestro(Maestro maestro) throws SQLException {
 		maestroDao = new MaestroDaoImpl();
 		return maestroDao.actualizarMaestro(maestro);
+	}
+
+	@Override
+	public List<BaseVO> listarCatalogoMaestro(int maestro) throws SQLException {
+		catalogoDao = new CatalogoDaoImpl();
+		return catalogoDao.listarCatalogoMaestro(maestro);
+	}
+	
+	@Override
+	public List<BaseVO> listarCatalogoDepartamento() throws SQLException {
+		catalogoDao = new CatalogoDaoImpl();
+		return catalogoDao.listaDepartamento();
+	}
+	
+	@Override
+	public List<BaseVO> listarCatalogoProvincia(String idDepartamento) throws SQLException {
+		catalogoDao = new CatalogoDaoImpl();
+		return catalogoDao.listaProvincia(idDepartamento);
+	}
+	
+	@Override
+	public List<BaseVO> listarCatalogoDistrito(String idDepartamento, String idProvincia) throws SQLException {
+		catalogoDao = new CatalogoDaoImpl();
+		return catalogoDao.listaDistrito(idDepartamento, idProvincia);
 	}
 }

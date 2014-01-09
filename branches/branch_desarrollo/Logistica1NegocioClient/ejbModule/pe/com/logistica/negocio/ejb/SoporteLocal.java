@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.ejb.Local;
 
+import pe.com.logistica.bean.base.BaseVO;
 import pe.com.logistica.bean.negocio.Maestro;
 
 @Local
@@ -23,4 +24,12 @@ public interface SoporteLocal {
 	public Maestro consultarHijoMaestro(Maestro hijo) throws SQLException;
 
 	public boolean actualizarMaestro(Maestro maestro) throws SQLException;
+	
+	public List<BaseVO> listarCatalogoMaestro(int maestro) throws SQLException;
+
+	public List<BaseVO> listarCatalogoProvincia(String idDepartamento)
+			throws SQLException;
+
+	public List<BaseVO> listarCatalogoDistrito(String idDepartamento,
+			String idProvincia) throws SQLException;
 }
