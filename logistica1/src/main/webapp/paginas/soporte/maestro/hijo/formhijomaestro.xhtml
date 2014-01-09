@@ -62,6 +62,16 @@
 					<rich:message for="idDescripcion" showDetail="true"
 						showSummary="false" />
 				</h:panelGrid>
+				<h:outputLabel value="Abreviatura"
+					style="width: 100px; text-align:left" />
+				<h:panelGrid columns="1" border="0" cellpadding="0" cellspacing="0"
+					rendered="#{maestroMBean.nuevoMaestro or maestroMBean.editarMaestro}">
+					<h:inputText id="idAbreviatura" required="true"
+						requiredMessage="Ingrese la Abreviatura"
+						value="#{maestroMBean.hijoMaestro.abreviatura}" />
+					<rich:message for="idAbreviatura" showDetail="true"
+						showSummary="false" />
+				</h:panelGrid>
 				<h:outputLabel value="Estado"
 					rendered="#{maestroMBean.editarMaestro}"
 					style="width: 100px; text-align:left" />

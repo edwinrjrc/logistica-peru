@@ -73,4 +73,192 @@ public class CatalogoDaoImpl implements CatalogoDao {
 		return resultado;
 	}
 
+	@Override
+	public List<BaseVO> listarCatalogoMaestro(int maestro) {
+		List<BaseVO> resultado = null;
+		Connection conn = null;
+		CallableStatement cs = null;
+		ResultSet rs = null;
+		String sql = "select * from soporte.vw_catalogomaestro where idmaestro = ?";
+		
+		try {
+			conn = UtilConexion.obtenerConexion();
+			cs = conn.prepareCall(sql);
+			cs.setInt(1, maestro);
+			rs = cs.executeQuery();
+			
+			resultado = new ArrayList<BaseVO>();
+			BaseVO maestroVO = null;
+			while(rs.next()){
+				maestroVO = new BaseVO();
+				maestroVO.setCodigoEntero(rs.getInt("id"));
+				maestroVO.setNombre(UtilJdbc.obtenerCadena(rs, "nombre"));
+				resultado.add(maestroVO);
+			}
+		} catch (SQLException e) {
+			resultado = null;
+			e.printStackTrace();
+		} finally{
+			try {
+				if (cs != null){
+					cs.close();
+				}
+				if (conn != null){
+					conn.close();
+				}
+			} catch (SQLException e) {
+				try {
+					if (conn != null){
+						conn.close();
+					}
+				} catch (SQLException e1) {
+					e1.printStackTrace();
+				}
+			}
+		}
+		
+		return resultado;
+	}
+
+	@Override
+	public List<BaseVO> listaDepartamento() {
+		List<BaseVO> resultado = null;
+		Connection conn = null;
+		CallableStatement cs = null;
+		ResultSet rs = null;
+		String sql = "select * from soporte.vw_catalogodepartamento";
+		
+		try {
+			conn = UtilConexion.obtenerConexion();
+			cs = conn.prepareCall(sql);
+			rs = cs.executeQuery();
+			
+			resultado = new ArrayList<BaseVO>();
+			BaseVO maestroVO = null;
+			while(rs.next()){
+				maestroVO = new BaseVO();
+				maestroVO.setCodigoCadena(rs.getString("iddepartamento"));
+				maestroVO.setNombre(UtilJdbc.obtenerCadena(rs, "descripcion"));
+				resultado.add(maestroVO);
+			}
+		} catch (SQLException e) {
+			resultado = null;
+			e.printStackTrace();
+		} finally{
+			try {
+				if (cs != null){
+					cs.close();
+				}
+				if (conn != null){
+					conn.close();
+				}
+			} catch (SQLException e) {
+				try {
+					if (conn != null){
+						conn.close();
+					}
+				} catch (SQLException e1) {
+					e1.printStackTrace();
+				}
+			}
+		}
+		
+		return resultado;
+	}
+
+	@Override
+	public List<BaseVO> listaProvincia(String idDepartamento) {
+		List<BaseVO> resultado = null;
+		Connection conn = null;
+		CallableStatement cs = null;
+		ResultSet rs = null;
+		String sql = "select * from soporte.vw_catalogoprovincia where iddepartamento = ?";
+		
+		try {
+			conn = UtilConexion.obtenerConexion();
+			cs = conn.prepareCall(sql);
+			cs.setString(1, idDepartamento);
+			rs = cs.executeQuery();
+			
+			resultado = new ArrayList<BaseVO>();
+			BaseVO maestroVO = null;
+			while(rs.next()){
+				maestroVO = new BaseVO();
+				maestroVO.setCodigoCadena(rs.getString("idprovincia"));
+				maestroVO.setNombre(UtilJdbc.obtenerCadena(rs, "descripcion"));
+				resultado.add(maestroVO);
+			}
+		} catch (SQLException e) {
+			resultado = null;
+			e.printStackTrace();
+		} finally{
+			try {
+				if (cs != null){
+					cs.close();
+				}
+				if (conn != null){
+					conn.close();
+				}
+			} catch (SQLException e) {
+				try {
+					if (conn != null){
+						conn.close();
+					}
+				} catch (SQLException e1) {
+					e1.printStackTrace();
+				}
+			}
+		}
+		
+		return resultado;
+	}
+
+	@Override
+	public List<BaseVO> listaDistrito(String idDepartamento, String idProvincia) {
+		List<BaseVO> resultado = null;
+		Connection conn = null;
+		CallableStatement cs = null;
+		ResultSet rs = null;
+		String sql = "select * from soporte.vw_catalogodistrito where iddepartamento = ? and idprovincia = ?";
+		
+		try {
+			conn = UtilConexion.obtenerConexion();
+			cs = conn.prepareCall(sql);
+			cs.setString(1, idDepartamento);
+			cs.setString(2, idProvincia);
+			rs = cs.executeQuery();
+			
+			resultado = new ArrayList<BaseVO>();
+			BaseVO maestroVO = null;
+			while(rs.next()){
+				maestroVO = new BaseVO();
+				maestroVO.setCodigoCadena(rs.getString("iddistrito"));
+				maestroVO.setNombre(UtilJdbc.obtenerCadena(rs, "descripcion"));
+				resultado.add(maestroVO);
+			}
+		} catch (SQLException e) {
+			resultado = null;
+			e.printStackTrace();
+		} finally{
+			try {
+				if (cs != null){
+					cs.close();
+				}
+				if (conn != null){
+					conn.close();
+				}
+			} catch (SQLException e) {
+				try {
+					if (conn != null){
+						conn.close();
+					}
+				} catch (SQLException e1) {
+					e1.printStackTrace();
+				}
+			}
+		}
+		
+		return resultado;
+	}
+
 }

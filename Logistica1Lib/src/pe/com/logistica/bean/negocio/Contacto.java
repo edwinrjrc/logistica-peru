@@ -1,6 +1,9 @@
 package pe.com.logistica.bean.negocio;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import pe.com.logistica.bean.base.BaseVO;
 
 /**
  * @author Edwin
@@ -14,7 +17,9 @@ public class Contacto extends Persona {
 	 */
 	private static final long serialVersionUID = 4988270415170041781L;
 	private List<String> listaCorreos;
-	private List<String> listaTelefonos;
+	private List<Telefono> listaTelefonos;
+	private String anexo;	
+	private BaseVO area;
 
 	public Contacto() {
 
@@ -42,7 +47,10 @@ public class Contacto extends Persona {
 	/**
 	 * @return the listaTelefonos
 	 */
-	public List<String> getListaTelefonos() {
+	public List<Telefono> getListaTelefonos() {
+		if (listaTelefonos == null){
+			listaTelefonos = new ArrayList<Telefono>();
+		}
 		return listaTelefonos;
 	}
 
@@ -50,8 +58,39 @@ public class Contacto extends Persona {
 	 * @param listaTelefonos
 	 *            the listaTelefonos to set
 	 */
-	public void setListaTelefonos(List<String> listaTelefonos) {
+	public void setListaTelefonos(List<Telefono> listaTelefonos) {
 		this.listaTelefonos = listaTelefonos;
+	}
+
+	/**
+	 * @return the anexo
+	 */
+	public String getAnexo() {
+		return anexo;
+	}
+
+	/**
+	 * @param anexo the anexo to set
+	 */
+	public void setAnexo(String anexo) {
+		this.anexo = anexo;
+	}
+
+	/**
+	 * @return the area
+	 */
+	public BaseVO getArea() {
+		if (area == null){
+			area = new BaseVO();
+		}
+		return area;
+	}
+
+	/**
+	 * @param area the area to set
+	 */
+	public void setArea(BaseVO area) {
+		this.area = area;
 	}
 
 }

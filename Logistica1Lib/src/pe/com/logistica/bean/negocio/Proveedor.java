@@ -1,5 +1,6 @@
 package pe.com.logistica.bean.negocio;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import pe.com.logistica.bean.base.BaseVO;
@@ -31,6 +32,9 @@ public class Proveedor extends Persona {
 	 * @return the listaContactos
 	 */
 	public List<Contacto> getListaContactos() {
+		if (listaContactos == null){
+			listaContactos = new ArrayList<Contacto>();
+		}
 		return listaContactos;
 	}
 
@@ -46,6 +50,9 @@ public class Proveedor extends Persona {
 	 * @return the listaCuentas
 	 */
 	public List<CuentaBancaria> getListaCuentas() {
+		if (listaCuentas == null){
+			listaCuentas = new ArrayList<CuentaBancaria>();
+		}
 		return listaCuentas;
 	}
 
@@ -61,6 +68,9 @@ public class Proveedor extends Persona {
 	 * @return the rubro
 	 */
 	public BaseVO getRubro() {
+		if (rubro == null){
+			rubro = new BaseVO();
+		}
 		return rubro;
 	}
 

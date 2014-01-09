@@ -30,4 +30,11 @@ public class UtilJdbc {
 		}
 		return "";
 	}
+	
+	public static Integer parseCadenaEntero(String cadena){
+		if (StringUtils.isNotBlank(cadena)){
+			return Integer.valueOf(cadena);
+		}
+		return Integer.valueOf(0);
+	}
 }

@@ -8,7 +8,7 @@ import pe.com.logistica.bean.base.BaseVO;
  * @version 1.0
  * @created 14-dic-2013 01:14:34 p.m.
  */
-public class Ubigeo extends Base {
+public class Ubigeo extends BaseVO {
 
 	/**
 	 * 
@@ -46,6 +46,9 @@ public class Ubigeo extends Base {
 	 * @return the departamento
 	 */
 	public BaseVO getDepartamento() {
+		if (departamento == null){
+			departamento = new BaseVO();
+		}
 		return departamento;
 	}
 
@@ -61,6 +64,9 @@ public class Ubigeo extends Base {
 	 * @return the distrito
 	 */
 	public BaseVO getDistrito() {
+		if (distrito == null){
+			distrito = new BaseVO();
+		}
 		return distrito;
 	}
 
@@ -76,6 +82,9 @@ public class Ubigeo extends Base {
 	 * @return the provincia
 	 */
 	public BaseVO getProvincia() {
+		if (provincia == null){
+			provincia = new BaseVO();
+		}
 		return provincia;
 	}
 
