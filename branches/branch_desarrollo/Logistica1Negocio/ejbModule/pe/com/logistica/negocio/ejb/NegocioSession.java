@@ -1,5 +1,6 @@
 package pe.com.logistica.negocio.ejb;
 
+import java.sql.Connection;
 import java.sql.SQLException;
 
 import javax.ejb.Stateless;
@@ -9,11 +10,20 @@ import org.apache.commons.lang3.StringUtils;
 import pe.com.logistica.bean.base.Direccion;
 import pe.com.logistica.bean.negocio.Contacto;
 import pe.com.logistica.bean.negocio.Maestro;
+import pe.com.logistica.bean.negocio.Proveedor;
+import pe.com.logistica.bean.negocio.Telefono;
 import pe.com.logistica.bean.negocio.Ubigeo;
+import pe.com.logistica.negocio.dao.DireccionDao;
 import pe.com.logistica.negocio.dao.MaestroDao;
+import pe.com.logistica.negocio.dao.PersonaDao;
+import pe.com.logistica.negocio.dao.TelefonoDao;
 import pe.com.logistica.negocio.dao.UbigeoDao;
+import pe.com.logistica.negocio.dao.impl.DireccionDaoImpl;
 import pe.com.logistica.negocio.dao.impl.MaestroDaoImpl;
+import pe.com.logistica.negocio.dao.impl.PersonaDaoImpl;
+import pe.com.logistica.negocio.dao.impl.TelefonoDaoImpl;
 import pe.com.logistica.negocio.dao.impl.UbigeoDaoImpl;
+import pe.com.logistica.negocio.util.UtilConexion;
 
 /**
  * Session Bean implementation class NegocioSession
@@ -91,4 +101,37 @@ public class NegocioSession implements NegocioSessionRemote,
 		return contacto;
 	}
 
+	@Override
+	public void registrarProveedor(Proveedor proveedor) throws SQLException, Exception{
+		PersonaDao proveedorDao = new PersonaDaoImpl();
+		DireccionDao direccionDao = new DireccionDaoImpl();
+		TelefonoDao telefonoDao = new TelefonoDaoImpl();
+		Connection conexion = null;
+		try {
+			conexion = UtilConexion.obtenerConexion();
+			conexion.setAutoCommit(false);
+			
+			proveedorDao.registrarPersona(proveedor, conexion);
+			if (proveedor.getListaDirecciones() != null){
+				for (Direccion direccion : proveedor.getListaDirecciones()){
+					direccionDao.registrarDireccion(direccion, conexion);
+					for (Telefono telefono : direccion.getTelefonos()){
+						telefonoDao.registrarTelefono(telefono, conexion);
+					}
+				}
+			}
+			
+			if (proveedor.getListaContactos() != null){
+				for (Contacto contacto : proveedor.getListaContactos()){
+					proveedorDao.registrarPersona(contacto, conexion);
+				}
+			}
+			
+			
+			conexion.commit();
+		} catch (SQLException e) {
+			conexion.rollback();
+			throw new SQLException(e);
+		}
+	}
 }

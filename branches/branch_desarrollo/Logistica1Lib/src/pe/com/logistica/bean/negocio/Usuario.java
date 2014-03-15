@@ -4,6 +4,7 @@
 package pe.com.logistica.bean.negocio;
 
 import pe.com.logistica.bean.base.BaseVO;
+import pe.com.logistica.bean.base.Persona;
 
 /**
  * @author Edwin

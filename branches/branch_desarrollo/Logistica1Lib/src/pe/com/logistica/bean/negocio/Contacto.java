@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import pe.com.logistica.bean.base.BaseVO;
+import pe.com.logistica.bean.base.Persona;
 
 /**
  * @author Edwin
