@@ -8,7 +8,9 @@ import java.util.List;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+import javax.faces.context.FacesContext;
 import javax.naming.NamingException;
+import javax.servlet.ServletContext;
 
 import pe.com.logistica.bean.negocio.Parametro;
 import pe.com.logistica.web.servicio.ParametroServicio;
@@ -36,7 +38,8 @@ public class ParametroMBean extends BaseMBean {
 	 */
 	public ParametroMBean() {
 		try {
-			parametroServicio = new ParametroServicioImpl();
+			ServletContext servletContext = (ServletContext)FacesContext.getCurrentInstance().getExternalContext().getContext();
+			parametroServicio = new ParametroServicioImpl(servletContext);
 		} catch (NamingException e) {
 			e.printStackTrace();
 		}
@@ -88,10 +91,9 @@ public class ParametroMBean extends BaseMBean {
 	 */
 	public List<Parametro> getListaParametros() {
 		try {
-			parametroServicio = new ParametroServicioImpl();
 			listaParametros = parametroServicio.listarParametros();
 			this.setShowModal(false);
-		} catch (NamingException | SQLException e) {
+		} catch (SQLException e) {
 			e.printStackTrace();
 			this.setShowModal(true);
 			this.setTipoModal("2");
