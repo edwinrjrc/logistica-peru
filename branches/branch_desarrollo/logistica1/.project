@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>logistica1</name>
+	<name>logistica1Web</name>
 	<comment></comment>
 	<projects>
 		<project>Logistica1NegocioClient</project>

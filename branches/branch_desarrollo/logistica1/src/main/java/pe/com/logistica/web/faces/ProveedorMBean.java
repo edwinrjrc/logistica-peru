@@ -9,9 +9,11 @@ import java.util.List;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+import javax.faces.context.FacesContext;
 import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.SelectItem;
 import javax.naming.NamingException;
+import javax.servlet.ServletContext;
 
 import pe.com.logistica.bean.base.BaseVO;
 import pe.com.logistica.bean.base.Direccion;
@@ -63,7 +65,8 @@ public class ProveedorMBean extends BaseMBean{
 		try {
 			soporteServicio = new SoporteServicioImpl();
 			
-			negocioServicio = new NegocioServicioImpl();
+			ServletContext servletContext = (ServletContext)FacesContext.getCurrentInstance().getExternalContext().getContext();
+			negocioServicio = new NegocioServicioImpl(servletContext);
 		} catch (NamingException e) {
 			e.printStackTrace();
 		}
@@ -106,7 +109,14 @@ public class ProveedorMBean extends BaseMBean{
 	}
 	
 	public void ejecutarMetodo(){
-		
+		if (this.isNuevoProveedor()){
+			try {
+				negocioServicio.registrarProveedor(getProveedor());
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 	}
 	
 	public void consultarProveedor(int codigoProveedor){
