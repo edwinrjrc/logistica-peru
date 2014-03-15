@@ -1,11 +1,13 @@
 package pe.com.logistica.bean.base;
 
+import java.util.List;
+
 /**
  * @author Edwin
  * @version 1.0
  * @created 14-dic-2013 01:14:34 p.m.
  */
-public class Persona extends BaseNegocio {
+public abstract class Persona extends BaseNegocio {
 
 	/**
 	 * 
@@ -13,12 +15,15 @@ public class Persona extends BaseNegocio {
 	private static final long serialVersionUID = 4643534946632179203L;
 	private String apellidoMaterno;
 	private String apellidoPaterno;
-	private Direccion direccion;
+	private Direccion direccion;	
 	private DocumentoIdentidad documentoIdentidad;
 	private BaseVO estadoCivil;
 	private BaseVO genero;
 	private String nombres;
 	private String razonSocial;
+	private List<Direccion> listaDirecciones;
+	
+	private int tipoPersona;
 
 	public Persona() {
 
@@ -62,6 +67,9 @@ public class Persona extends BaseNegocio {
 	 * @return the direccion
 	 */
 	public Direccion getDireccion() {
+		if (direccion == null){
+			direccion = new Direccion();
+		}
 		return direccion;
 	}
 
@@ -77,6 +85,9 @@ public class Persona extends BaseNegocio {
 	 * @return the documentoIdentidad
 	 */
 	public DocumentoIdentidad getDocumentoIdentidad() {
+		if (documentoIdentidad == null){
+			documentoIdentidad = new DocumentoIdentidad();
+		}
 		return documentoIdentidad;
 	}
 
@@ -146,6 +157,34 @@ public class Persona extends BaseNegocio {
 	 */
 	public void setRazonSocial(String razonSocial) {
 		this.razonSocial = razonSocial;
+	}
+
+	/**
+	 * @return the tipoPersona
+	 */
+	public int getTipoPersona() {
+		return tipoPersona;
+	}
+
+	/**
+	 * @param tipoPersona the tipoPersona to set
+	 */
+	public void setTipoPersona(int tipoPersona) {
+		this.tipoPersona = tipoPersona;
+	}
+
+	/**
+	 * @return the listaDirecciones
+	 */
+	public List<Direccion> getListaDirecciones() {
+		return listaDirecciones;
+	}
+
+	/**
+	 * @param listaDirecciones the listaDirecciones to set
+	 */
+	public void setListaDirecciones(List<Direccion> listaDirecciones) {
+		this.listaDirecciones = listaDirecciones;
 	}
 
 }

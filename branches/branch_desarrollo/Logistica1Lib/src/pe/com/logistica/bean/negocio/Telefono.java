@@ -3,15 +3,14 @@
  */
 package pe.com.logistica.bean.negocio;
 
-import java.io.Serializable;
-
+import pe.com.logistica.bean.base.BaseNegocio;
 import pe.com.logistica.bean.base.BaseVO;
 
 /**
  * @author Edwin
  *
  */
-public class Telefono implements Serializable{
+public class Telefono extends BaseNegocio{
 
 	/**
 	 * 
