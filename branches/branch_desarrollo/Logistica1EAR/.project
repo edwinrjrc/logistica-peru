@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>Logistica1EAR</name>
+	<name>Logistica1WebEAR</name>
 	<comment></comment>
 	<projects>
-		<project>Logistica1NegocioClient</project>
-		<project>Logistica1Negocio</project>
 		<project>Logistica1Lib</project>
+		<project>Logistica1NegocioClient</project>
+		<project>logistica1Web</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

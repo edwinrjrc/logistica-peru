@@ -9,9 +9,11 @@ import java.util.Properties;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
+import javax.servlet.ServletContext;
 
 import pe.com.logistica.bean.base.Direccion;
 import pe.com.logistica.bean.negocio.Contacto;
+import pe.com.logistica.bean.negocio.Proveedor;
 import pe.com.logistica.negocio.ejb.NegocioSessionRemote;
 import pe.com.logistica.web.servicio.NegocioServicio;
 
@@ -22,10 +24,12 @@ import pe.com.logistica.web.servicio.NegocioServicio;
 public class NegocioServicioImpl implements NegocioServicio {
 
 	NegocioSessionRemote ejbSession;
+	
+	final String ejbBeanName = "NegocioSession";
 	/**
 	 * 
 	 */
-	public NegocioServicioImpl() {
+	public NegocioServicioImpl(ServletContext context) {
 		try {
 			Properties props = new Properties();
 			/*props.setProperty("java.naming.factory.initial","org.jnp.interfaces.NamingContextFactory");
@@ -36,6 +40,11 @@ public class NegocioServicioImpl implements NegocioServicio {
 			Context ctx = new InitialContext(props);
 			//String lookup = "ejb:Logistica1EAR/Logistica1Negocio/SeguridadSession!pe.com.logistica.negocio.ejb.SeguridadRemote";
 			String lookup = "java:jboss/exported/Logistica1EAR/Logistica1Negocio/NegocioSession!pe.com.logistica.negocio.ejb.NegocioSessionRemote";
+			
+			final String ejbRemoto = NegocioSessionRemote.class.getName();
+			lookup = "java:jboss/exported/"+context.getInitParameter("appNegocioNameEar")+"/"+context.getInitParameter("appNegocioName")+"/"+ejbBeanName+"!"+ejbRemoto;
+			
+			System.out.println("ejb lookup:"+lookup);
 			ejbSession = (NegocioSessionRemote) ctx.lookup(lookup);
 		} catch (NamingException e) {
 			// TODO Auto-generated catch block
@@ -55,6 +64,11 @@ public class NegocioServicioImpl implements NegocioServicio {
 	@Override
 	public Contacto agregarContacto (Contacto contacto) throws SQLException, Exception {
 		return ejbSession.agregarContacto(contacto);
+	}
+
+	@Override
+	public void registrarProveedor(Proveedor proveedor) throws SQLException, Exception {
+		ejbSession.registrarProveedor(proveedor);
 	}
 
 }
