@@ -14,5 +14,8 @@ import pe.com.logistica.bean.base.Direccion;
  */
 public interface DireccionDao {
 
-	public void registrarDireccion(Direccion direccion, Connection conexion) throws SQLException;
+	public int registrarDireccion(Direccion direccion, Connection conexion) throws SQLException;
+
+	void registrarPersonaDireccion(int idPersona, int idTipoPersona,
+			int idDireccion, Connection conexion) throws SQLException;
 }

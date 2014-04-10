@@ -22,6 +22,6 @@ public interface PersonaDao {
 
 	public Proveedor consultarPersona(int id) throws SQLException;
 
-	void registrarPersona(Persona persona, Connection conexion)
+	int registrarPersona(Persona persona, Connection conexion)
 			throws SQLException;
 }

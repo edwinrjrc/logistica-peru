@@ -20,7 +20,8 @@ public class Usuario extends Persona {
 	private String usuario;
 	private String credencial;
 	private BaseVO rol;
-
+	private boolean encontrado;
+	
 	/**
 	 * 
 	 */
@@ -74,6 +75,20 @@ public class Usuario extends Persona {
 	 */
 	public void setRol(BaseVO rol) {
 		this.rol = rol;
+	}
+
+	/**
+	 * @return the encontrado
+	 */
+	public boolean isEncontrado() {
+		return encontrado;
+	}
+
+	/**
+	 * @param encontrado the encontrado to set
+	 */
+	public void setEncontrado(boolean encontrado) {
+		this.encontrado = encontrado;
 	}
 
 }

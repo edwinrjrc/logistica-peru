@@ -32,6 +32,8 @@ public class Direccion extends BaseNegocio {
 	private BaseVO zona;
 	private String manzana;
 	private String lote;
+	
+	private boolean principal;
 
 	public Direccion() {
 
@@ -265,6 +267,20 @@ public class Direccion extends BaseNegocio {
 	 */
 	public void setLote(String lote) {
 		this.lote = lote;
+	}
+
+	/**
+	 * @return the principal
+	 */
+	public boolean isPrincipal() {
+		return principal;
+	}
+
+	/**
+	 * @param principal the principal to set
+	 */
+	public void setPrincipal(boolean principal) {
+		this.principal = principal;
 	}
 
 }

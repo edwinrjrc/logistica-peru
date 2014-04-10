@@ -1,5 +1,6 @@
 package pe.com.logistica.bean.base;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -103,6 +104,9 @@ public abstract class Persona extends BaseNegocio {
 	 * @return the estadoCivil
 	 */
 	public BaseVO getEstadoCivil() {
+		if (estadoCivil == null){
+			estadoCivil = new BaseVO();
+		}
 		return estadoCivil;
 	}
 
@@ -118,6 +122,9 @@ public abstract class Persona extends BaseNegocio {
 	 * @return the genero
 	 */
 	public BaseVO getGenero() {
+		if (genero == null){
+			genero = new BaseVO();
+		}
 		return genero;
 	}
 
@@ -177,6 +184,9 @@ public abstract class Persona extends BaseNegocio {
 	 * @return the listaDirecciones
 	 */
 	public List<Direccion> getListaDirecciones() {
+		if (listaDirecciones == null){
+			listaDirecciones = new ArrayList<Direccion>();
+		}
 		return listaDirecciones;
 	}
 

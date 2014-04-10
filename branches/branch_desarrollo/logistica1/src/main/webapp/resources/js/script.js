@@ -13,3 +13,27 @@ function mostrarModal(idform){
 		document.getElementById(idform+':idBotonModalError').click();
 	}
 }
+
+function cerrarModalBoton(idform,idBoton){
+	try{
+		var direccionAgregada = document.getElementById(idform+':idHdDirAgr').value;
+		if (eval(direccionAgregada)){
+			document.getElementById(idform+':'+idBoton).click();
+		}
+	}
+	catch (e){
+		alert("error ::"+e.message);
+	}
+}
+
+function cerrarModalBoton(idform,idBoton,idHid){
+	try{
+		var direccionAgregada = document.getElementById(idform+':'+idHid).value;
+		if (eval(direccionAgregada)){
+			document.getElementById(idform+':'+idBoton).click();
+		}
+	}
+	catch (e){
+		alert("error ::"+e.message);
+	}
+}

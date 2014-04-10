@@ -29,38 +29,93 @@
 					id="idTabPanelFormProveedor">
 					<rich:tab header="Información Basica">
 						<h:panelGrid border="0" cellpadding="0" cellspacing="0"
-							style="width:100%;" columns="1">
+							style="width:100%;" columns="1" id="idGrdFrmProv">
 							<h:panelGrid border="0" cellpadding="0" cellspacing="0"
 								style="width:100%;" columns="4"
 								columnClasses="col1fil1proveedor,col2fil1proveedor,col3fil1proveedor,col4fil1proveedor">
 								<h:outputText value="Tipo Documento" />
-								<h:selectOneMenu
-									value="#{proveedorMBean.proveedor.documentoIdentidad.tipoDocumento.codigoEntero}">
-									<f:selectItem itemLabel="-Seleccione-" />
-									<f:selectItems value="#{catalogoMBean.catalogoTipoDocumento}" />
-								</h:selectOneMenu>
+								<h:panelGrid border="0" cellpadding="0" cellspacing="0"
+									columns="1">
+									<h:selectOneMenu id="idFPSelTipoDoc"
+										value="#{proveedorMBean.proveedor.documentoIdentidad.tipoDocumento.codigoEntero}"
+										required="True" requiredMessage="Seleccione tipo de documento">
+										<f:selectItem itemLabel="-Seleccione-" />
+										<f:selectItems value="#{catalogoMBean.catalogoTipoDocumento}" />
+										<a4j:ajax event="valueChange" render="idGrdFrmProv"
+											execute="@this" immediate="true" />
+									</h:selectOneMenu>
+									<rich:message for="idFPSelTipoDoc" showSummary="true"
+										showDetail="false" />
+								</h:panelGrid>
 								<h:outputText value="Numero Documento" />
-								<h:inputText
-									value="#{proveedorMBean.proveedor.documentoIdentidad.numeroDocumento}" />
-								<h:outputText value="Apellido Paterno" />
-								<h:inputText value="#{proveedorMBean.proveedor.apellidoPaterno}" />
-								<h:outputText value="Apellido Materno" />
-								<h:inputText value="#{proveedorMBean.proveedor.apellidoMaterno}" />
+								<h:panelGrid border="0" cellpadding="0" cellspacing="0"
+									columns="1">
+									<h:inputText id="idFPInNumDoc"
+										value="#{proveedorMBean.proveedor.documentoIdentidad.numeroDocumento}"
+										required="True"
+										requiredMessage="Ingrese el número de documento"
+										maxlength="12" />
+									<rich:message for="idFPInNumDoc" showSummary="true"
+										showDetail="false" />
+								</h:panelGrid>
+								<h:outputText value="Apellido Paterno"
+									rendered="#{proveedorMBean.proveedor.documentoIdentidad.tipoDocumento.codigoEntero == 1 or proveedorMBean.proveedor.documentoIdentidad.tipoDocumento.codigoEntero == 2}" />
+								<h:panelGrid border="0" cellpadding="0" cellspacing="0"
+									columns="1"
+									rendered="#{proveedorMBean.proveedor.documentoIdentidad.tipoDocumento.codigoEntero == 1 or proveedorMBean.proveedor.documentoIdentidad.tipoDocumento.codigoEntero == 2}">
+									<h:inputText id="idApePatPro"
+										value="#{proveedorMBean.proveedor.apellidoPaterno}"
+										maxlength="40" />
+									<rich:message for="idApePatPro" showSummary="true"
+										showDetail="false" />
+								</h:panelGrid>
+								<h:outputText value="Apellido Materno"
+									rendered="#{proveedorMBean.proveedor.documentoIdentidad.tipoDocumento.codigoEntero == 1 or proveedorMBean.proveedor.documentoIdentidad.tipoDocumento.codigoEntero == 2}" />
+								<h:panelGrid border="0" cellpadding="0" cellspacing="0"
+									columns="1"
+									rendered="#{proveedorMBean.proveedor.documentoIdentidad.tipoDocumento.codigoEntero == 1 or proveedorMBean.proveedor.documentoIdentidad.tipoDocumento.codigoEntero == 2}">
+									<h:inputText id="idApeMatPro"
+										value="#{proveedorMBean.proveedor.apellidoMaterno}"
+										maxlength="40" />
+									<rich:message for="idApeMatPro" showSummary="true"
+										showDetail="false" />
+								</h:panelGrid>
 							</h:panelGrid>
 							<h:panelGrid border="0" cellpadding="0" cellspacing="0"
 								style="width:100%;" columns="2"
 								columnClasses="col1fil2proveedor,col2fil2proveedor">
-								<h:outputText value="Nombres" for="idForProNom" />
-								<h:inputText id="idForProNom"
-									value="#{proveedorMBean.proveedor.nombres}" />
-								<h:outputText value="Razon Social" />
-								<h:inputText value="#{proveedorMBean.proveedor.nombres}" />
+								<h:outputText value="Nombres"
+									rendered="#{proveedorMBean.proveedor.documentoIdentidad.tipoDocumento.codigoEntero == 1 or proveedorMBean.proveedor.documentoIdentidad.tipoDocumento.codigoEntero == 2}" />
+								<h:panelGrid border="0" cellpadding="0" cellspacing="0"
+									columns="1"
+									rendered="#{proveedorMBean.proveedor.documentoIdentidad.tipoDocumento.codigoEntero == 1 or proveedorMBean.proveedor.documentoIdentidad.tipoDocumento.codigoEntero == 2}">
+									<h:inputText id="idNomPro"
+										value="#{proveedorMBean.proveedor.nombres}" maxlength="80" />
+									<rich:message for="idNomPro" showSummary="true"
+										showDetail="false" />
+								</h:panelGrid>
+								<h:outputText value="Razon Social"
+									rendered="#{proveedorMBean.proveedor.documentoIdentidad.tipoDocumento.codigoEntero == 3}" />
+								<h:panelGrid border="0" cellpadding="0" cellspacing="0"
+									columns="1"
+									rendered="#{proveedorMBean.proveedor.documentoIdentidad.tipoDocumento.codigoEntero == 3}">
+									<h:inputText id="idRazSocPro"
+										value="#{proveedorMBean.proveedor.nombres}" maxlength="80" />
+									<rich:message for="idRazSocPro" showSummary="true"
+										showDetail="false" />
+								</h:panelGrid>
 								<h:outputText value="Rubro" />
-								<h:selectOneMenu
-									value="#{proveedorMBean.proveedor.rubro.codigoEntero}">
-									<f:selectItem itemLabel="-Seleccione-" />
-									<f:selectItems value="#{catalogoMBean.catalogoRubro}" />
-								</h:selectOneMenu>
+								<h:panelGrid border="0" cellpadding="0" cellspacing="0"
+									columns="1">
+									<h:selectOneMenu id="idFPSelRubro"
+										value="#{proveedorMBean.proveedor.rubro.codigoEntero}"
+										required="true" requiredMessage="Seleccione el rubro">
+										<f:selectItem itemLabel="-Seleccione-" />
+										<f:selectItems value="#{catalogoMBean.catalogoRubro}" />
+									</h:selectOneMenu>
+									<rich:message for="idFPSelRubro" showSummary="true"
+										showDetail="false" />
+								</h:panelGrid>
 								<h:outputText value="Fecha Registro" />
 
 								<h:panelGrid border="0" columns="1">
@@ -102,12 +157,35 @@
 									</f:facet>
 									<h:outputText value="#{fila.ubigeo.distrito.nombre}" />
 								</rich:column>
+								<rich:column>
+									<f:facet name="header">
+										<h:outputText value="Oficina Principal" />
+									</f:facet>
+									<h:outputText value="#{fila.principal?'SI':'NO'}" />
+								</rich:column>
+								<rich:column>
+									<f:facet name="header">
+										<h:outputText value="Opciones" />
+									</f:facet>
+									<h:panelGrid border="0" cellpadding="0" cellspacing="0"
+										style="width:100%;" columns="1">
+										<a4j:commandButton value="Editar"
+											render="idNomModalDireccion,idGrdFDir"
+											action="#{proveedorMBean.editarDireccionProveedor(fila)}"
+											oncomplete="#{rich:component('idModalFormDireccion')}.show();" />
+										<a4j:commandButton value="Eliminar"
+											render="idTablaDirecciones"
+											action="#{proveedorMBean.eliminarDireccionProveedor(fila)}" />
+									</h:panelGrid>
+								</rich:column>
 								<f:facet name="header">
 									<h:panelGrid columns="1" style="width:100%;text-align:right;">
-										<a4j:commandButton value="Agregar"
+
+										<a4j:commandButton value="Agregar" immediate="true"
 											action="#{proveedorMBean.nuevaDireccion()}"
 											oncomplete="#{rich:component('idModalFormDireccion')}.show();"
-											render="idNomModalDireccion" />
+											render="idNomModalDireccion,idGrdFDir" />
+
 									</h:panelGrid>
 								</f:facet>
 							</rich:dataTable>
@@ -137,12 +215,27 @@
 									</f:facet>
 									<h:outputText value="#{fila.anexo}" />
 								</rich:column>
+								<rich:column>
+									<f:facet name="header">
+										<h:outputText value="Opciones" />
+									</f:facet>
+									<h:panelGrid border="0" cellpadding="0" cellspacing="0"
+										style="width:100%;" columns="1">
+										<a4j:commandButton value="Editar"
+											action="#{proveedorMBean.editarContactoProveedor(fila)}"
+											render="idNomModalContacto,idGrdFCon"
+											oncomplete="#{rich:component('idModalFormContacto')}.show();" />
+										<a4j:commandButton value="Eliminar" render="idTablaContactos"
+											action="#{proveedorMBean.eliminarContactoProveedor(fila)}" />
+
+									</h:panelGrid>
+								</rich:column>
 								<f:facet name="header">
 									<h:panelGrid columns="1" style="width:100%;text-align:right;">
-										<a4j:commandButton value="Agregar"
+										<a4j:commandButton value="Agregar" immediate="true"
 											action="#{proveedorMBean.nuevoContacto()}"
 											oncomplete="#{rich:component('idModalFormContacto')}.show();"
-											render="idNomModalContacto" />
+											render="idNomModalContacto,idGrdFCon" />
 									</h:panelGrid>
 								</f:facet>
 							</rich:dataTable>
@@ -154,14 +247,14 @@
 					<h:panelGrid border="0" cellpadding="0" cellspacing="0"
 						style="width:100%;text-align:center;">
 						<a4j:commandButton value="Grabar"
-							action="#{proveedorMBean.ejecutarMetodo}"></a4j:commandButton>
+							actionListener="#{proveedorMBean.ejecutarMetodo}"
+							render="idFormHidden,idPanelHidden,idPanelBotones,idModalcorrecto,idModalError"
+							oncomplete="mostrarModal('idformadmproveedor')" />
 					</h:panelGrid>
 				</f:facet>
 			</h:panelGrid>
 
 		</h:form>
 
-		<ui:include src="/paginas/negocio/proveedor/formdireccion.xhtml" />
-		<ui:include src="/paginas/negocio/proveedor/formcontacto.xhtml" />
 	</rich:popupPanel>
 </ui:composition>
