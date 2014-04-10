@@ -52,4 +52,16 @@
  <PROCESS-ITEM NAME="rules:#paginas#negocio#proveedor#administrar.xhtml"
   PATH="/paginas/negocio/proveedor/administrar.xhtml"
   SHAPE="201,356,0,0" model-entity="JSFProcessGroup" persistent="true"/>
+ <PROCESS-ITEM NAME="rules:#index.xhtml" PATH="/index.xhtml"
+  SHAPE="502,350,0,0" model-entity="JSFProcessGroup">
+  <PROCESS-ITEM ID="rules:#index.xhtml:0" NAME="item"
+   PATH="/index.xhtml" model-entity="JSFProcessItem">
+   <PROCESS-ITEM-OUTPUT ID="irInicio::#paginas#inicio.xhtml"
+    NAME="output" PATH="/paginas/inicio.xhtml"
+    TARGET="rules:#paginas#inicio.xhtml" TITLE="irInicio" model-entity="JSFProcessItemOutput"/>
+  </PROCESS-ITEM>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM NAME="rules:#paginas#inicio.xhtml"
+  PATH="/paginas/inicio.xhtml" SHAPE="746,263,0,0"
+  model-entity="JSFProcessGroup" persistent="true"/>
 </PROCESS>

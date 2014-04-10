@@ -19,5 +19,7 @@ public interface UsuarioDao {
 	public List<Usuario> listarUsuarios() throws SQLException ;
 	Usuario consultarUsuario(int id) throws SQLException;
 	boolean actualizarUsuario(Usuario usuario) throws SQLException;
+	boolean inicioSesion(Usuario usuario) throws SQLException;
+	Usuario inicioSesion2(Usuario usuario) throws SQLException;
 	
 }

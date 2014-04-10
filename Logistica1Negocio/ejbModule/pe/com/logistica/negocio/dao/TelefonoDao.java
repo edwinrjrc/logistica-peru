@@ -14,6 +14,12 @@ import pe.com.logistica.bean.negocio.Telefono;
  */
 public interface TelefonoDao {
 
-	public void registrarTelefono(Telefono telefono, Connection conexion)
+	public int registrarTelefono(Telefono telefono, Connection conexion)
 			throws SQLException;
+
+	void registrarTelefonoDireccion(int idTelefono, int idDireccion,
+			Connection conexion) throws SQLException;
+
+	void registrarTelefonoPersona(int idTelefono, int idPersona,
+			Connection conexion) throws SQLException;
 }

@@ -79,23 +79,37 @@
 									</f:facet>
 									<rich:column>
 										<f:facet name="header">
+											<h:outputText value="Documento" />
+										</f:facet>
+										<h:outputText value="#{row.documentoIdentidad.tipoDocumento.nombre} - #{row.documentoIdentidad.numeroDocumento}" />
+									</rich:column>
+									
+									<rich:column>
+										<f:facet name="header">
 											<h:outputText value="Nombre" />
 										</f:facet>
-										<h:outputText value="#{row.razonSocial}" />
+										<h:outputText value="#{row.nombres}" />
 									</rich:column>
 
 									<rich:column>
 										<f:facet name="header">
-											<h:outputText value="Descripcion" />
+											<h:outputText value="Rubro" />
 										</f:facet>
-										<h:outputText value="#{row.razonSocial}" />
+										<h:outputText value="#{row.rubro.nombre}" />
 									</rich:column>
 
 									<rich:column>
 										<f:facet name="header">
-											<h:outputText value="Estado" />
+											<h:outputText value="Dirección" />
 										</f:facet>
-										<h:outputText value="#{row.estado.nombre}" />
+										<h:outputText value="#{row.direccion.direccion}" />
+									</rich:column>
+									
+									<rich:column>
+										<f:facet name="header">
+											<h:outputText value="Teléfono" />
+										</f:facet>
+										<h:outputText value="#{row.direccion.telefonos[0].numeroTelefono}" />
 									</rich:column>
 
 									<rich:column>
@@ -138,6 +152,8 @@
 			</h:panelGrid>
 		</h:form>
 		<ui:include src="/paginas/negocio/proveedor/formproveedor.xhtml" />
+		<ui:include src="/paginas/negocio/proveedor/formdireccion.xhtml" />
+		<ui:include src="/paginas/negocio/proveedor/formcontacto.xhtml" />
 		<ui:include src="/resources/includes/includemensaje.xhtml">
 			<ui:param name="backBean" value="#{proveedorMBean}" />
 			<ui:param name="idModalForm" value="idModalformproveedor" />

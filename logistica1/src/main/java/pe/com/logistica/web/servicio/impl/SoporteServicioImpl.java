@@ -10,6 +10,7 @@ import java.util.Properties;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
+import javax.servlet.ServletContext;
 
 import pe.com.logistica.bean.base.BaseVO;
 import pe.com.logistica.bean.negocio.Maestro;
@@ -23,11 +24,13 @@ import pe.com.logistica.web.servicio.SoporteServicio;
 public class SoporteServicioImpl implements SoporteServicio {
 
 	SoporteRemote ejbSession;
+	final String ejbBeanName = "SoporteSession";
 	/**
+	 * @param servletContext 
 	 * @throws NamingException 
 	 * 
 	 */
-	public SoporteServicioImpl() throws NamingException {
+	public SoporteServicioImpl(ServletContext context) throws NamingException {
 		Properties props = new Properties();
         /*props.setProperty("java.naming.factory.initial","org.jnp.interfaces.NamingContextFactory");
         props.setProperty("java.naming.factory.url.pkgs", "org.jboss.naming");
@@ -36,6 +39,9 @@ public class SoporteServicioImpl implements SoporteServicio {
         
 		Context ctx = new InitialContext(props);
 		String lookup = "java:jboss/exported/Logistica1EAR/Logistica1Negocio/SoporteSession!pe.com.logistica.negocio.ejb.SoporteRemote";
+		final String ejbRemoto = SoporteRemote.class.getName();
+		lookup = "java:jboss/exported/"+context.getInitParameter("appNegocioNameEar")+"/"+context.getInitParameter("appNegocioName")+"/"+ejbBeanName+"!"+ejbRemoto;
+		
 		ejbSession = (SoporteRemote) ctx.lookup(lookup);
 	}
 

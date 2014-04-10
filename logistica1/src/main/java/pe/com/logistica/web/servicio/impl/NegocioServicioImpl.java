@@ -4,6 +4,7 @@
 package pe.com.logistica.web.servicio.impl;
 
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Properties;
 
 import javax.naming.Context;
@@ -67,8 +68,13 @@ public class NegocioServicioImpl implements NegocioServicio {
 	}
 
 	@Override
-	public void registrarProveedor(Proveedor proveedor) throws SQLException, Exception {
-		ejbSession.registrarProveedor(proveedor);
+	public boolean registrarProveedor(Proveedor proveedor) throws SQLException, Exception {
+		return ejbSession.registrarProveedor(proveedor);
+	}
+	
+	@Override
+	public List<Proveedor> listarProveedor(Proveedor proveedor) throws SQLException, Exception {
+		return ejbSession.listarProveedor(proveedor);
 	}
 
 }

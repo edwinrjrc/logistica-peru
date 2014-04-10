@@ -8,8 +8,11 @@ import java.util.List;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import javax.naming.NamingException;
+import javax.servlet.ServletContext;
+import javax.servlet.http.HttpSession;
 
 import pe.com.logistica.bean.negocio.Usuario;
 import pe.com.logistica.web.servicio.SeguridadServicio;
@@ -44,7 +47,8 @@ public class UsuarioMBean extends BaseMBean {
 	 */
 	public UsuarioMBean() {
 		try {
-			seguridadServicio = new SeguridadServicioImpl();
+			ServletContext servletContext = (ServletContext)FacesContext.getCurrentInstance().getExternalContext().getContext();
+			seguridadServicio = new SeguridadServicioImpl(servletContext);
 		} catch (NamingException e) {
 			e.printStackTrace();
 		}
@@ -92,6 +96,25 @@ public class UsuarioMBean extends BaseMBean {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
+	}
+	
+	public String inicioSesion(){
+		try {
+			usuario = seguridadServicio.inicioSesion(usuario);
+			
+			if (usuario.isEncontrado()){
+				HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(true);
+				session.setAttribute("usuarioSession", usuario);
+				return "irInicio";
+			}
+			else{
+				String msje = "El usuario y la contraseña son incorrectas";
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return "";
 	}
 	/**
 	 * @return the listaUsuarios

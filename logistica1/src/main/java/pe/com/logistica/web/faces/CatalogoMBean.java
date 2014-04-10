@@ -8,8 +8,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.faces.bean.ManagedBean;
+import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
 import javax.naming.NamingException;
+import javax.servlet.ServletContext;
 
 import pe.com.logistica.bean.base.BaseVO;
 import pe.com.logistica.web.servicio.SeguridadServicio;
@@ -38,8 +40,9 @@ public class CatalogoMBean {
 	
 	public CatalogoMBean() {
 		try {
-			seguridadServicio = new SeguridadServicioImpl();
-			soporteServicio = new SoporteServicioImpl();
+			ServletContext servletContext = (ServletContext)FacesContext.getCurrentInstance().getExternalContext().getContext();
+			seguridadServicio = new SeguridadServicioImpl(servletContext);
+			soporteServicio = new SoporteServicioImpl(servletContext);
 			
 		} catch (NamingException e) {
 			e.printStackTrace();
@@ -66,7 +69,7 @@ public class CatalogoMBean {
 	 * @return the catalogoTipoDocumento
 	 */
 	public List<SelectItem> getCatalogoTipoDocumento() {
-		int idmaestro = UtilWeb.obtenerEnteroPropertieMaestro("maestroTipoDocumento", "maestrosCombos");
+		int idmaestro = UtilWeb.obtenerEnteroPropertieMaestro("maestroTipoDocumento", "aplicacionDatos");
 		
 		try {
 			List<BaseVO> lista = soporteServicio.listarCatalogoMaestro(idmaestro);
@@ -88,7 +91,7 @@ public class CatalogoMBean {
 	 * @return the catalogoRubro
 	 */
 	public List<SelectItem> getCatalogoRubro() {
-		int idmaestro = UtilWeb.obtenerEnteroPropertieMaestro("maestroRubo", "maestrosCombos");
+		int idmaestro = UtilWeb.obtenerEnteroPropertieMaestro("maestroRubo", "aplicacionDatos");
 		try {
 			List<BaseVO> lista = soporteServicio.listarCatalogoMaestro(idmaestro);
 			catalogoRubro = UtilWeb.convertirSelectItem(lista);
@@ -130,7 +133,7 @@ public class CatalogoMBean {
 	 */
 	public List<SelectItem> getCatalogoVias() {
 		try {
-			int idmaestro = UtilWeb.obtenerEnteroPropertieMaestro("maestroVias", "maestrosCombos");
+			int idmaestro = UtilWeb.obtenerEnteroPropertieMaestro("maestroVias", "aplicacionDatos");
 			List<BaseVO> lista = soporteServicio.listarCatalogoMaestro(idmaestro);
 			catalogoVias = UtilWeb.convertirSelectItem(lista);
 		} catch (SQLException e) {
@@ -155,7 +158,7 @@ public class CatalogoMBean {
 	 */
 	public List<SelectItem> getCatalogoArea() {
 		try {
-			int idmaestro = UtilWeb.obtenerEnteroPropertieMaestro("maestroAreas", "maestrosCombos");
+			int idmaestro = UtilWeb.obtenerEnteroPropertieMaestro("maestroAreas", "aplicacionDatos");
 			List<BaseVO> lista = soporteServicio.listarCatalogoMaestro(idmaestro);
 			catalogoArea = UtilWeb.convertirSelectItem(lista);
 		} catch (SQLException e) {
@@ -180,7 +183,7 @@ public class CatalogoMBean {
 	 */
 	public List<SelectItem> getCatalogoOperadoraMovil() {
 		try {
-			int idmaestro = UtilWeb.obtenerEnteroPropertieMaestro("maestroOperadoraMovil", "maestrosCombos");
+			int idmaestro = UtilWeb.obtenerEnteroPropertieMaestro("maestroOperadoraMovil", "aplicacionDatos");
 			List<BaseVO> lista = soporteServicio.listarCatalogoMaestro(idmaestro);
 			catalogoOperadoraMovil = UtilWeb.convertirSelectItem(lista);
 		} catch (SQLException e) {
