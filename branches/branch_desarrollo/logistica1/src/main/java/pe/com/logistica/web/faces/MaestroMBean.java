@@ -8,7 +8,9 @@ import java.util.List;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+import javax.faces.context.FacesContext;
 import javax.naming.NamingException;
+import javax.servlet.ServletContext;
 
 import pe.com.logistica.bean.negocio.Maestro;
 import pe.com.logistica.web.servicio.SoporteServicio;
@@ -144,7 +146,9 @@ public class MaestroMBean extends BaseMBean {
 	 */
 	public List<Maestro> getListaMaestros() {
 		try {
-			soporteServicio = new SoporteServicioImpl();
+			
+			ServletContext servletContext = (ServletContext)FacesContext.getCurrentInstance().getExternalContext().getContext();
+			soporteServicio = new SoporteServicioImpl(servletContext);
 			listaMaestros = soporteServicio.listarMaestros();
 			this.setShowModal(false);
 		} catch (NamingException | SQLException e) {

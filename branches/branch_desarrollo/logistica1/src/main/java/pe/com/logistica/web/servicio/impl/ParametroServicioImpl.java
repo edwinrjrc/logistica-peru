@@ -13,7 +13,6 @@ import javax.naming.NamingException;
 import javax.servlet.ServletContext;
 
 import pe.com.logistica.bean.negocio.Parametro;
-import pe.com.logistica.negocio.ejb.NegocioSessionRemote;
 import pe.com.logistica.negocio.ejb.ParametroRemote;
 import pe.com.logistica.web.servicio.ParametroServicio;
 
@@ -32,10 +31,10 @@ public class ParametroServicioImpl implements ParametroServicio {
 	 */
 	public ParametroServicioImpl(ServletContext context) throws NamingException {
 		Properties props = new Properties();
-        props.setProperty("java.naming.factory.initial","org.jnp.interfaces.NamingContextFactory");
+        /*props.setProperty("java.naming.factory.initial","org.jnp.interfaces.NamingContextFactory");
         props.setProperty("java.naming.factory.url.pkgs", "org.jboss.naming");
-        props.setProperty("java.naming.provider.url", "eddesarrollos16:1099");
-        //props.put(Context.URL_PKG_PREFIXES, "org.jboss.ejb.client.naming");
+        props.setProperty("java.naming.provider.url", "eddesarrollos16:1099");*/
+        props.put(Context.URL_PKG_PREFIXES, "org.jboss.ejb.client.naming");
         
 		Context ctx = new InitialContext(props);
 		//String lookup = "ejb:Logistica1EAR/Logistica1Negocio/SeguridadSession!pe.com.logistica.negocio.ejb.SeguridadRemote";

@@ -11,6 +11,8 @@ import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
+
 import pe.com.logistica.bean.negocio.Maestro;
 import pe.com.logistica.negocio.dao.MaestroDao;
 import pe.com.logistica.negocio.util.UtilConexion;
@@ -358,7 +360,7 @@ public class MaestroDaoImpl implements MaestroDao {
 		boolean resultado = false;
 		Connection conn = null;
 		CallableStatement cs = null;
-		String sql = "{? = call soporte.fn_actualizarmaestro(?,?,?,?,?,?)}";
+		String sql = "{? = call soporte.fn_actualizarmaestro(?,?,?,?,?,?,?)}";
 
 		try {
 			conn = UtilConexion.obtenerConexion();
@@ -368,9 +370,26 @@ public class MaestroDaoImpl implements MaestroDao {
 			cs.setInt(i++, maestro.getCodigoEntero());
 			cs.setInt(i++, maestro.getCodigoMaestro());
 			cs.setString(i++, maestro.getNombre());
-			cs.setString(i++, maestro.getDescripcion());
-			cs.setString(i++, maestro.getEstado().getCodigoCadena());
+			if (StringUtils.isNotBlank(maestro.getDescripcion())){
+				cs.setString(i++, maestro.getDescripcion());
+			}
+			else{
+				cs.setNull(i++, Types.VARCHAR);
+			}
+			if (StringUtils.isNotBlank(maestro.getEstado().getCodigoCadena())){
+				cs.setString(i++, maestro.getEstado().getCodigoCadena());
+			}
+			else{
+				cs.setNull(i++, Types.VARCHAR);
+			}
+			
 			cs.setInt(i++, maestro.getOrden());
+			if (StringUtils.isNotBlank(maestro.getAbreviatura())){
+				cs.setString(i++, maestro.getAbreviatura());
+			}
+			else{
+				cs.setNull(i++, Types.VARCHAR);
+			}
 			cs.execute();
 			
 			resultado = cs.getBoolean(1);

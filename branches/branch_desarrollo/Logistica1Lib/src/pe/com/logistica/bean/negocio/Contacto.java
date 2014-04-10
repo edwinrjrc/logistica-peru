@@ -3,6 +3,8 @@ package pe.com.logistica.bean.negocio;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
+
 import pe.com.logistica.bean.base.BaseVO;
 import pe.com.logistica.bean.base.Persona;
 
@@ -94,4 +96,13 @@ public class Contacto extends Persona {
 		this.area = area;
 	}
 
+	
+	public String getNombreCompleto(){
+		String nomCompleto = "";
+		
+		nomCompleto = getNombres()+" "+getApellidoPaterno()+" "+getApellidoMaterno();
+		nomCompleto = StringUtils.normalizeSpace(nomCompleto);
+		
+		return nomCompleto;
+	}
 }

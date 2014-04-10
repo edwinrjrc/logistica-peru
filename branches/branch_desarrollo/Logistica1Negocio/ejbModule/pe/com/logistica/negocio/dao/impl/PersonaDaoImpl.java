@@ -9,6 +9,8 @@ import java.sql.SQLException;
 import java.sql.Types;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
+
 import pe.com.logistica.bean.base.Persona;
 import pe.com.logistica.bean.negocio.Proveedor;
 import pe.com.logistica.negocio.dao.PersonaDao;
@@ -39,30 +41,75 @@ public class PersonaDaoImpl implements PersonaDao {
 	 * @see pe.com.logistica.negocio.dao.ProveedorDao#registrarProveedor(pe.com.logistica.bean.negocio.Proveedor)
 	 */
 	@Override
-	public void registrarPersona(Persona persona, Connection conexion) throws SQLException {
-
+	public int registrarPersona(Persona persona, Connection conexion) throws SQLException {
+		int resultado = 0;
 		CallableStatement cs = null;
-		String sql = "{ ? = call negocio.fn_ingresarpersona(?,?,?,?,?,?,?,?,?,?,?) }";
+		String sql = "{ ? = call negocio.fn_ingresarpersona(?,?,?,?,?,?,?,?,?,?) }";
 		
 		try {
 			cs = conexion.prepareCall(sql);
 			int i=1;
-			cs.registerOutParameter(i++, Types.BOOLEAN);
+			cs.registerOutParameter(i++, Types.INTEGER);
 			cs.setInt(i++, persona.getTipoPersona());
-			cs.setString(i++, persona.getNombres());
-			cs.setString(i++, persona.getRazonSocial());
-			cs.setString(i++, persona.getApellidoPaterno());
-			cs.setString(i++, persona.getApellidoMaterno());
-			cs.setInt(i++, persona.getGenero().getCodigoEntero());
-			cs.setInt(i++, persona.getEstadoCivil().getCodigoEntero());
-			cs.setInt(i++, persona.getDocumentoIdentidad().getTipoDocumento().getCodigoEntero());
-			cs.setString(i++, persona.getDocumentoIdentidad().getNumeroDocumento());
-			cs.setString(i++, persona.getUsuarioCreacion());
-			cs.setString(i++, persona.getIpCreacion());
-			
+			if (StringUtils.isNotBlank(persona.getNombres())){
+				cs.setString(i++, persona.getNombres());
+			}
+			else{
+				cs.setNull(i++, Types.VARCHAR);
+			}
+			if (StringUtils.isNotBlank(persona.getApellidoPaterno())){
+				cs.setString(i++, persona.getApellidoPaterno());
+			}
+			else{
+				cs.setNull(i++, Types.VARCHAR);
+			}
+			if (StringUtils.isNotBlank(persona.getApellidoMaterno())){
+				cs.setString(i++, persona.getApellidoMaterno());
+			}
+			else{
+				cs.setNull(i++, Types.VARCHAR);
+			}
+			if (persona.getGenero().getCodigoEntero() != null && !Integer.valueOf(0).equals(persona.getGenero().getCodigoEntero())){
+				cs.setInt(i++, persona.getGenero().getCodigoEntero());
+			}
+			else{
+				cs.setNull(i++, Types.INTEGER);
+			}
+			if (persona.getEstadoCivil().getCodigoEntero() != null && !Integer.valueOf(0).equals(persona.getEstadoCivil().getCodigoEntero())){
+				cs.setInt(i++, persona.getEstadoCivil().getCodigoEntero());
+			}
+			else{
+				cs.setNull(i++, Types.INTEGER);
+			}
+			if (persona.getDocumentoIdentidad().getTipoDocumento().getCodigoEntero() != null && !Integer.valueOf(0).equals(persona.getDocumentoIdentidad().getTipoDocumento().getCodigoEntero())){
+				cs.setInt(i++, persona.getDocumentoIdentidad().getTipoDocumento().getCodigoEntero());
+			}
+			else{
+				cs.setNull(i++, Types.INTEGER);
+			}
+			if (StringUtils.isNotBlank(persona.getDocumentoIdentidad().getNumeroDocumento())){
+				cs.setString(i++, persona.getDocumentoIdentidad().getNumeroDocumento());
+			}
+			else{
+				cs.setNull(i++, Types.VARCHAR);
+			}
+			if (StringUtils.isNotBlank(persona.getUsuarioCreacion())){
+				cs.setString(i++, persona.getUsuarioCreacion());
+			}
+			else{
+				cs.setNull(i++, Types.VARCHAR);
+			}
+			if (StringUtils.isNotBlank(persona.getIpCreacion())){
+				cs.setString(i++, persona.getIpCreacion());
+			}
+			else{
+				cs.setNull(i++, Types.VARCHAR);
+			}
 			
 			cs.execute();
+			resultado = cs.getInt(1);
 		} catch (SQLException e) {
+			resultado = 0;
 			throw new SQLException(e);
 		} finally{
 			try {
@@ -73,6 +120,8 @@ public class PersonaDaoImpl implements PersonaDao {
 				throw new SQLException(e);
 			}
 		}
+		
+		return resultado;
 	}
 
 	/* (non-Javadoc)

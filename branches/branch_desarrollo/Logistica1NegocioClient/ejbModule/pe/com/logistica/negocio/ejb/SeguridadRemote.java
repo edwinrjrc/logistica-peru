@@ -16,4 +16,5 @@ public interface SeguridadRemote {
 	List<BaseVO> listarRoles();
 	Usuario consultarUsuario(int id) throws SQLException;
 	boolean actualizarUsuario(Usuario usuario) throws SQLException;
+	Usuario inicioSesion(Usuario usuario) throws SQLException;
 }

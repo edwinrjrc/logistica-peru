@@ -47,6 +47,7 @@ public class SeguridadSession implements SeguridadRemote, SeguridadLocal {
 
 	@Override
 	public Usuario consultarUsuario(int id) throws SQLException {
+		usuarioDao = new UsuarioDaoImpl();
 		return usuarioDao.consultarUsuario(id);
 	}
 
@@ -54,5 +55,11 @@ public class SeguridadSession implements SeguridadRemote, SeguridadLocal {
 	public boolean actualizarUsuario(Usuario usuario) throws SQLException {
 		usuarioDao = new UsuarioDaoImpl();
     	return usuarioDao.actualizarUsuario(usuario);
+	}
+	
+	@Override
+	public Usuario inicioSesion(Usuario usuario) throws SQLException {
+		usuarioDao = new UsuarioDaoImpl();
+		return usuarioDao.inicioSesion2(usuario);
 	}
 }

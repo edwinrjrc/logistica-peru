@@ -18,10 +18,17 @@ public class UtilJdbc {
 	}
 
 	public static String obtenerCadena(ResultSet rs, String campo) throws SQLException {
-		if (rs != null && campo != null) {
+		if (rs != null && StringUtils.isNotBlank(campo)) {
 			return parseaCadena(rs.getString(campo));
 		}
 		return "";
+	}
+	
+	public static int obtenerNumero(ResultSet rs, String campo) throws SQLException {
+		if (rs != null && StringUtils.isNotBlank(campo)) {
+			return rs.getInt(campo);
+		}
+		return 0;
 	}
 
 	public static String parseaCadena(String cadena){

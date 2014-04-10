@@ -10,6 +10,7 @@ import java.util.Properties;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
+import javax.servlet.ServletContext;
 
 import pe.com.logistica.bean.base.BaseVO;
 import pe.com.logistica.bean.negocio.Usuario;
@@ -23,11 +24,13 @@ import pe.com.logistica.web.servicio.SeguridadServicio;
 public class SeguridadServicioImpl implements SeguridadServicio{
 	
 	SeguridadRemote ejbSession;
+	final String ejbBeanName = "SeguridadSession";
 	/**
+	 * @param servletContext 
 	 * @throws NamingException 
 	 * 
 	 */
-	public SeguridadServicioImpl() throws NamingException {
+	public SeguridadServicioImpl(ServletContext context) throws NamingException {
 		Properties props = new Properties();
         /*props.setProperty("java.naming.factory.initial","org.jnp.interfaces.NamingContextFactory");
         props.setProperty("java.naming.factory.url.pkgs", "org.jboss.naming");
@@ -37,6 +40,9 @@ public class SeguridadServicioImpl implements SeguridadServicio{
 		Context ctx = new InitialContext(props);
 		//String lookup = "ejb:Logistica1EAR/Logistica1Negocio/SeguridadSession!pe.com.logistica.negocio.ejb.SeguridadRemote";
 		String lookup = "java:jboss/exported/Logistica1EAR/Logistica1Negocio/SeguridadSession!pe.com.logistica.negocio.ejb.SeguridadRemote";
+		
+		final String ejbRemoto = SeguridadRemote.class.getName();
+		lookup = "java:jboss/exported/"+context.getInitParameter("appNegocioNameEar")+"/"+context.getInitParameter("appNegocioName")+"/"+ejbBeanName+"!"+ejbRemoto;
 		ejbSession = (SeguridadRemote) ctx.lookup(lookup);
 		
 	}
@@ -59,5 +65,9 @@ public class SeguridadServicioImpl implements SeguridadServicio{
 	@Override
 	public boolean actualizarUsuario(Usuario usuario) throws SQLException {
 		return ejbSession.actualizarUsuario(usuario);
+	}
+	@Override
+	public Usuario inicioSesion(Usuario usuario) throws SQLException{
+		return ejbSession.inicioSesion(usuario);
 	}
 }
