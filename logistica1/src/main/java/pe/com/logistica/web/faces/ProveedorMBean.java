@@ -21,8 +21,9 @@ import javax.servlet.http.HttpSession;
 import org.apache.commons.lang3.StringUtils;
 
 import pe.com.logistica.bean.base.BaseVO;
-import pe.com.logistica.bean.base.Direccion;
+import pe.com.logistica.bean.base.CorreoElectronico;
 import pe.com.logistica.bean.negocio.Contacto;
+import pe.com.logistica.bean.negocio.Direccion;
 import pe.com.logistica.bean.negocio.Proveedor;
 import pe.com.logistica.bean.negocio.Telefono;
 import pe.com.logistica.bean.negocio.Ubigeo;
@@ -59,6 +60,7 @@ public class ProveedorMBean extends BaseMBean {
 	private String nombreFormulario;
 	private String nombreFormularioDireccion;
 	private String nombreFormularioContacto;
+	private String pestanaActiva = "idFC01";
 
 	private List<SelectItem> listaProvincia;
 	private List<SelectItem> listaDistrito;
@@ -126,7 +128,7 @@ public class ProveedorMBean extends BaseMBean {
 	}
 
 	public void editarContactoProveedor(Contacto contactoLista) {
-		this.setNombreFormularioDireccion("Editar Contacto");
+		this.setNombreFormularioContacto("Editar Contacto");
 		this.setNuevoContacto(false);
 		this.setEditarContacto(true);
 		this.setContacto(contactoLista);
@@ -142,18 +144,87 @@ public class ProveedorMBean extends BaseMBean {
 
 	public void ejecutarMetodo(ActionEvent e) {
 		try {
+			this.setShowModal(false);
+			int tipoDocRUC = UtilWeb.obtenerEnteroPropertieMaestro(
+					"tipoDocumentoRUC", "aplicacionDatos");
 			if (this.isNuevoProveedor()) {
 				if (validarProveedor(e)) {
-					HttpSession session = obtenerSession(false);
-					Usuario usuario = (Usuario) session
-							.getAttribute("usuarioSession");
-					getProveedor().setUsuarioCreacion(usuario.getUsuario());
-					getProveedor().setIpCreacion(
-							obtenerRequest().getRemoteAddr());
-					this.setShowModal(negocioServicio
-							.registrarProveedor(getProveedor()));
-					this.setTipoModal("1");
-					this.setMensajeModal("Proveedor registrado Satisfactoriamente");
+					if (validarDireccionProveedor(e)) {
+						if (validarContactoProveedor(e)) {
+							if (validarTelefonoProveedor()){
+								HttpSession session = obtenerSession(false);
+								Usuario usuario = (Usuario) session
+										.getAttribute("usuarioSession");
+								getProveedor().setUsuarioCreacion(
+										usuario.getUsuario());
+								getProveedor().setIpCreacion(
+										obtenerRequest().getRemoteAddr());
+								if (tipoDocRUC == getProveedor().getDocumentoIdentidad()
+										.getTipoDocumento().getCodigoEntero().intValue()) {
+									getProveedor().setNombres(getProveedor().getRazonSocial());
+								}
+								
+								this.setShowModal(negocioServicio
+										.registrarProveedor(getProveedor()));
+								this.setTipoModal("1");
+								this.setMensajeModal("Proveedor registrado Satisfactoriamente");
+							}
+							else {
+								this.setShowModal(true);
+								this.setTipoModal("2");
+								this.setMensajeModal("Debe ingresar por lo menos un telefono, en la direccion o el contacto");
+							}
+							
+						} else {
+							this.setShowModal(true);
+							this.setTipoModal("2");
+							this.setMensajeModal("No se ha agregado ningun contacto para el proveedor, para proveedor personal natural registre como contacto la mismo persona");
+						}
+					} else {
+						this.setShowModal(true);
+						this.setTipoModal("2");
+						this.setMensajeModal("No se ha agregado ninguna dirección al proveedor");
+					}
+				}
+			}
+			else if (this.isEditarProveedor()){
+				if (validarProveedor(e)) {
+					if (validarDireccionProveedor(e)) {
+						if (validarContactoProveedor(e)) {
+							if (validarTelefonoProveedor()){
+								HttpSession session = obtenerSession(false);
+								Usuario usuario = (Usuario) session
+										.getAttribute("usuarioSession");
+								getProveedor().setUsuarioCreacion(
+										usuario.getUsuario());
+								getProveedor().setIpCreacion(
+										obtenerRequest().getRemoteAddr());
+								if (tipoDocRUC == getProveedor().getDocumentoIdentidad()
+										.getTipoDocumento().getCodigoEntero().intValue()) {
+									getProveedor().setNombres(getProveedor().getRazonSocial());
+								}
+								
+								this.setShowModal(negocioServicio
+										.actualizarProveedor(getProveedor()));
+								this.setTipoModal("1");
+								this.setMensajeModal("Proveedor actualizado Satisfactoriamente");
+							}
+							else {
+								this.setShowModal(true);
+								this.setTipoModal("2");
+								this.setMensajeModal("Debe ingresar por lo menos un telefono, en la direccion o el contacto");
+							}
+							
+						} else {
+							this.setShowModal(true);
+							this.setTipoModal("2");
+							this.setMensajeModal("No se ha agregado ningun contacto para el proveedor, para proveedor personal natural registre como contacto la mismo persona");
+						}
+					} else {
+						this.setShowModal(true);
+						this.setTipoModal("2");
+						this.setMensajeModal("No se ha agregado ninguna dirección al proveedor");
+					}
 				}
 			}
 		} catch (Exception ex) {
@@ -162,6 +233,22 @@ public class ProveedorMBean extends BaseMBean {
 			this.setTipoModal("2");
 			this.setMensajeModal(ex.getMessage());
 		}
+	}
+
+	private boolean validarContactoProveedor(ActionEvent e) {
+		boolean resultado = true;
+
+		resultado = !(this.getProveedor().getListaContactos().isEmpty());
+
+		return resultado;
+	}
+
+	private boolean validarDireccionProveedor(ActionEvent e) {
+		boolean resultado = true;
+
+		resultado = !(this.getProveedor().getListaDirecciones().isEmpty());
+
+		return resultado;
 	}
 
 	private boolean validarProveedor(ActionEvent e) {
@@ -174,12 +261,6 @@ public class ProveedorMBean extends BaseMBean {
 		int tipoDocRUC = UtilWeb.obtenerEnteroPropertieMaestro(
 				"tipoDocumentoRUC", "aplicacionDatos");
 
-		if (StringUtils.isBlank(getContacto().getApellidoPaterno())) {
-			this.agregarMensaje(idFormulario + ":idApePat",
-					"Ingrese el apellido paterno", "",
-					FacesMessage.SEVERITY_ERROR);
-			resultado = false;
-		}
 		if (tipoDocDNI == getProveedor().getDocumentoIdentidad()
 				.getTipoDocumento().getCodigoEntero().intValue()
 				|| tipoDocCE == getProveedor().getDocumentoIdentidad()
@@ -204,25 +285,61 @@ public class ProveedorMBean extends BaseMBean {
 			}
 			if (StringUtils.isBlank(getProveedor().getNombres())) {
 				this.agregarMensaje(idFormulario + ":idNomPro",
-						"Ingrese los nombres", "",
-						FacesMessage.SEVERITY_ERROR);
+						"Ingrese los nombres", "", FacesMessage.SEVERITY_ERROR);
 				resultado = false;
 			}
 		}
 		if (tipoDocRUC == getProveedor().getDocumentoIdentidad()
-				.getTipoDocumento().getCodigoEntero().intValue()){
-			if (StringUtils.isBlank(getProveedor().getNombres())) {
+				.getTipoDocumento().getCodigoEntero().intValue()) {
+			if (StringUtils.isBlank(getProveedor().getRazonSocial())) {
 				this.agregarMensaje(idFormulario + ":idRazSocPro",
 						"Ingrese la razon social", "",
 						FacesMessage.SEVERITY_ERROR);
 				resultado = false;
 			}
 		}
+		
+		return resultado;
+	}
+	
+	private boolean validarTelefonoProveedor(){
+		boolean resultado = false;
+		
+		List<Direccion> listaDire = this.getProveedor().getListaDirecciones();
+		for (Direccion direccion : listaDire) {
+			List<Telefono> listTelefono = direccion.getTelefonos();
+			for (Telefono telefono : listTelefono) {
+				if (StringUtils.isNotBlank(telefono.getNumeroTelefono())){
+					resultado = true;
+					break;
+				}
+			}
+		}
+		if (!resultado){
+			List<Contacto> listaContacto = this.getProveedor().getListaContactos();
+			for (Contacto contacto : listaContacto) {
+				List<Telefono> listTelefono = contacto.getListaTelefonos();
+				for (Telefono telefono : listTelefono) {
+					if (StringUtils.isNotBlank(telefono.getNumeroTelefono())){
+						resultado = true;
+						break;
+					}
+				}
+			}
+		}
+		
 		return resultado;
 	}
 
 	public void consultarProveedor(int codigoProveedor) {
-
+		try {
+			this.setProveedor(negocioServicio.consultarProveedorCompleto(codigoProveedor));
+			this.setNuevoProveedor(false);
+			this.setEditarProveedor(true);
+			this.setNombreFormulario("Editar Proveedor");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	public void agregarDireccion(ActionEvent e) {
@@ -262,6 +379,9 @@ public class ProveedorMBean extends BaseMBean {
 		telefono.setId(this.getContacto().getListaTelefonos().size() + 1);
 		this.getContacto().getListaTelefonos().add(telefono);
 	}
+	public void agregarCorreoContacto(){
+		this.getContacto().getListaCorreos().add(new CorreoElectronico());
+	}
 
 	public void eliminarTelefono(Telefono telefono) {
 		this.getDireccion().getTelefonos().remove(telefono);
@@ -286,28 +406,100 @@ public class ProveedorMBean extends BaseMBean {
 	private boolean validarContacto(ActionEvent e) {
 		boolean resultado = true;
 		String idFormulario = "idFCPr";
+		int tipoDocDNI = UtilWeb.obtenerEnteroPropertieMaestro(
+				"tipoDocumentoDNI", "aplicacionDatos");
+		int tipoDocCE = UtilWeb.obtenerEnteroPropertieMaestro(
+				"tipoDocumentoCE", "aplicacionDatos");
+		int tipoDocRUC = UtilWeb.obtenerEnteroPropertieMaestro(
+				"tipoDocumentoRUC", "aplicacionDatos");
 		if (StringUtils.isBlank(getContacto().getApellidoPaterno())) {
 			this.agregarMensaje(idFormulario + ":idApePat",
 					"Ingrese el apellido paterno", "",
 					FacesMessage.SEVERITY_ERROR);
 			resultado = false;
+			this.setPestanaActiva("idFC01");
 		}
 		if (StringUtils.isBlank(getContacto().getApellidoMaterno())) {
 			this.agregarMensaje(idFormulario + ":idApeMat",
 					"Ingrese el apellido materno", "",
 					FacesMessage.SEVERITY_ERROR);
 			resultado = false;
+			this.setPestanaActiva("idFC01");
 		}
 		if (StringUtils.isBlank(getContacto().getNombres())) {
 			this.agregarMensaje(idFormulario + ":idForProNom",
 					"Ingrese los nombres", "", FacesMessage.SEVERITY_ERROR);
 			resultado = false;
+			this.setPestanaActiva("idFC01");
 		}
 		if (getContacto().getArea().getCodigoEntero() == null) {
 			this.agregarMensaje(idFormulario + ":idSelAreCon",
 					"Seleccione el area del contacto", "",
 					FacesMessage.SEVERITY_ERROR);
 			resultado = false;
+			this.setPestanaActiva("idFC01");
+		}
+		if (StringUtils.isNotBlank(getContacto().getDocumentoIdentidad().getNumeroDocumento())){
+			if (getContacto().getDocumentoIdentidad().getTipoDocumento().getCodigoEntero() != null){
+				if (getContacto().getDocumentoIdentidad().getTipoDocumento().getCodigoEntero().intValue() == tipoDocDNI){
+					if (getContacto().getDocumentoIdentidad().getNumeroDocumento().length() != 8){
+						this.agregarMensaje(idFormulario + ":idNumDoc",
+								"El número de documento debe ser de 8 caracteres", "",
+								FacesMessage.SEVERITY_ERROR);
+						resultado = false;
+						this.setPestanaActiva("idFC01");
+					}
+				}
+				if (getContacto().getDocumentoIdentidad().getTipoDocumento().getCodigoEntero().intValue() == tipoDocCE){
+					if (getContacto().getDocumentoIdentidad().getNumeroDocumento().length() != 9){
+						this.agregarMensaje(idFormulario + ":idNumDoc",
+								"El número de documento debe ser de 9 caracteres", "",
+								FacesMessage.SEVERITY_ERROR);
+						resultado = false;
+						this.setPestanaActiva("idFC01");
+					}
+				}
+				if (getContacto().getDocumentoIdentidad().getTipoDocumento().getCodigoEntero().intValue() == tipoDocRUC){
+					if (getContacto().getDocumentoIdentidad().getNumeroDocumento().length() != 11){
+						this.agregarMensaje(idFormulario + ":idNumDoc",
+								"El número de documento debe ser de 11 caracteres", "",
+								FacesMessage.SEVERITY_ERROR);
+						resultado = false;
+						this.setPestanaActiva("idFC01");
+					}
+				}
+			}
+		}
+		if (resultado){
+			List<Telefono> listTelefonos = getContacto().getListaTelefonos();
+			if (!listTelefonos.isEmpty()){
+				for (Telefono telefono : listTelefonos) {
+					if (StringUtils.isBlank(telefono.getNumeroTelefono())){
+						this.agregarMensaje(idFormulario + ":idTablaTelefonosContacto",
+								"Complete los telefonos vacios", "",
+								FacesMessage.SEVERITY_ERROR);
+						resultado = false;
+						this.setPestanaActiva("idFC02");
+						break;
+					}
+				}
+			}
+		}
+		
+		if (resultado){
+			List<CorreoElectronico> listCorreos = getContacto().getListaCorreos();
+			if (!listCorreos.isEmpty()){
+				for (CorreoElectronico correo : listCorreos) {
+					if (StringUtils.isBlank(correo.getDireccion())){
+						this.agregarMensaje(idFormulario + ":idTablaCorreoContacto",
+								"Complete los correos electronicos vacios", "",
+								FacesMessage.SEVERITY_ERROR);
+						resultado = false;
+						this.setPestanaActiva("idFC03");
+						break;
+					}
+				}
+			}
 		}
 
 		return resultado;
@@ -321,16 +513,19 @@ public class ProveedorMBean extends BaseMBean {
 					"Seleccione el tipo de via", "",
 					FacesMessage.SEVERITY_ERROR);
 			resultado = false;
+			this.setPestanaActiva("idFC01");
 		} else if (getDireccion().getVia().getCodigoEntero().intValue() == 0) {
 			this.agregarMensaje(idFormulario + ":idFDSelTipoVia",
 					"Seleccione el tipo de via", "",
 					FacesMessage.SEVERITY_ERROR);
 			resultado = false;
+			this.setPestanaActiva("idFD01");
 		}
 		if (StringUtils.isBlank(getDireccion().getNombreVia())) {
 			this.agregarMensaje(idFormulario + ":idFDInNomVia",
 					"Ingrese el nombre de via", "", FacesMessage.SEVERITY_ERROR);
 			resultado = false;
+			this.setPestanaActiva("idFD01");
 		}
 		if (StringUtils.isBlank(getDireccion().getUbigeo().getDepartamento()
 				.getCodigoCadena())) {
@@ -338,18 +533,36 @@ public class ProveedorMBean extends BaseMBean {
 					"Seleccione el departamento", "",
 					FacesMessage.SEVERITY_ERROR);
 			resultado = false;
+			this.setPestanaActiva("idFD01");
 		}
 		if (StringUtils.isBlank(getDireccion().getUbigeo().getProvincia()
 				.getCodigoCadena())) {
 			this.agregarMensaje(idFormulario + ":idProvinciaDireccion",
 					"Seleccione la provincia", "", FacesMessage.SEVERITY_ERROR);
 			resultado = false;
+			this.setPestanaActiva("idFD01");
 		}
 		if (StringUtils.isBlank(getDireccion().getUbigeo().getDistrito()
 				.getCodigoCadena())) {
 			this.agregarMensaje(idFormulario + ":idDistritoDireccion",
 					"Seleccione el distrito", "", FacesMessage.SEVERITY_ERROR);
 			resultado = false;
+			this.setPestanaActiva("idFD01");
+		}
+		if (resultado){
+			List<Telefono> listTelefonos = getDireccion().getTelefonos();
+			if (!listTelefonos.isEmpty()){
+				for (Telefono telefono : listTelefonos) {
+					if (StringUtils.isBlank(telefono.getNumeroTelefono())){
+						this.agregarMensaje(idFormulario + ":idTablaTelDir",
+								"Complete los telefonos vacios", "",
+								FacesMessage.SEVERITY_ERROR);
+						resultado = false;
+						this.setPestanaActiva("idFD02");
+						break;
+					}
+				}
+			}
 		}
 
 		return resultado;
@@ -362,6 +575,7 @@ public class ProveedorMBean extends BaseMBean {
 		try {
 			listaProveedores = this.negocioServicio
 					.listarProveedor(getProveedor());
+			this.setShowModal(false);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -654,6 +868,20 @@ public class ProveedorMBean extends BaseMBean {
 	 */
 	public void setContactoAgregada(boolean contactoAgregada) {
 		this.contactoAgregada = contactoAgregada;
+	}
+
+	/**
+	 * @return the pestanaActiva
+	 */
+	public String getPestanaActiva() {
+		return pestanaActiva;
+	}
+
+	/**
+	 * @param pestanaActiva the pestanaActiva to set
+	 */
+	public void setPestanaActiva(String pestanaActiva) {
+		this.pestanaActiva = pestanaActiva;
 	}
 
 }
