@@ -3,6 +3,9 @@ package pe.com.logistica.bean.base;
 import java.util.ArrayList;
 import java.util.List;
 
+import pe.com.logistica.bean.negocio.Direccion;
+import pe.com.logistica.bean.negocio.DocumentoIdentidad;
+
 /**
  * @author Edwin
  * @version 1.0

@@ -6,6 +6,7 @@ import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 
 import pe.com.logistica.bean.base.BaseVO;
+import pe.com.logistica.bean.base.CorreoElectronico;
 import pe.com.logistica.bean.base.Persona;
 
 /**
@@ -19,7 +20,7 @@ public class Contacto extends Persona {
 	 * 
 	 */
 	private static final long serialVersionUID = 4988270415170041781L;
-	private List<String> listaCorreos;
+	private List<CorreoElectronico> listaCorreos;
 	private List<Telefono> listaTelefonos;
 	private String anexo;	
 	private BaseVO area;
@@ -35,7 +36,10 @@ public class Contacto extends Persona {
 	/**
 	 * @return the listaCorreos
 	 */
-	public List<String> getListaCorreos() {
+	public List<CorreoElectronico> getListaCorreos() {
+		if (listaCorreos == null){
+			listaCorreos = new ArrayList<CorreoElectronico>();
+		}
 		return listaCorreos;
 	}
 
@@ -43,7 +47,7 @@ public class Contacto extends Persona {
 	 * @param listaCorreos
 	 *            the listaCorreos to set
 	 */
-	public void setListaCorreos(List<String> listaCorreos) {
+	public void setListaCorreos(List<CorreoElectronico> listaCorreos) {
 		this.listaCorreos = listaCorreos;
 	}
 
