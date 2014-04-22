@@ -59,6 +59,9 @@ public class ParametroDaoImpl implements ParametroDao {
 			throw new SQLException(e);
 		} finally{
 			try {
+				if (rs != null){
+					rs.close();
+				}
 				if (cs != null){
 					cs.close();
 				}
@@ -189,6 +192,9 @@ public class ParametroDaoImpl implements ParametroDao {
 			throw new SQLException(e);
 		} finally{
 			try {
+				if (rs != null){
+					rs.close();
+				}
 				if (cs != null){
 					cs.close();
 				}

@@ -53,6 +53,9 @@ public class CatalogoDaoImpl implements CatalogoDao {
 			e.printStackTrace();
 		} finally{
 			try {
+				if (rs != null){
+					rs.close();
+				}
 				if (cs != null){
 					cs.close();
 				}
@@ -100,6 +103,9 @@ public class CatalogoDaoImpl implements CatalogoDao {
 			e.printStackTrace();
 		} finally{
 			try {
+				if (rs != null){
+					rs.close();
+				}
 				if (cs != null){
 					cs.close();
 				}
@@ -146,6 +152,9 @@ public class CatalogoDaoImpl implements CatalogoDao {
 			e.printStackTrace();
 		} finally{
 			try {
+				if (rs != null){
+					rs.close();
+				}
 				if (cs != null){
 					cs.close();
 				}
@@ -193,6 +202,9 @@ public class CatalogoDaoImpl implements CatalogoDao {
 			e.printStackTrace();
 		} finally{
 			try {
+				if (rs != null){
+					rs.close();
+				}
 				if (cs != null){
 					cs.close();
 				}
@@ -241,6 +253,9 @@ public class CatalogoDaoImpl implements CatalogoDao {
 			e.printStackTrace();
 		} finally{
 			try {
+				if (rs != null){
+					rs.close();
+				}
 				if (cs != null){
 					cs.close();
 				}

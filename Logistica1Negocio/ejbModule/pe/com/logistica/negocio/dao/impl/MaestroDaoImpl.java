@@ -68,6 +68,9 @@ public class MaestroDaoImpl implements MaestroDao {
 			throw new SQLException(e);
 		} finally {
 			try {
+				if (rs != null){
+					rs.close();
+				}
 				if (cs != null) {
 					cs.close();
 				}
@@ -118,6 +121,9 @@ public class MaestroDaoImpl implements MaestroDao {
 			throw new SQLException(e);
 		} finally {
 			try {
+				if (rs != null){
+					rs.close();
+				}
 				if (cs != null) {
 					cs.close();
 				}
@@ -177,6 +183,9 @@ public class MaestroDaoImpl implements MaestroDao {
 			throw new SQLException(e);
 		} finally {
 			try {
+				if (rs != null){
+					rs.close();
+				}
 				if (cs != null) {
 					cs.close();
 				}
@@ -334,6 +343,9 @@ public class MaestroDaoImpl implements MaestroDao {
 			throw new SQLException(e);
 		} finally {
 			try {
+				if (rs != null){
+					rs.close();
+				}
 				if (cs != null) {
 					cs.close();
 				}
