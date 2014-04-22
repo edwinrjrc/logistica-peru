@@ -100,7 +100,7 @@
 									columns="1"
 									rendered="#{proveedorMBean.proveedor.documentoIdentidad.tipoDocumento.codigoEntero == 3}">
 									<h:inputText id="idRazSocPro"
-										value="#{proveedorMBean.proveedor.nombres}" maxlength="80" />
+										value="#{proveedorMBean.proveedor.razonSocial}" maxlength="80" />
 									<rich:message for="idRazSocPro" showSummary="true"
 										showDetail="false" />
 								</h:panelGrid>
@@ -223,9 +223,9 @@
 										style="width:100%;" columns="1">
 										<a4j:commandButton value="Editar"
 											action="#{proveedorMBean.editarContactoProveedor(fila)}"
-											render="idNomModalContacto,idGrdFCon"
+											render="idNomModalContacto,idGrdFCon" immediate="true"
 											oncomplete="#{rich:component('idModalFormContacto')}.show();" />
-										<a4j:commandButton value="Eliminar" render="idTablaContactos"
+										<a4j:commandButton value="Eliminar" render="idTablaContactos" immediate="true"
 											action="#{proveedorMBean.eliminarContactoProveedor(fila)}" />
 
 									</h:panelGrid>

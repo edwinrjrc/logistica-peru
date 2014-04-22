@@ -6,8 +6,8 @@ package pe.com.logistica.web.servicio;
 import java.sql.SQLException;
 import java.util.List;
 
-import pe.com.logistica.bean.base.Direccion;
 import pe.com.logistica.bean.negocio.Contacto;
+import pe.com.logistica.bean.negocio.Direccion;
 import pe.com.logistica.bean.negocio.Proveedor;
 
 /**
@@ -21,7 +21,11 @@ public interface NegocioServicio {
 	public Contacto agregarContacto(Contacto contacto) throws SQLException, Exception;
 
 	public boolean registrarProveedor(Proveedor proveedor) throws SQLException, Exception;
+	
+	public boolean actualizarProveedor(Proveedor proveedor) throws SQLException, Exception;
 
 	List<Proveedor> listarProveedor(Proveedor proveedor) throws SQLException,
 			Exception;
+
+	public Proveedor consultarProveedorCompleto(int codigoProveedor) throws SQLException, Exception;
 }

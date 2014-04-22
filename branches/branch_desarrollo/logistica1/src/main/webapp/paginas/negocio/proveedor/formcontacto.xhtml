@@ -24,8 +24,8 @@
 		<h:form id="idFCPr">
 			<h:panelGrid border="0" cellpadding="0" cellspacing="0" columns="1"
 				id="idGrdFCon" style="width:100%;">
-				<rich:tabPanel style="width:100%;" switchType="client">
-					<rich:tab>
+				<rich:tabPanel style="width:100%;" switchType="client" activeItem="#{proveedorMBean.pestanaActiva}">
+					<rich:tab id="idFC01">
 						<f:facet name="header">
 							<h:outputText value="Contacto" />
 						</f:facet>
@@ -47,14 +47,14 @@
 								<h:outputText value="Numero Documento" />
 								<h:panelGrid border="0" cellpadding="0" cellspacing="0"
 									columns="1">
-									<h:inputText id="idNumDoc"
+									<h:inputText id="idNumDoc" maxlength="12"
 										value="#{proveedorMBean.contacto.documentoIdentidad.numeroDocumento}" />
 									<rich:message for="idNumDoc" />
 								</h:panelGrid>
 								<h:outputText value="Apellido Paterno" />
 								<h:panelGrid columns="1" cellpadding="0" cellspacing="0"
 									border="0">
-									<h:inputText id="idApePat"
+									<h:inputText id="idApePat" maxlength="20"
 										value="#{proveedorMBean.contacto.apellidoPaterno}" />
 									<rich:message for="idApePat" ajaxRendered="true"
 										showSummary="true" />
@@ -62,7 +62,7 @@
 								<h:outputText value="Apellido Materno" />
 								<h:panelGrid columns="1" cellpadding="0" cellspacing="0"
 									border="0">
-									<h:inputText id="idApeMat"
+									<h:inputText id="idApeMat" maxlength="20"
 										value="#{proveedorMBean.contacto.apellidoMaterno}" />
 									<rich:message for="idApeMat" ajaxRendered="true"
 										showSummary="true" />
@@ -74,7 +74,7 @@
 								<h:outputText value="Nombres" for="idForProNom" />
 								<h:panelGrid border="0" cellpadding="0" cellspacing="0"
 									columns="1">
-									<h:inputText id="idForProNom" size="100"
+									<h:inputText id="idForProNom" size="100" maxlength="20"
 										value="#{proveedorMBean.contacto.nombres}" />
 									<rich:message for="idForProNom" ajaxRendered="true"
 										showSummary="true" />
@@ -96,13 +96,13 @@
 								</h:panelGrid>
 
 								<h:outputText value="Anexo" />
-								<h:inputText id="idForAnexo"
+								<h:inputText id="idForAnexo" maxlength="5" size="10"
 									value="#{proveedorMBean.contacto.anexo}" />
 							</h:panelGrid>
 
 						</h:panelGrid>
 					</rich:tab>
-					<rich:tab>
+					<rich:tab id="idFC02">
 						<f:facet name="header">
 							<h:outputText value="Telefonos Movil" />
 						</f:facet>
@@ -142,6 +142,41 @@
 								</h:panelGrid>
 							</f:facet>
 						</rich:dataTable>
+						<rich:message for="idTablaTelefonosContacto" ajaxRendered="true"
+										showSummary="true" />
+					</rich:tab>
+					<rich:tab id="idFC03">
+						<f:facet name="header">
+							<h:outputText value="Correo Electronico" />
+						</f:facet>
+						<rich:dataTable value="#{proveedorMBean.contacto.listaCorreos}"
+							style="width:100%;" iterationStatusVar="idx" var="fila" id="idTablaCorreoContacto">
+							<rich:column>
+								<h:outputText value="#{idx.index+1}" />
+							</rich:column>
+							<rich:column>
+								<f:facet name="header">
+									<h:outputText value="Correo Electronico" />
+								</f:facet>
+								<h:inputText value="#{fila.direccion}" >
+								</h:inputText>
+							</rich:column>
+							<rich:column>
+								<a4j:commandButton render="idTablaTelefonosContacto"
+									value="Eliminar"
+									action="#{proveedorMBean.eliminarTelefonoContacto(fila)}" />
+							</rich:column>
+							<f:facet name="header">
+								<h:panelGrid columns="1" border="0" cellpadding="0"
+									cellspacing="0" style="width:100%;">
+									<a4j:commandButton render="idTablaCorreoContacto"
+										value="Agregar"
+										action="#{proveedorMBean.agregarCorreoContacto()}" />
+								</h:panelGrid>
+							</f:facet>
+						</rich:dataTable>
+						<rich:message for="idTablaCorreoContacto" ajaxRendered="true"
+										showSummary="true" />
 					</rich:tab>
 				</rich:tabPanel>
 
@@ -151,7 +186,7 @@
 						<a4j:commandButton value="Agregar"
 							actionListener="#{proveedorMBean.agregarContacto}"
 							oncomplete="cerrarModalBoton('idFCPr','idCerrModCon','idHdConAgr')"
-							render="idTablaContactos,idGrdBtnesCont" />
+							render="idTablaContactos,idGrdBtnesCont,idGrdFCon" />
 
 						<a4j:commandButton id="idCerrModCon" style="display:none;"
 							oncomplete="#{rich:component('idModalFormContacto')}.hide(); return false;" />

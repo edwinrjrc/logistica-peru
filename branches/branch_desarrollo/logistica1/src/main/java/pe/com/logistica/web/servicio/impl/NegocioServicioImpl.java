@@ -12,8 +12,8 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.servlet.ServletContext;
 
-import pe.com.logistica.bean.base.Direccion;
 import pe.com.logistica.bean.negocio.Contacto;
+import pe.com.logistica.bean.negocio.Direccion;
 import pe.com.logistica.bean.negocio.Proveedor;
 import pe.com.logistica.negocio.ejb.NegocioSessionRemote;
 import pe.com.logistica.web.servicio.NegocioServicio;
@@ -77,4 +77,16 @@ public class NegocioServicioImpl implements NegocioServicio {
 		return ejbSession.listarProveedor(proveedor);
 	}
 
+	@Override
+	public Proveedor consultarProveedorCompleto(int codigoProveedor) throws SQLException, Exception {
+		return ejbSession.consultarProveedor(codigoProveedor);
+	}
+
+	@Override
+	public boolean actualizarProveedor(Proveedor proveedor)
+			throws SQLException, Exception {
+		return ejbSession.actualizarProveedor(proveedor);
+	}
+
 }
+	
