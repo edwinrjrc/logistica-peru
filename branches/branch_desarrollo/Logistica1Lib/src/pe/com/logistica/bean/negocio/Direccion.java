@@ -1,10 +1,10 @@
-package pe.com.logistica.bean.base;
+package pe.com.logistica.bean.negocio;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import pe.com.logistica.bean.negocio.Telefono;
-import pe.com.logistica.bean.negocio.Ubigeo;
+import pe.com.logistica.bean.base.BaseNegocio;
+import pe.com.logistica.bean.base.BaseVO;
 
 /**
  * @author Edwin
@@ -154,9 +154,6 @@ public class Direccion extends BaseNegocio {
 	public List<Telefono> getTelefonos() {
 		if (telefonos == null){
 			telefonos = new ArrayList<Telefono>();
-			Telefono telefono = new Telefono();
-			telefono.setId(1);
-			telefonos.add(telefono);
 		}
 		return telefonos;
 	}
