@@ -5,13 +5,17 @@ package pe.com.logistica.negocio.dao.impl;
 
 import java.sql.CallableStatement;
 import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 
 import pe.com.logistica.bean.negocio.Telefono;
 import pe.com.logistica.negocio.dao.TelefonoDao;
+import pe.com.logistica.negocio.util.UtilJdbc;
 
 /**
  * @author Edwin
@@ -133,4 +137,157 @@ public class TelefonoDaoImpl implements TelefonoDao {
 		}
 	}
 
+	@Override
+	public List<Telefono> consultarTelefonoDireccion(int idDireccion, Connection conn)
+			throws SQLException {
+		List<Telefono> resultado = null;
+		CallableStatement cs = null;
+		ResultSet rs = null;
+		String sql = "select * " +
+				" from negocio.vw_telefonodireccion where iddireccion = ?";
+
+		try {
+			cs = conn.prepareCall(sql);
+			cs.setInt(1, idDireccion);
+			rs = cs.executeQuery();
+			
+			resultado = new ArrayList<Telefono>();
+			Telefono telefono = null;
+			while (rs.next()) {
+				telefono = new Telefono();
+				telefono.setCodigoEntero(UtilJdbc.obtenerNumero(rs, "id"));
+				telefono.setNumeroTelefono(UtilJdbc.obtenerCadena(rs, "numero"));
+				telefono.getEmpresaOperadora().setCodigoEntero(UtilJdbc.obtenerNumero(rs, "idempresaproveedor"));
+				resultado.add(telefono);
+			}
+			
+		} catch (SQLException e) {
+			resultado = null;
+			throw new SQLException(e);
+		} finally {
+			try {
+				if (rs != null){
+					rs.close();
+				}
+				if (cs != null){
+					cs.close();
+				}
+			} catch (SQLException e) {
+				try {
+					if (cs != null){
+						cs.close();
+					}
+					throw new SQLException(e);
+				} catch (SQLException e1) {
+					throw new SQLException(e);
+				}
+			}
+		}
+		
+		return resultado;
+	}
+	
+	@Override
+	public List<Telefono> consultarTelefonoContacto(int idcontacto, Connection conn)
+			throws SQLException {
+		List<Telefono> resultado = null;
+		CallableStatement cs = null;
+		ResultSet rs = null;
+		String sql = "select * " +
+				" from negocio.vw_telefonocontacto where idpersona = ?";
+
+		try {
+			cs = conn.prepareCall(sql);
+			cs.setInt(1, idcontacto);
+			rs = cs.executeQuery();
+			
+			resultado = new ArrayList<Telefono>();
+			Telefono telefono = null;
+			while (rs.next()) {
+				telefono = new Telefono();
+				telefono.setCodigoEntero(UtilJdbc.obtenerNumero(rs, "id"));
+				telefono.setNumeroTelefono(UtilJdbc.obtenerCadena(rs, "numero"));
+				telefono.getEmpresaOperadora().setCodigoEntero(UtilJdbc.obtenerNumero(rs, "idempresaproveedor"));
+				resultado.add(telefono);
+			}
+			
+		} catch (SQLException e) {
+			resultado = null;
+			throw new SQLException(e);
+		} finally {
+			try {
+				if (rs != null){
+					rs.close();
+				}
+				if (cs != null){
+					cs.close();
+				}
+			} catch (SQLException e) {
+				try {
+					if (cs != null){
+						cs.close();
+					}
+					throw new SQLException(e);
+				} catch (SQLException e1) {
+					throw new SQLException(e);
+				}
+			}
+		}
+		
+		return resultado;
+	}
+
+	@Override
+	public boolean actualizarTelefono(Telefono telefono, Connection conexion)
+			throws SQLException {
+		boolean resultado = false;
+		CallableStatement cs = null;
+		String sql = "{ ? = call negocio.fn_ingresartelefono(?,?,?,?,?) }";
+		
+		try {
+			cs = conexion.prepareCall(sql);
+			int i=1;
+			cs.registerOutParameter(i++, Types.BOOLEAN);
+			if (StringUtils.isNotBlank(telefono.getNumeroTelefono())){
+				cs.setString(i++, telefono.getNumeroTelefono());
+			}
+			else{
+				cs.setNull(i++, Types.VARCHAR);
+			}
+			if (telefono.getEmpresaOperadora().getCodigoEntero() != null){
+				cs.setInt(i++, telefono.getEmpresaOperadora().getCodigoEntero());
+			}
+			else{
+				cs.setNull(i++, Types.INTEGER);
+			}
+			if (StringUtils.isNotBlank(telefono.getUsuarioModificacion())){
+				cs.setString(i++, telefono.getUsuarioModificacion());
+			}
+			else{
+				cs.setNull(i++, Types.VARCHAR);
+			}
+			if (StringUtils.isNotBlank(telefono.getIpModificacion())){
+				cs.setString(i++, telefono.getIpModificacion());
+			}
+			else{
+				cs.setNull(i++, Types.VARCHAR);
+			}
+			cs.setInt(i++, telefono.getCodigoEntero().intValue());
+			
+			cs.execute();
+			resultado = cs.getBoolean(1);
+		} catch (SQLException e) {
+			resultado = false;
+			throw new SQLException(e);
+		} finally{
+			try {
+				if (cs != null){
+					cs.close();
+				}
+			} catch (SQLException e) {
+				throw new SQLException(e);
+			}
+		}
+		return resultado;
+	}
 }

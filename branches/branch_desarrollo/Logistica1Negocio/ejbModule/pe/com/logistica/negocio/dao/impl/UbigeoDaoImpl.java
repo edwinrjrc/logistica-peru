@@ -54,6 +54,9 @@ public class UbigeoDaoImpl implements UbigeoDao{
 			throw new SQLException(e);
 		} finally{
 			try {
+				if (rs != null){
+					rs.close();
+				}
 				if (cs != null){
 					cs.close();
 				}

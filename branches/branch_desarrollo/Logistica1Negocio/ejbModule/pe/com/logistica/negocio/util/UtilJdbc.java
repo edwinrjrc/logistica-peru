@@ -5,6 +5,7 @@ package pe.com.logistica.negocio.util;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Date;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -30,6 +31,18 @@ public class UtilJdbc {
 		}
 		return 0;
 	}
+	
+	public static Date obtenerFecha(ResultSet rs, String campo) throws SQLException {
+		if (rs != null && StringUtils.isNotBlank(campo)) {
+			return rs.getDate(campo);
+		}
+		return null;
+	}
+	
+	public static boolean convertirBooleanSiNo(ResultSet rs, String campo) throws SQLException{
+		String dato = obtenerCadena(rs, campo);
+		return ("S".equals(dato));
+	}
 
 	public static String parseaCadena(String cadena){
 		if (StringUtils.isNotBlank(cadena)){
@@ -43,5 +56,12 @@ public class UtilJdbc {
 			return Integer.valueOf(cadena);
 		}
 		return Integer.valueOf(0);
+	}
+	
+	public static int obtenerNumero(Integer numero){
+		if (numero == null){
+			return 0;
+		}
+		return numero.intValue();
 	}
 }
