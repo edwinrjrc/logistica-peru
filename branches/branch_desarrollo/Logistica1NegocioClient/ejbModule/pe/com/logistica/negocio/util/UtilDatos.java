@@ -5,7 +5,7 @@ package pe.com.logistica.negocio.util;
 
 import org.apache.commons.lang3.StringUtils;
 
-import pe.com.logistica.bean.base.Direccion;
+import pe.com.logistica.bean.negocio.Direccion;
 import pe.com.logistica.bean.negocio.Maestro;
 
 /**
