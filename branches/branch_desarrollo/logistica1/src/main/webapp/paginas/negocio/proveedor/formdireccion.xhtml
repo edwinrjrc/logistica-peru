@@ -7,8 +7,8 @@
 	xmlns:a4j="http://richfaces.org/a4j"
 	xmlns:rich="http://richfaces.org/rich">
 
-	<rich:popupPanel id="idModalFormDireccion" modal="true" width="800"
-		height="500" style="background-color: #FFFFFF">
+	<rich:popupPanel id="idModalFormDireccion" modal="true" width="900"
+		height="600" style="background-color: #FFFFFF">
 		<f:facet name="header">
 			<h:outputText id="idNomModalDireccion"
 				value="#{proveedorMBean.nombreFormularioDireccion}" />
@@ -24,9 +24,8 @@
 		<h:form id="idFDPr">
 			<h:panelGrid columns="1" style="width:100%;" cellpadding="0"
 				cellspacing="0" border="0" id="idGrdFDir">
-				<rich:tabPanel switchType="client">
-					<rich:tab header="Direccion">
-
+				<rich:tabPanel style="width:100%;" switchType="client" activeItem="#{proveedorMBean.pestanaActiva}">
+					<rich:tab header="Direccion" id="idFD01">
 						<h:panelGrid columns="1" style="width:100%;" cellpadding="0"
 							cellspacing="0" border="0" id="idGrdFormDireccion">
 							<h:panelGrid columns="4" style="width:100%;" cellpadding="0"
@@ -57,9 +56,9 @@
 								cellspacing="0" border="0"
 								columnClasses="col1fil1proveedor,col2fil1proveedor,col3fil1proveedor,col4fil1proveedor">
 								<h:outputText value="Número" style="width:100px;" />
-								<h:inputText value="#{proveedorMBean.direccion.numero}" />
+								<h:inputText value="#{proveedorMBean.direccion.numero}" maxlength="5" size="10" />
 								<h:outputText value="Interior" style="width:100px;" />
-								<h:inputText value="#{proveedorMBean.direccion.interior}" />
+								<h:inputText value="#{proveedorMBean.direccion.interior}" maxlength="5" size="10" />
 							</h:panelGrid>
 
 							<h:panelGrid columns="4" style="width:100%;" cellpadding="0"
@@ -76,21 +75,21 @@
 								columnClasses="col1fil1proveedor,col2fil1proveedor,col3fil1proveedor,col4fil1proveedor">
 								<h:outputText value="Departamento" />
 								<h:panelGrid border="0" cellpadding="0" cellspacing="0"
-									columns="1">
+									columns="1" >
 									<h:selectOneMenu id="idDepartamentoDireccion"
 										value="#{proveedorMBean.direccion.ubigeo.departamento.codigoCadena}"
 										valueChangeListener="#{proveedorMBean.buscarProvincias}">
 										<f:selectItem itemLabel="-Seleccione-" />
 										<f:selectItems value="#{catalogoMBean.catalogoDepartamento}" />
-										<a4j:ajax event="valueChange" render="idProvinciaDireccion"
-											execute="@this" immediate="true" />
+										<a4j:ajax event="valueChange" render="idSelProvDir,idProvinciaDireccion"
+											immediate="true" />
 									</h:selectOneMenu>
 									<rich:message for="idDepartamentoDireccion" showSummary="true"
 										showDetail="false" ajaxRendered="true" />
 								</h:panelGrid>
 								<h:outputText value="Provincia" />
 								<h:panelGrid border="0" cellpadding="0" cellspacing="0"
-									columns="1">
+									columns="1" id="idSelProvDir">
 									<h:selectOneMenu id="idProvinciaDireccion"
 										value="#{proveedorMBean.direccion.ubigeo.provincia.codigoCadena}"
 										valueChangeListener="#{proveedorMBean.buscarDistrito}">
@@ -133,24 +132,24 @@
 								cellspacing="0" border="0">
 								<h:outputText value="Referencia" />
 								<h:inputTextarea value="#{proveedorMBean.direccion.referencia}"
-									cols="100" rows="10" />
+									cols="120" rows="5" />
 							</h:panelGrid>
 
 							<h:panelGrid columns="1" style="width:100%;" cellpadding="0"
 								cellspacing="0" border="0">
 								<h:outputText value="Observaciones" />
 								<h:inputTextarea
-									value="#{proveedorMBean.direccion.observaciones}" cols="100"
-									rows="10" />
+									value="#{proveedorMBean.direccion.observaciones}" cols="120"
+									rows="5" />
 							</h:panelGrid>
 
 						</h:panelGrid>
 					</rich:tab>
-					<rich:tab header="Telefonos">
+					<rich:tab header="Telefonos" id="idFD02">
 						<h:panelGrid border="0" cellpadding="0" cellspacing="0"
 							style="width:100%;text-align:center;">
 							<rich:dataTable value="#{proveedorMBean.direccion.telefonos}"
-								style="width:50%;" var="fila" id="idTablaTelDir">
+								style="width:100%;" var="fila" id="idTablaTelDir">
 								<rich:column>
 									<h:outputText value="#{fila.id}" />
 								</rich:column>
@@ -175,6 +174,8 @@
 									</h:panelGrid>
 								</f:facet>
 							</rich:dataTable>
+							<rich:message for="idTablaTelDir" ajaxRendered="true"
+										showSummary="true" />
 						</h:panelGrid>
 					</rich:tab>
 				</rich:tabPanel>
@@ -189,7 +190,7 @@
 							actionListener="#{proveedorMBean.agregarDireccion}"
 							style="height:20px; width:150px;"
 							oncomplete="cerrarModalBoton('idFDPr','idCerrarModal','idHdDirAgr')"
-							render="idGrdFormDireccion,idGrdBtnes" />
+							render="idGrdFormDireccion,idGrdBtnes,idGrdFDir" />
 
 						<a4j:commandButton id="idCerrarModal" style="display:none;"
 							oncomplete="#{rich:component('idModalFormDireccion')}.hide(); return false;"
