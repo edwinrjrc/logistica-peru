@@ -18,10 +18,9 @@ public interface PersonaDao {
 
 	public List<Proveedor> listarPersonas() throws SQLException;
 
-	public void actualizarPersona(Proveedor proveedor) throws SQLException;
-
-	public Proveedor consultarPersona(int id) throws SQLException;
-
 	int registrarPersona(Persona persona, Connection conexion)
+			throws SQLException;
+
+	boolean actualizarPersona(Persona persona, Connection conexion)
 			throws SQLException;
 }

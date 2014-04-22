@@ -159,6 +159,9 @@ public class UsuarioDaoImpl implements UsuarioDao{
 			throw new SQLException(e);
 		} finally{
 			try {
+				if (rs != null){
+					rs.close();
+				}
 				if (cs != null){
 					cs.close();
 				}
@@ -211,6 +214,9 @@ public class UsuarioDaoImpl implements UsuarioDao{
 			throw new SQLException(e);
 		} finally{
 			try {
+				if (rs != null){
+					rs.close();
+				}
 				if (cs != null){
 					cs.close();
 				}
@@ -254,7 +260,7 @@ public class UsuarioDaoImpl implements UsuarioDao{
 			resultado = false;
 			throw new SQLException(e);
 		} finally{
-			try {	
+			try {
 				if (cs != null){
 					cs.close();
 				}
@@ -308,6 +314,9 @@ public class UsuarioDaoImpl implements UsuarioDao{
 			throw new SQLException(e);
 		} finally{
 			try {
+				if (rs != null){
+					rs.close();
+				}
 				if (cs != null){
 					cs.close();
 				}
