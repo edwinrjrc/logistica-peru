@@ -18,7 +18,7 @@ public interface TelefonoDao {
 	public int registrarTelefono(Telefono telefono, Connection conexion)
 			throws SQLException;
 	
-	public boolean actualizarTelefono(Telefono telefono, Connection conexion)
+	public int actualizarTelefono(Telefono telefono, Connection conexion)
 			throws SQLException;
 
 	void registrarTelefonoDireccion(int idTelefono, int idDireccion,

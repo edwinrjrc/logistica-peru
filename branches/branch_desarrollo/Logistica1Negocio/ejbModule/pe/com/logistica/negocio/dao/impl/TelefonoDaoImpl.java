@@ -238,16 +238,16 @@ public class TelefonoDaoImpl implements TelefonoDao {
 	}
 
 	@Override
-	public boolean actualizarTelefono(Telefono telefono, Connection conexion)
+	public int actualizarTelefono(Telefono telefono, Connection conexion)
 			throws SQLException {
-		boolean resultado = false;
+		int resultado = 0;
 		CallableStatement cs = null;
 		String sql = "{ ? = call negocio.fn_ingresartelefono(?,?,?,?,?) }";
 		
 		try {
 			cs = conexion.prepareCall(sql);
 			int i=1;
-			cs.registerOutParameter(i++, Types.BOOLEAN);
+			cs.registerOutParameter(i++, Types.INTEGER);
 			if (StringUtils.isNotBlank(telefono.getNumeroTelefono())){
 				cs.setString(i++, telefono.getNumeroTelefono());
 			}
@@ -275,9 +275,9 @@ public class TelefonoDaoImpl implements TelefonoDao {
 			cs.setInt(i++, telefono.getCodigoEntero().intValue());
 			
 			cs.execute();
-			resultado = cs.getBoolean(1);
+			resultado = cs.getInt(1);
 		} catch (SQLException e) {
-			resultado = false;
+			resultado = 0;
 			throw new SQLException(e);
 		} finally{
 			try {
