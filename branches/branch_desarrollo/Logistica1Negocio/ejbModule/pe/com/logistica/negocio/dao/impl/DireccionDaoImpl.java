@@ -13,6 +13,7 @@ import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 
+import pe.com.logistica.bean.base.Persona;
 import pe.com.logistica.bean.negocio.Direccion;
 import pe.com.logistica.negocio.dao.DireccionDao;
 import pe.com.logistica.negocio.dao.TelefonoDao;
@@ -205,9 +206,9 @@ public class DireccionDaoImpl implements DireccionDao {
 	}
 
 	@Override
-	public boolean actualizarDireccion(Direccion direccion, Connection conexion)
+	public int actualizarDireccion(Direccion direccion, Connection conexion)
 			throws SQLException {
-		boolean resultado = false;
+		int resultado = 0;
 		CallableStatement cs = null;
 		String sql = "{ ? = call negocio.fn_actualizardireccion(?,?,?,?,?,?,?,?,?,?,?) }";
 		
@@ -266,6 +267,70 @@ public class DireccionDaoImpl implements DireccionDao {
 			else{
 				cs.setNull(i++, Types.VARCHAR);
 			}
+			
+			cs.execute();
+			resultado = cs.getInt(1);
+		} catch (SQLException e) {
+			resultado = 0;
+			throw new SQLException(e);
+		} finally{
+			try {
+				if (cs != null){
+					cs.close();
+				}
+			} catch (SQLException e) {
+				throw new SQLException(e);
+			}
+		}
+		return resultado;
+	}
+	
+	@Override
+	public boolean eliminarTelefonoDireccion(Direccion direccion, Connection conexion)
+			throws SQLException {
+		boolean resultado = false;
+		CallableStatement cs = null;
+		String sql = "{ ? = call negocio.fn_eliminartelefonosdireccion(?,?,?) }";
+		
+		try {
+			cs = conexion.prepareCall(sql);
+			int i=1;
+			cs.registerOutParameter(i++, Types.BOOLEAN);
+			cs.setInt(i++, direccion.getCodigoEntero().intValue());
+			cs.setString(i++, direccion.getUsuarioModificacion());
+			cs.setString(i++, direccion.getIpModificacion());
+			
+			cs.execute();
+			resultado = cs.getBoolean(1);
+		} catch (SQLException e) {
+			resultado = false;
+			throw new SQLException(e);
+		} finally{
+			try {
+				if (cs != null){
+					cs.close();
+				}
+			} catch (SQLException e) {
+				throw new SQLException(e);
+			}
+		}
+		return resultado;
+	}
+	
+	@Override
+	public boolean eliminarDireccionPersona(Persona persona, Connection conexion)
+			throws SQLException {
+		boolean resultado = false;
+		CallableStatement cs = null;
+		String sql = "{ ? = call negocio.fn_eliminardirecciones(?,?,?) }";
+		
+		try {
+			cs = conexion.prepareCall(sql);
+			int i=1;
+			cs.registerOutParameter(i++, Types.BOOLEAN);
+			cs.setInt(i++, persona.getCodigoEntero().intValue());
+			cs.setString(i++, persona.getUsuarioModificacion());
+			cs.setString(i++, persona.getIpModificacion());
 			
 			cs.execute();
 			resultado = cs.getBoolean(1);

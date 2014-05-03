@@ -14,6 +14,7 @@ import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 
 import pe.com.logistica.bean.negocio.Contacto;
+import pe.com.logistica.bean.negocio.Proveedor;
 import pe.com.logistica.negocio.dao.ContactoDao;
 import pe.com.logistica.negocio.dao.TelefonoDao;
 import pe.com.logistica.negocio.util.UtilConexion;
@@ -149,6 +150,103 @@ public class ContactoDaoImpl implements ContactoDao {
 			}
 		}
 		
+		return resultado;
+	}
+	
+	@Override
+	public boolean eliminarTelefonoContacto(Contacto contacto, Connection conexion)
+			throws SQLException {
+		boolean resultado = false;
+		CallableStatement cs = null;
+		String sql = "{ ? = call negocio.fn_eliminartelefonoscontacto(?,?,?) }";
+		
+		try {
+			cs = conexion.prepareCall(sql);
+			int i=1;
+			cs.registerOutParameter(i++, Types.BOOLEAN);
+			cs.setInt(i++, contacto.getCodigoEntero().intValue());
+			cs.setString(i++, contacto.getUsuarioModificacion());
+			cs.setString(i++, contacto.getIpModificacion());
+			
+			cs.execute();
+			resultado = cs.getBoolean(1);
+		} catch (SQLException e) {
+			resultado = false;
+			throw new SQLException(e);
+		} finally{
+			try {
+				if (cs != null){
+					cs.close();
+				}
+			} catch (SQLException e) {
+				throw new SQLException(e);
+			}
+		}
+		return resultado;
+	}
+	
+	@Override
+	public boolean eliminarContacto(Contacto contacto, Connection conexion)
+			throws SQLException {
+		boolean resultado = false;
+		CallableStatement cs = null;
+		String sql = "{ ? = call negocio.fn_eliminarpersona(?,?,?,?) }";
+		
+		try {
+			cs = conexion.prepareCall(sql);
+			int i=1;
+			cs.registerOutParameter(i++, Types.BOOLEAN);
+			cs.setInt(i++, contacto.getCodigoEntero().intValue());
+			cs.setInt(i++, contacto.getTipoPersona());
+			cs.setString(i++, contacto.getUsuarioModificacion());
+			cs.setString(i++, contacto.getIpModificacion());
+			
+			cs.execute();
+			resultado = cs.getBoolean(1);
+		} catch (SQLException e) {
+			resultado = false;
+			throw new SQLException(e);
+		} finally{
+			try {
+				if (cs != null){
+					cs.close();
+				}
+			} catch (SQLException e) {
+				throw new SQLException(e);
+			}
+		}
+		return resultado;
+	}
+	
+	@Override
+	public boolean eliminarContactoProveedor(Proveedor proveedor, Connection conexion)
+			throws SQLException {
+		boolean resultado = false;
+		CallableStatement cs = null;
+		String sql = "{ ? = call negocio.fn_eliminarcontactoproveedor(?,?,?) }";
+		
+		try {
+			cs = conexion.prepareCall(sql);
+			int i=1;
+			cs.registerOutParameter(i++, Types.BOOLEAN);
+			cs.setInt(i++, proveedor.getCodigoEntero().intValue());
+			cs.setString(i++, proveedor.getUsuarioModificacion());
+			cs.setString(i++, proveedor.getIpModificacion());
+			
+			cs.execute();
+			resultado = cs.getBoolean(1);
+		} catch (SQLException e) {
+			resultado = false;
+			throw new SQLException(e);
+		} finally{
+			try {
+				if (cs != null){
+					cs.close();
+				}
+			} catch (SQLException e) {
+				throw new SQLException(e);
+			}
+		}
 		return resultado;
 	}
 }

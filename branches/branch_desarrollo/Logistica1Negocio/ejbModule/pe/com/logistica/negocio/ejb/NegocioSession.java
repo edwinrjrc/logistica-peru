@@ -206,88 +206,67 @@ public class NegocioSession implements NegocioSessionRemote,
 						"No se pudo completar la actualización de la persona");
 			}
 			Integer idPersona = proveedor.getCodigoEntero();
+			direccionDao.eliminarDireccionPersona(proveedor, conexion);
 			if (proveedor.getListaDirecciones() != null) {
 				int idDireccion = 0;
 				for (Direccion direccion : proveedor.getListaDirecciones()) {
-					boolean resultadoActualizacion = false;
+					int iddireccion = direccionDao
+							.actualizarDireccion(direccion, conexion);
 					int idTelefono = 0;
-					if (direccion.getCodigoEntero() != null
-							&& direccion.getCodigoEntero().intValue() != 0) {
-						resultadoActualizacion = direccionDao
-								.actualizarDireccion(direccion, conexion);
-						if (!resultadoActualizacion) {
-							throw new ResultadoCeroDaoException(
-									"No se pudo completar la actualización de la dirección");
-						}
+					if (iddireccion == 0) {
+						throw new ResultadoCeroDaoException(
+								"No se pudo completar la actualización de la dirección");
 					}
 					else {
-						idDireccion = direccionDao.registrarDireccion(
-								direccion, conexion);
-					}
-					direccion.setCodigoEntero(idDireccion);
-					if (!direccion.getTelefonos().isEmpty()) {
-						for (Telefono telefono : direccion.getTelefonos()) {
-							if (resultadoActualizacion) {
-								if (telefonoDao.actualizarTelefono(telefono,
-										conexion)) {
-									throw new ResultadoCeroDaoException(
-											"No se pudo completar la actualización del teléfono de direccion");
+						if (iddireccion == direccion.getCodigoEntero().intValue()){
+							direccionDao.eliminarTelefonoDireccion(direccion, conexion);
+							List<Telefono> listTelefonos = direccion.getTelefonos();
+							if (!listTelefonos.isEmpty()){
+								for (Telefono telefono : listTelefonos) {
+									telefono.getEmpresaOperadora().setCodigoEntero(
+											0);
+									idTelefono = telefonoDao.registrarTelefono(
+											telefono, conexion);
+									if (idTelefono == 0) {
+										throw new ResultadoCeroDaoException(
+												"No se pudo completar el registro del teléfono de direccion");
+									}
+									telefonoDao.registrarTelefonoDireccion(
+											idTelefono, idDireccion, conexion);
 								}
-							}
-							else {
-								telefono.getEmpresaOperadora().setCodigoEntero(
-										0);
-								idTelefono = telefonoDao.registrarTelefono(
-										telefono, conexion);
-								if (idTelefono == 0) {
-									throw new ResultadoCeroDaoException(
-											"No se pudo completar el registro del teléfono de direccion");
-								}
-								telefonoDao.registrarTelefonoDireccion(
-										idTelefono, idDireccion, conexion);
 							}
 						}
 					}
 				}
 			}
 
+			contactoDao.eliminarContactoProveedor(proveedor, conexion);
 			if (proveedor.getListaContactos() != null) {
 				int idContacto = 0;
 				for (Contacto contacto : proveedor.getListaContactos()) {
-					boolean resultadoActualizacion = false;
 					contacto.setTipoPersona(3);
 					
-					if (contacto.getCodigoEntero() != null && contacto.getCodigoEntero().intValue() != 0) {
-						resultadoActualizacion = personaDao.actualizarPersona(contacto, conexion);
-					}
-					else {
-						idContacto = personaDao
-								.registrarPersona(contacto, conexion);
-						contacto.setCodigoEntero(idContacto);
-						contactoDao.registrarContactoProveedor(idPersona, contacto,
-								conexion);
-					}
+					idContacto = personaDao
+							.registrarPersona(contacto, conexion);
+					contacto.setCodigoEntero(idContacto);
+					contactoDao.registrarContactoProveedor(idPersona, contacto,
+							conexion);
 					
 					if (!contacto.getListaTelefonos().isEmpty()) {
 						for (Telefono telefono : contacto.getListaTelefonos()) {
-							if (resultadoActualizacion){
-								if (!telefonoDao.actualizarTelefono(telefono, conexion)){
-									throw new ResultadoCeroDaoException(
-											"No se pudo completar la actualización del teléfono de contacto");
-								}
+							int idTelefono = telefonoDao.registrarTelefono(
+									telefono, conexion);
+							if (idTelefono == 0) {
+								throw new ResultadoCeroDaoException(
+										"No se pudo completar el registro del teléfono de contacto");
 							}
-							else{
-								int idTelefono = telefonoDao.registrarTelefono(
-										telefono, conexion);
-								if (idTelefono == 0) {
-									throw new ResultadoCeroDaoException(
-											"No se pudo completar el registro del teléfono de contacto");
-								}
-								telefonoDao.registrarTelefonoPersona(idTelefono,
-										idContacto, conexion);
-							}
+							telefonoDao.registrarTelefonoPersona(idTelefono,
+									idContacto, conexion);
 						}
 					}
+					
+					contactoDao.registrarContactoProveedor(idPersona, contacto,
+							conexion);
 				}
 			}
 			proveedorDao.actualizarProveedor(proveedor, conexion);
