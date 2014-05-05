@@ -171,7 +171,6 @@ public class DireccionDaoImpl implements DireccionDao {
 				direccion.setUsuarioCreacion(UtilJdbc.obtenerCadena(rs, "usuariocreacion"));
 				direccion.setFechaCreacion(UtilJdbc.obtenerFecha(rs, "fechacreacion"));
 				direccion.setIpCreacion(UtilJdbc.obtenerCadena(rs, "ipcreacion"));
-				direccion.getEstado().setCodigoEntero(UtilJdbc.obtenerNumero(rs, "idestado"));
 				direccion.setTelefonos(telefonoDao.consultarTelefonoDireccion(direccion.getCodigoEntero().intValue(), conn));
 				resultado.add(direccion);
 			}
@@ -216,7 +215,7 @@ public class DireccionDaoImpl implements DireccionDao {
 			cs = conexion.prepareCall(sql);
 			int i=1;
 			cs.registerOutParameter(i++, Types.INTEGER);
-			cs.setInt(i++, direccion.getCodigoEntero().intValue());
+			cs.setInt(i++, UtilJdbc.obtenerNumero(direccion.getCodigoEntero()));
 			cs.setInt(i++, direccion.getVia().getCodigoEntero());
 			if (StringUtils.isNotBlank(direccion.getNombreVia())){
 				cs.setString(i++, direccion.getNombreVia());
@@ -296,7 +295,7 @@ public class DireccionDaoImpl implements DireccionDao {
 			cs = conexion.prepareCall(sql);
 			int i=1;
 			cs.registerOutParameter(i++, Types.BOOLEAN);
-			cs.setInt(i++, direccion.getCodigoEntero().intValue());
+			cs.setInt(i++, UtilJdbc.obtenerNumero(direccion.getCodigoEntero()));
 			cs.setString(i++, direccion.getUsuarioModificacion());
 			cs.setString(i++, direccion.getIpModificacion());
 			

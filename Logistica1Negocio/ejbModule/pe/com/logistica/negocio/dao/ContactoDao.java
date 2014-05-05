@@ -7,6 +7,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 
+import pe.com.logistica.bean.base.CorreoElectronico;
 import pe.com.logistica.bean.negocio.Contacto;
 import pe.com.logistica.bean.negocio.Proveedor;
 
@@ -19,9 +20,6 @@ public interface ContactoDao {
 	void registrarContactoProveedor(int idproveedor, Contacto contacto,
 			Connection conexion) throws SQLException;
 
-	List<Contacto> consultarContactoOProveedor(int idproveedor)
-			throws SQLException;
-
 	boolean eliminarTelefonoContacto(Contacto contacto, Connection conexion)
 			throws SQLException;
 
@@ -29,5 +27,17 @@ public interface ContactoDao {
 			throws SQLException;
 
 	boolean eliminarContactoProveedor(Proveedor proveedor, Connection conexion)
+			throws SQLException;
+
+	List<Contacto> consultarContactoProveedor(int idproveedor)
+			throws SQLException;
+
+	boolean ingresarCorreoElectronico(Contacto contacto, Connection conexion)
+			throws SQLException;
+
+	boolean eliminarCorreosContacto(Contacto contacto, Connection conexion)
+			throws SQLException;
+
+	List<CorreoElectronico> consultarCorreos(int idcontacto, Connection conn)
 			throws SQLException;
 }
