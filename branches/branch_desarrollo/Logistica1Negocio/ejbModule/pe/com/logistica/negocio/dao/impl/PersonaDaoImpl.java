@@ -128,8 +128,8 @@ public class PersonaDaoImpl implements PersonaDao {
 	 * @see pe.com.logistica.negocio.dao.ProveedorDao#actualizarProveedor(pe.com.logistica.bean.negocio.Proveedor)
 	 */
 	@Override
-	public boolean actualizarPersona(Persona persona, Connection conexion) throws SQLException {
-		boolean resultado = false;
+	public int actualizarPersona(Persona persona, Connection conexion) throws SQLException {
+		int resultado = 0;
 		CallableStatement cs = null;
 		String sql = "{ ? = call negocio.fn_actualizarpersona(?,?,?,?,?,?,?,?,?,?,?) }";
 		
@@ -195,9 +195,9 @@ public class PersonaDaoImpl implements PersonaDao {
 			}
 			
 			cs.execute();
-			resultado = cs.getBoolean(1);
+			resultado = cs.getInt(1);
 		} catch (SQLException e) {
-			resultado = false;
+			resultado = 0;
 			throw new SQLException(e);
 		} finally{
 			try {

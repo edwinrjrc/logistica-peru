@@ -13,8 +13,10 @@ import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 
+import pe.com.logistica.bean.base.CorreoElectronico;
 import pe.com.logistica.bean.negocio.Contacto;
 import pe.com.logistica.bean.negocio.Proveedor;
+import pe.com.logistica.bean.negocio.Telefono;
 import pe.com.logistica.negocio.dao.ContactoDao;
 import pe.com.logistica.negocio.dao.TelefonoDao;
 import pe.com.logistica.negocio.util.UtilConexion;
@@ -87,7 +89,7 @@ public class ContactoDaoImpl implements ContactoDao {
 	}
 
 	@Override
-	public List<Contacto> consultarContactoOProveedor(int idproveedor) throws SQLException {
+	public List<Contacto> consultarContactoProveedor(int idproveedor) throws SQLException {
 		List<Contacto> resultado = null;
 		Connection conn = null;
 		CallableStatement cs = null;
@@ -122,6 +124,7 @@ public class ContactoDaoImpl implements ContactoDao {
 				contacto.getArea().setNombre(UtilJdbc.obtenerCadena(rs, "nombre"));
 				contacto.setAnexo(UtilJdbc.obtenerCadena(rs, "anexo"));
 				contacto.setListaTelefonos(telefonoDao.consultarTelefonoContacto(UtilJdbc.obtenerNumero(contacto.getCodigoEntero()), conn));
+				contacto.setListaCorreos(consultarCorreos(UtilJdbc.obtenerNumero(contacto.getCodigoEntero()), conn));
 				resultado.add(contacto);
 			}
 		} catch (SQLException e) {
@@ -152,7 +155,7 @@ public class ContactoDaoImpl implements ContactoDao {
 		
 		return resultado;
 	}
-	
+
 	@Override
 	public boolean eliminarTelefonoContacto(Contacto contacto, Connection conexion)
 			throws SQLException {
@@ -247,6 +250,125 @@ public class ContactoDaoImpl implements ContactoDao {
 				throw new SQLException(e);
 			}
 		}
+		return resultado;
+	}
+	
+	@Override
+	public boolean ingresarCorreoElectronico(Contacto contacto, Connection conexion)
+			throws SQLException {
+		boolean resultado = false;
+		CallableStatement cs = null;
+		String sql = "{ ? = call negocio.fn_ingresarcorreoelectronico(?,?,?,?) }";
+		
+		try {
+			
+			for(CorreoElectronico correo : contacto.getListaCorreos()){
+				cs = conexion.prepareCall(sql);
+				int i=1;
+				cs.registerOutParameter(i++, Types.INTEGER);
+				cs.setString(i++, correo.getDireccion());
+				cs.setInt(i++, contacto.getCodigoEntero().intValue());
+				cs.setString(i++, contacto.getUsuarioCreacion());
+				cs.setString(i++, contacto.getIpCreacion());
+				
+				cs.execute();
+				cs.close();
+			}
+			
+		} catch (SQLException e) {
+			resultado = false;
+			throw new SQLException(e);
+		} finally{
+			try {
+				if (cs != null){
+					cs.close();
+				}
+			} catch (SQLException e) {
+				throw new SQLException(e);
+			}
+		}
+		return resultado;
+	}
+	
+	@Override
+	public boolean eliminarCorreosContacto(Contacto contacto, Connection conexion)
+			throws SQLException {
+		boolean resultado = false;
+		CallableStatement cs = null;
+		String sql = "{ ? = call negocio.fn_eliminarcorreoscontacto(?,?,?) }";
+		
+		try {
+			
+			cs = conexion.prepareCall(sql);
+			int i=1;
+			cs.registerOutParameter(i++, Types.INTEGER);
+			cs.setInt(i++, contacto.getCodigoEntero().intValue());
+			cs.setString(i++, contacto.getUsuarioModificacion());
+			cs.setString(i++, contacto.getIpModificacion());
+			
+			cs.execute();
+			
+		} catch (SQLException e) {
+			resultado = false;
+			throw new SQLException(e);
+		} finally{
+			try {
+				if (cs != null){
+					cs.close();
+				}
+			} catch (SQLException e) {
+				throw new SQLException(e);
+			}
+		}
+		return resultado;
+	}
+	
+	@Override
+	public List<CorreoElectronico> consultarCorreos(int idcontacto,
+			Connection conn) throws SQLException {
+		List<CorreoElectronico> resultado = null;
+		CallableStatement cs = null;
+		ResultSet rs = null;
+		String sql = "select * " +
+				" from negocio.vw_consultacorreocontacto where idpersona = ?";
+
+		try {
+			cs = conn.prepareCall(sql);
+			cs.setInt(1, idcontacto);
+			rs = cs.executeQuery();
+			
+			resultado = new ArrayList<CorreoElectronico>();
+			CorreoElectronico correoElectronico = null;
+			while (rs.next()) {
+				correoElectronico = new CorreoElectronico();
+				correoElectronico.setCodigoEntero(UtilJdbc.obtenerNumero(rs, "id"));
+				correoElectronico.setDireccion(UtilJdbc.obtenerCadena(rs, "correo"));
+				resultado.add(correoElectronico);
+			}
+			
+		} catch (SQLException e) {
+			resultado = null;
+			throw new SQLException(e);
+		} finally {
+			try {
+				if (rs != null){
+					rs.close();
+				}
+				if (cs != null){
+					cs.close();
+				}
+			} catch (SQLException e) {
+				try {
+					if (cs != null){
+						cs.close();
+					}
+					throw new SQLException(e);
+				} catch (SQLException e1) {
+					throw new SQLException(e);
+				}
+			}
+		}
+		
 		return resultado;
 	}
 }

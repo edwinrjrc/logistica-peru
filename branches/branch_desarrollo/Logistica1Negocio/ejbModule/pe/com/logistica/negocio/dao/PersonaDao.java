@@ -21,6 +21,6 @@ public interface PersonaDao {
 	int registrarPersona(Persona persona, Connection conexion)
 			throws SQLException;
 
-	boolean actualizarPersona(Persona persona, Connection conexion)
+	int actualizarPersona(Persona persona, Connection conexion)
 			throws SQLException;
 }

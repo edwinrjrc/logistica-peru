@@ -166,6 +166,8 @@ public class NegocioSession implements NegocioSessionRemote,
 					}
 					contactoDao.registrarContactoProveedor(idPersona, contacto,
 							conexion);
+					
+					contactoDao.ingresarCorreoElectronico(contacto, conexion);
 				}
 			}
 			proveedorDao.registroProveedor(proveedor, conexion);
@@ -201,42 +203,44 @@ public class NegocioSession implements NegocioSessionRemote,
 
 			proveedor.setTipoPersona(2);
 
-			if (!personaDao.actualizarPersona(proveedor, conexion)) {
+			Integer idPersona = personaDao.actualizarPersona(proveedor, conexion); 
+			if (idPersona == 0) {
 				throw new ResultadoCeroDaoException(
 						"No se pudo completar la actualización de la persona");
 			}
-			Integer idPersona = proveedor.getCodigoEntero();
 			direccionDao.eliminarDireccionPersona(proveedor, conexion);
 			if (proveedor.getListaDirecciones() != null) {
 				int idDireccion = 0;
 				for (Direccion direccion : proveedor.getListaDirecciones()) {
-					int iddireccion = direccionDao
+					idDireccion = direccionDao
 							.actualizarDireccion(direccion, conexion);
 					int idTelefono = 0;
-					if (iddireccion == 0) {
+					if (idDireccion == 0) {
 						throw new ResultadoCeroDaoException(
 								"No se pudo completar la actualización de la dirección");
 					}
 					else {
-						if (iddireccion == direccion.getCodigoEntero().intValue()){
-							direccionDao.eliminarTelefonoDireccion(direccion, conexion);
-							List<Telefono> listTelefonos = direccion.getTelefonos();
-							if (!listTelefonos.isEmpty()){
-								for (Telefono telefono : listTelefonos) {
-									telefono.getEmpresaOperadora().setCodigoEntero(
-											0);
-									idTelefono = telefonoDao.registrarTelefono(
-											telefono, conexion);
-									if (idTelefono == 0) {
-										throw new ResultadoCeroDaoException(
-												"No se pudo completar el registro del teléfono de direccion");
-									}
-									telefonoDao.registrarTelefonoDireccion(
-											idTelefono, idDireccion, conexion);
+						direccionDao.eliminarTelefonoDireccion(direccion, conexion);
+						List<Telefono> listTelefonos = direccion.getTelefonos();
+						if (!listTelefonos.isEmpty()){
+							for (Telefono telefono : listTelefonos) {
+								telefono.getEmpresaOperadora().setCodigoEntero(
+										0);
+								idTelefono = telefonoDao.registrarTelefono(
+										telefono, conexion);
+								if (idTelefono == 0) {
+									throw new ResultadoCeroDaoException(
+											"No se pudo completar el registro del teléfono de direccion");
 								}
+								telefonoDao.registrarTelefonoDireccion(
+										idTelefono, idDireccion, conexion);
 							}
 						}
 					}
+					
+					direccionDao.registrarPersonaDireccion(
+							proveedor.getCodigoEntero(),
+							proveedor.getTipoPersona(), idDireccion, conexion);
 				}
 			}
 
@@ -249,8 +253,6 @@ public class NegocioSession implements NegocioSessionRemote,
 					idContacto = personaDao
 							.registrarPersona(contacto, conexion);
 					contacto.setCodigoEntero(idContacto);
-					contactoDao.registrarContactoProveedor(idPersona, contacto,
-							conexion);
 					
 					if (!contacto.getListaTelefonos().isEmpty()) {
 						for (Telefono telefono : contacto.getListaTelefonos()) {
@@ -264,9 +266,12 @@ public class NegocioSession implements NegocioSessionRemote,
 									idContacto, conexion);
 						}
 					}
-					
 					contactoDao.registrarContactoProveedor(idPersona, contacto,
 							conexion);
+					
+					contactoDao.eliminarCorreosContacto(contacto, conexion);
+					
+					contactoDao.ingresarCorreoElectronico(contacto, conexion);
 				}
 			}
 			proveedorDao.actualizarProveedor(proveedor, conexion);
@@ -326,7 +331,7 @@ public class NegocioSession implements NegocioSessionRemote,
 		}
 		proveedor.setListaDirecciones(listaDirecciones);
 		proveedor.setListaContactos(contactoDao
-				.consultarContactoOProveedor(codigoProveedor));
+				.consultarContactoProveedor(codigoProveedor));
 
 		return proveedor;
 	}
