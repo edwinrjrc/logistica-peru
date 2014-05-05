@@ -115,9 +115,13 @@ public class ProveedorMBean extends BaseMBean {
 						.getAttribute("usuarioSession");
 				getContacto().setUsuarioCreacion(usuario.getUsuario());
 				getContacto().setIpCreacion(obtenerRequest().getRemoteAddr());
+				getContacto().setUsuarioModificacion(usuario.getUsuario());
+				getContacto().setIpModificacion(obtenerRequest().getRemoteAddr());
+				if (this.isEditarContacto()){
+					this.getProveedor().getListaContactos().remove(getContacto());
+				}
 				this.getProveedor().getListaContactos()
-						.add(negocioServicio.agregarContacto(getContacto()));
-
+				.add(negocioServicio.agregarContacto(getContacto()));
 				this.setContactoAgregada(true);
 			}
 		} catch (SQLException ex) {
@@ -195,9 +199,9 @@ public class ProveedorMBean extends BaseMBean {
 								HttpSession session = obtenerSession(false);
 								Usuario usuario = (Usuario) session
 										.getAttribute("usuarioSession");
-								getProveedor().setUsuarioCreacion(
+								getProveedor().setUsuarioModificacion(
 										usuario.getUsuario());
-								getProveedor().setIpCreacion(
+								getProveedor().setIpModificacion(
 										obtenerRequest().getRemoteAddr());
 								if (tipoDocRUC == getProveedor().getDocumentoIdentidad()
 										.getTipoDocumento().getCodigoEntero().intValue()) {
@@ -346,9 +350,17 @@ public class ProveedorMBean extends BaseMBean {
 		try {
 			this.setDireccionAgregada(false);
 			if (this.validarDireccion(e)) {
-				this.getProveedor().getListaDirecciones()
-						.add(negocioServicio.agregarDireccion(getDireccion()));
-				this.setDireccionAgregada(true);
+				if (this.isNuevaDireccion()){
+					this.getProveedor().getListaDirecciones()
+					.add(negocioServicio.agregarDireccion(getDireccion()));
+					this.setDireccionAgregada(true);
+				}
+				else{
+					this.getProveedor().getListaDirecciones().remove(getDireccion());
+					this.getProveedor().getListaDirecciones()
+					.add(negocioServicio.agregarDireccion(getDireccion()));
+					this.setDireccionAgregada(true);
+				}
 			}
 		} catch (SQLException ex) {
 			ex.printStackTrace();
