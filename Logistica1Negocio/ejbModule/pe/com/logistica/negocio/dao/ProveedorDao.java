@@ -26,4 +26,6 @@ public interface ProveedorDao {
 	Contacto consultarContacto(int idPersona) throws SQLException;
 
 	void actualizarProveedor(Proveedor proveedor, Connection conexion) throws SQLException;
+
+	List<Proveedor> buscarProveedor(Proveedor proveedor) throws SQLException;
 }

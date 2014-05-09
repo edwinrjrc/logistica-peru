@@ -29,4 +29,6 @@ public interface NegocioSessionRemote {
 
 	boolean actualizarProveedor(Proveedor proveedor) throws SQLException,
 			ResultadoCeroDaoException, Exception;
+	
+	List<Proveedor> buscarProveedor(Proveedor proveedor) throws SQLException;
 }

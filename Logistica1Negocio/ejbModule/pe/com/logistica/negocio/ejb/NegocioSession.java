@@ -361,4 +361,27 @@ public class NegocioSession implements NegocioSessionRemote,
 
 		return direccionCompleta;
 	}
+	
+	@Override
+	public List<Proveedor> buscarProveedor(Proveedor proveedor)
+			throws SQLException{
+		ProveedorDao proveedorDao = new ProveedorDaoImpl();
+		List<Proveedor> listaProveedores = proveedorDao.buscarProveedor(proveedor);
+
+		MaestroDao maestroDao = new MaestroDaoImpl();
+
+		for (Proveedor proveedor2 : listaProveedores) {
+			Maestro hijoMaestro = new Maestro();
+			hijoMaestro.setCodigoMaestro(2);
+			hijoMaestro.setCodigoEntero(proveedor2.getDireccion().getVia()
+					.getCodigoEntero());
+			hijoMaestro = maestroDao.consultarHijoMaestro(hijoMaestro);
+			proveedor2.getDireccion().setDireccion(
+					UtilDatos.obtenerDireccionCompleta(
+							proveedor2.getDireccion(), hijoMaestro));
+
+		}
+		
+		return listaProveedores;
+	}
 }

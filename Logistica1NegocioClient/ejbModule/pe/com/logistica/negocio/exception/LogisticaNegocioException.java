@@ -32,6 +32,13 @@ public class LogisticaNegocioException extends Exception {
 		mensajeError = arg0;
 		// TODO Auto-generated constructor stub
 	}
+	
+	public LogisticaNegocioException(String arg0, String arg1) {
+		super(arg1);
+		codigoError = arg0;
+		mensajeError = arg1;
+		// TODO Auto-generated constructor stub
+	}
 
 	/**
 	 * @param arg0
