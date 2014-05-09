@@ -88,5 +88,13 @@ public class NegocioServicioImpl implements NegocioServicio {
 		return ejbSession.actualizarProveedor(proveedor);
 	}
 
+	@Override
+	public List<pe.com.logistica.bean.negocio.Proveedor> buscarProveedor(
+			Proveedor proveedor)
+			throws SQLException, Exception {
+		// TODO Auto-generated method stub
+		return ejbSession.buscarProveedor(proveedor);
+	}
+
 }
 	

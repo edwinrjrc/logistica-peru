@@ -61,75 +61,72 @@
 						<f:facet name="footer">
 							<h:panelGrid columns="1" border="0" cellpadding="0"
 								cellspacing="0" style="width:100%;text-align:center;">
-								<a4j:commandButton value="Buscar"
+								<a4j:commandButton value="Buscar" render="idTabla"
 									action="#{proveedorMBean.buscarProveedor()}"
 									style="height:20px; width:150px" />
 							</h:panelGrid>
 						</f:facet>
 					</h:panelGrid>
 
-					<table border="0" cellpadding="0" cellspacing="0" align="center"
-						width="100%">
-						<tr>
-							<td align="center"><rich:dataTable var="row" id="idTabla"
-									rows="10" value="#{proveedorMBean.listaProveedores}"
-									style="width:100%;">
-									<f:facet name="noData">
-										<h:outputText value="No se encontraron registros" />
-									</f:facet>
-									<rich:column>
-										<f:facet name="header">
-											<h:outputText value="Documento" />
-										</f:facet>
-										<h:outputText
-											value="#{row.documentoIdentidad.tipoDocumento.nombre} - #{row.documentoIdentidad.numeroDocumento}" />
-									</rich:column>
+					<h:panelGrid columns="1" border="0" style="width:100%;">
+						<rich:dataTable var="row" id="idTabla" rows="10"
+							value="#{proveedorMBean.listaProveedores}" style="width:100%;">
+							<f:facet name="noData">
+								<h:outputText value="No se encontraron registros" />
+							</f:facet>
+							<rich:column>
+								<f:facet name="header">
+									<h:outputText value="Documento" />
+								</f:facet>
+								<h:outputText
+									value="#{row.documentoIdentidad.tipoDocumento.nombre} - #{row.documentoIdentidad.numeroDocumento}" />
+							</rich:column>
 
-									<rich:column>
-										<f:facet name="header">
-											<h:outputText value="Nombre" />
-										</f:facet>
-										<h:outputText value="#{row.nombres}" />
-									</rich:column>
+							<rich:column>
+								<f:facet name="header">
+									<h:outputText value="Nombre" />
+								</f:facet>
+								<h:outputText value="#{row.nombres}" />
+							</rich:column>
 
-									<rich:column>
-										<f:facet name="header">
-											<h:outputText value="Rubro" />
-										</f:facet>
-										<h:outputText value="#{row.rubro.nombre}" />
-									</rich:column>
+							<rich:column>
+								<f:facet name="header">
+									<h:outputText value="Rubro" />
+								</f:facet>
+								<h:outputText value="#{row.rubro.nombre}" />
+							</rich:column>
 
-									<rich:column>
-										<f:facet name="header">
-											<h:outputText value="Dirección" />
-										</f:facet>
-										<h:outputText value="#{row.direccion.direccion}" />
-									</rich:column>
+							<rich:column>
+								<f:facet name="header">
+									<h:outputText value="Dirección" />
+								</f:facet>
+								<h:outputText value="#{row.direccion.direccion}" />
+							</rich:column>
 
-									<rich:column>
-										<f:facet name="header">
-											<h:outputText value="Teléfono" />
-										</f:facet>
-										<h:outputText
-											value="#{row.direccion.telefonos[0].numeroTelefono}" />
-									</rich:column>
+							<rich:column>
+								<f:facet name="header">
+									<h:outputText value="Teléfono" />
+								</f:facet>
+								<h:outputText
+									value="#{row.direccion.telefonos[0].numeroTelefono}" />
+							</rich:column>
 
-									<rich:column>
-										<f:facet name="header">
-											<h:outputText value="Opciones" />
-										</f:facet>
-										<a4j:commandLink
-											action="#{proveedorMBean.consultarProveedor(row.codigoEntero)}"
-											render="idTabPanelFormProveedor, idNomModal"
-											oncomplete="#{rich:component('idModalformproveedor')}.show();">
-											<h:graphicImage height="25" width="20"
-												url="/resources/img/editar2.png" style="border:0" />
-										</a4j:commandLink>
-									</rich:column>
+							<rich:column>
+								<f:facet name="header">
+									<h:outputText value="Opciones" />
+								</f:facet>
+								<a4j:commandLink
+									action="#{proveedorMBean.consultarProveedor(row.codigoEntero)}"
+									render="idTabPanelFormProveedor, idNomModal"
+									oncomplete="#{rich:component('idModalformproveedor')}.show();">
+									<h:graphicImage height="25" width="20"
+										url="/resources/img/editar2.png" style="border:0" />
+								</a4j:commandLink>
+							</rich:column>
 
-								</rich:dataTable> <rich:dataScroller for="idTabla" /></td>
-						</tr>
-					</table>
+						</rich:dataTable>
+						<rich:dataScroller for="idTabla" />
+					</h:panelGrid>
 
 					<f:facet name="footer">
 						<h:panelGroup style="text-align:center;">

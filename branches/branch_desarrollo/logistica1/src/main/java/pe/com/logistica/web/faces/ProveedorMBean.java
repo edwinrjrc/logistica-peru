@@ -28,6 +28,7 @@ import pe.com.logistica.bean.negocio.Proveedor;
 import pe.com.logistica.bean.negocio.Telefono;
 import pe.com.logistica.bean.negocio.Ubigeo;
 import pe.com.logistica.bean.negocio.Usuario;
+import pe.com.logistica.negocio.exception.NoEnvioDatoException;
 import pe.com.logistica.web.servicio.NegocioServicio;
 import pe.com.logistica.web.servicio.SoporteServicio;
 import pe.com.logistica.web.servicio.impl.NegocioServicioImpl;
@@ -143,7 +144,12 @@ public class ProveedorMBean extends BaseMBean {
 	}
 
 	public void buscarProveedor() {
-		System.out.println("buscar proveedor");
+		try {
+			this.setListaProveedores(this.negocioServicio.buscarProveedor(getProveedor()));
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	public void ejecutarMetodo(ActionEvent e) {
@@ -151,11 +157,13 @@ public class ProveedorMBean extends BaseMBean {
 			this.setShowModal(false);
 			int tipoDocRUC = UtilWeb.obtenerEnteroPropertieMaestro(
 					"tipoDocumentoRUC", "aplicacionDatos");
-			if (this.isNuevoProveedor()) {
-				if (validarProveedor(e)) {
-					if (validarDireccionProveedor(e)) {
-						if (validarContactoProveedor(e)) {
-							if (validarTelefonoProveedor()){
+			this.setListaProveedores(null);
+			
+			if (validarProveedor(e)) {
+				if (validarDireccionProveedor(e)) {
+					if (validarContactoProveedor(e)) {
+						if (validarTelefonoProveedor()){
+							if (this.isNuevoProveedor()){
 								HttpSession session = obtenerSession(false);
 								Usuario usuario = (Usuario) session
 										.getAttribute("usuarioSession");
@@ -173,29 +181,7 @@ public class ProveedorMBean extends BaseMBean {
 								this.setTipoModal("1");
 								this.setMensajeModal("Proveedor registrado Satisfactoriamente");
 							}
-							else {
-								this.setShowModal(true);
-								this.setTipoModal("2");
-								this.setMensajeModal("Debe ingresar por lo menos un telefono, en la direccion o el contacto");
-							}
-							
-						} else {
-							this.setShowModal(true);
-							this.setTipoModal("2");
-							this.setMensajeModal("No se ha agregado ningun contacto para el proveedor, para proveedor personal natural registre como contacto la mismo persona");
-						}
-					} else {
-						this.setShowModal(true);
-						this.setTipoModal("2");
-						this.setMensajeModal("No se ha agregado ninguna dirección al proveedor");
-					}
-				}
-			}
-			else if (this.isEditarProveedor()){
-				if (validarProveedor(e)) {
-					if (validarDireccionProveedor(e)) {
-						if (validarContactoProveedor(e)) {
-							if (validarTelefonoProveedor()){
+							else if (this.isEditarProveedor()){
 								HttpSession session = obtenerSession(false);
 								Usuario usuario = (Usuario) session
 										.getAttribute("usuarioSession");
@@ -213,24 +199,28 @@ public class ProveedorMBean extends BaseMBean {
 								this.setTipoModal("1");
 								this.setMensajeModal("Proveedor actualizado Satisfactoriamente");
 							}
-							else {
-								this.setShowModal(true);
-								this.setTipoModal("2");
-								this.setMensajeModal("Debe ingresar por lo menos un telefono, en la direccion o el contacto");
-							}
-							
-						} else {
+						}
+						else {
 							this.setShowModal(true);
 							this.setTipoModal("2");
-							this.setMensajeModal("No se ha agregado ningun contacto para el proveedor, para proveedor personal natural registre como contacto la mismo persona");
+							this.setMensajeModal("Debe ingresar por lo menos un telefono, en la direccion o el contacto");
 						}
+						
 					} else {
 						this.setShowModal(true);
 						this.setTipoModal("2");
-						this.setMensajeModal("No se ha agregado ninguna dirección al proveedor");
+						this.setMensajeModal("No se ha agregado ningun contacto para el proveedor, para proveedor personal natural registre como contacto la mismo persona");
 					}
+				} else {
+					this.setShowModal(true);
+					this.setTipoModal("2");
+					this.setMensajeModal("No se ha agregado ninguna dirección al proveedor");
 				}
 			}
+		} catch (NoEnvioDatoException ex){
+			this.setShowModal(true);
+			this.setTipoModal("2");
+			this.setMensajeModal(ex.getMessage());
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			this.setShowModal(true);
@@ -243,14 +233,28 @@ public class ProveedorMBean extends BaseMBean {
 		boolean resultado = true;
 
 		resultado = !(this.getProveedor().getListaContactos().isEmpty());
+		
 
 		return resultado;
 	}
 
-	private boolean validarDireccionProveedor(ActionEvent e) {
+	private boolean validarDireccionProveedor(ActionEvent e) throws NoEnvioDatoException {
 		boolean resultado = true;
 
 		resultado = !(this.getProveedor().getListaDirecciones().isEmpty());
+		
+		int principales = 0;
+		if (resultado){
+			for(Direccion direccion : this.getProveedor().getListaDirecciones()){
+				if (direccion.isPrincipal()){
+					principales++;
+				}
+			}
+		}
+		
+		if (principales == 0){
+			throw new NoEnvioDatoException("1010","Debe ingresar una direccion principal");
+		}
 
 		return resultado;
 	}
@@ -584,10 +588,13 @@ public class ProveedorMBean extends BaseMBean {
 	 * @return the listaProveedores
 	 */
 	public List<Proveedor> getListaProveedores() {
+		this.setShowModal(false);
 		try {
-			listaProveedores = this.negocioServicio
-					.listarProveedor(getProveedor());
-			this.setShowModal(false);
+			if (listaProveedores == null || listaProveedores.isEmpty()){
+				listaProveedores = this.negocioServicio
+						.listarProveedor(getProveedor());
+			}
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
