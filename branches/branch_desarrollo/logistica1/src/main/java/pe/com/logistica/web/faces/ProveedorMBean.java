@@ -406,6 +406,10 @@ public class ProveedorMBean extends BaseMBean {
 	public void eliminarTelefonoContacto(Telefono telefono) {
 		this.getContacto().getListaTelefonos().remove(telefono);
 	}
+	
+	public void eliminarCorreoContacto(CorreoElectronico correo){
+		getContacto().getListaCorreos().remove(correo);
+	}
 
 	public void buscarProvincias(ValueChangeEvent e) {
 		this.setListaProvincia(null);
