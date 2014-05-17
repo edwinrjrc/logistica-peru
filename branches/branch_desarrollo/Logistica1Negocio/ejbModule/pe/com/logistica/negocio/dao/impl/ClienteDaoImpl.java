@@ -148,5 +148,56 @@ public class ClienteDaoImpl implements ClienteDao {
 
 		return resultado;
 	}
+	
+	@Override
+	public void registroCliente(Cliente cliente, Connection conexion) throws SQLException {
+		CallableStatement cs = null;
+		String sql = "{ ? = call negocio.fn_ingresarpersonaproveedor(?,?) }";
+		
+		try {
+			cs = conexion.prepareCall(sql);
+			int i=1;
+			cs.registerOutParameter(i++, Types.BOOLEAN);
+			cs.setInt(i++, cliente.getCodigoEntero());
+			cs.setInt(i++, cliente.getRubro().getCodigoEntero());
+			
+			cs.execute();
+		} catch (SQLException e) {
+			throw new SQLException(e);
+		} finally{
+			try {
+				if (cs != null){
+					cs.close();
+				}
+			} catch (SQLException e) {
+				throw new SQLException(e);
+			}
+		}
+	}
 
+	@Override
+	public void actualizarPersonaAdicional(Cliente cliente, Connection conexion) throws SQLException {
+		CallableStatement cs = null;
+		String sql = "{ ? = call negocio.fn_actualizarpersonaproveedor(?,?) }";
+		
+		try {
+			cs = conexion.prepareCall(sql);
+			int i=1;
+			cs.registerOutParameter(i++, Types.BOOLEAN);
+			cs.setInt(i++, cliente.getCodigoEntero());
+			cs.setInt(i++, cliente.getRubro().getCodigoEntero());
+			
+			cs.execute();
+		} catch (SQLException e) {
+			throw new SQLException(e);
+		} finally{
+			try {
+				if (cs != null){
+					cs.close();
+				}
+			} catch (SQLException e) {
+				throw new SQLException(e);
+			}
+		}
+	}
 }

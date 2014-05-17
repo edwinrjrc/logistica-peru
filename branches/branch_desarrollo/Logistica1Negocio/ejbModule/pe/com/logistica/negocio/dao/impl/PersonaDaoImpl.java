@@ -14,6 +14,7 @@ import org.apache.commons.lang3.StringUtils;
 import pe.com.logistica.bean.base.Persona;
 import pe.com.logistica.bean.negocio.Proveedor;
 import pe.com.logistica.negocio.dao.PersonaDao;
+import pe.com.logistica.negocio.util.UtilJdbc;
 
 /**
  * @author Edwin
@@ -52,19 +53,19 @@ public class PersonaDaoImpl implements PersonaDao {
 			cs.registerOutParameter(i++, Types.INTEGER);
 			cs.setInt(i++, persona.getTipoPersona());
 			if (StringUtils.isNotBlank(persona.getNombres())){
-				cs.setString(i++, persona.getNombres());
+				cs.setString(i++, UtilJdbc.convertirMayuscula(persona.getNombres()));
 			}
 			else{
 				cs.setNull(i++, Types.VARCHAR);
 			}
 			if (StringUtils.isNotBlank(persona.getApellidoPaterno())){
-				cs.setString(i++, persona.getApellidoPaterno());
+				cs.setString(i++, UtilJdbc.convertirMayuscula(persona.getApellidoPaterno()));
 			}
 			else{
 				cs.setNull(i++, Types.VARCHAR);
 			}
 			if (StringUtils.isNotBlank(persona.getApellidoMaterno())){
-				cs.setString(i++, persona.getApellidoMaterno());
+				cs.setString(i++, UtilJdbc.convertirMayuscula(persona.getApellidoMaterno()));
 			}
 			else{
 				cs.setNull(i++, Types.VARCHAR);
@@ -88,13 +89,13 @@ public class PersonaDaoImpl implements PersonaDao {
 				cs.setNull(i++, Types.INTEGER);
 			}
 			if (StringUtils.isNotBlank(persona.getDocumentoIdentidad().getNumeroDocumento())){
-				cs.setString(i++, persona.getDocumentoIdentidad().getNumeroDocumento());
+				cs.setString(i++, UtilJdbc.convertirMayuscula(persona.getDocumentoIdentidad().getNumeroDocumento()));
 			}
 			else{
 				cs.setNull(i++, Types.VARCHAR);
 			}
 			if (StringUtils.isNotBlank(persona.getUsuarioCreacion())){
-				cs.setString(i++, persona.getUsuarioCreacion());
+				cs.setString(i++, UtilJdbc.convertirMayuscula(persona.getUsuarioCreacion()));
 			}
 			else{
 				cs.setNull(i++, Types.VARCHAR);
@@ -140,19 +141,19 @@ public class PersonaDaoImpl implements PersonaDao {
 			cs.setInt(i++, persona.getCodigoEntero().intValue());
 			cs.setInt(i++, persona.getTipoPersona());
 			if (StringUtils.isNotBlank(persona.getNombres())){
-				cs.setString(i++, persona.getNombres());
+				cs.setString(i++, UtilJdbc.convertirMayuscula(persona.getNombres()));
 			}
 			else{
 				cs.setNull(i++, Types.VARCHAR);
 			}
 			if (StringUtils.isNotBlank(persona.getApellidoPaterno())){
-				cs.setString(i++, persona.getApellidoPaterno());
+				cs.setString(i++, UtilJdbc.convertirMayuscula(persona.getApellidoPaterno()));
 			}
 			else{
 				cs.setNull(i++, Types.VARCHAR);
 			}
 			if (StringUtils.isNotBlank(persona.getApellidoMaterno())){
-				cs.setString(i++, persona.getApellidoMaterno());
+				cs.setString(i++, UtilJdbc.convertirMayuscula(persona.getApellidoMaterno()));
 			}
 			else{
 				cs.setNull(i++, Types.VARCHAR);
@@ -176,13 +177,13 @@ public class PersonaDaoImpl implements PersonaDao {
 				cs.setNull(i++, Types.INTEGER);
 			}
 			if (StringUtils.isNotBlank(persona.getDocumentoIdentidad().getNumeroDocumento())){
-				cs.setString(i++, persona.getDocumentoIdentidad().getNumeroDocumento());
+				cs.setString(i++, UtilJdbc.convertirMayuscula(persona.getDocumentoIdentidad().getNumeroDocumento()));
 			}
 			else{
 				cs.setNull(i++, Types.VARCHAR);
 			}
 			if (StringUtils.isNotBlank(persona.getUsuarioModificacion())){
-				cs.setString(i++, persona.getUsuarioModificacion());
+				cs.setString(i++, UtilJdbc.convertirMayuscula(persona.getUsuarioModificacion()));
 			}
 			else{
 				cs.setNull(i++, Types.VARCHAR);

@@ -278,9 +278,9 @@ public class MaestroDaoImpl implements MaestroDao {
 			int i = 1;
 			cs.registerOutParameter(i++, Types.BOOLEAN);
 			cs.setInt(i++, maestro.getCodigoMaestro());
-			cs.setString(i++, maestro.getNombre());
-			cs.setString(i++, maestro.getDescripcion());
-			cs.setString(i++, maestro.getAbreviatura());
+			cs.setString(i++, UtilJdbc.convertirMayuscula(maestro.getNombre()));
+			cs.setString(i++, UtilJdbc.convertirMayuscula(maestro.getDescripcion()));
+			cs.setString(i++, UtilJdbc.convertirMayuscula(maestro.getAbreviatura()));
 
 			cs.execute();
 			
@@ -381,15 +381,15 @@ public class MaestroDaoImpl implements MaestroDao {
 			cs.registerOutParameter(i++, Types.BOOLEAN);
 			cs.setInt(i++, maestro.getCodigoEntero());
 			cs.setInt(i++, maestro.getCodigoMaestro());
-			cs.setString(i++, maestro.getNombre());
+			cs.setString(i++, UtilJdbc.convertirMayuscula(maestro.getNombre()));
 			if (StringUtils.isNotBlank(maestro.getDescripcion())){
-				cs.setString(i++, maestro.getDescripcion());
+				cs.setString(i++, UtilJdbc.convertirMayuscula(maestro.getDescripcion()));
 			}
 			else{
 				cs.setNull(i++, Types.VARCHAR);
 			}
 			if (StringUtils.isNotBlank(maestro.getEstado().getCodigoCadena())){
-				cs.setString(i++, maestro.getEstado().getCodigoCadena());
+				cs.setString(i++, UtilJdbc.convertirMayuscula(maestro.getEstado().getCodigoCadena()));
 			}
 			else{
 				cs.setNull(i++, Types.VARCHAR);
@@ -397,7 +397,7 @@ public class MaestroDaoImpl implements MaestroDao {
 			
 			cs.setInt(i++, maestro.getOrden());
 			if (StringUtils.isNotBlank(maestro.getAbreviatura())){
-				cs.setString(i++, maestro.getAbreviatura());
+				cs.setString(i++, UtilJdbc.convertirMayuscula(maestro.getAbreviatura()));
 			}
 			else{
 				cs.setNull(i++, Types.VARCHAR);

@@ -36,7 +36,7 @@
 									columns="1">
 									<h:selectOneMenu id="idFDSelTipoVia"
 										value="#{proveedorMBean.direccion.via.codigoEntero}"
-										style="width:123px;">
+										style="width:123px;" styleClass="estilocampo1">
 										<f:selectItem itemLabel="-Seleccione-" />
 										<f:selectItems value="#{catalogoMBean.catalogoVias}" />
 									</h:selectOneMenu>
@@ -46,7 +46,7 @@
 								<h:outputText value="Nombre Via" />
 								<h:panelGrid border="0" cellpadding="0" cellspacing="0"
 									columns="1">
-									<h:inputText id="idFDInNomVia"
+									<h:inputText id="idFDInNomVia" styleClass="estilocampo1"
 										value="#{proveedorMBean.direccion.nombreVia}" maxlength="40" />
 									<rich:message for="idFDInNomVia" showSummary="true"
 										showDetail="false" ajaxRendered="true" />
@@ -56,18 +56,18 @@
 								cellspacing="0" border="0"
 								columnClasses="col1fil1proveedor,col2fil1proveedor,col3fil1proveedor,col4fil1proveedor">
 								<h:outputText value="Número" style="width:100px;" />
-								<h:inputText value="#{proveedorMBean.direccion.numero}" maxlength="5" size="10" />
+								<h:inputText value="#{proveedorMBean.direccion.numero}" maxlength="5" size="10" styleClass="estilocampo1" />
 								<h:outputText value="Interior" style="width:100px;" />
-								<h:inputText value="#{proveedorMBean.direccion.interior}" maxlength="5" size="10" />
+								<h:inputText value="#{proveedorMBean.direccion.interior}" maxlength="5" size="10" styleClass="estilocampo1" />
 							</h:panelGrid>
 
 							<h:panelGrid columns="4" style="width:100%;" cellpadding="0"
 								cellspacing="0" border="0"
 								columnClasses="col1fil1proveedor,col2fil1proveedor,col3fil1proveedor,col4fil1proveedor">
 								<h:outputText value="Manzana" style="width:100px;" />
-								<h:inputText value="#{proveedorMBean.direccion.manzana}" />
+								<h:inputText value="#{proveedorMBean.direccion.manzana}" styleClass="estilocampo1" />
 								<h:outputText value="Lote" style="width:100px;" />
-								<h:inputText value="#{proveedorMBean.direccion.lote}" />
+								<h:inputText value="#{proveedorMBean.direccion.lote}" styleClass="estilocampo1" />
 							</h:panelGrid>
 
 							<h:panelGrid columns="4" style="width:100%;" cellpadding="0"
@@ -132,7 +132,7 @@
 								cellspacing="0" border="0">
 								<h:outputText value="Referencia" />
 								<h:inputTextarea value="#{proveedorMBean.direccion.referencia}"
-									cols="120" rows="5" />
+									cols="120" rows="5" styleClass="estilocampo1" />
 							</h:panelGrid>
 
 							<h:panelGrid columns="1" style="width:100%;" cellpadding="0"
@@ -140,7 +140,7 @@
 								<h:outputText value="Observaciones" />
 								<h:inputTextarea
 									value="#{proveedorMBean.direccion.observaciones}" cols="120"
-									rows="5" />
+									rows="5" styleClass="estilocampo1" />
 							</h:panelGrid>
 
 						</h:panelGrid>
