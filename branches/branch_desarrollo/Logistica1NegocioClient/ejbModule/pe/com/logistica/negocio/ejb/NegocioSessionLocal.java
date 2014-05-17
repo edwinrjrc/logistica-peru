@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.ejb.Local;
 
+import pe.com.logistica.bean.negocio.Cliente;
 import pe.com.logistica.bean.negocio.Contacto;
 import pe.com.logistica.bean.negocio.Direccion;
 import pe.com.logistica.bean.negocio.Proveedor;
@@ -27,4 +28,10 @@ public interface NegocioSessionLocal {
 			ResultadoCeroDaoException, Exception;
 
 	List<Proveedor> buscarProveedor(Proveedor proveedor) throws SQLException;
+	
+	public boolean registrarCliente(Cliente cliente) throws ResultadoCeroDaoException, SQLException, Exception;
+
+	public boolean actualizarCliente(Cliente cliente) throws SQLException, ResultadoCeroDaoException, Exception ;
+	
+	List<Cliente> buscarCliente(Cliente cliente) throws SQLException;
 }

@@ -53,6 +53,25 @@
 .col2fil2proveedor{
 	width: 75%;
 }
+#estilos general
+.col1fil1formulario{
+	width: 25%;
+}
+.col2fil1formulario{
+	width: 25%;
+}
+.col3fil1formulario{
+	width: 25%;
+}
+.col4fil1formulario{
+	width: 25%;
+}
+.col1fil2formulario{
+	width: 25%;
+}
+.col2fil2formulario{
+	width: 75%;
+}
 .estiloBoton1{
 	height: 20px; 
 	width: 150px";

@@ -11,7 +11,7 @@
 		height="500" style="background-color: #FFFFFF">
 		<f:facet name="header">
 			<h:outputText id="idNomModalContacto"
-				value="#{proveedorMBean.nombreFormularioContacto}" />
+				value="#{clienteMBean.nombreFormularioContacto}" />
 		</f:facet>
 		<f:facet name="controls">
 			<h:outputLink value="#" style="border:0"
@@ -24,7 +24,7 @@
 		<h:form id="idFCPr">
 			<h:panelGrid border="0" cellpadding="0" cellspacing="0" columns="1"
 				id="idGrdFCon" style="width:100%;">
-				<rich:tabPanel style="width:100%;" switchType="client" activeItem="#{proveedorMBean.pestanaActiva}">
+				<rich:tabPanel style="width:100%;" switchType="client" activeItem="#{clienteMBean.pestanaActiva}">
 					<rich:tab id="idFC01">
 						<f:facet name="header">
 							<h:outputText value="Contacto" />
@@ -38,7 +38,7 @@
 								<h:panelGrid border="0" cellpadding="0" cellspacing="0"
 									columns="1">
 									<h:selectOneMenu id="idSelTipDoc"
-										value="#{proveedorMBean.contacto.documentoIdentidad.tipoDocumento.codigoEntero}">
+										value="#{clienteMBean.contacto.documentoIdentidad.tipoDocumento.codigoEntero}">
 										<f:selectItem itemLabel="-Seleccione-" />
 										<f:selectItems value="#{catalogoMBean.catalogoTipoDocumento}" />
 									</h:selectOneMenu>
@@ -48,14 +48,14 @@
 								<h:panelGrid border="0" cellpadding="0" cellspacing="0"
 									columns="1">
 									<h:inputText id="idNumDoc" maxlength="12"
-										value="#{proveedorMBean.contacto.documentoIdentidad.numeroDocumento}" />
+										value="#{clienteMBean.contacto.documentoIdentidad.numeroDocumento}" />
 									<rich:message for="idNumDoc" />
 								</h:panelGrid>
 								<h:outputText value="Apellido Paterno" />
 								<h:panelGrid columns="1" cellpadding="0" cellspacing="0"
 									border="0">
 									<h:inputText id="idApePat" maxlength="20"
-										value="#{proveedorMBean.contacto.apellidoPaterno}" />
+										value="#{clienteMBean.contacto.apellidoPaterno}" />
 									<rich:message for="idApePat" ajaxRendered="true"
 										showSummary="true" />
 								</h:panelGrid>
@@ -63,7 +63,7 @@
 								<h:panelGrid columns="1" cellpadding="0" cellspacing="0"
 									border="0">
 									<h:inputText id="idApeMat" maxlength="20"
-										value="#{proveedorMBean.contacto.apellidoMaterno}" />
+										value="#{clienteMBean.contacto.apellidoMaterno}" />
 									<rich:message for="idApeMat" ajaxRendered="true"
 										showSummary="true" />
 								</h:panelGrid>
@@ -75,7 +75,7 @@
 								<h:panelGrid border="0" cellpadding="0" cellspacing="0"
 									columns="1">
 									<h:inputText id="idForProNom" size="100" maxlength="20"
-										value="#{proveedorMBean.contacto.nombres}" />
+										value="#{clienteMBean.contacto.nombres}" />
 									<rich:message for="idForProNom" ajaxRendered="true"
 										showSummary="true" />
 								</h:panelGrid>
@@ -87,7 +87,7 @@
 								<h:panelGrid border="0" cellpadding="0" cellspacing="0"
 									columns="1">
 									<h:selectOneMenu id="idSelAreCon"
-										value="#{proveedorMBean.contacto.area.codigoEntero}">
+										value="#{clienteMBean.contacto.area.codigoEntero}">
 										<f:selectItem itemLabel="-Seleccione-" />
 										<f:selectItems value="#{catalogoMBean.catalogoArea}" />
 									</h:selectOneMenu>
@@ -97,7 +97,7 @@
 
 								<h:outputText value="Anexo" />
 								<h:inputText id="idForAnexo" maxlength="5" size="10"
-									value="#{proveedorMBean.contacto.anexo}" />
+									value="#{clienteMBean.contacto.anexo}" />
 							</h:panelGrid>
 
 						</h:panelGrid>
@@ -106,7 +106,7 @@
 						<f:facet name="header">
 							<h:outputText value="Telefonos Movil" />
 						</f:facet>
-						<rich:dataTable value="#{proveedorMBean.contacto.listaTelefonos}"
+						<rich:dataTable value="#{clienteMBean.contacto.listaTelefonos}"
 							style="width:100%;" var="fila" id="idTablaTelefonosContacto">
 							<rich:column>
 								<h:outputText value="#{fila.id}" />
@@ -131,14 +131,14 @@
 							<rich:column>
 								<a4j:commandButton render="idTablaTelefonosContacto"
 									value="Eliminar"
-									action="#{proveedorMBean.eliminarTelefonoContacto(fila)}" />
+									action="#{clienteMBean.eliminarTelefonoContacto(fila)}" />
 							</rich:column>
 							<f:facet name="header">
 								<h:panelGrid columns="1" border="0" cellpadding="0"
 									cellspacing="0">
 									<a4j:commandButton render="idTablaTelefonosContacto"
 										value="Agregar"
-										action="#{proveedorMBean.agregarTelefonoContacto()}" />
+										action="#{clienteMBean.agregarTelefonoContacto()}" />
 								</h:panelGrid>
 							</f:facet>
 						</rich:dataTable>
@@ -149,7 +149,7 @@
 						<f:facet name="header">
 							<h:outputText value="Correo Electronico" />
 						</f:facet>
-						<rich:dataTable value="#{proveedorMBean.contacto.listaCorreos}"
+						<rich:dataTable value="#{clienteMBean.contacto.listaCorreos}"
 							style="width:100%;" iterationStatusVar="idx" var="fila" id="idTablaCorreoContacto">
 							<rich:column>
 								<h:outputText value="#{idx.index+1}" />
@@ -162,16 +162,16 @@
 								</h:inputText>
 							</rich:column>
 							<rich:column>
-								<a4j:commandButton render="idTablaCorreoContacto"
+								<a4j:commandButton render="idTablaTelefonosContacto"
 									value="Eliminar"
-									action="#{proveedorMBean.eliminarCorreoContacto(fila)}" />
+									action="#{clienteMBean.eliminarTelefonoContacto(fila)}" />
 							</rich:column>
 							<f:facet name="header">
 								<h:panelGrid columns="1" border="0" cellpadding="0"
 									cellspacing="0" style="width:100%;">
 									<a4j:commandButton render="idTablaCorreoContacto"
 										value="Agregar"
-										action="#{proveedorMBean.agregarCorreoContacto()}" />
+										action="#{clienteMBean.agregarCorreoContacto()}" />
 								</h:panelGrid>
 							</f:facet>
 						</rich:dataTable>
@@ -184,14 +184,14 @@
 					<h:panelGrid columns="1" style="width:100%;text-align:center;"
 						id="idGrdBtnesCont">
 						<a4j:commandButton value="Agregar"
-							actionListener="#{proveedorMBean.agregarContacto}"
-							rendered="#{proveedorMBean.nuevoContacto}"
+							actionListener="#{clienteMBean.agregarContacto}"
+							rendered="#{clienteMBean.nuevoContacto}"
 							oncomplete="cerrarModalBoton('idFCPr','idCerrModCon','idHdConAgr')"
 							render="idTablaContactos,idGrdBtnesCont,idGrdFCon" />
 							
 						<a4j:commandButton value="Actualizar"
-							actionListener="#{proveedorMBean.agregarContacto}"
-							rendered="#{proveedorMBean.editarContacto}"
+							actionListener="#{clienteMBean.agregarContacto}"
+							rendered="#{clienteMBean.editarContacto}"
 							oncomplete="cerrarModalBoton('idFCPr','idCerrModCon','idHdConAgr')"
 							render="idTablaContactos,idGrdBtnesCont,idGrdFCon" />
 
@@ -199,7 +199,7 @@
 							oncomplete="#{rich:component('idModalFormContacto')}.hide(); return false;" />
 
 						<h:inputHidden id="idHdConAgr"
-							value="#{proveedorMBean.contactoAgregada}" />
+							value="#{clienteMBean.contactoAgregada}" />
 					</h:panelGrid>
 				</f:facet>
 			</h:panelGrid>

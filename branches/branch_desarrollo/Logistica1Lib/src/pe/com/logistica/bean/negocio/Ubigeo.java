@@ -1,6 +1,5 @@
 package pe.com.logistica.bean.negocio;
 
-import pe.com.logistica.bean.base.Base;
 import pe.com.logistica.bean.base.BaseVO;
 
 /**
