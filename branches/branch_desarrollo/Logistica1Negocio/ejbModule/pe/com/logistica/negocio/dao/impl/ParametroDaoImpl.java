@@ -94,9 +94,9 @@ public class ParametroDaoImpl implements ParametroDao {
 			cs = conn.prepareCall(sql);
 			int i=1;
 			cs.registerOutParameter(i++, Types.BOOLEAN);
-			cs.setString(i++, parametro.getNombre());
-			cs.setString(i++, parametro.getDescripcion());
-			cs.setString(i++, parametro.getValor());
+			cs.setString(i++, UtilJdbc.convertirMayuscula(parametro.getNombre()));
+			cs.setString(i++, UtilJdbc.convertirMayuscula(parametro.getDescripcion()));
+			cs.setString(i++, UtilJdbc.convertirMayuscula(parametro.getValor()));
 			
 			cs.execute();
 		} catch (SQLException e) {
@@ -134,10 +134,10 @@ public class ParametroDaoImpl implements ParametroDao {
 			int i=1;
 			cs.registerOutParameter(i++, Types.BOOLEAN);
 			cs.setInt(i++, parametro.getCodigoEntero());
-			cs.setString(i++, parametro.getNombre());
-			cs.setString(i++, parametro.getDescripcion());
-			cs.setString(i++, parametro.getValor());
-			cs.setString(i++, parametro.getEstado().getCodigoCadena());
+			cs.setString(i++, UtilJdbc.convertirMayuscula(parametro.getNombre()));
+			cs.setString(i++, UtilJdbc.convertirMayuscula(parametro.getDescripcion()));
+			cs.setString(i++, UtilJdbc.convertirMayuscula(parametro.getValor()));
+			cs.setString(i++, UtilJdbc.convertirMayuscula(parametro.getEstado().getCodigoCadena()));
 			cs.setBoolean(i++, parametro.isEditable());
 			
 			cs.execute();

@@ -56,7 +56,7 @@ public class TelefonoDaoImpl implements TelefonoDao {
 				cs.setNull(i++, Types.INTEGER);
 			}
 			if (StringUtils.isNotBlank(telefono.getUsuarioCreacion())){
-				cs.setString(i++, telefono.getUsuarioCreacion());
+				cs.setString(i++, UtilJdbc.convertirMayuscula(telefono.getUsuarioCreacion()));
 			}
 			else{
 				cs.setNull(i++, Types.VARCHAR);
@@ -249,7 +249,7 @@ public class TelefonoDaoImpl implements TelefonoDao {
 			int i=1;
 			cs.registerOutParameter(i++, Types.INTEGER);
 			if (StringUtils.isNotBlank(telefono.getNumeroTelefono())){
-				cs.setString(i++, telefono.getNumeroTelefono());
+				cs.setString(i++, UtilJdbc.convertirMayuscula(telefono.getNumeroTelefono()));
 			}
 			else{
 				cs.setNull(i++, Types.VARCHAR);
@@ -261,7 +261,7 @@ public class TelefonoDaoImpl implements TelefonoDao {
 				cs.setNull(i++, Types.INTEGER);
 			}
 			if (StringUtils.isNotBlank(telefono.getUsuarioModificacion())){
-				cs.setString(i++, telefono.getUsuarioModificacion());
+				cs.setString(i++, UtilJdbc.convertirMayuscula(telefono.getUsuarioModificacion()));
 			}
 			else{
 				cs.setNull(i++, Types.VARCHAR);

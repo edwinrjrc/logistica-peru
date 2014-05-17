@@ -3,6 +3,7 @@
  */
 package pe.com.logistica.negocio.dao;
 
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -16,4 +17,10 @@ import pe.com.logistica.bean.negocio.Cliente;
 public interface ClienteDao {
 
 	public List<Cliente> consultarPersona(Persona persona) throws SQLException;
+
+	void registroCliente(Cliente cliente, Connection conexion)
+			throws SQLException;
+
+	void actualizarPersonaAdicional(Cliente cliente, Connection conexion)
+			throws SQLException;
 }

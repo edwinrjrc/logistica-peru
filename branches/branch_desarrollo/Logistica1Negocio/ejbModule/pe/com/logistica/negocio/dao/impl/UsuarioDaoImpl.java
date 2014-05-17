@@ -40,12 +40,12 @@ public class UsuarioDaoImpl implements UsuarioDao{
 			cs = conn.prepareCall(sql);
 			int i=1;
 			cs.registerOutParameter(i++, Types.BOOLEAN);
-			cs.setString(i++, usuario.getUsuario());
+			cs.setString(i++, UtilJdbc.convertirMayuscula(usuario.getUsuario()));
 			cs.setString(i++, usuario.getCredencial());
 			cs.setInt(i++, usuario.getRol().getCodigoEntero());
-			cs.setString(i++, usuario.getNombres());
-			cs.setString(i++, usuario.getApellidoPaterno());
-			cs.setString(i++, usuario.getApellidoMaterno());
+			cs.setString(i++, UtilJdbc.convertirMayuscula(usuario.getNombres()));
+			cs.setString(i++, UtilJdbc.convertirMayuscula(usuario.getApellidoPaterno()));
+			cs.setString(i++, UtilJdbc.convertirMayuscula(usuario.getApellidoMaterno()));
 			boolean resul = cs.execute();
 			
 			System.out.println("resultado execute ::"+resul);
@@ -92,9 +92,9 @@ public class UsuarioDaoImpl implements UsuarioDao{
 			cs.registerOutParameter(i++, Types.BOOLEAN);
 			cs.setInt(i++, usuario.getCodigoEntero());
 			cs.setInt(i++, usuario.getRol().getCodigoEntero());
-			cs.setString(i++, usuario.getNombres());
-			cs.setString(i++, usuario.getApellidoPaterno());
-			cs.setString(i++, usuario.getApellidoMaterno());
+			cs.setString(i++, UtilJdbc.convertirMayuscula(usuario.getNombres()));
+			cs.setString(i++, UtilJdbc.convertirMayuscula(usuario.getApellidoPaterno()));
+			cs.setString(i++, UtilJdbc.convertirMayuscula(usuario.getApellidoMaterno()));
 			
 			boolean resul = cs.execute();
 			
