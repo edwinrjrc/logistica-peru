@@ -467,6 +467,8 @@ public class NegocioSession implements NegocioSessionRemote,
 					contactoDao.ingresarCorreoElectronico(contacto, conexion);
 				}
 			}
+			ClienteDao clienteDao = new ClienteDaoImpl();
+			clienteDao.registroCliente(cliente, conexion);
 
 			conexion.commit();
 			return true;
@@ -568,6 +570,8 @@ public class NegocioSession implements NegocioSessionRemote,
 					contactoDao.ingresarCorreoElectronico(contacto, conexion);
 				}
 			}
+			ClienteDao clienteDao = new ClienteDaoImpl();
+			clienteDao.actualizarPersonaAdicional(cliente, conexion);
 
 			conexion.commit();
 			return true;

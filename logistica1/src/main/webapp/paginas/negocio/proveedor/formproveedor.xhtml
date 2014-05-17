@@ -38,7 +38,8 @@
 									columns="1">
 									<h:selectOneMenu id="idFPSelTipoDoc"
 										value="#{proveedorMBean.proveedor.documentoIdentidad.tipoDocumento.codigoEntero}"
-										required="True" requiredMessage="Seleccione tipo de documento">
+										required="True" requiredMessage="Seleccione tipo de documento"
+										styleClass="estilocampo1">
 										<f:selectItem itemLabel="-Seleccione-" />
 										<f:selectItems value="#{catalogoMBean.catalogoTipoDocumento}" />
 										<a4j:ajax event="valueChange" render="idGrdFrmProv"
@@ -54,7 +55,7 @@
 										value="#{proveedorMBean.proveedor.documentoIdentidad.numeroDocumento}"
 										required="True"
 										requiredMessage="Ingrese el número de documento"
-										maxlength="12" />
+										maxlength="12" styleClass="estilocampo1"/>
 									<rich:message for="idFPInNumDoc" showSummary="true"
 										showDetail="false" />
 								</h:panelGrid>
@@ -65,7 +66,7 @@
 									rendered="#{proveedorMBean.proveedor.documentoIdentidad.tipoDocumento.codigoEntero == 1 or proveedorMBean.proveedor.documentoIdentidad.tipoDocumento.codigoEntero == 2}">
 									<h:inputText id="idApePatPro"
 										value="#{proveedorMBean.proveedor.apellidoPaterno}"
-										maxlength="40" />
+										maxlength="40" styleClass="estilocampo1"/>
 									<rich:message for="idApePatPro" showSummary="true"
 										showDetail="false" />
 								</h:panelGrid>
@@ -76,7 +77,7 @@
 									rendered="#{proveedorMBean.proveedor.documentoIdentidad.tipoDocumento.codigoEntero == 1 or proveedorMBean.proveedor.documentoIdentidad.tipoDocumento.codigoEntero == 2}">
 									<h:inputText id="idApeMatPro"
 										value="#{proveedorMBean.proveedor.apellidoMaterno}"
-										maxlength="40" />
+										maxlength="40" styleClass="estilocampo1" />
 									<rich:message for="idApeMatPro" showSummary="true"
 										showDetail="false" />
 								</h:panelGrid>
@@ -90,7 +91,7 @@
 									columns="1"
 									rendered="#{proveedorMBean.proveedor.documentoIdentidad.tipoDocumento.codigoEntero == 1 or proveedorMBean.proveedor.documentoIdentidad.tipoDocumento.codigoEntero == 2}">
 									<h:inputText id="idNomPro"
-										value="#{proveedorMBean.proveedor.nombres}" maxlength="80" />
+										value="#{proveedorMBean.proveedor.nombres}" maxlength="80" styleClass="estilocampo1" />
 									<rich:message for="idNomPro" showSummary="true"
 										showDetail="false" />
 								</h:panelGrid>
@@ -100,7 +101,7 @@
 									columns="1"
 									rendered="#{proveedorMBean.proveedor.documentoIdentidad.tipoDocumento.codigoEntero == 3}">
 									<h:inputText id="idRazSocPro"
-										value="#{proveedorMBean.proveedor.razonSocial}" maxlength="80" />
+										value="#{proveedorMBean.proveedor.razonSocial}" maxlength="80" styleClass="estilocampo1" />
 									<rich:message for="idRazSocPro" showSummary="true"
 										showDetail="false" />
 								</h:panelGrid>
@@ -109,7 +110,7 @@
 									columns="1">
 									<h:selectOneMenu id="idFPSelRubro"
 										value="#{proveedorMBean.proveedor.rubro.codigoEntero}"
-										required="true" requiredMessage="Seleccione el rubro">
+										required="true" requiredMessage="Seleccione el rubro" styleClass="estilocampo1">
 										<f:selectItem itemLabel="-Seleccione-" />
 										<f:selectItems value="#{catalogoMBean.catalogoRubro}" />
 									</h:selectOneMenu>

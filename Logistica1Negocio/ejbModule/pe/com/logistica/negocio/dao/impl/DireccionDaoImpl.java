@@ -38,7 +38,7 @@ public class DireccionDaoImpl implements DireccionDao {
 			cs.registerOutParameter(i++, Types.INTEGER);
 			cs.setInt(i++, direccion.getVia().getCodigoEntero());
 			if (StringUtils.isNotBlank(direccion.getNombreVia())){
-				cs.setString(i++, direccion.getNombreVia());
+				cs.setString(i++, UtilJdbc.convertirMayuscula(direccion.getNombreVia()));
 			}
 			else{
 				cs.setNull(i++, Types.VARCHAR);
@@ -56,13 +56,13 @@ public class DireccionDaoImpl implements DireccionDao {
 				cs.setNull(i++, Types.VARCHAR);
 			}
 			if (StringUtils.isNotBlank(direccion.getManzana())){
-				cs.setString(i++, direccion.getManzana());
+				cs.setString(i++, UtilJdbc.convertirMayuscula(direccion.getManzana()));
 			}
 			else{
 				cs.setNull(i++, Types.VARCHAR);
 			}
 			if (StringUtils.isNotBlank(direccion.getLote())){
-				cs.setString(i++, direccion.getLote());
+				cs.setString(i++, UtilJdbc.convertirMayuscula(direccion.getLote()));
 			}
 			else{
 				cs.setNull(i++, Types.VARCHAR);
@@ -75,7 +75,7 @@ public class DireccionDaoImpl implements DireccionDao {
 				cs.setNull(i++, Types.VARCHAR);
 			}
 			if (StringUtils.isNotBlank(direccion.getUsuarioCreacion())){
-				cs.setString(i++, direccion.getUsuarioCreacion());
+				cs.setString(i++, UtilJdbc.convertirMayuscula(direccion.getUsuarioCreacion()));
 			}
 			else{
 				cs.setNull(i++, Types.VARCHAR);
@@ -236,7 +236,7 @@ public class DireccionDaoImpl implements DireccionDao {
 				cs.setNull(i++, Types.VARCHAR);
 			}
 			if (StringUtils.isNotBlank(direccion.getManzana())){
-				cs.setString(i++, direccion.getManzana());
+				cs.setString(i++, UtilJdbc.convertirMayuscula(direccion.getManzana()));
 			}
 			else{
 				cs.setNull(i++, Types.VARCHAR);
@@ -255,7 +255,7 @@ public class DireccionDaoImpl implements DireccionDao {
 				cs.setNull(i++, Types.VARCHAR);
 			}
 			if (StringUtils.isNotBlank(direccion.getUsuarioModificacion())){
-				cs.setString(i++, direccion.getUsuarioModificacion());
+				cs.setString(i++, UtilJdbc.convertirMayuscula(direccion.getUsuarioModificacion()));
 			}
 			else{
 				cs.setNull(i++, Types.VARCHAR);
@@ -296,7 +296,7 @@ public class DireccionDaoImpl implements DireccionDao {
 			int i=1;
 			cs.registerOutParameter(i++, Types.BOOLEAN);
 			cs.setInt(i++, UtilJdbc.obtenerNumero(direccion.getCodigoEntero()));
-			cs.setString(i++, direccion.getUsuarioModificacion());
+			cs.setString(i++, UtilJdbc.convertirMayuscula(direccion.getUsuarioModificacion()));
 			cs.setString(i++, direccion.getIpModificacion());
 			
 			cs.execute();
@@ -328,7 +328,7 @@ public class DireccionDaoImpl implements DireccionDao {
 			int i=1;
 			cs.registerOutParameter(i++, Types.BOOLEAN);
 			cs.setInt(i++, persona.getCodigoEntero().intValue());
-			cs.setString(i++, persona.getUsuarioModificacion());
+			cs.setString(i++, UtilJdbc.convertirMayuscula(persona.getUsuarioModificacion()));
 			cs.setString(i++, persona.getIpModificacion());
 			
 			cs.execute();

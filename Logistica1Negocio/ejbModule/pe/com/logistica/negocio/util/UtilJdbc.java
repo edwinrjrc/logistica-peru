@@ -64,4 +64,8 @@ public class UtilJdbc {
 		}
 		return numero.intValue();
 	}
+	
+	public static String convertirMayuscula(String cadena){
+		return StringUtils.upperCase(parseaCadena(cadena));
+	}
 }

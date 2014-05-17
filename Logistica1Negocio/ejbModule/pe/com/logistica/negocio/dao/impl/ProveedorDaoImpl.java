@@ -145,15 +145,13 @@ public class ProveedorDaoImpl implements ProveedorDao {
 			sql = sql + " where idtipodocumento = "+proveedor.getDocumentoIdentidad().getTipoDocumento().getCodigoEntero().intValue();
 			sql = sql + " and numerodocumento = '"+proveedor.getDocumentoIdentidad().getNumeroDocumento()+"'";
 			if (StringUtils.isNotBlank(proveedor.getNombres())){
-				sql = sql + " and nombres like '%"+proveedor.getNombres()+"%'";
+				sql = sql + " and upper(nombres) like '%"+UtilJdbc.convertirMayuscula(proveedor.getNombres())+"%'";
 			}
 		}
 		else if (StringUtils.isNotBlank(proveedor.getNombres())){
-			sql = sql + " where nombres like '%"+proveedor.getNombres()+"%'";
+			sql = sql + " where upper(nombres) like '%"+UtilJdbc.convertirMayuscula(proveedor.getNombres())+"%'";
 		}
 		
-		System.out.println("sql ::"+sql);
-
 		try {
 			conn = UtilConexion.obtenerConexion();
 			cs = conn.prepareCall(sql);

@@ -47,14 +47,14 @@
 								<h:outputText value="Numero Documento" />
 								<h:panelGrid border="0" cellpadding="0" cellspacing="0"
 									columns="1">
-									<h:inputText id="idNumDoc" maxlength="12"
+									<h:inputText id="idNumDoc" maxlength="12" styleClass="estilocampo1"
 										value="#{proveedorMBean.contacto.documentoIdentidad.numeroDocumento}" />
 									<rich:message for="idNumDoc" />
 								</h:panelGrid>
 								<h:outputText value="Apellido Paterno" />
 								<h:panelGrid columns="1" cellpadding="0" cellspacing="0"
 									border="0">
-									<h:inputText id="idApePat" maxlength="20"
+									<h:inputText id="idApePat" maxlength="20" styleClass="estilocampo1"
 										value="#{proveedorMBean.contacto.apellidoPaterno}" />
 									<rich:message for="idApePat" ajaxRendered="true"
 										showSummary="true" />
@@ -62,7 +62,7 @@
 								<h:outputText value="Apellido Materno" />
 								<h:panelGrid columns="1" cellpadding="0" cellspacing="0"
 									border="0">
-									<h:inputText id="idApeMat" maxlength="20"
+									<h:inputText id="idApeMat" maxlength="20" styleClass="estilocampo1"
 										value="#{proveedorMBean.contacto.apellidoMaterno}" />
 									<rich:message for="idApeMat" ajaxRendered="true"
 										showSummary="true" />
@@ -75,7 +75,7 @@
 								<h:panelGrid border="0" cellpadding="0" cellspacing="0"
 									columns="1">
 									<h:inputText id="idForProNom" size="100" maxlength="20"
-										value="#{proveedorMBean.contacto.nombres}" />
+										value="#{proveedorMBean.contacto.nombres}" styleClass="estilocampo1" />
 									<rich:message for="idForProNom" ajaxRendered="true"
 										showSummary="true" />
 								</h:panelGrid>
@@ -158,7 +158,7 @@
 								<f:facet name="header">
 									<h:outputText value="Correo Electronico" />
 								</f:facet>
-								<h:inputText value="#{fila.direccion}" size="50" maxlength="30">
+								<h:inputText value="#{fila.direccion}" size="50" maxlength="30" styleClass="estilocampo1">
 								</h:inputText>
 							</rich:column>
 							<rich:column>

@@ -66,7 +66,7 @@ public class ContactoDaoImpl implements ContactoDao {
 				cs.setNull(i++, Types.INTEGER);
 			}
 			if (StringUtils.isNotBlank(contacto.getAnexo())){
-				cs.setString(i++, contacto.getAnexo());
+				cs.setString(i++, UtilJdbc.convertirMayuscula(contacto.getAnexo()));
 			}
 			else{
 				cs.setNull(i++, Types.VARCHAR);
@@ -167,7 +167,7 @@ public class ContactoDaoImpl implements ContactoDao {
 			int i=1;
 			cs.registerOutParameter(i++, Types.BOOLEAN);
 			cs.setInt(i++, contacto.getCodigoEntero().intValue());
-			cs.setString(i++, contacto.getUsuarioModificacion());
+			cs.setString(i++, UtilJdbc.convertirMayuscula(contacto.getUsuarioModificacion()));
 			cs.setString(i++, contacto.getIpModificacion());
 			
 			cs.execute();
@@ -200,7 +200,7 @@ public class ContactoDaoImpl implements ContactoDao {
 			cs.registerOutParameter(i++, Types.BOOLEAN);
 			cs.setInt(i++, contacto.getCodigoEntero().intValue());
 			cs.setInt(i++, contacto.getTipoPersona());
-			cs.setString(i++, contacto.getUsuarioModificacion());
+			cs.setString(i++, UtilJdbc.convertirMayuscula(contacto.getUsuarioModificacion()));
 			cs.setString(i++, contacto.getIpModificacion());
 			
 			cs.execute();
@@ -232,7 +232,7 @@ public class ContactoDaoImpl implements ContactoDao {
 			int i=1;
 			cs.registerOutParameter(i++, Types.BOOLEAN);
 			cs.setInt(i++, proveedor.getCodigoEntero().intValue());
-			cs.setString(i++, proveedor.getUsuarioModificacion());
+			cs.setString(i++, UtilJdbc.convertirMayuscula(proveedor.getUsuarioModificacion()));
 			cs.setString(i++, proveedor.getIpModificacion());
 			
 			cs.execute();
@@ -265,9 +265,9 @@ public class ContactoDaoImpl implements ContactoDao {
 				cs = conexion.prepareCall(sql);
 				int i=1;
 				cs.registerOutParameter(i++, Types.INTEGER);
-				cs.setString(i++, correo.getDireccion());
+				cs.setString(i++, UtilJdbc.convertirMayuscula(correo.getDireccion()));
 				cs.setInt(i++, contacto.getCodigoEntero().intValue());
-				cs.setString(i++, contacto.getUsuarioCreacion());
+				cs.setString(i++, UtilJdbc.convertirMayuscula(contacto.getUsuarioCreacion()));
 				cs.setString(i++, contacto.getIpCreacion());
 				
 				cs.execute();
@@ -302,7 +302,7 @@ public class ContactoDaoImpl implements ContactoDao {
 			int i=1;
 			cs.registerOutParameter(i++, Types.INTEGER);
 			cs.setInt(i++, contacto.getCodigoEntero().intValue());
-			cs.setString(i++, contacto.getUsuarioModificacion());
+			cs.setString(i++, UtilJdbc.convertirMayuscula(contacto.getUsuarioModificacion()));
 			cs.setString(i++, contacto.getIpModificacion());
 			
 			cs.execute();
