@@ -8,12 +8,14 @@ import javax.ejb.Stateless;
 
 import org.apache.commons.lang3.StringUtils;
 
+import pe.com.logistica.bean.negocio.Cliente;
 import pe.com.logistica.bean.negocio.Contacto;
 import pe.com.logistica.bean.negocio.Direccion;
 import pe.com.logistica.bean.negocio.Maestro;
 import pe.com.logistica.bean.negocio.Proveedor;
 import pe.com.logistica.bean.negocio.Telefono;
 import pe.com.logistica.bean.negocio.Ubigeo;
+import pe.com.logistica.negocio.dao.ClienteDao;
 import pe.com.logistica.negocio.dao.ContactoDao;
 import pe.com.logistica.negocio.dao.DireccionDao;
 import pe.com.logistica.negocio.dao.MaestroDao;
@@ -21,6 +23,7 @@ import pe.com.logistica.negocio.dao.PersonaDao;
 import pe.com.logistica.negocio.dao.ProveedorDao;
 import pe.com.logistica.negocio.dao.TelefonoDao;
 import pe.com.logistica.negocio.dao.UbigeoDao;
+import pe.com.logistica.negocio.dao.impl.ClienteDaoImpl;
 import pe.com.logistica.negocio.dao.impl.ContactoDaoImpl;
 import pe.com.logistica.negocio.dao.impl.DireccionDaoImpl;
 import pe.com.logistica.negocio.dao.impl.MaestroDaoImpl;
@@ -84,11 +87,15 @@ public class NegocioSession implements NegocioSessionRemote,
 			Exception {
 		MaestroDao maestroDao = new MaestroDaoImpl();
 
-		Maestro hijoMaestro = new Maestro();
-		hijoMaestro.setCodigoEntero(contacto.getArea().getCodigoEntero());
-		hijoMaestro.setCodigoMaestro(4);
-		hijoMaestro = maestroDao.consultarHijoMaestro(hijoMaestro);
-		contacto.getArea().setNombre(hijoMaestro.getNombre());
+		try {
+			Maestro hijoMaestro = new Maestro();
+			hijoMaestro.setCodigoEntero(contacto.getArea().getCodigoEntero());
+			hijoMaestro.setCodigoMaestro(4);
+			hijoMaestro = maestroDao.consultarHijoMaestro(hijoMaestro);
+			contacto.getArea().setNombre(hijoMaestro.getNombre());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 
 		return contacto;
 	}
@@ -383,5 +390,220 @@ public class NegocioSession implements NegocioSessionRemote,
 		}
 		
 		return listaProveedores;
+	}
+
+	@Override
+	public boolean registrarCliente(Cliente cliente) throws ResultadoCeroDaoException, SQLException, Exception {
+		PersonaDao personaDao = new PersonaDaoImpl();
+		DireccionDao direccionDao = new DireccionDaoImpl();
+		TelefonoDao telefonoDao = new TelefonoDaoImpl();
+		ContactoDao contactoDao = new ContactoDaoImpl();
+
+		Connection conexion = null;
+		try {
+			conexion = UtilConexion.obtenerConexion();
+			conexion.setAutoCommit(false);
+
+			cliente.setTipoPersona(1);
+			int idPersona = personaDao.registrarPersona(cliente, conexion);
+			if (idPersona == 0) {
+				throw new ResultadoCeroDaoException(
+						"No se pudo completar el registro de la persona");
+			}
+			cliente.setCodigoEntero(idPersona);
+			if (cliente.getListaDirecciones() != null) {
+				int idDireccion = 0;
+				for (Direccion direccion : cliente.getListaDirecciones()) {
+					idDireccion = direccionDao.registrarDireccion(direccion,
+							conexion);
+					if (idDireccion == 0) {
+						throw new ResultadoCeroDaoException(
+								"No se pudo completar el registro de la direccion");
+					}
+					direccion.setCodigoEntero(idDireccion);
+					int idTelefono = 0;
+					if (!direccion.getTelefonos().isEmpty()) {
+						for (Telefono telefono : direccion.getTelefonos()) {
+							telefono.getEmpresaOperadora().setCodigoEntero(0);
+							idTelefono = telefonoDao.registrarTelefono(
+									telefono, conexion);
+							if (idTelefono == 0) {
+								throw new ResultadoCeroDaoException(
+										"No se pudo completar el registro del telefono");
+							}
+							telefonoDao.registrarTelefonoDireccion(idTelefono,
+									idDireccion, conexion);
+						}
+					}
+
+					direccionDao.registrarPersonaDireccion(
+							cliente.getCodigoEntero(),
+							cliente.getTipoPersona(), idDireccion, conexion);
+				}
+			}
+
+			if (cliente.getListaContactos() != null) {
+				int idContacto = 0;
+				for (Contacto contacto : cliente.getListaContactos()) {
+					contacto.setTipoPersona(3);
+					idContacto = personaDao
+							.registrarPersona(contacto, conexion);
+					contacto.setCodigoEntero(idContacto);
+					if (!contacto.getListaTelefonos().isEmpty()) {
+						for (Telefono telefono : contacto.getListaTelefonos()) {
+							int idTelefono = telefonoDao.registrarTelefono(
+									telefono, conexion);
+							if (idTelefono == 0) {
+								throw new ResultadoCeroDaoException(
+										"No se pudo completar el registro del telefono");
+							}
+							telefonoDao.registrarTelefonoPersona(idTelefono,
+									idContacto, conexion);
+						}
+					}
+					contactoDao.registrarContactoProveedor(idPersona, contacto,
+							conexion);
+					
+					contactoDao.ingresarCorreoElectronico(contacto, conexion);
+				}
+			}
+
+			conexion.commit();
+			return true;
+		} catch (ResultadoCeroDaoException e) {
+			conexion.rollback();
+			throw new ResultadoCeroDaoException(e.getMensajeError(), e);
+		} catch (SQLException e) {
+			conexion.rollback();
+			throw new SQLException(e);
+		} finally {
+			if (conexion != null) {
+				conexion.close();
+			}
+		}
+	}
+
+	@Override
+	public boolean actualizarCliente(Cliente cliente) throws SQLException, ResultadoCeroDaoException, Exception {
+		PersonaDao personaDao = new PersonaDaoImpl();
+		DireccionDao direccionDao = new DireccionDaoImpl();
+		TelefonoDao telefonoDao = new TelefonoDaoImpl();
+		ContactoDao contactoDao = new ContactoDaoImpl();
+
+		Connection conexion = null;
+		try {
+			conexion = UtilConexion.obtenerConexion();
+			conexion.setAutoCommit(false);
+
+			cliente.setTipoPersona(1);
+
+			Integer idPersona = personaDao.actualizarPersona(cliente, conexion); 
+			if (idPersona == 0) {
+				throw new ResultadoCeroDaoException(
+						"No se pudo completar la actualización de la persona");
+			}
+			direccionDao.eliminarDireccionPersona(cliente, conexion);
+			if (cliente.getListaDirecciones() != null) {
+				int idDireccion = 0;
+				for (Direccion direccion : cliente.getListaDirecciones()) {
+					idDireccion = direccionDao
+							.actualizarDireccion(direccion, conexion);
+					int idTelefono = 0;
+					if (idDireccion == 0) {
+						throw new ResultadoCeroDaoException(
+								"No se pudo completar la actualización de la dirección");
+					}
+					else {
+						direccionDao.eliminarTelefonoDireccion(direccion, conexion);
+						List<Telefono> listTelefonos = direccion.getTelefonos();
+						if (!listTelefonos.isEmpty()){
+							for (Telefono telefono : listTelefonos) {
+								telefono.getEmpresaOperadora().setCodigoEntero(
+										0);
+								idTelefono = telefonoDao.registrarTelefono(
+										telefono, conexion);
+								if (idTelefono == 0) {
+									throw new ResultadoCeroDaoException(
+											"No se pudo completar el registro del teléfono de direccion");
+								}
+								telefonoDao.registrarTelefonoDireccion(
+										idTelefono, idDireccion, conexion);
+							}
+						}
+					}
+					
+					direccionDao.registrarPersonaDireccion(
+							cliente.getCodigoEntero(),
+							cliente.getTipoPersona(), idDireccion, conexion);
+				}
+			}
+
+			contactoDao.eliminarContactoProveedor(cliente, conexion);
+			if (cliente.getListaContactos() != null) {
+				int idContacto = 0;
+				for (Contacto contacto : cliente.getListaContactos()) {
+					contacto.setTipoPersona(3);
+					
+					idContacto = personaDao
+							.registrarPersona(contacto, conexion);
+					contacto.setCodigoEntero(idContacto);
+					
+					if (!contacto.getListaTelefonos().isEmpty()) {
+						for (Telefono telefono : contacto.getListaTelefonos()) {
+							int idTelefono = telefonoDao.registrarTelefono(
+									telefono, conexion);
+							if (idTelefono == 0) {
+								throw new ResultadoCeroDaoException(
+										"No se pudo completar el registro del teléfono de contacto");
+							}
+							telefonoDao.registrarTelefonoPersona(idTelefono,
+									idContacto, conexion);
+						}
+					}
+					contactoDao.registrarContactoProveedor(idPersona, contacto,
+							conexion);
+					
+					contactoDao.eliminarCorreosContacto(contacto, conexion);
+					
+					contactoDao.ingresarCorreoElectronico(contacto, conexion);
+				}
+			}
+
+			conexion.commit();
+			return true;
+		} catch (ResultadoCeroDaoException e) {
+			conexion.rollback();
+			throw new ResultadoCeroDaoException(e.getMensajeError(), e);
+		} catch (SQLException e) {
+			conexion.rollback();
+			throw new SQLException(e);
+		} finally {
+			if (conexion != null) {
+				conexion.close();
+			}
+		}
+	}
+	
+	@Override
+	public List<Cliente> buscarCliente(Cliente cliente)
+			throws SQLException{
+		ClienteDao clienteDao = new ClienteDaoImpl();
+		List<Cliente> listaClientes = clienteDao.consultarPersona(cliente);
+
+		MaestroDao maestroDao = new MaestroDaoImpl();
+
+		for (Cliente cliente2 : listaClientes) {
+			Maestro hijoMaestro = new Maestro();
+			hijoMaestro.setCodigoMaestro(2);
+			hijoMaestro.setCodigoEntero(cliente2.getDireccion().getVia()
+					.getCodigoEntero());
+			hijoMaestro = maestroDao.consultarHijoMaestro(hijoMaestro);
+			cliente2.getDireccion().setDireccion(
+					UtilDatos.obtenerDireccionCompleta(
+							cliente2.getDireccion(), hijoMaestro));
+
+		}
+		
+		return listaClientes;
 	}
 }

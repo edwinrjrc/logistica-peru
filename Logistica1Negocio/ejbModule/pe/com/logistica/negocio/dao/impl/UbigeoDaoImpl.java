@@ -8,7 +8,6 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import pe.com.logistica.bean.negocio.Parametro;
 import pe.com.logistica.bean.negocio.Ubigeo;
 import pe.com.logistica.negocio.dao.UbigeoDao;
 import pe.com.logistica.negocio.util.UtilConexion;

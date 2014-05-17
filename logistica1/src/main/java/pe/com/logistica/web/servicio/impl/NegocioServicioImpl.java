@@ -12,10 +12,12 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.servlet.ServletContext;
 
+import pe.com.logistica.bean.negocio.Cliente;
 import pe.com.logistica.bean.negocio.Contacto;
 import pe.com.logistica.bean.negocio.Direccion;
 import pe.com.logistica.bean.negocio.Proveedor;
 import pe.com.logistica.negocio.ejb.NegocioSessionRemote;
+import pe.com.logistica.negocio.exception.ResultadoCeroDaoException;
 import pe.com.logistica.web.servicio.NegocioServicio;
 
 /**
@@ -96,5 +98,19 @@ public class NegocioServicioImpl implements NegocioServicio {
 		return ejbSession.buscarProveedor(proveedor);
 	}
 
+	@Override
+	public boolean registrarCliente(Cliente cliente) throws ResultadoCeroDaoException, SQLException, Exception {
+		return ejbSession.registrarCliente(cliente);
+	}
+
+	@Override
+	public boolean actualizarCliente(Cliente cliente) throws ResultadoCeroDaoException, SQLException, Exception {
+		return ejbSession.actualizarCliente(cliente);
+	}
+
+	@Override
+	public List<Cliente> buscarCliente(Cliente cliente) throws SQLException{
+		return ejbSession.buscarCliente(cliente);
+	}
 }
 	

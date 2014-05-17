@@ -14,9 +14,8 @@ import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 
 import pe.com.logistica.bean.base.CorreoElectronico;
+import pe.com.logistica.bean.base.Persona;
 import pe.com.logistica.bean.negocio.Contacto;
-import pe.com.logistica.bean.negocio.Proveedor;
-import pe.com.logistica.bean.negocio.Telefono;
 import pe.com.logistica.negocio.dao.ContactoDao;
 import pe.com.logistica.negocio.dao.TelefonoDao;
 import pe.com.logistica.negocio.util.UtilConexion;
@@ -222,7 +221,7 @@ public class ContactoDaoImpl implements ContactoDao {
 	}
 	
 	@Override
-	public boolean eliminarContactoProveedor(Proveedor proveedor, Connection conexion)
+	public boolean eliminarContactoProveedor(Persona proveedor, Connection conexion)
 			throws SQLException {
 		boolean resultado = false;
 		CallableStatement cs = null;

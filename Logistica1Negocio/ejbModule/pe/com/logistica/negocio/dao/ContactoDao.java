@@ -8,8 +8,8 @@ import java.sql.SQLException;
 import java.util.List;
 
 import pe.com.logistica.bean.base.CorreoElectronico;
+import pe.com.logistica.bean.base.Persona;
 import pe.com.logistica.bean.negocio.Contacto;
-import pe.com.logistica.bean.negocio.Proveedor;
 
 /**
  * @author Edwin
@@ -26,9 +26,6 @@ public interface ContactoDao {
 	boolean eliminarContacto(Contacto contacto, Connection conexion)
 			throws SQLException;
 
-	boolean eliminarContactoProveedor(Proveedor proveedor, Connection conexion)
-			throws SQLException;
-
 	List<Contacto> consultarContactoProveedor(int idproveedor)
 			throws SQLException;
 
@@ -39,5 +36,8 @@ public interface ContactoDao {
 			throws SQLException;
 
 	List<CorreoElectronico> consultarCorreos(int idcontacto, Connection conn)
+			throws SQLException;
+
+	boolean eliminarContactoProveedor(Persona proveedor, Connection conexion)
 			throws SQLException;
 }
