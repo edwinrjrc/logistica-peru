@@ -30,7 +30,7 @@ public class DireccionDaoImpl implements DireccionDao {
 	public int registrarDireccion(Direccion direccion, Connection conexion) throws SQLException {
 		int resultado = 0;
 		CallableStatement cs = null;
-		String sql = "{ ? = call negocio.fn_ingresardireccion(?,?,?,?,?,?,?,?,?,?) }";
+		String sql = "{ ? = call negocio.fn_ingresardireccion(?,?,?,?,?,?,?,?,?,?,?,?) }";
 		
 		try {
 			cs = conexion.prepareCall(sql);
@@ -82,6 +82,18 @@ public class DireccionDaoImpl implements DireccionDao {
 			}
 			if (StringUtils.isNotBlank(direccion.getIpCreacion())){
 				cs.setString(i++, direccion.getIpCreacion());
+			}
+			else{
+				cs.setNull(i++, Types.VARCHAR);
+			}
+			if (StringUtils.isNotBlank(direccion.getObservaciones())){
+				cs.setString(i++, UtilJdbc.convertirMayuscula(direccion.getObservaciones()));
+			}
+			else{
+				cs.setNull(i++, Types.VARCHAR);
+			}
+			if (StringUtils.isNotBlank(direccion.getReferencia())){
+				cs.setString(i++, UtilJdbc.convertirMayuscula(direccion.getReferencia()));
 			}
 			else{
 				cs.setNull(i++, Types.VARCHAR);
@@ -171,6 +183,8 @@ public class DireccionDaoImpl implements DireccionDao {
 				direccion.setUsuarioCreacion(UtilJdbc.obtenerCadena(rs, "usuariocreacion"));
 				direccion.setFechaCreacion(UtilJdbc.obtenerFecha(rs, "fechacreacion"));
 				direccion.setIpCreacion(UtilJdbc.obtenerCadena(rs, "ipcreacion"));
+				direccion.setObservaciones(UtilJdbc.obtenerCadena(rs, "observacion"));
+				direccion.setReferencia(UtilJdbc.obtenerCadena(rs, "referencia"));
 				direccion.setTelefonos(telefonoDao.consultarTelefonoDireccion(direccion.getCodigoEntero().intValue(), conn));
 				resultado.add(direccion);
 			}
@@ -209,7 +223,7 @@ public class DireccionDaoImpl implements DireccionDao {
 			throws SQLException {
 		int resultado = 0;
 		CallableStatement cs = null;
-		String sql = "{ ? = call negocio.fn_actualizardireccion(?,?,?,?,?,?,?,?,?,?,?) }";
+		String sql = "{ ? = call negocio.fn_actualizardireccion(?,?,?,?,?,?,?,?,?,?,?,?,?) }";
 		
 		try {
 			cs = conexion.prepareCall(sql);
@@ -218,7 +232,7 @@ public class DireccionDaoImpl implements DireccionDao {
 			cs.setInt(i++, UtilJdbc.obtenerNumero(direccion.getCodigoEntero()));
 			cs.setInt(i++, direccion.getVia().getCodigoEntero());
 			if (StringUtils.isNotBlank(direccion.getNombreVia())){
-				cs.setString(i++, direccion.getNombreVia());
+				cs.setString(i++, UtilJdbc.convertirMayuscula(direccion.getNombreVia()));
 			}
 			else{
 				cs.setNull(i++, Types.VARCHAR);
@@ -262,6 +276,18 @@ public class DireccionDaoImpl implements DireccionDao {
 			}
 			if (StringUtils.isNotBlank(direccion.getIpModificacion())){
 				cs.setString(i++, direccion.getIpModificacion());	
+			}
+			else{
+				cs.setNull(i++, Types.VARCHAR);
+			}
+			if (StringUtils.isNotBlank(direccion.getObservaciones())){
+				cs.setString(i++, UtilJdbc.convertirMayuscula(direccion.getObservaciones()));
+			}
+			else{
+				cs.setNull(i++, Types.VARCHAR);
+			}
+			if (StringUtils.isNotBlank(direccion.getReferencia())){
+				cs.setString(i++, UtilJdbc.convertirMayuscula(direccion.getReferencia()));
 			}
 			else{
 				cs.setNull(i++, Types.VARCHAR);

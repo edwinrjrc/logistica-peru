@@ -4,6 +4,7 @@
 package pe.com.logistica.web.faces;
 
 import java.sql.SQLException;
+import java.util.Enumeration;
 import java.util.List;
 
 import javax.faces.bean.ManagedBean;
@@ -103,18 +104,36 @@ public class UsuarioMBean extends BaseMBean {
 			usuario = seguridadServicio.inicioSesion(usuario);
 			
 			if (usuario.isEncontrado()){
-				HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(true);
+				HttpSession session = (HttpSession) obtenerSession(true);
 				session.setAttribute("usuarioSession", usuario);
 				return "irInicio";
 			}
 			else{
 				String msje = "El usuario y la contraseña son incorrectas";
+				obtenerRequest().setAttribute("msjeError", msje);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		
 		return "";
+	}
+	
+	public String salirSesion(){
+		try {
+			HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(true);
+			Enumeration<String> enuatributos = session.getAttributeNames();
+			
+			while (enuatributos.hasMoreElements()){
+				session.removeAttribute(enuatributos.nextElement());
+			}
+			session.invalidate();
+		} catch (Exception e) {
+			System.out.println("Error saliendo de sesion");
+			e.printStackTrace();
+		}
+		
+		return "irSalirSistema";
 	}
 	/**
 	 * @return the listaUsuarios

@@ -48,6 +48,7 @@
 					<h:inputText id="idNombreMaestro"
 						value="#{maestroMBean.hijoMaestro.nombre}" required="true"
 						requiredMessage="Ingrese el nombre"
+						styleClass="estilocampo1" maxlength="50"
 						rendered="#{maestroMBean.nuevoMaestro or maestroMBean.editarMaestro}" />
 					<rich:message for="idNombreMaestro" showDetail="true"
 						showSummary="false" />
@@ -58,7 +59,8 @@
 					rendered="#{maestroMBean.nuevoMaestro or maestroMBean.editarMaestro}">
 					<h:inputText id="idDescripcion" required="true"
 						requiredMessage="Ingrese la descripcion"
-						value="#{maestroMBean.hijoMaestro.descripcion}" />
+						value="#{maestroMBean.hijoMaestro.descripcion}"
+						styleClass="estilocampo1" maxlength="100" />
 					<rich:message for="idDescripcion" showDetail="true"
 						showSummary="false" />
 				</h:panelGrid>
@@ -68,7 +70,8 @@
 					rendered="#{maestroMBean.nuevoMaestro or maestroMBean.editarMaestro}">
 					<h:inputText id="idAbreviatura" required="true"
 						requiredMessage="Ingrese la Abreviatura"
-						value="#{maestroMBean.hijoMaestro.abreviatura}" />
+						value="#{maestroMBean.hijoMaestro.abreviatura}"
+						styleClass="estilocampo1" maxlength="5" />
 					<rich:message for="idAbreviatura" showDetail="true"
 						showSummary="false" />
 				</h:panelGrid>

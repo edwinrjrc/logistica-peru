@@ -23,4 +23,6 @@ public interface ClienteDao {
 
 	void actualizarPersonaAdicional(Cliente cliente, Connection conexion)
 			throws SQLException;
+
+	List<Cliente> buscarPersona(Persona persona) throws SQLException;
 }

@@ -3,6 +3,9 @@ package pe.com.logistica.bean.base;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
+
+import pe.com.logistica.bean.Util.UtilParse;
 import pe.com.logistica.bean.negocio.Direccion;
 import pe.com.logistica.bean.negocio.DocumentoIdentidad;
 
@@ -198,6 +201,15 @@ public abstract class Persona extends BaseNegocio {
 	 */
 	public void setListaDirecciones(List<Direccion> listaDirecciones) {
 		this.listaDirecciones = listaDirecciones;
+	}
+	
+	public String getNombreCompleto(){
+		String nombreCompleto = "";
+		
+		nombreCompleto = UtilParse.parseCadena(getNombres())+" "+ UtilParse.parseCadena(getApellidoPaterno())+ " "+UtilParse.parseCadena(getApellidoMaterno());
+		nombreCompleto = StringUtils.normalizeSpace(nombreCompleto);
+		
+		return nombreCompleto;
 	}
 
 }
