@@ -27,6 +27,9 @@
     NAME="output4" PATH="/paginas/negocio/cliente/administrar.xhtml"
     TARGET="rules:#paginas#negocio#cliente#administrar.xhtml"
     TITLE="irAdministrarCliente" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="irSalirSistema::#index.xhtml" NAME="output5"
+    PATH="/index.xhtml" TARGET="rules:#index.xhtml"
+    TITLE="irSalirSistema" model-entity="JSFProcessItemOutput"/>
   </PROCESS-ITEM>
  </PROCESS-ITEM>
  <PROCESS-ITEM NAME="rules:#paginas#seguridad#usuario#administrar.xhtml"

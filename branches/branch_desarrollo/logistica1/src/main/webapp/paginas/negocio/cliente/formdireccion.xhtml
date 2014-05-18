@@ -46,7 +46,7 @@
 								<h:outputText value="Nombre Via" />
 								<h:panelGrid border="0" cellpadding="0" cellspacing="0"
 									columns="1">
-									<h:inputText id="idFDInNomVia"
+									<h:inputText id="idFDInNomVia" styleClass="estilocampo1"
 										value="#{clienteMBean.direccion.nombreVia}" maxlength="40" />
 									<rich:message for="idFDInNomVia" showSummary="true"
 										showDetail="false" ajaxRendered="true" />
@@ -65,9 +65,9 @@
 								cellspacing="0" border="0"
 								columnClasses="col1fil1proveedor,col2fil1proveedor,col3fil1proveedor,col4fil1proveedor">
 								<h:outputText value="Manzana" style="width:100px;" />
-								<h:inputText value="#{clienteMBean.direccion.manzana}" />
+								<h:inputText value="#{clienteMBean.direccion.manzana}" styleClass="estilocampo1" />
 								<h:outputText value="Lote" style="width:100px;" />
-								<h:inputText value="#{clienteMBean.direccion.lote}" />
+								<h:inputText value="#{clienteMBean.direccion.lote}" styleClass="estilocampo1" />
 							</h:panelGrid>
 
 							<h:panelGrid columns="4" style="width:100%;" cellpadding="0"
@@ -132,13 +132,13 @@
 								cellspacing="0" border="0">
 								<h:outputText value="Referencia" />
 								<h:inputTextarea value="#{clienteMBean.direccion.referencia}"
-									cols="120" rows="5" />
+									cols="120" rows="5" styleClass="estilocampo1" />
 							</h:panelGrid>
 
 							<h:panelGrid columns="1" style="width:100%;" cellpadding="0"
 								cellspacing="0" border="0">
 								<h:outputText value="Observaciones" />
-								<h:inputTextarea
+								<h:inputTextarea styleClass="estilocampo1"
 									value="#{clienteMBean.direccion.observaciones}" cols="120"
 									rows="5" />
 							</h:panelGrid>

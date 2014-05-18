@@ -42,14 +42,16 @@
 										<f:selectItem itemLabel="-Seleccione-" />
 										<f:selectItems value="#{catalogoMBean.catalogoTipoDocumento}" />
 									</h:selectOneMenu>
-									<rich:message for="idSelTipDoc" ajaxRendered="true" />
+									<rich:message for="idSelTipDoc" ajaxRendered="true"
+										showSummary="true" />
 								</h:panelGrid>
 								<h:outputText value="Numero Documento" />
 								<h:panelGrid border="0" cellpadding="0" cellspacing="0"
 									columns="1">
 									<h:inputText id="idNumDoc" maxlength="12" styleClass="estilocampo1"
 										value="#{proveedorMBean.contacto.documentoIdentidad.numeroDocumento}" />
-									<rich:message for="idNumDoc" />
+									<rich:message for="idNumDoc" ajaxRendered="true"
+										showSummary="true" />
 								</h:panelGrid>
 								<h:outputText value="Apellido Paterno" />
 								<h:panelGrid columns="1" cellpadding="0" cellspacing="0"

@@ -85,7 +85,13 @@ public class ClienteMBean extends BaseMBean {
 	
 	
 	public void buscarCliente(){
-		
+		try {
+			this.setShowModal(false);
+			this.setListaClientes(this.negocioServicio.buscarCliente(getCliente()));
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	public void ejecutarMetodo(ActionEvent e){
@@ -549,14 +555,14 @@ public class ClienteMBean extends BaseMBean {
 	}
 
 
-	public void editarContactoProveedor(Contacto contactoLista) {
+	public void editarContactoCliente(Contacto contactoLista) {
 		this.setNombreFormularioContacto("Editar Contacto");
 		this.setNuevoContacto(false);
 		this.setEditarContacto(true);
 		this.setContacto(contactoLista);
 	}
 
-	public void eliminarContactoProveedor(Contacto contactoLista) {
+	public void eliminarContactoCliente(Contacto contactoLista) {
 		this.getCliente().getListaContactos().remove(contactoLista);
 	}
 	

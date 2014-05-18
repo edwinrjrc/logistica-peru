@@ -25,7 +25,7 @@
 		<rich:toolbar height="20px">
 			<rich:dropDownMenu mode="ajax">
 				<f:facet name="label">
-					<h:outputText value="Inicio" />
+					<h:outputText value="Inicio" style="width:50px;" />
 				</f:facet>
 				<rich:menuGroup label="Seguridad" style="text-align:left">
 					<rich:menuItem action="irAdministrarUsuarios" label="Administrar Usuarios" style="text-align:left" />
@@ -38,6 +38,8 @@
 					<rich:menuItem action="irAdministrarProveedor" label="Administrar Proveedores" style="text-align:left" />
 					<rich:menuItem action="irAdministrarCliente" label="Administrar Clientes" style="text-align:left" />
 				</rich:menuGroup>
+				<rich:menuSeparator id="idmenuseparador" />
+				<rich:menuItem action="#{usuarioMBean.salirSesion}" label="Salir" style="text-align:left" />
 			</rich:dropDownMenu>
 		</rich:toolbar>
 	</h:form>

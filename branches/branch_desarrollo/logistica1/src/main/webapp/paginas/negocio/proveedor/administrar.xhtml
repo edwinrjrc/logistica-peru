@@ -47,7 +47,7 @@
 									<f:selectItems value="#{catalogoMBean.catalogoTipoDocumento}" />
 								</h:selectOneMenu>
 								<h:outputText value="Numero documento" />
-								<h:inputText
+								<h:inputText maxlength="11"
 									value="#{proveedorMBean.proveedor.documentoIdentidad.numeroDocumento}" />
 							</h:panelGrid>
 							<h:panelGrid columns="2" border="0" cellpadding="0"
@@ -55,7 +55,7 @@
 								columnClasses="col1fil2proveedor,col2fil2proveedor">
 								<h:outputText value="Nombres" />
 								<h:inputText value="#{proveedorMBean.proveedor.nombres}"
-									size="100" />
+									size="100" maxlength="100" styleClass="estilocampo1"/>
 							</h:panelGrid>
 						</h:panelGrid>
 						<f:facet name="footer">
@@ -86,7 +86,7 @@
 								<f:facet name="header">
 									<h:outputText value="Nombre" />
 								</f:facet>
-								<h:outputText value="#{row.nombres}" />
+								<h:outputText value="#{row.nombreCompleto}" />
 							</rich:column>
 
 							<rich:column>

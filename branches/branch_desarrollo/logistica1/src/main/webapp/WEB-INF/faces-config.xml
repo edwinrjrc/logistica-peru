@@ -40,6 +40,11 @@
 			<to-view-id>/paginas/negocio/cliente/administrar.xhtml</to-view-id>
 			<redirect />
 		</navigation-case>
+		<navigation-case>
+			<from-outcome>irSalirSistema</from-outcome>
+			<to-view-id>/index.xhtml</to-view-id>
+			<redirect />
+		</navigation-case>
 	</navigation-rule>
 	<navigation-rule>
 		<from-view-id>/paginas/soporte/parametro/administrar.xhtml</from-view-id>
