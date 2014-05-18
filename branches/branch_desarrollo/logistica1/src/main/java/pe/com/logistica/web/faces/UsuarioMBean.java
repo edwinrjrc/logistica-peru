@@ -69,7 +69,6 @@ public class UsuarioMBean extends BaseMBean {
 			this.setEditarUsuario(true);
 			this.setNuevoUsuario(false);
 			this.setUsuario(this.seguridadServicio.consultarUsuario(id));
-			System.out.println("clave ::"+this.getUsuario().getCredencial());
 			this.setReCredencial(this.getUsuario().getCredencial());
 		} catch (SQLException e) {
 			e.printStackTrace();

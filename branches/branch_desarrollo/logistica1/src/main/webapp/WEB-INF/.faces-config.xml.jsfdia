@@ -30,6 +30,9 @@
    <PROCESS-ITEM-OUTPUT ID="irSalirSistema::#index.xhtml" NAME="output5"
     PATH="/index.xhtml" TARGET="rules:#index.xhtml"
     TITLE="irSalirSistema" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="irInicioSistema::#index.xhtml"
+    NAME="output6" PATH="/index.xhtml" TARGET="rules:#index.xhtml"
+    TITLE="irInicioSistema" model-entity="JSFProcessItemOutput"/>
   </PROCESS-ITEM>
  </PROCESS-ITEM>
  <PROCESS-ITEM NAME="rules:#paginas#seguridad#usuario#administrar.xhtml"
