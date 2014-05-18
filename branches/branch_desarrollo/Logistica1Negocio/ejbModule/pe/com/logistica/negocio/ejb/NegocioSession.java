@@ -34,6 +34,7 @@ import pe.com.logistica.negocio.dao.impl.UbigeoDaoImpl;
 import pe.com.logistica.negocio.exception.ResultadoCeroDaoException;
 import pe.com.logistica.negocio.util.UtilConexion;
 import pe.com.logistica.negocio.util.UtilDatos;
+import pe.com.logistica.negocio.util.UtilJdbc;
 
 /**
  * Session Bean implementation class NegocioSession
@@ -366,7 +367,7 @@ public class NegocioSession implements NegocioSessionRemote,
 					+ direccion.getInterior();
 		}
 
-		return direccionCompleta;
+		return UtilJdbc.convertirMayuscula(direccionCompleta);
 	}
 	
 	@Override

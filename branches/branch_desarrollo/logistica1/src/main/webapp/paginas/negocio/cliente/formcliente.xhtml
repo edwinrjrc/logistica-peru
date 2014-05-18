@@ -65,7 +65,7 @@
 									rendered="#{clienteMBean.cliente.documentoIdentidad.tipoDocumento.codigoEntero == 1 or clienteMBean.cliente.documentoIdentidad.tipoDocumento.codigoEntero == 2}">
 									<h:inputText id="idApePatPro"
 										value="#{clienteMBean.cliente.apellidoPaterno}"
-										maxlength="40" />
+										maxlength="40" styleClass="estilocampo1"/>
 									<rich:message for="idApePatPro" showSummary="true"
 										showDetail="false" />
 								</h:panelGrid>
@@ -76,7 +76,7 @@
 									rendered="#{clienteMBean.cliente.documentoIdentidad.tipoDocumento.codigoEntero == 1 or clienteMBean.cliente.documentoIdentidad.tipoDocumento.codigoEntero == 2}">
 									<h:inputText id="idApeMatPro"
 										value="#{clienteMBean.cliente.apellidoMaterno}"
-										maxlength="40" />
+										maxlength="40" styleClass="estilocampo1"/>
 									<rich:message for="idApeMatPro" showSummary="true"
 										showDetail="false" />
 								</h:panelGrid>
@@ -90,7 +90,7 @@
 									columns="1"
 									rendered="#{clienteMBean.cliente.documentoIdentidad.tipoDocumento.codigoEntero == 1 or clienteMBean.cliente.documentoIdentidad.tipoDocumento.codigoEntero == 2}">
 									<h:inputText id="idNomPro"
-										value="#{clienteMBean.cliente.nombres}" maxlength="80" />
+										value="#{clienteMBean.cliente.nombres}" maxlength="80" styleClass="estilocampo1" />
 									<rich:message for="idNomPro" showSummary="true"
 										showDetail="false" />
 								</h:panelGrid>
@@ -100,7 +100,7 @@
 									columns="1"
 									rendered="#{clienteMBean.cliente.documentoIdentidad.tipoDocumento.codigoEntero == 3}">
 									<h:inputText id="idRazSocPro"
-										value="#{clienteMBean.cliente.razonSocial}" maxlength="80" />
+										value="#{clienteMBean.cliente.razonSocial}" maxlength="80" styleClass="estilocampo1" />
 									<rich:message for="idRazSocPro" showSummary="true"
 										showDetail="false" />
 								</h:panelGrid>
