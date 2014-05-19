@@ -12,6 +12,16 @@
 	<h:outputStylesheet name="app.css" library="css" />
 	<h:outputScript library="js" name="script.js" />
 	<h:outputScript library="js" name="validacion.js" />
+	<!-- definición del comportamiento en javascript tras la perdida de sesión -->
+	<a4j:region>
+		<script language="javascript" type="text/javascript">
+            // añadimos una función de callback que será invocada 
+            // cuando se produzca el evento de sesión caducada
+            A4J.AJAX.onError = function(req, status, message){
+			    alert("Custom onError handler "+message);
+			}  
+        </script>
+	</a4j:region>
 </h:head>
 <h:body style="background: #FFFFFF">
 	<table border="0" cellpadding="0" cellspacing="1" bgcolor="#F1F1F1"
@@ -42,4 +52,6 @@
 	</table>
 
 </h:body>
+
+<ui:include src="/resources/modal/perdidasesion.xhtml" />
 </html>
