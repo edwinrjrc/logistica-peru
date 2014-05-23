@@ -34,6 +34,7 @@ public class CatalogoMBean {
 	private List<SelectItem> catalogoVias;
 	private List<SelectItem> catalogoDepartamento;
 	private List<SelectItem> catalogoOperadoraMovil;
+	private List<SelectItem> catalogoEstadoCivil;
 	
 	private SeguridadServicio seguridadServicio;
 	private SoporteServicio soporteServicio;
@@ -201,6 +202,31 @@ public class CatalogoMBean {
 	 */
 	public void setCatalogoOperadoraMovil(List<SelectItem> catalogoOperadoraMovil) {
 		this.catalogoOperadoraMovil = catalogoOperadoraMovil;
+	}
+
+	/**
+	 * @return the catalogoEstadoCivil
+	 */
+	public List<SelectItem> getCatalogoEstadoCivil() {
+		try {
+			int idmaestro = UtilWeb.obtenerEnteroPropertieMaestro("maestroEstadoCivil", "aplicacionDatos");
+			List<BaseVO> lista = soporteServicio.listarCatalogoMaestro(idmaestro);
+			catalogoEstadoCivil = UtilWeb.convertirSelectItem(lista);
+		} catch (SQLException e) {
+			catalogoEstadoCivil = new ArrayList<SelectItem>();
+			e.printStackTrace();
+		} catch (Exception e){
+			catalogoEstadoCivil = new ArrayList<SelectItem>();
+			e.printStackTrace();
+		}
+		return catalogoEstadoCivil;
+	}
+
+	/**
+	 * @param catalogoEstadoCivil the catalogoEstadoCivil to set
+	 */
+	public void setCatalogoEstadoCivil(List<SelectItem> catalogoEstadoCivil) {
+		this.catalogoEstadoCivil = catalogoEstadoCivil;
 	}
 
 }

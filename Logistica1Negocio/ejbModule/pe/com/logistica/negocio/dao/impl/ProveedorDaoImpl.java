@@ -226,7 +226,6 @@ public class ProveedorDaoImpl implements ProveedorDao {
 			cs.setInt(1, idProveedor);
 			rs = cs.executeQuery();
 			
-			resultado = new Proveedor();
 			if (rs.next()){
 				resultado = new Proveedor();
 				resultado.setCodigoEntero(UtilJdbc.obtenerNumero(rs, "id"));

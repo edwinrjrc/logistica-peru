@@ -1,6 +1,7 @@
 package pe.com.logistica.bean.base;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
@@ -29,6 +30,7 @@ public abstract class Persona extends BaseNegocio {
 	private String nombres;
 	private String razonSocial;
 	private List<Direccion> listaDirecciones;
+	private Date fechaNacimiento;
 	
 	private int tipoPersona;
 
@@ -210,6 +212,20 @@ public abstract class Persona extends BaseNegocio {
 		nombreCompleto = StringUtils.normalizeSpace(nombreCompleto);
 		
 		return nombreCompleto;
+	}
+
+	/**
+	 * @return the fechaNacimiento
+	 */
+	public Date getFechaNacimiento() {
+		return fechaNacimiento;
+	}
+
+	/**
+	 * @param fechaNacimiento the fechaNacimiento to set
+	 */
+	public void setFechaNacimiento(Date fechaNacimiento) {
+		this.fechaNacimiento = fechaNacimiento;
 	}
 
 }
