@@ -45,7 +45,7 @@ public class PersonaDaoImpl implements PersonaDao {
 	public int registrarPersona(Persona persona, Connection conexion) throws SQLException {
 		int resultado = 0;
 		CallableStatement cs = null;
-		String sql = "{ ? = call negocio.fn_ingresarpersona(?,?,?,?,?,?,?,?,?,?) }";
+		String sql = "{ ? = call negocio.fn_ingresarpersona(?,?,?,?,?,?,?,?,?,?,?) }";
 		
 		try {
 			cs = conexion.prepareCall(sql);
@@ -70,11 +70,11 @@ public class PersonaDaoImpl implements PersonaDao {
 			else{
 				cs.setNull(i++, Types.VARCHAR);
 			}
-			if (persona.getGenero().getCodigoEntero() != null && !Integer.valueOf(0).equals(persona.getGenero().getCodigoEntero())){
-				cs.setInt(i++, persona.getGenero().getCodigoEntero());
+			if (StringUtils.isNotBlank(persona.getGenero().getCodigoCadena())){
+				cs.setString(i++, persona.getGenero().getCodigoCadena());
 			}
 			else{
-				cs.setNull(i++, Types.INTEGER);
+				cs.setNull(i++, Types.VARCHAR);
 			}
 			if (persona.getEstadoCivil().getCodigoEntero() != null && !Integer.valueOf(0).equals(persona.getEstadoCivil().getCodigoEntero())){
 				cs.setInt(i++, persona.getEstadoCivil().getCodigoEntero());
@@ -106,6 +106,12 @@ public class PersonaDaoImpl implements PersonaDao {
 			else{
 				cs.setNull(i++, Types.VARCHAR);
 			}
+			if (persona.getFechaNacimiento() != null){
+				cs.setDate(i++, UtilJdbc.convertirUtilDateSQLDate(persona.getFechaNacimiento()));
+			}
+			else{
+				cs.setNull(i++, Types.DATE);
+			}
 			
 			cs.execute();
 			resultado = cs.getInt(1);
@@ -132,7 +138,7 @@ public class PersonaDaoImpl implements PersonaDao {
 	public int actualizarPersona(Persona persona, Connection conexion) throws SQLException {
 		int resultado = 0;
 		CallableStatement cs = null;
-		String sql = "{ ? = call negocio.fn_actualizarpersona(?,?,?,?,?,?,?,?,?,?,?) }";
+		String sql = "{ ? = call negocio.fn_actualizarpersona(?,?,?,?,?,?,?,?,?,?,?,?) }";
 		
 		try {
 			cs = conexion.prepareCall(sql);
@@ -158,11 +164,11 @@ public class PersonaDaoImpl implements PersonaDao {
 			else{
 				cs.setNull(i++, Types.VARCHAR);
 			}
-			if (persona.getGenero().getCodigoEntero() != null && !Integer.valueOf(0).equals(persona.getGenero().getCodigoEntero())){
-				cs.setInt(i++, persona.getGenero().getCodigoEntero());
+			if (StringUtils.isNotBlank(persona.getGenero().getCodigoCadena())){
+				cs.setString(i++, persona.getGenero().getCodigoCadena());
 			}
 			else{
-				cs.setNull(i++, Types.INTEGER);
+				cs.setNull(i++, Types.VARCHAR);
 			}
 			if (persona.getEstadoCivil().getCodigoEntero() != null && !Integer.valueOf(0).equals(persona.getEstadoCivil().getCodigoEntero())){
 				cs.setInt(i++, persona.getEstadoCivil().getCodigoEntero());
@@ -193,6 +199,12 @@ public class PersonaDaoImpl implements PersonaDao {
 			}
 			else{
 				cs.setNull(i++, Types.VARCHAR);
+			}
+			if (persona.getFechaNacimiento() != null){
+				cs.setDate(i++, UtilJdbc.convertirUtilDateSQLDate(persona.getFechaNacimiento()));
+			}
+			else{
+				cs.setNull(i++, Types.DATE);
 			}
 			
 			cs.execute();

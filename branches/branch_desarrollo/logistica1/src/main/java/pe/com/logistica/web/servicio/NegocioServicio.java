@@ -44,4 +44,8 @@ public interface NegocioServicio {
 	public boolean actualizarCliente(Cliente cliente) throws ResultadoCeroDaoException, SQLException, Exception;
 
 	List<Cliente> buscarCliente(Cliente cliente) throws SQLException;
+	
+	List<Cliente> listarCliente() throws SQLException;
+
+	public Cliente consultarClienteCompleto(int idcliente) throws SQLException, Exception;
 }

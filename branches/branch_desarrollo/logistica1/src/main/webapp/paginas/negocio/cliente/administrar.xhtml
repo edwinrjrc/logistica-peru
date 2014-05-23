@@ -39,22 +39,22 @@
 							cellspacing="0" style="width:80%;text-align:center;">
 							<h:panelGrid columns="4" border="0" cellpadding="0"
 								cellspacing="0" style="width:100%;text-align:left;"
-								columnClasses="col1fil1cliente,col2fil1cliente,col3fil1cliente,col4fil1cliente">
+								columnClasses="col1fil1formulario,col2fil1formulario,col3fil1formulario,col4fil1formulario">
 								<h:outputText value="Tipo documento" />
 								<h:selectOneMenu
-									value="#{clienteMBean.cliente.documentoIdentidad.tipoDocumento.codigoEntero}">
+									value="#{clienteMBean.clienteBusqueda.documentoIdentidad.tipoDocumento.codigoEntero}">
 									<f:selectItem itemLabel="-Seleccione-" />
 									<f:selectItems value="#{catalogoMBean.catalogoTipoDocumento}" />
 								</h:selectOneMenu>
 								<h:outputText value="Numero documento" />
 								<h:inputText
-									value="#{clienteMBean.cliente.documentoIdentidad.numeroDocumento}" />
+									value="#{clienteMBean.clienteBusqueda.documentoIdentidad.numeroDocumento}" />
 							</h:panelGrid>
 							<h:panelGrid columns="2" border="0" cellpadding="0"
 								cellspacing="0" style="width:100%;text-align:left;"
-								columnClasses="col1fil2cliente,col2fil2cliente">
+								columnClasses="col1fil2formulario,col2fil2formulario">
 								<h:outputText value="Nombres" />
-								<h:inputText value="#{clienteMBean.cliente.nombres}"
+								<h:inputText value="#{clienteMBean.clienteBusqueda.nombres}"
 									size="100" styleClass="estilocampo1"/>
 							</h:panelGrid>
 						</h:panelGrid>

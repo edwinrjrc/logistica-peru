@@ -68,4 +68,8 @@ public class UtilJdbc {
 	public static String convertirMayuscula(String cadena){
 		return StringUtils.upperCase(parseaCadena(cadena));
 	}
+	
+	public static java.sql.Date convertirUtilDateSQLDate(java.util.Date fecha){
+		return new java.sql.Date(fecha.getTime());
+	}
 }

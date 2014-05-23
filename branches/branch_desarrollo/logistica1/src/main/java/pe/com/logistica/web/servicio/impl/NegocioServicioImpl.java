@@ -112,5 +112,16 @@ public class NegocioServicioImpl implements NegocioServicio {
 	public List<Cliente> buscarCliente(Cliente cliente) throws SQLException{
 		return ejbSession.buscarCliente(cliente);
 	}
+
+	@Override
+	public Cliente consultarClienteCompleto(int idcliente) throws SQLException, Exception {
+		return ejbSession.consultarCliente(idcliente);
+	}
+
+	@Override
+	public List<Cliente> listarCliente() throws SQLException {
+		// TODO Auto-generated method stub
+		return ejbSession.listarCliente();
+	}
 }
 	

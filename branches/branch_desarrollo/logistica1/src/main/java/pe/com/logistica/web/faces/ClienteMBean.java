@@ -46,6 +46,7 @@ public class ClienteMBean extends BaseMBean {
 	private List<Cliente> listaClientes;
 	
 	private Cliente cliente;
+	private Cliente clienteBusqueda;
 	private Direccion direccion;
 	private Contacto contacto;
 	
@@ -57,6 +58,7 @@ public class ClienteMBean extends BaseMBean {
 	private boolean editarContacto;
 	private boolean direccionAgregada;
 	private boolean contactoAgregada;
+	private boolean busquedaRealizada;
 
 	private String nombreFormulario;
 	private String nombreFormularioDireccion;
@@ -83,13 +85,21 @@ public class ClienteMBean extends BaseMBean {
 		}
 	}
 	
+	public String inicioAdministrador(){
+		this.setBusquedaRealizada(false);
+		
+		System.out.println("codigo :"+this.getCliente().getDocumentoIdentidad().getTipoDocumento().getCodigoEntero());
+		
+		return "irAdministrarCliente";
+	}
+	
 	
 	public void buscarCliente(){
 		try {
 			this.setShowModal(false);
-			this.setListaClientes(this.negocioServicio.buscarCliente(getCliente()));
+			this.setListaClientes(this.negocioServicio.buscarCliente(getClienteBusqueda()));
+			this.setBusquedaRealizada(true);
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -285,8 +295,15 @@ public class ClienteMBean extends BaseMBean {
 	}
 
 
-	public void consultarCliente(){
-		
+	public void consultarCliente(int idcliente){
+		try {
+			this.setCliente(negocioServicio.consultarClienteCompleto(idcliente));
+			this.setNuevoCliente(false);
+			this.setEditarCliente(true);
+			this.setNombreFormulario("Editar Cliente");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	public void nuevoCliente(){
 		this.setNuevoCliente(true);
@@ -863,19 +880,54 @@ public class ClienteMBean extends BaseMBean {
 	public List<Cliente> getListaClientes() {
 		try {
 			this.setShowModal(false);
-			listaClientes = this.negocioServicio.buscarCliente(getCliente());
+			if (!this.isBusquedaRealizada()){
+				listaClientes = this.negocioServicio.listarCliente();
+			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return listaClientes;
 	}
-
+		
 	/**
 	 * @param listaClientes the listaClientes to set
 	 */
 	public void setListaClientes(List<Cliente> listaClientes) {
 		this.listaClientes = listaClientes;
+	}
+
+
+	/**
+	 * @return the busquedaRealizada
+	 */
+	public boolean isBusquedaRealizada() {
+		return busquedaRealizada;
+	}
+
+
+	/**
+	 * @param busquedaRealizada the busquedaRealizada to set
+	 */
+	public void setBusquedaRealizada(boolean busquedaRealizada) {
+		this.busquedaRealizada = busquedaRealizada;
+	}
+
+	/**
+	 * @return the clienteBusqueda
+	 */
+	public Cliente getClienteBusqueda() {
+		if (clienteBusqueda == null){
+			clienteBusqueda = new Cliente();
+		}
+		return clienteBusqueda;
+	}
+
+	/**
+	 * @param clienteBusqueda the clienteBusqueda to set
+	 */
+	public void setClienteBusqueda(Cliente clienteBusqueda) {
+		this.clienteBusqueda = clienteBusqueda;
 	}
 
 }
