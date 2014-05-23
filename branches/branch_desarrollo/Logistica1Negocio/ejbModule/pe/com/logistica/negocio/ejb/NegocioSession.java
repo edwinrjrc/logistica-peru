@@ -590,10 +590,10 @@ public class NegocioSession implements NegocioSessionRemote,
 	}
 	
 	@Override
-	public List<Cliente> buscarCliente(Cliente cliente)
+	public List<Cliente> listarCliente()
 			throws SQLException{
 		ClienteDao clienteDao = new ClienteDaoImpl();
-		List<Cliente> listaClientes = clienteDao.consultarPersona(cliente);
+		List<Cliente> listaClientes = clienteDao.consultarPersona(null);
 
 		MaestroDao maestroDao = new MaestroDaoImpl();
 
@@ -610,5 +610,48 @@ public class NegocioSession implements NegocioSessionRemote,
 		}
 		
 		return listaClientes;
+	}
+	
+	@Override
+	public List<Cliente> buscarCliente(Cliente cliente)
+			throws SQLException{
+		ClienteDao clienteDao = new ClienteDaoImpl();
+		List<Cliente> listaClientes = clienteDao.buscarPersona(cliente);
+
+		MaestroDao maestroDao = new MaestroDaoImpl();
+
+		for (Cliente cliente2 : listaClientes) {
+			Maestro hijoMaestro = new Maestro();
+			hijoMaestro.setCodigoMaestro(2);
+			hijoMaestro.setCodigoEntero(cliente2.getDireccion().getVia()
+					.getCodigoEntero());
+			hijoMaestro = maestroDao.consultarHijoMaestro(hijoMaestro);
+			cliente2.getDireccion().setDireccion(
+					UtilDatos.obtenerDireccionCompleta(
+							cliente2.getDireccion(), hijoMaestro));
+
+		}
+		
+		return listaClientes;
+	}
+
+	@Override
+	public Cliente consultarCliente(int idcliente) throws SQLException, Exception {
+		DireccionDao direccionDao = new DireccionDaoImpl();
+		ClienteDao clienteDao = new ClienteDaoImpl();
+		ContactoDao contactoDao = new ContactoDaoImpl();
+
+		Cliente cliente = clienteDao.consultarCliente(idcliente);
+		List<Direccion> listaDirecciones = direccionDao
+				.consultarDireccionProveedor(idcliente);
+
+		for (Direccion direccion : listaDirecciones) {
+			direccion.setDireccion(obtenerDireccionCompleta(direccion));
+		}
+		cliente.setListaDirecciones(listaDirecciones);
+		cliente.setListaContactos(contactoDao
+				.consultarContactoProveedor(idcliente));
+
+		return cliente;
 	}
 }

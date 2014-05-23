@@ -36,7 +36,7 @@
 				</rich:menuGroup>
 				<rich:menuGroup label="Negocio" style="text-align:left">
 					<rich:menuItem action="irAdministrarProveedor" label="Administrar Proveedores" style="text-align:left" />
-					<rich:menuItem action="irAdministrarCliente" label="Administrar Clientes" style="text-align:left" />
+					<rich:menuItem action="#{clienteMBean.inicioAdministrador()}" label="Administrar Clientes" style="text-align:left" />
 				</rich:menuGroup>
 				<rich:menuSeparator id="idmenuseparador" />
 				<rich:menuItem action="#{usuarioMBean.salirSesion}" label="Salir" style="text-align:left" />

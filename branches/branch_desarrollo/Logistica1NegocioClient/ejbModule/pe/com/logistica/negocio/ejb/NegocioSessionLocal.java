@@ -34,4 +34,8 @@ public interface NegocioSessionLocal {
 	public boolean actualizarCliente(Cliente cliente) throws SQLException, ResultadoCeroDaoException, Exception ;
 	
 	List<Cliente> buscarCliente(Cliente cliente) throws SQLException;
+	
+	public Cliente consultarCliente(int idcliente) throws SQLException, Exception;
+	
+	List<Cliente> listarCliente() throws SQLException;
 }
