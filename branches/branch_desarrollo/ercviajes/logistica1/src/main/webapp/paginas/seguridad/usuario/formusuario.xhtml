@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich">
+
+	<rich:popupPanel id="idModalformusuario" modal="true" width="600"
+		height="500" style="background-color: #FFFFFF">
+		<f:facet name="header">
+			<h:outputText id="idNomModal"
+				value="#{usuarioMBean.nombreFormulario}" />
+		</f:facet>
+		<f:facet name="controls">
+			<h:outputLink value="#" style="border:0"
+				onclick="#{rich:component('idModalformusuario')}.hide(); return false;">
+				<h:graphicImage height="18" width="18"
+					url="/resources/img/close.png" style="border:0" />
+			</h:outputLink>
+		</f:facet>
+		<h:form id="idFormUsuario">
+			<h:panelGrid id="idGridFormUsuario" columns="2" border="0"
+				cellpadding="1" cellspacing="2" width="100%">
+				<f:facet name="header">
+					<h:panelGrid width="100%" border="0" cellpadding="0"
+						cellspacing="0" style="text-align: left;vertical-align: top; ">
+						<h:outputText id="idNomSubtitulo"
+							value="#{usuarioMBean.nombreFormulario}" style="height: 100px"
+							styleClass="subtitulo2" />
+						<hr width="100%" />
+					</h:panelGrid>
+				</f:facet>
+
+				<h:outputLabel value="Usuario" style="width: 100px; text-align:left" />
+				<h:panelGrid columns="1" border="0" cellpadding="0" cellspacing="0">
+					<h:inputText id="idUsuario" value="#{usuarioMBean.usuario.usuario}"
+						required="true" requiredMessage="Ingrese el usuario" rendered="#{usuarioMBean.nuevoUsuario}" />
+					<h:outputText value="#{usuarioMBean.usuario.usuario}" rendered="#{usuarioMBean.editarUsuario}" />
+					<rich:message for="idUsuario" showDetail="true" showSummary="false" />
+				</h:panelGrid>
+				<h:outputLabel value="Clave" style="width: 100px; text-align:left" rendered="#{usuarioMBean.nuevoUsuario}" />
+				<h:panelGrid columns="1" border="0" cellpadding="0" cellspacing="0" rendered="#{usuarioMBean.nuevoUsuario}">
+					<h:inputSecret id="idClave" required="true"
+						requiredMessage="Ingrese la clave"
+						value="#{usuarioMBean.usuario.credencial}"  />
+					<rich:message for="idClave" showDetail="true" showSummary="false" />
+				</h:panelGrid>
+				<h:outputLabel value="Re Clave" rendered="#{usuarioMBean.nuevoUsuario}"
+					style="width: 100px; text-align:left" />
+				<h:inputSecret value="#{usuarioMBean.reCredencial}" rendered="#{usuarioMBean.nuevoUsuario}" />
+				<h:outputLabel value="Rol" style="width: 100px; text-align:left" />
+				<h:panelGrid columns="1" border="0" cellpadding="0" cellspacing="0">
+					<h:selectOneMenu id="idRol"
+						value="#{usuarioMBean.usuario.rol.codigoEntero}" required="true"
+						requiredMessage="Seleccione el rol">
+						<f:selectItem itemValue="" itemLabel="-Seleccione-" />
+						<f:selectItems value="#{catalogoMBean.catalogoRoles}" />
+					</h:selectOneMenu>
+					<rich:message for="idRol" showDetail="true" showSummary="false" />
+				</h:panelGrid>
+				<h:outputLabel value="Nombres" style="width: 100px; text-align:left" />
+				<h:panelGrid columns="1" border="0" cellpadding="0" cellspacing="0">
+					<h:inputText id="idNombre" value="#{usuarioMBean.usuario.nombres}"
+						required="true" requiredMessage="Ingrese los nombres" />
+					<rich:message for="idNombre" showDetail="true" showSummary="false" />
+				</h:panelGrid>
+				<h:outputLabel value="Apellido Paterno"
+					style="width: 100px; text-align:left" />
+				<h:panelGrid columns="1" border="0" cellpadding="0" cellspacing="0">
+					<h:inputText value="#{usuarioMBean.usuario.apellidoPaterno}"
+						required="true" requiredMessage="Ingrese el apellido paterno" />
+					<rich:message for="idNombre" showDetail="true" showSummary="false" />
+				</h:panelGrid>
+				<h:outputLabel value="Apellido Materno"
+					style="width: 100px; text-align:left" />
+				<h:panelGrid columns="1" border="0" cellpadding="0" cellspacing="0">
+					<h:inputText value="#{usuarioMBean.usuario.apellidoMaterno}"
+						required="true" requiredMessage="Ingrese el apellido materno" />
+					<rich:message for="idNombre" showDetail="true" showSummary="false" />
+				</h:panelGrid>
+				<f:facet name="footer">
+					<h:panelGrid border="0" cellpadding="0" cellspacing="0"
+						width="100%">
+						<table align="center" border="0" cellpadding="0" cellspacing="0"
+							style="height: 40px">
+							<tr>
+								<td><h:panelGrid columns="3" border="0" cellpadding="0"
+										cellspacing="0">
+										<a4j:commandButton value="Grabar"
+											style="height:20px; width:100px"
+											actionListener="#{usuarioMBean.ejecutarMetodo}"
+											render="idFormUsuario,idPanelHidden,idPanelBotones,idModalcorrecto,idModalError" 
+											oncomplete="mostrarModal('idFormUsuario')"/>
+										<a4j:commandButton value="Cancelar"
+											style="height:20px; width:100px"
+											oncomplete="#{rich:component('idModalformusuario')}.hide(); return false;" />
+										<a4j:commandButton onclick="alert('hola3')" id="idBotonModalCorrecto" style="display:none;"
+										oncomplete="#{rich:component('idModalcorrecto')}.show();" />
+										<a4j:commandButton id="idBotonModalError" style="display:none;"
+										oncomplete="#{rich:component('idModalError')}.show();" />
+									</h:panelGrid></td>
+							</tr>
+						</table>
+					</h:panelGrid>
+				</f:facet>
+			</h:panelGrid>
+		</h:form>
+
+	</rich:popupPanel>
+</ui:composition>
