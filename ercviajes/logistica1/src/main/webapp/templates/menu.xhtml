@@ -1,0 +1,47 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:my="http://java.sun.com/jsf/composite/components">
+
+	<h:outputStylesheet>
+        .pic {
+        margin-bottom: -4px;
+        margin-right: 2px;
+        }
+ 
+        .search .rf-ddm-itm-sel {
+        background-color: transparent;
+        background-image:none;
+        border-color: transparent;
+        cursor: default;
+        }
+    </h:outputStylesheet>
+
+	<h:form id="idFormMenu">
+		<rich:toolbar height="20px">
+			<rich:dropDownMenu mode="ajax" style="width:50px;text-align:center;">
+				<f:facet name="label">
+					<h:outputText value="Inicio" style="width:50px;" />
+				</f:facet>
+				<rich:menuGroup label="Seguridad" style="text-align:left">
+					<rich:menuItem action="irAdministrarUsuarios" label="Administrar Usuarios" style="text-align:left" />
+				</rich:menuGroup>
+				<rich:menuGroup label="Soporte" style="text-align:left">
+					<rich:menuItem action="irAdministrarParametros" label="Administrar Parametros" style="text-align:left" />
+					<rich:menuItem action="irAdministrarMaestros" label="Administrar Maestros" style="text-align:left" />
+				</rich:menuGroup>
+				<rich:menuGroup label="Negocio" style="text-align:left">
+					<rich:menuItem action="irAdministrarProveedor" label="Administrar Proveedores" style="text-align:left" />
+					<rich:menuItem action="#{clienteMBean.inicioAdministrador()}" label="Administrar Clientes" style="text-align:left" />
+				</rich:menuGroup>
+				<rich:menuSeparator id="idmenuseparador" />
+				<rich:menuItem action="#{usuarioMBean.salirSesion}" label="Salir" style="text-align:left" />
+			</rich:dropDownMenu>
+		</rich:toolbar>
+	</h:form>
+
+</ui:composition>

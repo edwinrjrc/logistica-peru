@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pageflow:Pageflow xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:pageflow="http://www.sybase.com/suade/pageflow" id="pf13744639699500" configfile="/logistica1/src/main/webapp/WEB-INF/faces-config.xml">
+  <nodes xsi:type="pageflow:PFPage" name="*" x="122" y="178" id="pf13744640279591" referenceLink="//@navigationRule.0/@fromViewId|" outlinks="pf13744640279592 pf13744640279593" path="*"/>
+  <nodes xsi:type="pageflow:PFPage" name="paginas/seguridad/usuario/administrar.xhtml" x="338" y="178" id="pf13744640279594" referenceLink="//@navigationRule.0/@navigationCase.0/@toViewId|" inlinks="pf13744640279592" path="/paginas/seguridad/usuario/administrar.xhtml"/>
+  <nodes xsi:type="pageflow:PFPage" name="paginas/parametro/administrar.xhtml" x="358" y="276" id="pf13744640279595" inlinks="pf13744640279593" path="/paginas/parametro/administrar.xhtml"/>
+  <links id="pf13744640279592" target="pf13744640279594" source="pf13744640279591" outcome="irAdministrarUsuarios" redirect="true"/>
+  <links id="pf13744640279593" target="pf13744640279595" source="pf13744640279591" outcome="irAdministrarParametros" redirect="true"/>
+</pageflow:Pageflow>
