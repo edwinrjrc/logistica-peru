@@ -161,7 +161,7 @@ public class ClienteMBean extends BaseMBean {
 					} else {
 						this.setShowModal(true);
 						this.setTipoModal("2");
-						this.setMensajeModal("No se ha agregado ningun contacto para el proveedor, para proveedor personal natural registre como contacto la mismo persona");
+						this.setMensajeModal("No se ha agregado ningun contacto para el cliente, para cliente personal natural registre como contacto la mismo persona");
 					}
 				} else {
 					this.setShowModal(true);

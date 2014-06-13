@@ -21,5 +21,5 @@ public interface SeguridadServicio {
 	public List<BaseVO> listarRoles();
 	public Usuario consultarUsuario(int id) throws SQLException;
 	boolean actualizarUsuario(Usuario usuario) throws SQLException;
-	Usuario inicioSesion(Usuario usuario) throws SQLException;
+	Usuario inicioSesion(Usuario usuario) throws SQLException, Exception;
 }
