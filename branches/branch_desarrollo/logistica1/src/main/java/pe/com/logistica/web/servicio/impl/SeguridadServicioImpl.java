@@ -67,7 +67,7 @@ public class SeguridadServicioImpl implements SeguridadServicio{
 		return ejbSession.actualizarUsuario(usuario);
 	}
 	@Override
-	public Usuario inicioSesion(Usuario usuario) throws SQLException{
+	public Usuario inicioSesion(Usuario usuario) throws SQLException, Exception{
 		return ejbSession.inicioSesion(usuario);
 	}
 }

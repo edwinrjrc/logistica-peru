@@ -6,6 +6,9 @@ function mostrarModal(idform){
 	var mostrarModal = document.getElementById('idFormHidden:idShowModal').value;
 	var tipoModal = document.getElementById('idFormHidden:idTipoModal').value;
 	
+	alert('MOSTRAR ::'+mostrarModal);
+	alert('tipo ::'+tipoModal);
+	
 	if (tipoModal == "1" && eval(mostrarModal)){
 		document.getElementById(idform+':idBotonModalCorrecto').click();
 	}

@@ -58,7 +58,7 @@ public class SeguridadSession implements SeguridadRemote, SeguridadLocal {
 	}
 	
 	@Override
-	public Usuario inicioSesion(Usuario usuario) throws SQLException {
+	public Usuario inicioSesion(Usuario usuario) throws SQLException, Exception {
 		usuarioDao = new UsuarioDaoImpl();
 		return usuarioDao.inicioSesion2(usuario);
 	}
