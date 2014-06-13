@@ -16,27 +16,42 @@
 				<h:outputText value="Inicio" />
 			</f:facet>
 
-			<h:form>
-				<table border="0" cellpadding="0" cellspacing="0" width="300">
-					<tr>
-						<td><h:outputText value="USUARIO" /></td>
-						<td><h:inputText id="j_username" value="#{usuarioMBean.usuario.usuario}" /></td>
-					</tr>
-					<tr>
-						<td><h:outputText value="CLAVE" /></td>
-						<td><h:inputSecret id="j_password" value="#{usuarioMBean.usuario.credencial}" /></td>
-					</tr>
-					<tr>
-						<td colspan="2" align="center"><h:commandButton value=":: INGRESAR ::"
-								action="#{usuarioMBean.inicioSesion}" /></td>
-					</tr>
-					<tr>
-						<td
+			<h:form id="idforminisesion">
+
+				<h:panelGrid columns="2" border="0" cellpadding="0" cellspacing="0"
+					style="width:100%;" id="idGridIniSesion">
+					<h:outputText value="USUARIO" />
+					<h:inputText id="j_username"
+						value="#{usuarioMBean.usuario.usuario}" />
+					<h:outputText value="CLAVE" />
+					<h:inputSecret id="j_password"
+						value="#{usuarioMBean.usuario.credencial}" />
+
+					<f:facet name="footer">
+						<table border="0" cellpadding="0" cellspacing="0"
+							style="width: 100%">
+							<tr>
+								<td align="center"><a4j:commandButton
+										value=":: INGRESAR ::" action="#{usuarioMBean.inicioSesion}"
+										oncomplete="alert('Hola')" render="idGridIniSesion" /> <a4j:commandButton
+										id="idBotonModalError" style="display:none;" type="button"
+										oncomplete="#{rich:component('idModalError')}.show();" /></td>
+							</tr>
+							<tr><td
 							style="color: red; font-family: sans-serif; font-size: 10pt; font-weight: bold;"><h:outputText
-								value="#{requestScope.msjeError}" /></td>
-					</tr>
-				</table>
+								value="#{requestScope.msjeError}" /></td></tr>
+						</table>
+					</f:facet>
+				</h:panelGrid>
 			</h:form>
+
+			<ui:include src="resources/includes/includemensajeerror.xhtml">
+				<ui:param name="backBean" value="#{usuarioMBean}" />
+			</ui:include>
+			<script type="text/javascript">
+		mostrarModal('idforminisesion');
+		</script>
+
 		</rich:panel>
 	</ui:define>
 </ui:composition>

@@ -27,7 +27,6 @@ import pe.com.logistica.web.servicio.impl.SeguridadServicioImpl;
 @ManagedBean(name="usuarioMBean")
 @SessionScoped()
 public class UsuarioMBean extends BaseMBean {
-
 	
 	private List<Usuario> listaUsuarios;
 	
@@ -88,9 +87,15 @@ public class UsuarioMBean extends BaseMBean {
 		try {
 			if (this.isNuevoUsuario()){
 				seguridadServicio.registrarUsuario(getUsuario());
+				this.setShowModal(true);
+				this.setTipoModal("1");
+				this.setMensajeModal("Usuario registrado Satisfactoriamente");
 			}
 			else if(this.isEditarUsuario()){
 				seguridadServicio.actualizarUsuario(usuario);
+				this.setShowModal(true);
+				this.setTipoModal("1");
+				this.setMensajeModal("Usuario actualizado Satisfactoriamente");
 			}
 		} catch (SQLException e1) {
 			// TODO Auto-generated catch block
@@ -112,7 +117,17 @@ public class UsuarioMBean extends BaseMBean {
 				obtenerRequest().setAttribute("msjeError", msje);
 			}
 		} catch (SQLException e) {
-			e.printStackTrace();
+			this.setTipoModal("2");
+			this.setShowModal(true);
+			this.setMensajeModal(e.getMessage());
+			String msje = "No se pudo iniciar sesion";
+			obtenerRequest().setAttribute("msjeError", msje);
+		} catch (Exception e) {
+			this.setTipoModal("2");
+			this.setShowModal(true);
+			this.setMensajeModal(e.getMessage());
+			String msje = "No se pudo iniciar sesion";
+			obtenerRequest().setAttribute("msjeError", msje);
 		}
 		
 		return "";
@@ -139,7 +154,9 @@ public class UsuarioMBean extends BaseMBean {
 	 */
 	public List<Usuario> getListaUsuarios() {
 		try {
+			this.setShowModal(false);
 			listaUsuarios = seguridadServicio.listarUsuarios();
+			
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
