@@ -39,7 +39,12 @@ public class MaestroMBean extends BaseMBean {
 	 * 
 	 */
 	public MaestroMBean() {
-		// TODO Auto-generated constructor stub
+		try {
+			ServletContext servletContext = (ServletContext)FacesContext.getCurrentInstance().getExternalContext().getContext();
+			soporteServicio = new SoporteServicioImpl(servletContext);
+		} catch (NamingException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public void consultarMaestro(Integer id){
@@ -147,11 +152,9 @@ public class MaestroMBean extends BaseMBean {
 	public List<Maestro> getListaMaestros() {
 		try {
 			
-			ServletContext servletContext = (ServletContext)FacesContext.getCurrentInstance().getExternalContext().getContext();
-			soporteServicio = new SoporteServicioImpl(servletContext);
 			listaMaestros = soporteServicio.listarMaestros();
 			this.setShowModal(false);
-		} catch (NamingException | SQLException e) {
+		} catch (SQLException e) {
 			e.printStackTrace();
 			this.setShowModal(true);
 			this.setTipoModal("2");
