@@ -1,12 +1,14 @@
 package pe.com.logistica.negocio.ejb;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.ejb.Stateless;
 
 import pe.com.logistica.bean.base.BaseVO;
 import pe.com.logistica.bean.negocio.Maestro;
+import pe.com.logistica.bean.negocio.Pais;
 import pe.com.logistica.negocio.dao.CatalogoDao;
 import pe.com.logistica.negocio.dao.MaestroDao;
 import pe.com.logistica.negocio.dao.impl.CatalogoDaoImpl;
@@ -91,5 +93,30 @@ public class SoporteSession implements SoporteRemote, SoporteLocal {
 	public List<BaseVO> listarCatalogoDistrito(String idDepartamento, String idProvincia) throws SQLException {
 		catalogoDao = new CatalogoDaoImpl();
 		return catalogoDao.listaDistrito(idDepartamento, idProvincia);
+	}
+
+	@Override
+	public List<BaseVO> listarContinentes() throws SQLException {
+		maestroDao = new MaestroDaoImpl();
+		List<BaseVO> lista = new ArrayList<BaseVO>();
+		int idmaestro = 10;
+		List<Maestro> listaContinentes = maestroDao.listarHijosMaestro(idmaestro);
+		for (Maestro maestro : listaContinentes) {
+			lista.add((BaseVO)maestro);
+		}
+		
+		return lista;
+	}
+	
+	@Override
+	public List<BaseVO> consultarPaisesContinente(int idcontinente) throws SQLException, Exception{
+		maestroDao = new MaestroDaoImpl();
+		return maestroDao.listarPaises(idcontinente);
+	}
+	
+	@Override
+	public boolean ingresarPais(Pais pais) throws SQLException, Exception{
+		maestroDao = new MaestroDaoImpl();
+		return maestroDao.ingresarPais(pais);
 	}
 }

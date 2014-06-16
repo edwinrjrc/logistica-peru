@@ -7,6 +7,7 @@ import javax.ejb.Local;
 
 import pe.com.logistica.bean.base.BaseVO;
 import pe.com.logistica.bean.negocio.Maestro;
+import pe.com.logistica.bean.negocio.Pais;
 
 @Local
 public interface SoporteLocal {
@@ -32,4 +33,11 @@ public interface SoporteLocal {
 
 	public List<BaseVO> listarCatalogoDistrito(String idDepartamento,
 			String idProvincia) throws SQLException;
+	
+	public List<BaseVO> listarContinentes() throws SQLException;
+
+	List<BaseVO> consultarPaisesContinente(int idcontinente)
+			throws SQLException, Exception;
+	
+	public boolean ingresarPais(Pais pais) throws SQLException, Exception;
 }

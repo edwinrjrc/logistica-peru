@@ -13,7 +13,9 @@ import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 
+import pe.com.logistica.bean.base.BaseVO;
 import pe.com.logistica.bean.negocio.Maestro;
+import pe.com.logistica.bean.negocio.Pais;
 import pe.com.logistica.negocio.dao.MaestroDao;
 import pe.com.logistica.negocio.util.UtilConexion;
 import pe.com.logistica.negocio.util.UtilJdbc;
@@ -430,4 +432,102 @@ public class MaestroDaoImpl implements MaestroDao {
 		}
 		return resultado;
 	}
+
+	@Override
+	public List<BaseVO> listarPaises(int idcontinente) throws SQLException {
+		Connection conn = null;
+		CallableStatement cs = null;
+		ResultSet rs = null;
+		String sql = "{ ? = call soporte.fn_listarpaises(?) }";
+		List<BaseVO> listaPaises = null;
+		try {
+			conn = UtilConexion.obtenerConexion();
+			conn.setAutoCommit(false);
+			cs = conn.prepareCall(sql);
+			cs.registerOutParameter(1, Types.OTHER);
+			cs.setInt(2, idcontinente);
+			cs.execute();
+			rs = (ResultSet)cs.getObject(1);
+
+			listaPaises = new ArrayList<BaseVO>();
+			BaseVO pais = null;
+			while (rs.next()) {
+				pais = new BaseVO();
+				pais.setCodigoEntero(UtilJdbc.obtenerNumero(rs, "id"));
+				pais.setNombre(UtilJdbc.obtenerCadena(rs, "descripcion"));
+				listaPaises.add(pais);
+			}
+		} catch (SQLException e) {
+			throw new SQLException(e);
+		} finally {
+			try {
+				if (rs != null){
+					rs.close();
+				}
+				if (cs != null) {
+					cs.close();
+				}
+				if (conn != null) {
+					conn.close();
+				}
+			} catch (SQLException e) {
+				try {
+					if (conn != null) {
+						conn.close();
+					}
+					throw new SQLException(e);
+				} catch (SQLException e1) {
+					throw new SQLException(e);
+				}
+			}
+		}
+
+		return listaPaises;
+	}
+	
+	@Override
+	public boolean ingresarPais(Pais pais) throws SQLException {
+		boolean resultado = false;
+		Connection conn = null;
+		CallableStatement cs = null;
+		String sql = "{ ? = call soporte.fn_ingresarpais(?,?,?,?) }";
+		try {
+			conn = UtilConexion.obtenerConexion();
+			conn.setAutoCommit(false);
+			cs = conn.prepareCall(sql);
+			int i=1;
+			cs.registerOutParameter(i++, Types.BOOLEAN);
+			cs.setString(i++, UtilJdbc.convertirMayuscula(pais.getDescripcion()));
+			cs.setInt(i++, pais.getContinente().getCodigoEntero().intValue());
+			cs.setString(i++, pais.getUsuarioCreacion());
+			cs.setString(i++, pais.getIpCreacion());
+			cs.execute();
+			
+			resultado = cs.getBoolean(1);
+		} catch (SQLException e) {
+			resultado = false;
+			throw new SQLException(e);
+		} finally {
+			try {
+				if (cs != null) {
+					cs.close();
+				}
+				if (conn != null) {
+					conn.close();
+				}
+			} catch (SQLException e) {
+				try {
+					if (conn != null) {
+						conn.close();
+					}
+					throw new SQLException(e);
+				} catch (SQLException e1) {
+					throw new SQLException(e);
+				}
+			}
+		}
+
+		return resultado;
+	}
+
 }
