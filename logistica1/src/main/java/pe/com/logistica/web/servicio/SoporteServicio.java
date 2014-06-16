@@ -8,6 +8,7 @@ import java.util.List;
 
 import pe.com.logistica.bean.base.BaseVO;
 import pe.com.logistica.bean.negocio.Maestro;
+import pe.com.logistica.bean.negocio.Pais;
 
 /**
  * @author Edwin
@@ -36,4 +37,11 @@ public interface SoporteServicio {
 	public List<BaseVO> listarCatalogoProvincia(String idProvincia) throws SQLException;
 	
 	public List<BaseVO> listarCatalogoDistrito(String idDepartamento, String idProvincia) throws SQLException;
+	
+	public List<BaseVO> listarContinentes() throws SQLException;
+
+	boolean ingresarPais(Pais pais) throws SQLException, Exception;
+
+	List<BaseVO> consultarPaises(int idcontinente) throws SQLException,
+			Exception;
 }

@@ -6,7 +6,9 @@ package pe.com.logistica.negocio.dao;
 import java.sql.SQLException;
 import java.util.List;
 
+import pe.com.logistica.bean.base.BaseVO;
 import pe.com.logistica.bean.negocio.Maestro;
+import pe.com.logistica.bean.negocio.Pais;
 
 /**
  * @author Edwin
@@ -27,4 +29,9 @@ public interface MaestroDao {
 	public Maestro consultarHijoMaestro(Maestro hijoMaestro) throws SQLException;
 
 	public boolean actualizarMaestro(Maestro maestro) throws SQLException;
+	
+	public List<BaseVO> listarPaises(int idcontinente) throws SQLException;
+
+	boolean ingresarPais(Pais pais) throws SQLException;
+	
 }

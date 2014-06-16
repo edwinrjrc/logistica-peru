@@ -14,6 +14,7 @@ import javax.servlet.ServletContext;
 
 import pe.com.logistica.bean.base.BaseVO;
 import pe.com.logistica.bean.negocio.Maestro;
+import pe.com.logistica.bean.negocio.Pais;
 import pe.com.logistica.negocio.ejb.SoporteRemote;
 import pe.com.logistica.web.servicio.SoporteServicio;
 
@@ -113,5 +114,20 @@ public class SoporteServicioImpl implements SoporteServicio {
 	public List<BaseVO> listarCatalogoDistrito(String idDepartamento,
 			String idProvincia) throws SQLException {
 		return ejbSession.listarCatalogoDistrito(idDepartamento, idProvincia);
+	}
+
+	@Override
+	public List<BaseVO> listarContinentes() throws SQLException {
+		return ejbSession.listarContinentes();
+	}
+	
+	@Override
+	public List<BaseVO> consultarPaises(int idcontinente) throws SQLException, Exception {
+		return ejbSession.consultarPaisesContinente(idcontinente);
+	}
+	
+	@Override
+	public boolean ingresarPais(Pais pais) throws SQLException, Exception {
+		return ejbSession.ingresarPais(pais);
 	}
 }
