@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?><project-modules id="moduleCoreId" project-version="1.5.0">
+    <wb-module deploy-name="Logistica1NegocioEAR">
+        <wb-resource deploy-path="/" source-path="/EarContent" tag="defaultRootSource"/>
+        <dependent-module archiveName="Logistica1Negocio.jar" deploy-path="/" handle="module:/resource/Logistica1Negocio/Logistica1Negocio">
+            <dependent-object/>
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="Logistica1NegocioClient.jar" deploy-path="/" handle="module:/resource/Logistica1NegocioClient/Logistica1NegocioClient">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="Logistica1Lib.jar" deploy-path="/lib" handle="module:/resource/Logistica1Lib/Logistica1Lib">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+    </wb-module>
+</project-modules>
