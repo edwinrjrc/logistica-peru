@@ -88,8 +88,6 @@ public class ClienteMBean extends BaseMBean {
 	public String inicioAdministrador(){
 		this.setBusquedaRealizada(false);
 		
-		System.out.println("codigo :"+this.getCliente().getDocumentoIdentidad().getTipoDocumento().getCodigoEntero());
-		
 		return "irAdministrarCliente";
 	}
 	

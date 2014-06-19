@@ -31,6 +31,9 @@ public class Pais extends BaseNegocio {
 	 * @return the continente
 	 */
 	public BaseVO getContinente() {
+		if (continente == null){
+			continente = new BaseVO();
+		}
 		return continente;
 	}
 

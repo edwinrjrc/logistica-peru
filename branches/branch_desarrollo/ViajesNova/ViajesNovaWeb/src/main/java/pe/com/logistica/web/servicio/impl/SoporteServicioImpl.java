@@ -13,6 +13,7 @@ import javax.naming.NamingException;
 import javax.servlet.ServletContext;
 
 import pe.com.logistica.bean.base.BaseVO;
+import pe.com.logistica.bean.negocio.Destino;
 import pe.com.logistica.bean.negocio.Maestro;
 import pe.com.logistica.bean.negocio.Pais;
 import pe.com.logistica.negocio.ejb.SoporteRemote;
@@ -129,5 +130,23 @@ public class SoporteServicioImpl implements SoporteServicio {
 	@Override
 	public boolean ingresarPais(Pais pais) throws SQLException, Exception {
 		return ejbSession.ingresarPais(pais);
+	}
+
+	@Override
+	public boolean ingresarDestino(Destino destino) throws SQLException,
+			Exception {
+		return ejbSession.ingresarDestino(destino);
+	}
+
+	@Override
+	public boolean actualizarDestino(Destino destino) throws SQLException,
+			Exception {
+		return ejbSession.actualizarDestino(destino);
+	}
+	
+	@Override
+	public List<Destino> listarDestinos() throws SQLException,
+			Exception {
+		return ejbSession.listarDestinos();
 	}
 }

@@ -42,11 +42,17 @@
 						label="Administrar Proveedores" style="text-align:left" />
 					<rich:menuItem action="#{clienteMBean.inicioAdministrador()}"
 						label="Administrar Clientes" style="text-align:left" />
+					<rich:menuItem action="#{clienteMBean.inicioAdministrador()}"
+						label="Programa Novios" style="text-align:left">
+						<f:facet name="icon">
+						<h:graphicImage value="#{facesContext.externalContext.requestContextPath}/../resources/img/novioicon.gif" />
+						</f:facet>
+					</rich:menuItem>
 				</rich:menuGroup>
 				<rich:menuGroup label="Destinos" style="text-align:left">
 					<rich:menuItem action="irAdministrarPaises"
 						label="Administrar Paises" style="text-align:left" />
-					<rich:menuItem action="irAdministrarDestinos"
+					<rich:menuItem action="irAdministrarDestino"
 						label="Administrar Destinos" style="text-align:left" />
 				</rich:menuGroup>
 				<rich:menuSeparator id="idmenuseparador" />

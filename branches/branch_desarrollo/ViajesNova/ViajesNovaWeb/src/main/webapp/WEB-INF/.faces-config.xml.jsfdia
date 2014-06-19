@@ -39,6 +39,11 @@
     PATH="/paginas/soporte/destino/pais/listacontinentes.xhtml"
     TARGET="rules:#paginas#soporte#destino#pais#listacontinentes.xhtml"
     TITLE="irAdministrarPaises" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT
+    ID="irAdministrarDestino::#paginas#soporte#destino#administrar.xhtml"
+    NAME="output8" PATH="/paginas/soporte/destino/administrar.xhtml"
+    TARGET="rules:#paginas#soporte#destino#administrar.xhtml"
+    TITLE="irAdministrarDestino" model-entity="JSFProcessItemOutput"/>
   </PROCESS-ITEM>
  </PROCESS-ITEM>
  <PROCESS-ITEM NAME="rules:#paginas#seguridad#usuario#administrar.xhtml"
@@ -103,4 +108,7 @@
   NAME="rules:#paginas#soporte#destino#pais#administrar.xhtml"
   PATH="/paginas/soporte/destino/pais/administrar.xhtml"
   SHAPE="1048,408,50,25" model-entity="JSFProcessGroup" persistent="true"/>
+ <PROCESS-ITEM NAME="rules:#paginas#soporte#destino#administrar.xhtml"
+  PATH="/paginas/soporte/destino/administrar.xhtml" SHAPE="539,68,0,0"
+  model-entity="JSFProcessGroup" persistent="true"/>
 </PROCESS>
