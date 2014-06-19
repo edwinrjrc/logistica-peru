@@ -6,6 +6,7 @@ import java.util.List;
 import javax.ejb.Remote;
 
 import pe.com.logistica.bean.base.BaseVO;
+import pe.com.logistica.bean.negocio.Destino;
 import pe.com.logistica.bean.negocio.Maestro;
 import pe.com.logistica.bean.negocio.Pais;
 
@@ -41,4 +42,10 @@ public interface SoporteRemote {
 	public List<BaseVO> consultarPaisesContinente(int idcontinente) throws SQLException, Exception;
 
 	boolean ingresarPais(Pais pais) throws SQLException, Exception;
+	
+	public boolean ingresarDestino(Destino destino) throws SQLException, Exception;
+	
+	public boolean actualizarDestino(Destino destino) throws SQLException, Exception;
+	
+	List<Destino> listarDestinos() throws SQLException, Exception;
 }

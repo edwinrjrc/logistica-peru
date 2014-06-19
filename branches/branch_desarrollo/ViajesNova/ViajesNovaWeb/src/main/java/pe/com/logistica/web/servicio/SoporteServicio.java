@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 import pe.com.logistica.bean.base.BaseVO;
+import pe.com.logistica.bean.negocio.Destino;
 import pe.com.logistica.bean.negocio.Maestro;
 import pe.com.logistica.bean.negocio.Pais;
 
@@ -44,4 +45,10 @@ public interface SoporteServicio {
 
 	List<BaseVO> consultarPaises(int idcontinente) throws SQLException,
 			Exception;
+	
+	boolean ingresarDestino (Destino destino) throws SQLException, Exception;
+	
+	boolean actualizarDestino (Destino destino) throws SQLException, Exception;
+
+	List<Destino> listarDestinos() throws SQLException, Exception;
 }

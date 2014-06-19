@@ -11,10 +11,12 @@ import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.naming.NamingException;
 import javax.servlet.ServletContext;
+import javax.servlet.http.HttpSession;
 
 import pe.com.logistica.bean.base.BaseVO;
 import pe.com.logistica.bean.negocio.Maestro;
 import pe.com.logistica.bean.negocio.Pais;
+import pe.com.logistica.bean.negocio.Usuario;
 import pe.com.logistica.web.servicio.SoporteServicio;
 import pe.com.logistica.web.servicio.impl.SoporteServicioImpl;
 
@@ -75,6 +77,13 @@ public class PaisMBean extends BaseMBean {
 	public void ejecutarMetodo(){
 		try {
 			if (this.isNuevoPais()){
+				HttpSession session = obtenerSession(false);
+				Usuario usuario = (Usuario) session
+						.getAttribute("usuarioSession");
+				getPais().setUsuarioCreacion(
+						usuario.getUsuario());
+				getPais().setIpCreacion(
+						obtenerRequest().getRemoteAddr());
 				this.getPais().setContinente(getContinente());
 				this.soporteServicio.ingresarPais(getPais());
 				this.setShowModal(true);
