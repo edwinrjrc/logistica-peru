@@ -1,0 +1,81 @@
+.titleCell {
+    text-align: right;
+}
+
+.header {
+    font-size: larger;
+    padding: 8px;
+}
+
+.rf-pp-hdr-cntrls a {
+    padding: 2px 2px 2px 8px;
+}
+
+.rf-msgs-inf {
+    color: green;
+}
+
+.update {
+   margin-top : 10px;
+   padding: 8px 0px;
+}
+
+.update div {
+   color: #006400;
+   padding: 6px 4px;
+}
+.subtitulo{
+	font-family: sans-serif;
+	font-size: 14pt;
+	color: #5885BE;
+	
+}
+.subtitulo2{
+	font-family: sans-serif;
+	font-size: 12pt;
+	color: #5885BE;
+}
+.col1fil1proveedor{
+	width: 25%;
+}
+.col2fil1proveedor{
+	width: 25%;
+}
+.col3fil1proveedor{
+	width: 25%;
+}
+.col4fil1proveedor{
+	width: 25%;
+}
+.col1fil2proveedor{
+	width: 25%;
+}
+.col2fil2proveedor{
+	width: 75%;
+}
+#estilos general
+.col1fil1formulario{
+	width: 25%;
+}
+.col2fil1formulario{
+	width: 25%;
+}
+.col3fil1formulario{
+	width: 25%;
+}
+.col4fil1formulario{
+	width: 25%;
+}
+.col1fil2formulario{
+	width: 25%;
+}
+.col2fil2formulario{
+	width: 75%;
+}
+.estiloBoton1{
+	height: 20px; 
+	width: 150px";
+}
+.estilocampo1{
+	text-transform: uppercase;
+}
