@@ -228,8 +228,8 @@ public class MaestroDaoImpl implements MaestroDao {
 			cs = conn.prepareCall(sql);
 			int i = 1;
 			cs.registerOutParameter(i++, Types.BOOLEAN);
-			cs.setString(i++, maestro.getNombre());
-			cs.setString(i++, maestro.getDescripcion());
+			cs.setString(i++, UtilJdbc.convertirMayuscula(maestro.getNombre()));
+			cs.setString(i++, UtilJdbc.convertirMayuscula(maestro.getDescripcion()));
 
 			cs.execute();
 			
@@ -457,6 +457,8 @@ public class MaestroDaoImpl implements MaestroDao {
 				pais.setNombre(UtilJdbc.obtenerCadena(rs, "descripcion"));
 				listaPaises.add(pais);
 			}
+			
+			conn.commit();
 		} catch (SQLException e) {
 			throw new SQLException(e);
 		} finally {
@@ -499,8 +501,8 @@ public class MaestroDaoImpl implements MaestroDao {
 			cs.registerOutParameter(i++, Types.BOOLEAN);
 			cs.setString(i++, UtilJdbc.convertirMayuscula(pais.getDescripcion()));
 			cs.setInt(i++, pais.getContinente().getCodigoEntero().intValue());
-			cs.setString(i++, pais.getUsuarioCreacion());
-			cs.setString(i++, pais.getIpCreacion());
+			cs.setString(i++, UtilJdbc.convertirMayuscula(pais.getUsuarioCreacion()));
+			cs.setString(i++, UtilJdbc.convertirMayuscula(pais.getIpCreacion()));
 			cs.execute();
 			
 			resultado = cs.getBoolean(1);

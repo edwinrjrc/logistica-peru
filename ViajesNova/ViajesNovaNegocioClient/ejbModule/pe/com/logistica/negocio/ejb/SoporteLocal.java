@@ -6,6 +6,7 @@ import java.util.List;
 import javax.ejb.Local;
 
 import pe.com.logistica.bean.base.BaseVO;
+import pe.com.logistica.bean.negocio.Destino;
 import pe.com.logistica.bean.negocio.Maestro;
 import pe.com.logistica.bean.negocio.Pais;
 
@@ -40,4 +41,10 @@ public interface SoporteLocal {
 			throws SQLException, Exception;
 	
 	public boolean ingresarPais(Pais pais) throws SQLException, Exception;
+	
+	public boolean ingresarDestino(Destino destino) throws SQLException, Exception;
+	
+	public boolean actualizarDestino(Destino destino) throws SQLException, Exception;
+
+	List<Destino> listarDestinos() throws SQLException, Exception;
 }

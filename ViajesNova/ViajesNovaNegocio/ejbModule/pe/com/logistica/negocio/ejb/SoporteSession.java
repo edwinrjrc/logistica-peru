@@ -7,11 +7,14 @@ import java.util.List;
 import javax.ejb.Stateless;
 
 import pe.com.logistica.bean.base.BaseVO;
+import pe.com.logistica.bean.negocio.Destino;
 import pe.com.logistica.bean.negocio.Maestro;
 import pe.com.logistica.bean.negocio.Pais;
 import pe.com.logistica.negocio.dao.CatalogoDao;
+import pe.com.logistica.negocio.dao.DestinoDao;
 import pe.com.logistica.negocio.dao.MaestroDao;
 import pe.com.logistica.negocio.dao.impl.CatalogoDaoImpl;
+import pe.com.logistica.negocio.dao.impl.DestinoDaoImpl;
 import pe.com.logistica.negocio.dao.impl.MaestroDaoImpl;
 
 /**
@@ -22,6 +25,7 @@ public class SoporteSession implements SoporteRemote, SoporteLocal {
 
 	MaestroDao maestroDao = null;
 	CatalogoDao catalogoDao = null;
+	DestinoDao destinoDao = null;
     /**
      * Default constructor. 
      */
@@ -118,5 +122,26 @@ public class SoporteSession implements SoporteRemote, SoporteLocal {
 	public boolean ingresarPais(Pais pais) throws SQLException, Exception{
 		maestroDao = new MaestroDaoImpl();
 		return maestroDao.ingresarPais(pais);
+	}
+
+	@Override
+	public boolean ingresarDestino(Destino destino) throws SQLException,
+			Exception {
+		destinoDao = new DestinoDaoImpl();
+		return destinoDao.ingresarDestino(destino);
+	}
+
+	@Override
+	public boolean actualizarDestino(Destino destino) throws SQLException,
+			Exception {
+		destinoDao = new DestinoDaoImpl();
+		return destinoDao.actualizarDestino(destino);
+	}
+	
+	@Override
+	public List<Destino> listarDestinos() throws SQLException,
+			Exception {
+		destinoDao = new DestinoDaoImpl();
+		return destinoDao.listarDestinos();
 	}
 }
