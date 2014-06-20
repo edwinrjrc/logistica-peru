@@ -8,6 +8,7 @@ import java.util.List;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 
+import pe.com.logistica.bean.negocio.Cliente;
 import pe.com.logistica.bean.negocio.ProgramaNovios;
 
 /**
@@ -20,6 +21,7 @@ public class NoviosMBean extends BaseMBean {
 
 	
 	private ProgramaNovios programaNovios;
+	private Cliente clienteBusqueda;
 	
 	private List<ProgramaNovios> listadoNovios;
 	/**
@@ -60,6 +62,22 @@ public class NoviosMBean extends BaseMBean {
 	 */
 	public void setListadoNovios(List<ProgramaNovios> listadoNovios) {
 		this.listadoNovios = listadoNovios;
+	}
+
+
+	/**
+	 * @return the clienteBusqueda
+	 */
+	public Cliente getClienteBusqueda() {
+		return clienteBusqueda;
+	}
+
+
+	/**
+	 * @param clienteBusqueda the clienteBusqueda to set
+	 */
+	public void setClienteBusqueda(Cliente clienteBusqueda) {
+		this.clienteBusqueda = clienteBusqueda;
 	}
 
 }
