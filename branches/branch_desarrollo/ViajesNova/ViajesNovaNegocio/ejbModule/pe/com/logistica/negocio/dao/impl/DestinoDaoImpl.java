@@ -40,7 +40,6 @@ public class DestinoDaoImpl implements DestinoDao {
 		String sql = "{ ? = call soporte.fn_ingresardestino(?,?,?,?,?,?,?) }";
 		try {
 			conn = UtilConexion.obtenerConexion();
-			conn.setAutoCommit(false);
 			cs = conn.prepareCall(sql);
 			int i=1;
 			cs.registerOutParameter(i++, Types.BOOLEAN);
@@ -91,7 +90,6 @@ public class DestinoDaoImpl implements DestinoDao {
 		String sql = "{ ? = call soporte.fn_actualizardestino(?,?,?,?,?,?,?) }";
 		try {
 			conn = UtilConexion.obtenerConexion();
-			conn.setAutoCommit(false);
 			cs = conn.prepareCall(sql);
 			int i=1;
 			cs.registerOutParameter(i++, Types.BOOLEAN);
