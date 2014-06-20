@@ -9,6 +9,7 @@ import java.util.List;
 import pe.com.logistica.bean.negocio.Cliente;
 import pe.com.logistica.bean.negocio.Contacto;
 import pe.com.logistica.bean.negocio.Direccion;
+import pe.com.logistica.bean.negocio.ProgramaNovios;
 import pe.com.logistica.bean.negocio.Proveedor;
 import pe.com.logistica.negocio.exception.ResultadoCeroDaoException;
 
@@ -48,4 +49,6 @@ public interface NegocioServicio {
 	List<Cliente> listarCliente() throws SQLException;
 
 	public Cliente consultarClienteCompleto(int idcliente) throws SQLException, Exception;
+	
+	public String registrarNovios(ProgramaNovios programaNovios) throws SQLException, Exception; 
 }

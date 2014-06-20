@@ -15,6 +15,7 @@ import javax.servlet.ServletContext;
 import pe.com.logistica.bean.negocio.Cliente;
 import pe.com.logistica.bean.negocio.Contacto;
 import pe.com.logistica.bean.negocio.Direccion;
+import pe.com.logistica.bean.negocio.ProgramaNovios;
 import pe.com.logistica.bean.negocio.Proveedor;
 import pe.com.logistica.negocio.ejb.NegocioSessionRemote;
 import pe.com.logistica.negocio.exception.ResultadoCeroDaoException;
@@ -47,10 +48,8 @@ public class NegocioServicioImpl implements NegocioServicio {
 			final String ejbRemoto = NegocioSessionRemote.class.getName();
 			lookup = "java:jboss/exported/"+context.getInitParameter("appNegocioNameEar")+"/"+context.getInitParameter("appNegocioName")+"/"+ejbBeanName+"!"+ejbRemoto;
 			
-			System.out.println("ejb lookup:"+lookup);
 			ejbSession = (NegocioSessionRemote) ctx.lookup(lookup);
 		} catch (NamingException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -94,7 +93,6 @@ public class NegocioServicioImpl implements NegocioServicio {
 	public List<pe.com.logistica.bean.negocio.Proveedor> buscarProveedor(
 			Proveedor proveedor)
 			throws SQLException, Exception {
-		// TODO Auto-generated method stub
 		return ejbSession.buscarProveedor(proveedor);
 	}
 
@@ -120,8 +118,13 @@ public class NegocioServicioImpl implements NegocioServicio {
 
 	@Override
 	public List<Cliente> listarCliente() throws SQLException {
-		// TODO Auto-generated method stub
 		return ejbSession.listarCliente();
+	}
+
+	@Override
+	public String registrarNovios(ProgramaNovios programaNovios)
+			throws SQLException, Exception {
+		return ejbSession.registrarNovios(programaNovios);
 	}
 }
 	
