@@ -24,6 +24,8 @@
 	<h:form id="idFormMenu">
 		<rich:toolbar height="20px">
 			<rich:dropDownMenu mode="ajax" style="width:50px;text-align:center;">
+				<rich:menuItem action="irInicio2Sistema"
+					label="Inicio Sistema" style="text-align:left" />
 				<f:facet name="label">
 					<h:outputText value="Inicio" style="width:50px;" />
 				</f:facet>
@@ -45,9 +47,12 @@
 					<rich:menuItem action="#{clienteMBean.inicioAdministrador()}"
 						label="Programa Novios" style="text-align:left">
 						<f:facet name="icon">
-						<h:graphicImage value="#{facesContext.externalContext.requestContextPath}/../resources/img/novioicon.gif" />
+							<h:graphicImage
+								value="#{facesContext.externalContext.requestContextPath}/../resources/img/novioicon.gif" />
 						</f:facet>
 					</rich:menuItem>
+					<rich:menuItem
+						label="Registro Servicios" style="text-align:left" />
 				</rich:menuGroup>
 				<rich:menuGroup label="Destinos" style="text-align:left">
 					<rich:menuItem action="irAdministrarPaises"
