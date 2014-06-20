@@ -25,6 +25,7 @@ public class ProgramaNovios extends BaseNegocio {
 	private Destino destino;
 	private String codigoNovios;
 	private Date fechaBoda;
+	private Date fechaViaje;
 	private BaseVO moneda;
 	private BigDecimal cuotaInicial;
 	private int nroDias;
@@ -202,6 +203,20 @@ public class ProgramaNovios extends BaseNegocio {
 	 */
 	public void setObservaciones(String observaciones) {
 		this.observaciones = observaciones;
+	}
+
+	/**
+	 * @return the fechaViaje
+	 */
+	public Date getFechaViaje() {
+		return fechaViaje;
+	}
+
+	/**
+	 * @param fechaViaje the fechaViaje to set
+	 */
+	public void setFechaViaje(Date fechaViaje) {
+		this.fechaViaje = fechaViaje;
 	}
 
 }
