@@ -43,7 +43,6 @@ public class ParametroServicioImpl implements ParametroServicio {
 		final String ejbRemoto = ParametroRemote.class.getName();
 		lookup = "java:jboss/exported/"+context.getInitParameter("appNegocioNameEar")+"/"+context.getInitParameter("appNegocioName")+"/"+ejbBeanName+"!"+ejbRemoto;
 		
-		System.out.println("ejb lookup:"+lookup);
 		ejbSession = (ParametroRemote) ctx.lookup(lookup);
 		
 	}
