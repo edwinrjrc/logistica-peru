@@ -12,6 +12,7 @@ import pe.com.logistica.bean.negocio.Cliente;
 import pe.com.logistica.bean.negocio.Contacto;
 import pe.com.logistica.bean.negocio.Direccion;
 import pe.com.logistica.bean.negocio.Maestro;
+import pe.com.logistica.bean.negocio.ProgramaNovios;
 import pe.com.logistica.bean.negocio.Proveedor;
 import pe.com.logistica.bean.negocio.Telefono;
 import pe.com.logistica.bean.negocio.Ubigeo;
@@ -21,6 +22,7 @@ import pe.com.logistica.negocio.dao.DireccionDao;
 import pe.com.logistica.negocio.dao.MaestroDao;
 import pe.com.logistica.negocio.dao.PersonaDao;
 import pe.com.logistica.negocio.dao.ProveedorDao;
+import pe.com.logistica.negocio.dao.ServicioNoviosDao;
 import pe.com.logistica.negocio.dao.TelefonoDao;
 import pe.com.logistica.negocio.dao.UbigeoDao;
 import pe.com.logistica.negocio.dao.impl.ClienteDaoImpl;
@@ -29,6 +31,7 @@ import pe.com.logistica.negocio.dao.impl.DireccionDaoImpl;
 import pe.com.logistica.negocio.dao.impl.MaestroDaoImpl;
 import pe.com.logistica.negocio.dao.impl.PersonaDaoImpl;
 import pe.com.logistica.negocio.dao.impl.ProveedorDaoImpl;
+import pe.com.logistica.negocio.dao.impl.ServicioNoviosDaoImpl;
 import pe.com.logistica.negocio.dao.impl.TelefonoDaoImpl;
 import pe.com.logistica.negocio.dao.impl.UbigeoDaoImpl;
 import pe.com.logistica.negocio.exception.ResultadoCeroDaoException;
@@ -653,5 +656,12 @@ public class NegocioSession implements NegocioSessionRemote,
 				.consultarContactoProveedor(idcliente));
 
 		return cliente;
+	}
+	
+	@Override
+	public String registrarNovios(ProgramaNovios programaNovios) throws SQLException, Exception{
+		ServicioNoviosDao sertvicioNovios = new ServicioNoviosDaoImpl();
+		
+		return sertvicioNovios.registrarNovios(programaNovios);
 	}
 }
