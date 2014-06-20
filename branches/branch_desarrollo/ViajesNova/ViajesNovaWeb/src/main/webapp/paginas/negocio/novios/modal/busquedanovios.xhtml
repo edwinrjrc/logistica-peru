@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich">
+
+	<rich:popupPanel id="idModalbusqnovios" modal="true" width="800"
+		height="500" style="background-color: #FFFFFF">
+
+		<f:facet name="header">
+			<h:outputText id="idNomModal" value="Busqueda Clientes" />
+		</f:facet>
+		<f:facet name="controls">
+			<h:outputLink value="#" style="border:0"
+				onclick="#{rich:component('idModalformnovios')}.hide(); return false;">
+				<h:graphicImage height="18" width="18"
+					url="/resources/img/close.png" style="border:0" />
+			</h:outputLink>
+		</f:facet>
+
+		<h:panelGrid cellpadding="0" cellspacing="0" border="0" columns="1"
+			style="width:100%;">
+			<h:panelGrid cellpadding="0" cellspacing="0" border="0" columns="1"
+				style="width:100%;">
+				<f:facet name="header">
+					<h:panelGrid cellpadding="0" cellspacing="0" border="0" columns="1"
+						style="width:100%;">
+						<h:outputText value="Busqueda Clientes" />
+						<hr />
+					</h:panelGrid>
+				</f:facet>
+				<h:panelGrid cellpadding="0" cellspacing="0" border="0" columns="4"
+					style="width:100%;">
+					<h:outputText value="Tipo documento" />
+					<h:selectOneMenu
+						value="#{noviosMBean.clienteBusqueda.documentoIdentidad.tipoDocumento.codigoEntero}">
+						<f:selectItem itemLabel="-Seleccione-" />
+						<f:selectItems value="#{catalogoMBean.catalogoTipoDocumento}" />
+					</h:selectOneMenu>
+					<h:outputText value="Numero documento" />
+					<h:inputText
+						value="#{noviosMBean.clienteBusqueda.documentoIdentidad.numeroDocumento}" />
+				</h:panelGrid>
+				<h:panelGrid cellpadding="0" cellspacing="0" border="0" columns="2"
+					style="width:100%;">
+					<h:outputText value="Nombres" />
+					<h:inputText value="#{clienteMBean.clienteBusqueda.nombres}"
+						size="100" styleClass="estilocampo1" />
+				</h:panelGrid>
+			</h:panelGrid>
+			<h:panelGrid cellpadding="0" cellspacing="0" border="0" columns="1"
+				style="width:100%;">
+				<f:facet name="header">
+					<h:panelGrid>
+						<h:outputText value="Resultado Busqueda" />
+						<hr />
+					</h:panelGrid>
+				</f:facet>
+				<rich:dataTable>
+				
+				
+				</rich:dataTable>
+			</h:panelGrid>
+
+			<f:facet name="footer">
+				<h:panelGrid cellpadding="0" cellspacing="0" border="0" columns="1"
+					style="width:100%;">
+					<a4j:commandButton value="Seleccionar" />
+				</h:panelGrid>
+			</f:facet>
+		</h:panelGrid>
+
+	</rich:popupPanel>
+</ui:composition>
