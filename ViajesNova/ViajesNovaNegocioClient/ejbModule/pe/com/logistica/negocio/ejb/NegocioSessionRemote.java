@@ -8,6 +8,7 @@ import javax.ejb.Remote;
 import pe.com.logistica.bean.negocio.Cliente;
 import pe.com.logistica.bean.negocio.Contacto;
 import pe.com.logistica.bean.negocio.Direccion;
+import pe.com.logistica.bean.negocio.ProgramaNovios;
 import pe.com.logistica.bean.negocio.Proveedor;
 import pe.com.logistica.negocio.exception.ResultadoCeroDaoException;
 
@@ -42,4 +43,7 @@ public interface NegocioSessionRemote {
 	public Cliente consultarCliente(int idcliente) throws SQLException, Exception;
 
 	List<Cliente> listarCliente() throws SQLException;
+	
+	String registrarNovios(ProgramaNovios programaNovios) throws SQLException,
+	Exception;
 }
