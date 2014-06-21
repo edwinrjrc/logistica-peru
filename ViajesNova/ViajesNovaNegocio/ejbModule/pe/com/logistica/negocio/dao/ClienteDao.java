@@ -27,4 +27,6 @@ public interface ClienteDao {
 	List<Cliente> buscarPersona(Persona persona) throws SQLException;
 
 	public Cliente consultarCliente(int idcliente) throws SQLException;
+	
+	public List<Cliente> listarClientesNovios(String genero) throws SQLException; 
 }

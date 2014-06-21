@@ -664,4 +664,10 @@ public class NegocioSession implements NegocioSessionRemote,
 		
 		return sertvicioNovios.registrarNovios(programaNovios);
 	}
+	
+	@Override
+	public List<Cliente> listarClientesNovios(String genero) throws SQLException, Exception{
+		ClienteDao clienteDao = new ClienteDaoImpl();
+		return clienteDao.listarClientesNovios(genero);
+	}
 }

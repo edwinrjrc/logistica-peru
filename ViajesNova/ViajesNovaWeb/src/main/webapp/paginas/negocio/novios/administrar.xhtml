@@ -43,16 +43,24 @@
 						<h:panelGrid columns="3" border="0" cellpadding="0"
 							cellspacing="0" style="width:100%;">
 							<h:outputText value="Novia" />
-							<h:outputText value="#{noviosMBean.programaNovios.novia.nombreCompleto}" />
-							<h:graphicImage value="#{facesContext.externalContext.requestContextPath}/../resources/img/iconoLupa.png"></h:graphicImage>
+							<h:outputText
+								value="#{noviosMBean.programaNovios.novia.nombreCompleto}" />
+							<a4j:commandLink action="#{noviosMBean.consultaClientes('F')}" oncomplete="#{rich:component('idModalbusqnovios')}.show();">
+								<h:graphicImage
+									value="#{facesContext.externalContext.requestContextPath}/../resources/img/iconoLupa.png" />
+							</a4j:commandLink>
 						</h:panelGrid>
 						<h:panelGrid columns="3" border="0" cellpadding="0"
 							cellspacing="0" style="width:100%;">
 							<h:outputText value="Novio" />
-							<h:outputText value="#{noviosMBean.programaNovios.novio.nombreCompleto}" />
-							<h:graphicImage value="#{facesContext.externalContext.requestContextPath}/../resources/img/iconoLupa.png"></h:graphicImage>
+							<h:outputText
+								value="#{noviosMBean.programaNovios.novio.nombreCompleto}" />
+							<a4j:commandLink action="#{noviosMBean.consultaClientes('M')}" oncomplete="#{rich:component('idModalbusqnovios')}.show();">
+								<h:graphicImage
+									value="#{facesContext.externalContext.requestContextPath}/../resources/img/iconoLupa.png" />
+							</a4j:commandLink>
 						</h:panelGrid>
-						
+
 						<f:facet name="footer">
 							<h:panelGrid columns="1" border="0" cellpadding="0"
 								cellspacing="0" style="width:100%;text-align:center;">
@@ -123,7 +131,7 @@
 									action="#{noviosMBean.registrarNovios()}"
 									style="height:20px; width:150px"
 									render="idTabPanelFormProveedor, idNomModal"
-									oncomplete="#{rich:component('idModalformcliente')}.show();">
+									oncomplete="#{rich:component('idModalformnovios')}.show();">
 								</a4j:commandButton>
 								<a4j:commandButton id="idBotonModalCorrecto"
 									style="display:none;" type="button"
@@ -137,6 +145,7 @@
 				</h:panelGrid>
 			</h:panelGrid>
 		</h:form>
+		<ui:include src="/paginas/negocio/novios/modal/busquedanovios.xhtml" />
 		<ui:include src="/paginas/negocio/novios/formasistentenovios1.xhtml" />
 		<ui:include src="/resources/includes/includemensaje.xhtml">
 			<ui:param name="backBean" value="#{noviosMBean}" />
