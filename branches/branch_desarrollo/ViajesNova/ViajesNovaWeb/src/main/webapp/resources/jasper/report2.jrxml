@@ -283,38 +283,38 @@
 	<pageFooter>
 		<band height="175" splitType="Stretch">
 			<line>
-				<reportElement x="32" y="113" width="151" height="1"/>
+				<reportElement x="32" y="115" width="170" height="1"/>
 			</line>
 			<staticText>
-				<reportElement x="34" y="132" width="150" height="12"/>
+				<reportElement x="33" y="132" width="170" height="12"/>
 				<textElement textAlignment="Center">
 					<font size="8"/>
 				</textElement>
 				<text><![CDATA[NOVIA]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="33" y="117" width="151" height="15"/>
+				<reportElement x="33" y="117" width="170" height="15"/>
 				<textElement textAlignment="Center">
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{P_NOVIA}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="352" y="135" width="150" height="12"/>
+				<reportElement x="335" y="132" width="170" height="12"/>
 				<textElement textAlignment="Center">
 					<font size="8"/>
 				</textElement>
 				<text><![CDATA[NOVIO]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="351" y="120" width="151" height="15"/>
+				<reportElement x="335" y="117" width="170" height="15"/>
 				<textElement textAlignment="Center">
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{P_NOVIO}]]></textFieldExpression>
 			</textField>
 			<line>
-				<reportElement x="350" y="116" width="151" height="1"/>
+				<reportElement x="334" y="115" width="170" height="1"/>
 			</line>
 		</band>
 	</pageFooter>
