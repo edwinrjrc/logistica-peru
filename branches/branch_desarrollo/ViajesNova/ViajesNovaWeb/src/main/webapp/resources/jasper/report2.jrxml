@@ -31,7 +31,7 @@
 		<band height="24" splitType="Stretch"/>
 	</pageHeader>
 	<columnHeader>
-		<band height="260" splitType="Stretch">
+		<band height="307" splitType="Stretch">
 			<staticText>
 				<reportElement x="2" y="22" width="93" height="15"/>
 				<textElement>
@@ -89,25 +89,11 @@
 				<text><![CDATA[:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="2" y="121" width="93" height="15"/>
-				<textElement>
-					<font size="10"/>
-				</textElement>
-				<text><![CDATA[DESTINO]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="110" y="121" width="7" height="15"/>
-				<textElement textAlignment="Center">
-					<font size="10"/>
-				</textElement>
-				<text><![CDATA[:]]></text>
-			</staticText>
-			<staticText>
 				<reportElement x="2" y="136" width="93" height="15"/>
 				<textElement>
 					<font size="10"/>
 				</textElement>
-				<text><![CDATA[PAIS]]></text>
+				<text><![CDATA[DESTINO]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="110" y="136" width="7" height="15"/>
@@ -121,10 +107,24 @@
 				<textElement>
 					<font size="10"/>
 				</textElement>
-				<text><![CDATA[FECHA IDA]]></text>
+				<text><![CDATA[PAIS]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="110" y="151" width="7" height="15"/>
+				<textElement textAlignment="Center">
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="2" y="166" width="93" height="15"/>
+				<textElement>
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[FECHA IDA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="110" y="166" width="7" height="15"/>
 				<textElement textAlignment="Center">
 					<font size="10"/>
 				</textElement>
@@ -151,29 +151,8 @@
 				<reportElement x="0" y="119" width="553" height="1"/>
 			</line>
 			<line>
-				<reportElement x="0" y="200" width="553" height="1"/>
+				<reportElement x="0" y="215" width="553" height="1"/>
 			</line>
-			<staticText>
-				<reportElement x="110" y="202" width="7" height="15"/>
-				<textElement textAlignment="Center">
-					<font size="10"/>
-				</textElement>
-				<text><![CDATA[:]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="0" y="186" width="555" height="14"/>
-				<textElement>
-					<font size="10" isBold="true" pdfFontName="Helvetica-Bold"/>
-				</textElement>
-				<text><![CDATA[EL PROGRAMA]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="2" y="202" width="107" height="15"/>
-				<textElement>
-					<font size="10"/>
-				</textElement>
-				<text><![CDATA[FECHA INSCRIPCION]]></text>
-			</staticText>
 			<staticText>
 				<reportElement x="110" y="217" width="7" height="15"/>
 				<textElement textAlignment="Center">
@@ -182,21 +161,42 @@
 				<text><![CDATA[:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="2" y="232" width="107" height="15"/>
+				<reportElement x="0" y="201" width="555" height="14"/>
 				<textElement>
-					<font size="10"/>
+					<font size="10" isBold="true" pdfFontName="Helvetica-Bold"/>
 				</textElement>
-				<text><![CDATA[NRO INVITADOS]]></text>
+				<text><![CDATA[EL PROGRAMA]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="2" y="217" width="107" height="15"/>
 				<textElement>
 					<font size="10"/>
 				</textElement>
-				<text><![CDATA[CUOTA INICIAL]]></text>
+				<text><![CDATA[FECHA INSCRIPCION]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="110" y="232" width="7" height="15"/>
+				<textElement textAlignment="Center">
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="2" y="247" width="107" height="15"/>
+				<textElement>
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[NRO INVITADOS]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="2" y="232" width="107" height="15"/>
+				<textElement>
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[CUOTA INICIAL]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="110" y="247" width="7" height="15"/>
 				<textElement textAlignment="Center">
 					<font size="10"/>
 				</textElement>
@@ -231,51 +231,72 @@
 				<textFieldExpression><![CDATA[$P{P_FECHABODA}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="119" y="121" width="429" height="15"/>
+				<reportElement x="119" y="136" width="429" height="15"/>
 				<textElement>
 					<font size="10"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{P_DESTINO}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="119" y="137" width="429" height="15"/>
+				<reportElement x="119" y="152" width="429" height="15"/>
 				<textElement>
 					<font size="10"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{P_PAIS}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="119" y="152" width="270" height="15"/>
+				<reportElement x="119" y="167" width="270" height="15"/>
 				<textElement>
 					<font size="10"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{P_FECHAIDA}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="120" y="202" width="282" height="15"/>
+				<reportElement x="120" y="217" width="282" height="15"/>
 				<textElement>
 					<font size="10"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{P_FECHAINSCRIPCION}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="119" y="217" width="283" height="15"/>
+				<reportElement x="119" y="232" width="283" height="15"/>
 				<textElement>
 					<font size="10"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{P_CUOTAINICIAL}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="119" y="232" width="279" height="15"/>
+				<reportElement x="119" y="247" width="279" height="15"/>
 				<textElement>
 					<font size="10"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{P_NROINVITADOS}]]></textFieldExpression>
 			</textField>
+			<staticText>
+				<reportElement x="2" y="121" width="93" height="15"/>
+				<textElement>
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[ORIGEN]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="110" y="121" width="7" height="15"/>
+				<textElement textAlignment="Center">
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="119" y="121" width="191" height="15"/>
+				<textElement>
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[LIMA (LIM)]]></text>
+			</staticText>
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="63" splitType="Stretch"/>
+		<band height="28" splitType="Stretch"/>
 	</detail>
 	<columnFooter>
 		<band height="45" splitType="Stretch"/>
