@@ -126,5 +126,11 @@ public class NegocioServicioImpl implements NegocioServicio {
 			throws SQLException, Exception {
 		return ejbSession.registrarNovios(programaNovios);
 	}
+	
+	@Override
+	public List<Cliente> listarClientesNovios(String genero)
+			throws SQLException, Exception {
+		return ejbSession.listarClientesNovios(genero);
+	}
 }
 	

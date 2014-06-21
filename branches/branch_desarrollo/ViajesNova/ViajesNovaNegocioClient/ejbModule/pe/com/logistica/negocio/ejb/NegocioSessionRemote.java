@@ -46,4 +46,6 @@ public interface NegocioSessionRemote {
 	
 	String registrarNovios(ProgramaNovios programaNovios) throws SQLException,
 	Exception;
+	
+	public List<Cliente> listarClientesNovios(String genero) throws SQLException, Exception;
 }
