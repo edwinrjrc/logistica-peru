@@ -30,6 +30,7 @@ public class NoviosMBean extends BaseMBean {
 
 	
 	private ProgramaNovios programaNovios;
+	private ProgramaNovios programaNoviosBusqueda;
 	private Cliente clienteBusqueda;
 	
 	private List<ProgramaNovios> listadoNovios;
@@ -72,10 +73,16 @@ public class NoviosMBean extends BaseMBean {
 			e.printStackTrace();
 		}
 	}
+	public void consultaDestinos(){
+		
+	}
 	/**
 	 * @return the programaNovios
 	 */
 	public ProgramaNovios getProgramaNovios() {
+		if (programaNovios == null){
+			programaNovios = new ProgramaNovios();
+		}
 		return programaNovios;
 	}
 	/**
@@ -130,6 +137,25 @@ public class NoviosMBean extends BaseMBean {
 	 */
 	public void setListadoClientes(List<Cliente> listadoClientes) {
 		this.listadoClientes = listadoClientes;
+	}
+
+
+	/**
+	 * @return the programaNoviosBusqueda
+	 */
+	public ProgramaNovios getProgramaNoviosBusqueda() {
+		if (programaNoviosBusqueda == null){
+			programaNoviosBusqueda = new ProgramaNovios();
+		}
+		return programaNoviosBusqueda;
+	}
+
+
+	/**
+	 * @param programaNoviosBusqueda the programaNoviosBusqueda to set
+	 */
+	public void setProgramaNoviosBusqueda(ProgramaNovios programaNoviosBusqueda) {
+		this.programaNoviosBusqueda = programaNoviosBusqueda;
 	}
 
 }

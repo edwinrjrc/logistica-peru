@@ -86,6 +86,16 @@
 	width: 75%;
 }
 
+.col1fil3formulario {
+	width: 15%;
+	text-align: left;
+}
+
+.col2fil3formulario {
+	width: 85%;
+	text-align: left;
+}
+
 .estiloBoton1 {
 	height: 20px;
 	width: 150px";
