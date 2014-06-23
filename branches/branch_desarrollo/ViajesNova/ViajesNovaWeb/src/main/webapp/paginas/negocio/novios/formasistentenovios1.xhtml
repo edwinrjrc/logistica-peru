@@ -40,13 +40,14 @@
 								columnClasses="col1fil3formulario,col2fil3formulario">
 								<h:outputText value="Novia" />
 								<h:panelGrid columns="2" border="0" cellpadding="0"
-									cellspacing="0">
+									cellspacing="0"
+									columnClasses="col1iconoformulario,col1iconoformulario">
 									<h:inputText readonly="true" size="100"
 										value="#{noviosMBean.programaNovios.novia.nombreCompleto}" />
 									<a4j:commandLink action="#{noviosMBean.consultaClientes('F')}"
 										oncomplete="#{rich:component('idModalbusqnovios')}.show();"
 										render="idTablaClientes">
-										<h:graphicImage
+										<h:graphicImage style="border:0px;"
 											value="#{facesContext.externalContext.requestContextPath}/../resources/img/iconoLupa.gif" />
 									</a4j:commandLink>
 								</h:panelGrid>
@@ -56,13 +57,14 @@
 								columnClasses="col1fil3formulario,col2fil3formulario">
 								<h:outputText value="Novio" />
 								<h:panelGrid columns="2" border="0" cellpadding="0"
-									cellspacing="0">
+									cellspacing="0"
+									columnClasses="col1iconoformulario,col1iconoformulario">
 									<h:inputText readonly="true" size="100"
 										value="#{noviosMBean.programaNovios.novio.nombreCompleto}" />
 									<a4j:commandLink action="#{noviosMBean.consultaClientes('M')}"
 										oncomplete="#{rich:component('idModalbusqnovios')}.show();"
 										render="idTablaClientes">
-										<h:graphicImage
+										<h:graphicImage style="border:0px;"
 											value="#{facesContext.externalContext.requestContextPath}/../resources/img/iconoLupa.gif" />
 									</a4j:commandLink>
 								</h:panelGrid>
@@ -72,13 +74,14 @@
 								columnClasses="col1fil3formulario,col2fil3formulario">
 								<h:outputText value="Destino" />
 								<h:panelGrid columns="2" border="0" cellpadding="0"
-									cellspacing="0">
+									cellspacing="0"
+									columnClasses="col1iconoformulario,col1iconoformulario">
 									<h:inputText readonly="true" size="100"
 										value="#{noviosMBean.programaNovios.destino.descripcionCompleto}" />
 									<a4j:commandLink action="#{noviosMBean.consultaDestinos()}"
 										oncomplete="#{rich:component('idModalbusqnovios')}.show();"
 										render="idTablaClientes">
-										<h:graphicImage
+										<h:graphicImage style="border:0px;"
 											value="#{facesContext.externalContext.requestContextPath}/../resources/img/iconoLupa.gif" />
 									</a4j:commandLink>
 								</h:panelGrid>
