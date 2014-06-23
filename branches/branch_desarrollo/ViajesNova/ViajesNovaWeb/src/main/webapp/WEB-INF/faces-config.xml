@@ -64,6 +64,11 @@
    <to-view-id>/paginas/inicio.xhtml</to-view-id>
    <redirect/>
   </navigation-case>
+  <navigation-case>
+   <from-outcome>irProgramaNovios</from-outcome>
+   <to-view-id>/paginas/negocio/novios/administrar.xhtml</to-view-id>
+   <redirect></redirect>
+  </navigation-case>
  </navigation-rule>
  <navigation-rule>
   <from-view-id>/paginas/soporte/parametro/administrar.xhtml</from-view-id>

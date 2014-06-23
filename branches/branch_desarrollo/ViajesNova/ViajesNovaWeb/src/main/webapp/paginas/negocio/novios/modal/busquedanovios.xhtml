@@ -11,11 +11,11 @@
 		height="500" style="background-color: #FFFFFF">
 
 		<f:facet name="header">
-			<h:outputText id="idNomModal" value="Busqueda Clientes" />
+			<h:outputText id="idNomModalBusqueda" value="Busqueda Clientes" />
 		</f:facet>
 		<f:facet name="controls">
 			<h:outputLink value="#" style="border:0"
-				onclick="#{rich:component('idModalformnovios')}.hide(); return false;">
+				onclick="#{rich:component('idModalbusqnovios')}.hide(); return false;">
 				<h:graphicImage height="18" width="18"
 					url="/resources/img/close.png" style="border:0" />
 			</h:outputLink>
@@ -27,13 +27,14 @@
 				style="width:100%;">
 				<f:facet name="header">
 					<h:panelGrid cellpadding="0" cellspacing="0" border="0" columns="1"
-						style="width:100%;">
+						style="width:100%;text-align:left;">
 						<h:outputText value="Busqueda Clientes" />
 						<hr />
 					</h:panelGrid>
 				</f:facet>
 				<h:panelGrid cellpadding="0" cellspacing="0" border="0" columns="4"
-					style="width:100%;">
+					style="width:100%;"
+					columnClasses="col1fil1formulario,col2fil1formulario,col3fil1formulario,col4fil1formulario">
 					<h:outputText value="Tipo documento" />
 					<h:selectOneMenu
 						value="#{noviosMBean.clienteBusqueda.documentoIdentidad.tipoDocumento.codigoEntero}">
@@ -45,7 +46,8 @@
 						value="#{noviosMBean.clienteBusqueda.documentoIdentidad.numeroDocumento}" />
 				</h:panelGrid>
 				<h:panelGrid cellpadding="0" cellspacing="0" border="0" columns="2"
-					style="width:100%;">
+					style="width:100%;"
+					columnClasses="col1fil2formulario,col2fil2formulario">
 					<h:outputText value="Nombres" />
 					<h:inputText value="#{clienteMBean.clienteBusqueda.nombres}"
 						size="100" styleClass="estilocampo1" />
@@ -62,12 +64,12 @@
 				style="width:100%;">
 
 				<f:facet name="header">
-					<h:panelGrid>
+					<h:panelGrid style="width:100%;text-align:left;" cellpadding="0" cellspacing="0" border="0" columns="1">
 						<h:outputText value="Resultado Busqueda" />
 						<hr />
 					</h:panelGrid>
 				</f:facet>
-				<rich:dataTable id="idTablaClientes" var="row" rows="10" value="#{noviosMBean.listadoClientes}">
+				<rich:dataTable id="idTablaClientes" var="row" rows="10" value="#{noviosMBean.listadoClientes}" style="width:100%;">
 					<f:facet name="noData">
 						<h:outputText value="No se encontraron clientes" />
 					</f:facet>

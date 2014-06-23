@@ -387,7 +387,7 @@ public class ClienteDaoImpl implements ClienteDao {
 			while (rs.next()) {
 				persona2 = new Cliente();
 				persona2.setCodigoEntero(UtilJdbc.obtenerNumero(rs,
-						"idproveedor"));
+						"idpersona"));
 				persona2.getDocumentoIdentidad()
 						.getTipoDocumento()
 						.setCodigoEntero(
@@ -404,24 +404,6 @@ public class ClienteDaoImpl implements ClienteDao {
 						"apellidopaterno"));
 				persona2.setApellidoMaterno(UtilJdbc.obtenerCadena(rs,
 						"apellidomaterno"));
-				persona2.getDireccion().getVia()
-						.setCodigoEntero(UtilJdbc.obtenerNumero(rs, "idvia"));
-				persona2.getDireccion().getVia()
-						.setNombre(UtilJdbc.obtenerCadena(rs, "nombretipovia"));
-				persona2.getDireccion().setNombreVia(
-						UtilJdbc.obtenerCadena(rs, "nombrevia"));
-				persona2.getDireccion().setNumero(
-						UtilJdbc.obtenerCadena(rs, "numero"));
-				persona2.getDireccion().setInterior(
-						UtilJdbc.obtenerCadena(rs, "interior"));
-				persona2.getDireccion().setManzana(
-						UtilJdbc.obtenerCadena(rs, "manzana"));
-				persona2.getDireccion().setLote(
-						UtilJdbc.obtenerCadena(rs, "lote"));
-				Telefono teldireccion = new Telefono();
-				teldireccion.setNumeroTelefono(UtilJdbc.obtenerCadena(rs,
-						"teledireccion"));
-				persona2.getDireccion().getTelefonos().add(teldireccion);
 				resultado.add(persona2);
 			}
 			

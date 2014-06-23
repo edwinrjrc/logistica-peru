@@ -20,6 +20,7 @@ public class Destino extends BaseNegocio {
 	
 	private Pais pais;
 	private String descripcion;
+	private String descripcionCompleto;
 	private BaseVO tipoDestino;
 	private String codigoIATA;
 	
@@ -91,6 +92,20 @@ public class Destino extends BaseNegocio {
 	 */
 	public void setDescripcion(String descripcion) {
 		this.descripcion = descripcion;
+	}
+
+	/**
+	 * @return the descripcionCompleto
+	 */
+	public String getDescripcionCompleto() {
+		return descripcionCompleto;
+	}
+
+	/**
+	 * @param descripcionCompleto the descripcionCompleto to set
+	 */
+	public void setDescripcionCompleto(String descripcionCompleto) {
+		this.descripcionCompleto = descripcionCompleto;
 	}
 
 }
