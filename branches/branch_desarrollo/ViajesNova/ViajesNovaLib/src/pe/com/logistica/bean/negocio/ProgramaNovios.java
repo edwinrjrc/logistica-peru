@@ -44,6 +44,9 @@ public class ProgramaNovios extends BaseNegocio {
 	 * @return the novia
 	 */
 	public Cliente getNovia() {
+		if (novia == null){
+			novia = new Cliente();
+		}
 		return novia;
 	}
 
@@ -59,6 +62,9 @@ public class ProgramaNovios extends BaseNegocio {
 	 * @return the novio
 	 */
 	public Cliente getNovio() {
+		if (novio == null){
+			novio = new Cliente();
+		}
 		return novio;
 	}
 
@@ -74,6 +80,9 @@ public class ProgramaNovios extends BaseNegocio {
 	 * @return the destino
 	 */
 	public Destino getDestino() {
+		if (destino == null){
+			destino = new Destino();
+		}
 		return destino;
 	}
 
@@ -119,6 +128,9 @@ public class ProgramaNovios extends BaseNegocio {
 	 * @return the moneda
 	 */
 	public BaseVO getMoneda() {
+		if (moneda == null){
+			moneda = new BaseVO();
+		}
 		return moneda;
 	}
 
