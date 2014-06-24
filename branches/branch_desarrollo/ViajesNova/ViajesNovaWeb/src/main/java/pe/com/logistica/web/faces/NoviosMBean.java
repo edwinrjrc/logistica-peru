@@ -28,13 +28,23 @@ import pe.com.logistica.web.servicio.impl.SoporteServicioImpl;
 @SessionScoped()
 public class NoviosMBean extends BaseMBean {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -2578137810881699743L;
+	
 	
 	private ProgramaNovios programaNovios;
 	private ProgramaNovios programaNoviosBusqueda;
 	private Cliente clienteBusqueda;
+	private Integer codigoCliente;
+	
+	private int tipoBusqueda;
 	
 	private List<ProgramaNovios> listadoNovios;
 	private List<Cliente> listadoClientes;
+	
+	private String generoCliente;
 	
 	private SoporteServicio soporteServicio;
 	private NegocioServicio negocioServicio;
@@ -64,8 +74,12 @@ public class NoviosMBean extends BaseMBean {
 	public void consultaClientes(){
 		
 	}
-	public void consultaClientes(String genero){
+	public void consultaClientes(String genero, long busqueda){
 		try {
+			this.setClienteBusqueda(null);
+			this.setGeneroCliente(genero);
+			this.setTipoBusqueda((int)busqueda);
+			
 			this.setListadoClientes(this.negocioServicio.listarClientesNovios(genero));
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -75,6 +89,42 @@ public class NoviosMBean extends BaseMBean {
 	}
 	public void consultaDestinos(){
 		
+	}
+	
+	public void buscarClientes(){
+		
+	}
+	public void seleccionarNovio(){
+		if (this.getTipoBusqueda() == 1){
+			if ("F".equals(this.getGeneroCliente())){
+				this.getProgramaNoviosBusqueda().setNovia(obtenerClienteListado());
+			}
+			else {
+				this.getProgramaNoviosBusqueda().setNovio(obtenerClienteListado());
+			}
+		}
+		else {
+			if ("F".equals(this.getGeneroCliente())){
+				this.getProgramaNovios().setNovia(obtenerClienteListado());
+			}
+			else {
+				this.getProgramaNovios().setNovio(obtenerClienteListado());
+			}
+		}
+	}
+	
+	private Cliente obtenerClienteListado(){
+		try {
+			for (Cliente clienteLocal : this.getListadoClientes()){
+				if (clienteLocal.getCodigoEntero().equals(this.getCodigoCliente())){
+					return clienteLocal;
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return null;
 	}
 	/**
 	 * @return the programaNovios
@@ -109,6 +159,9 @@ public class NoviosMBean extends BaseMBean {
 	 * @return the clienteBusqueda
 	 */
 	public Cliente getClienteBusqueda() {
+		if (clienteBusqueda == null){
+			clienteBusqueda = new Cliente();
+		}
 		return clienteBusqueda;
 	}
 
@@ -157,5 +210,54 @@ public class NoviosMBean extends BaseMBean {
 	public void setProgramaNoviosBusqueda(ProgramaNovios programaNoviosBusqueda) {
 		this.programaNoviosBusqueda = programaNoviosBusqueda;
 	}
+
+
+	/**
+	 * @return the generoCliente
+	 */
+	public String getGeneroCliente() {
+		return generoCliente;
+	}
+
+
+	/**
+	 * @param generoCliente the generoCliente to set
+	 */
+	public void setGeneroCliente(String generoCliente) {
+		this.generoCliente = generoCliente;
+	}
+
+
+	/**
+	 * @return the codigoCliente
+	 */
+	public Integer getCodigoCliente() {
+		return codigoCliente;
+	}
+
+
+	/**
+	 * @param codigoCliente the codigoCliente to set
+	 */
+	public void setCodigoCliente(Integer codigoCliente) {
+		this.codigoCliente = codigoCliente;
+	}
+
+
+	/**
+	 * @return the tipoBusqueda
+	 */
+	public int getTipoBusqueda() {
+		return tipoBusqueda;
+	}
+
+
+	/**
+	 * @param tipoBusqueda the tipoBusqueda to set
+	 */
+	public void setTipoBusqueda(int tipoBusqueda) {
+		this.tipoBusqueda = tipoBusqueda;
+	}
+
 
 }

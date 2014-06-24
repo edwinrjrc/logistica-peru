@@ -3,6 +3,8 @@
  */
 package pe.com.logistica.web.faces;
 
+import java.io.Serializable;
+
 import javax.faces.application.FacesMessage;
 import javax.faces.application.FacesMessage.Severity;
 import javax.faces.context.FacesContext;
@@ -14,8 +16,14 @@ import javax.servlet.http.HttpSession;
  * 
  */
 
-public class BaseMBean {
+public class BaseMBean implements Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -8144858026084650982L;
+	
+	
 	private String nombreFormulario;
 	private String mensajeModal;
 	private String tipoModal;

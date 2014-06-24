@@ -26,8 +26,7 @@
 			<h:panelGrid columns="2" border="0" cellpadding="0" cellspacing="0"
 				style="width:100%;">
 
-
-				<rich:tabPanel>
+				<rich:tabPanel switchType="client">
 					<rich:tab>
 						<f:facet name="header">
 							<h:outputText value="Informacion Novios" />
@@ -40,11 +39,11 @@
 								columnClasses="col1fil3formulario,col2fil3formulario">
 								<h:outputText value="Novia" />
 								<h:panelGrid columns="2" border="0" cellpadding="0"
-									cellspacing="0"
+									cellspacing="0" id="idGrnovia"
 									columnClasses="col1iconoformulario,col1iconoformulario">
-									<h:inputText readonly="true" size="100"
+									<h:inputText readonly="true" size="100" id="idFrNovia"
 										value="#{noviosMBean.programaNovios.novia.nombreCompleto}" />
-									<a4j:commandLink action="#{noviosMBean.consultaClientes('F')}"
+									<a4j:commandLink action="#{noviosMBean.consultaClientes('F',2)}"
 										oncomplete="#{rich:component('idModalbusqnovios')}.show();"
 										render="idTablaClientes">
 										<h:graphicImage style="border:0px;"
@@ -57,11 +56,11 @@
 								columnClasses="col1fil3formulario,col2fil3formulario">
 								<h:outputText value="Novio" />
 								<h:panelGrid columns="2" border="0" cellpadding="0"
-									cellspacing="0"
+									cellspacing="0" id="idGrnovio"
 									columnClasses="col1iconoformulario,col1iconoformulario">
 									<h:inputText readonly="true" size="100"
 										value="#{noviosMBean.programaNovios.novio.nombreCompleto}" />
-									<a4j:commandLink action="#{noviosMBean.consultaClientes('M')}"
+									<a4j:commandLink action="#{noviosMBean.consultaClientes('M',2)}"
 										oncomplete="#{rich:component('idModalbusqnovios')}.show();"
 										render="idTablaClientes">
 										<h:graphicImage style="border:0px;"
