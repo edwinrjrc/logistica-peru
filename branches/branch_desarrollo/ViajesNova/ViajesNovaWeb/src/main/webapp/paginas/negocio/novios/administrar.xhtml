@@ -46,11 +46,11 @@
 							columnClasses="col1fil3formulario,col2fil3formulario">
 							<h:outputText value="Novia" />
 							<h:panelGrid columns="2" border="0" cellpadding="0"
-								cellspacing="0"
+								cellspacing="0" id="idGrFrNovia"
 								columnClasses="col1iconoformulario,col1iconoformulario">
 								<h:inputText readonly="true" size="100"
 									value="#{noviosMBean.programaNoviosBusqueda.novia.nombreCompleto}" />
-								<a4j:commandLink action="#{noviosMBean.consultaClientes('F')}"
+								<a4j:commandLink action="#{noviosMBean.consultaClientes('F',1)}"
 									oncomplete="#{rich:component('idModalbusqnovios')}.show();"
 									render="idTablaClientes" >
 									<h:graphicImage style="border:0px;"
@@ -63,11 +63,11 @@
 							columnClasses="col1fil3formulario,col2fil3formulario">
 							<h:outputText value="Novio" />
 							<h:panelGrid columns="2" border="0" cellpadding="0"
-								cellspacing="0"
+								cellspacing="0" id="idGrFrNovio"
 								columnClasses="col1iconoformulario,col1iconoformulario">
 								<h:inputText readonly="true" size="100"
 									value="#{noviosMBean.programaNoviosBusqueda.novio.nombreCompleto}" />
-								<a4j:commandLink action="#{noviosMBean.consultaClientes('M')}"
+								<a4j:commandLink action="#{noviosMBean.consultaClientes('M',1)}"
 									oncomplete="#{rich:component('idModalbusqnovios')}.show();"
 									render="idTablaClientes">
 									<h:graphicImage style="border:0px;"
