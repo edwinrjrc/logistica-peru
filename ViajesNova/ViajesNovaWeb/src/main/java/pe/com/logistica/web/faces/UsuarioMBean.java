@@ -28,10 +28,16 @@ import pe.com.logistica.web.servicio.impl.SeguridadServicioImpl;
 @SessionScoped()
 public class UsuarioMBean extends BaseMBean {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 6495326572788019729L;
+
 	private List<Usuario> listaUsuarios;
 	
 	private Usuario usuario;
 	
+	private String credencialNueva;
 	private String reCredencial;
 	private String msjeError;
 	
@@ -131,6 +137,26 @@ public class UsuarioMBean extends BaseMBean {
 		}
 		
 		return "";
+	}
+	
+	public void cambiarClave(){
+		try {
+			this.seguridadServicio.cambiarClaveUsuario(getUsuario());
+			
+			this.setShowModal(true);
+			this.setTipoModal("1");
+			this.setMensajeModal("Cambio de clave Satisfactorio");
+		} catch (SQLException e) {
+			this.setTipoModal("2");
+			this.setShowModal(true);
+			this.setMensajeModal(e.getMessage());
+			e.printStackTrace();
+		} catch (Exception e) {
+			this.setTipoModal("2");
+			this.setShowModal(true);
+			this.setMensajeModal(e.getMessage());
+			e.printStackTrace();
+		}
 	}
 	
 	public String salirSesion(){
@@ -264,6 +290,20 @@ public class UsuarioMBean extends BaseMBean {
 	 */
 	public void setSeguridadServicio(SeguridadServicio seguridadServicio) {
 		this.seguridadServicio = seguridadServicio;
+	}
+
+	/**
+	 * @return the credencialNueva
+	 */
+	public String getCredencialNueva() {
+		return credencialNueva;
+	}
+
+	/**
+	 * @param credencialNueva the credencialNueva to set
+	 */
+	public void setCredencialNueva(String credencialNueva) {
+		this.credencialNueva = credencialNueva;
 	}
 
 }
