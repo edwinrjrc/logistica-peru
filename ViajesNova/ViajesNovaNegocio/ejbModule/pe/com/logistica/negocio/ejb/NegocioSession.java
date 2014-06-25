@@ -34,6 +34,7 @@ import pe.com.logistica.negocio.dao.impl.ProveedorDaoImpl;
 import pe.com.logistica.negocio.dao.impl.ServicioNoviosDaoImpl;
 import pe.com.logistica.negocio.dao.impl.TelefonoDaoImpl;
 import pe.com.logistica.negocio.dao.impl.UbigeoDaoImpl;
+import pe.com.logistica.negocio.exception.ErrorRegistroDataException;
 import pe.com.logistica.negocio.exception.ResultadoCeroDaoException;
 import pe.com.logistica.negocio.util.UtilConexion;
 import pe.com.logistica.negocio.util.UtilDatos;
@@ -659,15 +660,52 @@ public class NegocioSession implements NegocioSessionRemote,
 	}
 	
 	@Override
-	public String registrarNovios(ProgramaNovios programaNovios) throws SQLException, Exception{
-		ServicioNoviosDao sertvicioNovios = new ServicioNoviosDaoImpl();
+	public Integer registrarNovios(ProgramaNovios programaNovios) throws SQLException, Exception{
+		ServicioNoviosDao servicioNovios = new ServicioNoviosDaoImpl();
 		
-		return sertvicioNovios.registrarNovios(programaNovios);
+		Connection conexion = null;
+		try {
+			conexion = UtilConexion.obtenerConexion();
+			conexion.setAutoCommit(false);
+			
+			Integer idnovios = servicioNovios.registrarNovios(programaNovios, conexion);
+			
+			if (programaNovios.getListaInvitados() != null && !programaNovios.getListaInvitados().isEmpty()){
+				for (Cliente invitado : programaNovios.getListaInvitados()) {
+					boolean exitoRegistro = servicioNovios.registrarInvitado(invitado, idnovios, conexion);
+					if (!exitoRegistro){
+						throw new ErrorRegistroDataException("No se puedo registrar los invitados de los novios");
+					}
+				}
+			}
+			
+			conexion.commit();
+			return idnovios;
+		}
+		catch (ErrorRegistroDataException e){
+			conexion.rollback();
+			throw new ErrorRegistroDataException(e.getMensajeError(), e);
+		}
+		catch (SQLException e){
+			conexion.rollback();
+			throw new SQLException(e);
+		}
+		finally {
+			if (conexion != null) {
+				conexion.close();
+			}
+		}
 	}
 	
 	@Override
 	public List<Cliente> listarClientesNovios(String genero) throws SQLException, Exception{
 		ClienteDao clienteDao = new ClienteDaoImpl();
 		return clienteDao.listarClientesNovios(genero);
+	}
+	
+	@Override
+	public List<ProgramaNovios> consultarNovios(ProgramaNovios programaNovios) throws SQLException, Exception{
+		ServicioNoviosDao servicioNovios = new ServicioNoviosDaoImpl();
+		return servicioNovios.consultarNovios(programaNovios);
 	}
 }

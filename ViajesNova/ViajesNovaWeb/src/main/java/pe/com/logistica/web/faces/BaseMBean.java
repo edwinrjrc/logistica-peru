@@ -9,6 +9,7 @@ import javax.faces.application.FacesMessage;
 import javax.faces.application.FacesMessage.Severity;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 /**
@@ -30,6 +31,9 @@ public class BaseMBean implements Serializable {
 	private String modalNombre;
 
 	private boolean showModal;
+	
+	public static final String TIPO_MODAL_EXITO = "1";
+	public static final String TIPO_MODAL_ERROR = "2";
 
 	/**
 	 * 
@@ -133,6 +137,11 @@ public class BaseMBean implements Serializable {
 	public HttpServletRequest obtenerRequest() {
 		return (HttpServletRequest) obtenerContexto().getExternalContext()
 				.getRequest();
+	}
+	
+	public HttpServletResponse obtenerResponse() {
+		return (HttpServletResponse) obtenerContexto().getExternalContext()
+				.getResponse();
 	}
 
 	public void agregarMensaje(String idComponente, String mensajeSuma,
