@@ -18,8 +18,10 @@
 			<td><h:panelGrid columns="2" cellpadding="0" cellspacing="0"
 					border="0" rendered="#{sessionScope.usuarioSession != null}"
 					style="font-weight:bold;">
-					<h:graphicImage
-						value="#{facesContext.externalContext.requestContextPath}/../resources/img/user_icon.gif"></h:graphicImage>
+					<a4j:commandLink oncomplete="#{rich:component('idModalformcambioclave')}.show();">
+						<h:graphicImage style="border:0px;"
+							value="#{facesContext.externalContext.requestContextPath}/../resources/img/user_icon.gif" />
+					</a4j:commandLink>
 					<h:outputText
 						value="Usuario : #{sessionScope.usuarioSession.usuario}" />
 				</h:panelGrid></td>
