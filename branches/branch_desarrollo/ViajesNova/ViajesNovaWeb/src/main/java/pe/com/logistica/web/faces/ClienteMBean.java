@@ -43,6 +43,11 @@ import pe.com.logistica.web.util.UtilWeb;
 @SessionScoped()
 public class ClienteMBean extends BaseMBean {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -3161805888946994195L;
+
 	private List<Cliente> listaClientes;
 	
 	private Cliente cliente;

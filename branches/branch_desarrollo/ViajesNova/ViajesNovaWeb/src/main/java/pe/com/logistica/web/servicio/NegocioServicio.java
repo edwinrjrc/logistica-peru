@@ -50,8 +50,11 @@ public interface NegocioServicio {
 
 	public Cliente consultarClienteCompleto(int idcliente) throws SQLException, Exception;
 	
-	public String registrarNovios(ProgramaNovios programaNovios) throws SQLException, Exception;
+	public Integer registrarNovios(ProgramaNovios programaNovios) throws SQLException, Exception;
 
 	List<Cliente> listarClientesNovios(String genero) throws SQLException,
-			Exception; 
+			Exception;
+
+	List<ProgramaNovios> consultarNovios(ProgramaNovios programaNovios)
+			throws SQLException, Exception; 
 }

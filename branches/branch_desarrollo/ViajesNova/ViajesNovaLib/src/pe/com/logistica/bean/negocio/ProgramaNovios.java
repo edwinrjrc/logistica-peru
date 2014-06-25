@@ -4,7 +4,9 @@
 package pe.com.logistica.bean.negocio;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import pe.com.logistica.bean.base.BaseNegocio;
 import pe.com.logistica.bean.base.BaseVO;
@@ -32,6 +34,9 @@ public class ProgramaNovios extends BaseNegocio {
 	private int nroNoches;
 	private Date fechaShower;
 	private String observaciones;
+	
+	private List<Cliente> listaInvitados;
+	private int cantidadInvitados;
 
 	/**
 	 * 
@@ -229,6 +234,37 @@ public class ProgramaNovios extends BaseNegocio {
 	 */
 	public void setFechaViaje(Date fechaViaje) {
 		this.fechaViaje = fechaViaje;
+	}
+
+	/**
+	 * @return the listaInvitados
+	 */
+	public List<Cliente> getListaInvitados() {
+		if (listaInvitados == null){
+			listaInvitados = new ArrayList<Cliente>();
+		}
+		return listaInvitados;
+	}
+
+	/**
+	 * @param listaInvitados the listaInvitados to set
+	 */
+	public void setListaInvitados(List<Cliente> listaInvitados) {
+		this.listaInvitados = listaInvitados;
+	}
+
+	/**
+	 * @return the cantidadInvitados
+	 */
+	public int getCantidadInvitados() {
+		return cantidadInvitados;
+	}
+
+	/**
+	 * @param cantidadInvitados the cantidadInvitados to set
+	 */
+	public void setCantidadInvitados(int cantidadInvitados) {
+		this.cantidadInvitados = cantidadInvitados;
 	}
 
 }

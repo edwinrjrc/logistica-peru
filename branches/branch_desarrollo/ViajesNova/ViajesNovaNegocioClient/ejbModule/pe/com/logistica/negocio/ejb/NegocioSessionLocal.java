@@ -40,8 +40,10 @@ public interface NegocioSessionLocal {
 	
 	List<Cliente> listarCliente() throws SQLException;
 
-	String registrarNovios(ProgramaNovios programaNovios) throws SQLException,
-			Exception;
+	public Integer registrarNovios(ProgramaNovios programaNovios) throws SQLException, Exception;
 	
 	public List<Cliente> listarClientesNovios(String genero) throws SQLException, Exception;
+
+	List<ProgramaNovios> consultarNovios(ProgramaNovios programaNovios)
+			throws SQLException, Exception;
 }
