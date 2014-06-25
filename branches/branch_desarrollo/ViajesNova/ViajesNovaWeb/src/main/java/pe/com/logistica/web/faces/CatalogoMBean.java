@@ -3,6 +3,7 @@
  */
 package pe.com.logistica.web.faces;
 
+import java.io.Serializable;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,6 +16,7 @@ import javax.naming.NamingException;
 import javax.servlet.ServletContext;
 
 import pe.com.logistica.bean.base.BaseVO;
+import pe.com.logistica.bean.negocio.Destino;
 import pe.com.logistica.web.servicio.SeguridadServicio;
 import pe.com.logistica.web.servicio.SoporteServicio;
 import pe.com.logistica.web.servicio.impl.SeguridadServicioImpl;
@@ -27,8 +29,14 @@ import pe.com.logistica.web.util.UtilWeb;
  */
 @ManagedBean(name = "catalogoMBean")
 @SessionScoped()
-public class CatalogoMBean {
+public class CatalogoMBean implements Serializable{
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -571289965929551249L;
+	
+	
 	private List<SelectItem> catalogoRoles;
 	private List<SelectItem> catalogoTipoDocumento;
 	private List<SelectItem> catalogoRubro;
@@ -39,6 +47,7 @@ public class CatalogoMBean {
 	private List<SelectItem> catalogoEstadoCivil;
 	private List<SelectItem> catalogoContinente;
 	private List<SelectItem> catalogoTipoDestino;
+	private List<SelectItem> catalogoDestino;
 
 	private SeguridadServicio seguridadServicio;
 	private SoporteServicio soporteServicio;
@@ -303,6 +312,39 @@ public class CatalogoMBean {
 	 */
 	public void setCatalogoTipoDestino(List<SelectItem> catalogoTipoDestino) {
 		this.catalogoTipoDestino = catalogoTipoDestino;
+	}
+
+	/**
+	 * @return the catalogoDestino
+	 */
+	public List<SelectItem> getCatalogoDestino() {
+		try {
+			catalogoDestino = new ArrayList<SelectItem>();
+			List<Destino> listaDestino = this.soporteServicio.listarDestinos();
+			SelectItem si = null;
+			for (Destino destino : listaDestino) {
+				si = new SelectItem();
+				si.setValue(destino.getCodigoEntero());
+				String descripcionCompleto = destino.getDescripcion()+"("+destino.getCodigoIATA()+")"; 
+				si.setLabel(descripcionCompleto);
+				catalogoDestino.add(si);
+			}
+
+		} catch (SQLException e) {
+			catalogoDestino = new ArrayList<SelectItem>();
+			e.printStackTrace();
+		} catch (Exception e) {
+			catalogoDestino = new ArrayList<SelectItem>();
+			e.printStackTrace();
+		}
+		return catalogoDestino;
+	}
+
+	/**
+	 * @param catalogoDestino the catalogoDestino to set
+	 */
+	public void setCatalogoDestino(List<SelectItem> catalogoDestino) {
+		this.catalogoDestino = catalogoDestino;
 	}
 
 }

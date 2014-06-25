@@ -21,6 +21,9 @@ public class Cliente extends Persona {
 	private List<Contacto> listaContactos;
 	private List<CuentaBancaria> listaCuentas;
 	private BaseVO rubro;
+	
+	private String telefonoInvitadoNovios;
+	private Integer codigoSeleccionado;
 
 	public Cliente() {
 
@@ -91,6 +94,34 @@ public class Cliente extends Persona {
 	 */
 	public void setRubro(BaseVO rubro) {
 		this.rubro = rubro;
+	}
+
+	/**
+	 * @return the telefonoInvitadoNovios
+	 */
+	public String getTelefonoInvitadoNovios() {
+		return telefonoInvitadoNovios;
+	}
+
+	/**
+	 * @param telefonoInvitadoNovios the telefonoInvitadoNovios to set
+	 */
+	public void setTelefonoInvitadoNovios(String telefonoInvitadoNovios) {
+		this.telefonoInvitadoNovios = telefonoInvitadoNovios;
+	}
+
+	/**
+	 * @return the codigoSeleccionado
+	 */
+	public Integer getCodigoSeleccionado() {
+		return codigoSeleccionado;
+	}
+
+	/**
+	 * @param codigoSeleccionado the codigoSeleccionado to set
+	 */
+	public void setCodigoSeleccionado(Integer codigoSeleccionado) {
+		this.codigoSeleccionado = codigoSeleccionado;
 	}
 
 }

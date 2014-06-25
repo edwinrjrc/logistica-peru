@@ -3,6 +3,7 @@
  */
 package pe.com.logistica.negocio.util;
 
+import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Date;
@@ -37,6 +38,12 @@ public class UtilJdbc {
 			return rs.getDate(campo);
 		}
 		return null;
+	}
+	public static BigDecimal obtenerBigDecimal(ResultSet rs, String campo) throws SQLException {
+		if (rs != null && StringUtils.isNotBlank(campo)) {
+			return rs.getBigDecimal(campo);
+		}
+		return BigDecimal.ZERO;
 	}
 	
 	public static boolean convertirBooleanSiNo(ResultSet rs, String campo) throws SQLException{

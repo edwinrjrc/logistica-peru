@@ -33,25 +33,23 @@ public class NegocioServicioImpl implements NegocioServicio {
 	/**
 	 * 
 	 */
-	public NegocioServicioImpl(ServletContext context) {
-		try {
-			Properties props = new Properties();
-			/*props.setProperty("java.naming.factory.initial","org.jnp.interfaces.NamingContextFactory");
-			props.setProperty("java.naming.factory.url.pkgs", "org.jboss.naming");
-			props.setProperty("java.naming.provider.url", "localhost:1099"); */
-			props.put(Context.URL_PKG_PREFIXES, "org.jboss.ejb.client.naming");
-			
-			Context ctx = new InitialContext(props);
-			//String lookup = "ejb:Logistica1EAR/Logistica1Negocio/SeguridadSession!pe.com.logistica.negocio.ejb.SeguridadRemote";
-			String lookup = "java:jboss/exported/Logistica1EAR/Logistica1Negocio/NegocioSession!pe.com.logistica.negocio.ejb.NegocioSessionRemote";
-			
-			final String ejbRemoto = NegocioSessionRemote.class.getName();
-			lookup = "java:jboss/exported/"+context.getInitParameter("appNegocioNameEar")+"/"+context.getInitParameter("appNegocioName")+"/"+ejbBeanName+"!"+ejbRemoto;
-			
-			ejbSession = (NegocioSessionRemote) ctx.lookup(lookup);
-		} catch (NamingException e) {
-			e.printStackTrace();
-		}
+	public NegocioServicioImpl(ServletContext context) throws NamingException{
+		
+		Properties props = new Properties();
+		/*props.setProperty("java.naming.factory.initial","org.jnp.interfaces.NamingContextFactory");
+		props.setProperty("java.naming.factory.url.pkgs", "org.jboss.naming");
+		props.setProperty("java.naming.provider.url", "localhost:1099"); */
+		props.put(Context.URL_PKG_PREFIXES, "org.jboss.ejb.client.naming");
+		
+		Context ctx = new InitialContext(props);
+		//String lookup = "ejb:Logistica1EAR/Logistica1Negocio/SeguridadSession!pe.com.logistica.negocio.ejb.SeguridadRemote";
+		String lookup = "java:jboss/exported/Logistica1EAR/Logistica1Negocio/NegocioSession!pe.com.logistica.negocio.ejb.NegocioSessionRemote";
+		
+		final String ejbRemoto = NegocioSessionRemote.class.getName();
+		lookup = "java:jboss/exported/"+context.getInitParameter("appNegocioNameEar")+"/"+context.getInitParameter("appNegocioName")+"/"+ejbBeanName+"!"+ejbRemoto;
+		
+		ejbSession = (NegocioSessionRemote) ctx.lookup(lookup);
+		
 	}
 
 	/* (non-Javadoc)
@@ -122,7 +120,7 @@ public class NegocioServicioImpl implements NegocioServicio {
 	}
 
 	@Override
-	public String registrarNovios(ProgramaNovios programaNovios)
+	public Integer registrarNovios(ProgramaNovios programaNovios)
 			throws SQLException, Exception {
 		return ejbSession.registrarNovios(programaNovios);
 	}
@@ -131,6 +129,12 @@ public class NegocioServicioImpl implements NegocioServicio {
 	public List<Cliente> listarClientesNovios(String genero)
 			throws SQLException, Exception {
 		return ejbSession.listarClientesNovios(genero);
+	}
+	
+	@Override
+	public List<ProgramaNovios> consultarNovios(ProgramaNovios programaNovios)
+			throws SQLException, Exception {
+		return ejbSession.consultarNovios(programaNovios);
 	}
 }
 	

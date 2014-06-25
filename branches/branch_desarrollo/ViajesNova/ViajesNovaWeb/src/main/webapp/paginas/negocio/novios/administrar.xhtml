@@ -39,7 +39,8 @@
 							cellspacing="0" style="width:100%;"
 							columnClasses="col1fil3formulario,col2fil3formulario">
 							<h:outputText value="Codigo Novios" />
-							<h:inputText value="#{noviosMBean.programaNoviosBusqueda.codigoNovios}" />
+							<h:inputText
+								value="#{noviosMBean.programaNoviosBusqueda.codigoNovios}" />
 						</h:panelGrid>
 						<h:panelGrid columns="2" border="0" cellpadding="0"
 							cellspacing="0" style="width:100%;"
@@ -52,7 +53,7 @@
 									value="#{noviosMBean.programaNoviosBusqueda.novia.nombreCompleto}" />
 								<a4j:commandLink action="#{noviosMBean.consultaClientes('F',1)}"
 									oncomplete="#{rich:component('idModalbusqnovios')}.show();"
-									render="idTablaClientes" >
+									render="idTablaClientes">
 									<h:graphicImage style="border:0px;"
 										value="#{facesContext.externalContext.requestContextPath}/../resources/img/iconoLupa.gif" />
 								</a4j:commandLink>
@@ -154,6 +155,9 @@
 								<a4j:commandButton id="idBotonModalError" style="display:none;"
 									type="button"
 									oncomplete="#{rich:component('idModalError')}.show();" />
+								<h:commandButton value="Imprimir Registro Novios"
+									style="display:none" id="idbtnImpNovios"
+									action="#{noviosMBean.imprimirFormatoNovios()}" />
 							</h:panelGrid>
 						</h:panelGroup>
 					</f:facet>
@@ -162,10 +166,8 @@
 		</h:form>
 		<ui:include src="/paginas/negocio/novios/modal/busquedanovios.xhtml" />
 		<ui:include src="/paginas/negocio/novios/formasistentenovios1.xhtml" />
-		<ui:include src="/resources/includes/includemensaje.xhtml">
+		<ui:include src="/resources/includes/includemensajenovios.xhtml">
 			<ui:param name="backBean" value="#{noviosMBean}" />
-			<ui:param name="idModalForm" value="idModalformnovios" />
-			<ui:param name="idrender" value="idTabla" />
 		</ui:include>
 		<script type="text/javascript">
 		mostrarModal('idformadmnovios');
