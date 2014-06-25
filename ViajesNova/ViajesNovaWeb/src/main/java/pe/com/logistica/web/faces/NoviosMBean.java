@@ -24,13 +24,6 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import net.sf.jasperreports.engine.JRException;
-import net.sf.jasperreports.engine.JRExporterParameter;
-import net.sf.jasperreports.engine.JasperFillManager;
-import net.sf.jasperreports.engine.JasperPrint;
-import net.sf.jasperreports.engine.export.JRPdfExporter;
-import net.sf.jasperreports.engine.export.JRPdfExporterParameter;
-
 import org.apache.commons.lang3.StringUtils;
 
 import pe.com.logistica.bean.negocio.Cliente;
@@ -134,6 +127,14 @@ public class NoviosMBean extends BaseMBean {
 							usuario.getUsuario());
 					getProgramaNovios().setIpCreacion(
 							obtenerRequest().getRemoteAddr());
+					
+					for (Cliente cliente : this.getProgramaNovios().getListaInvitados()){
+						
+						cliente.setUsuarioCreacion(
+								usuario.getUsuario());
+						cliente.setIpCreacion(
+								obtenerRequest().getRemoteAddr());
+					}
 					
 					Integer idnovios = negocioServicio.registrarNovios(getProgramaNovios());
 					this.setRegistroExito(idnovios!=null && idnovios.intValue()!=0);
@@ -251,7 +252,7 @@ public class NoviosMBean extends BaseMBean {
 			jasperStream = obtenerContexto().getExternalContext()
 					.getResourceAsStream(rutaJasper);
 			
-			imprimirPDF(enviarParametros(),stream,jasperStream);
+			//imprimirPDF(enviarParametros(),stream,jasperStream);
 			
 			obtenerContexto().responseComplete();
 			
@@ -316,7 +317,7 @@ public class NoviosMBean extends BaseMBean {
 		return null;
 	}
 	
-	private void imprimirPDF(Map<String, Object> map, OutputStream outputStream,
+	/*private void imprimirPDF(Map<String, Object> map, OutputStream outputStream,
 			InputStream jasperStream) throws JRException {
 
 		JasperPrint print = JasperFillManager.fillReport(jasperStream, map);
@@ -329,7 +330,7 @@ public class NoviosMBean extends BaseMBean {
 		exporter.setParameter(JRPdfExporterParameter.OUTPUT_STREAM,
 				outputStream);
 		exporter.exportReport();
-	}
+	}*/
 	
 	/**
 	 * @return the programaNovios
