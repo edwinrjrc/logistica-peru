@@ -70,4 +70,8 @@ public class SeguridadServicioImpl implements SeguridadServicio{
 	public Usuario inicioSesion(Usuario usuario) throws SQLException, Exception{
 		return ejbSession.inicioSesion(usuario);
 	}
+	@Override
+	public boolean cambiarClaveUsuario(Usuario usuario) throws SQLException, Exception {
+		return ejbSession.cambiarClaveUsuario(usuario);
+	}
 }
