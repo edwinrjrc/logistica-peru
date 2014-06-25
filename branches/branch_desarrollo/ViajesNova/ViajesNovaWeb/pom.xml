@@ -18,8 +18,7 @@
 	<artifactId>viajesNovaWeb</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>war</packaging>
-	<name>JBoss AS Quickstarts: Kitchensink-rf</name>
-	<description>A starter Java EE 6 webapp project for use on JBoss AS 7 / EAP 6, generated from the jboss-javaee6-webapp archetype</description>
+	<name>Viajes Nova</name>
 
 	<url>http://jboss.org/richfaces</url>
 
@@ -80,11 +79,6 @@
 				<version>${org.richfaces.bom.version}</version>
 				<type>pom</type>
 				<scope>import</scope>
-			</dependency>
-			<dependency>
-				<groupId>net.sf.jasperreports</groupId>
-				<artifactId>jasperreports</artifactId>
-				<version>5.6.0</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
@@ -252,6 +246,12 @@
 			<scope>test</scope>
 		</dependency>
 
+		<dependency>
+			<groupId>net.sf.jasperreports</groupId>
+			<artifactId>jasperreports</artifactId>
+			<version>5.6.0</version>
+			<scope>runtime</scope>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -386,4 +386,6 @@
 		</profile>
 
 	</profiles>
+	<description>Viajes Nova Web
+</description>
 </project>
