@@ -17,4 +17,5 @@ public interface SeguridadRemote {
 	Usuario consultarUsuario(int id) throws SQLException;
 	boolean actualizarUsuario(Usuario usuario) throws SQLException;
 	Usuario inicioSesion(Usuario usuario) throws SQLException, Exception;
+	boolean cambiarClaveUsuario(Usuario usuario) throws SQLException, Exception;
 }
