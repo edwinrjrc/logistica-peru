@@ -28,7 +28,7 @@
 					<tr>
 						<td align="center"><h:panelGrid border="0" cellpadding="0"
 								cellspacing="0" columns="2">
-								<h:graphicImage height="54" width="70"
+								<h:graphicImage
 									url="/resources/img/check.gif" />
 								<h:outputText value="#{msjeModalCorrecto}" />
 							</h:panelGrid></td>
@@ -37,11 +37,9 @@
 
 				<f:facet name="footer">
 					<h:panelGrid width="100%" style="text-align:center;">
-						<a4j:commandButton value="Aceptar" rendered="#{idModalForm != null}"
+						<a4j:commandButton value="Aceptar" 
 							onclick="#{rich:component('#{idModalForm}')}.hide(); return false;"
 							render="#{idrender}"
-							oncomplete="#{rich:component('idModalcorrecto')}.hide(); return false;" />
-						<a4j:commandButton value="Aceptar" rendered="#{idModalForm == null}"
 							oncomplete="#{rich:component('idModalcorrecto')}.hide(); return false;" />
 					</h:panelGrid>
 
