@@ -94,6 +94,16 @@
 					<rich:message for="idapematerno" showDetail="true"
 						showSummary="false" ajaxRendered="true" />
 				</h:panelGrid>
+				<h:outputLabel value="Fecha Nacimiento"
+					style="width: 100px; text-align:left" />
+				<h:panelGrid columns="1" border="0" cellpadding="0" cellspacing="0">
+					<rich:calendar id="idfecnacimiento"
+						value="#{usuarioMBean.usuario.fechaNacimiento}" required="true"
+						requiredMessage="Ingrese la fecha nacimiento" />
+					<rich:message for="idfecnacimiento" showDetail="true"
+						showSummary="false" ajaxRendered="true" />
+				</h:panelGrid>
+				
 				<f:facet name="footer">
 					<h:panelGrid border="0" cellpadding="0" cellspacing="0"
 						style="width:100%;text-align:center;">

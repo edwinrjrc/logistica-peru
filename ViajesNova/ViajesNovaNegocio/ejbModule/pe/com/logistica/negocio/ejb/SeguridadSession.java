@@ -64,8 +64,15 @@ public class SeguridadSession implements SeguridadRemote, SeguridadLocal {
 	}
 	
 	@Override
-	public boolean cambiarClaveUsuario(Usuario usuario) throws SQLException {
+	public boolean cambiarClaveUsuario(Usuario usuario) throws SQLException, Exception {
 		usuarioDao = new UsuarioDaoImpl();
-    	return usuarioDao.cambiarClaveUsuario(usuario);
+		
+		Usuario usuario2 = usuarioDao.inicioSesion2(usuario);
+		usuario2.setCredencialNueva(usuario.getCredencialNueva());
+		if (!usuario2.isEncontrado()){
+			throw new SQLException("Informacion de usuario incorrecta");
+		}
+		
+    	return usuarioDao.cambiarClaveUsuario(usuario2);
 	}
 }

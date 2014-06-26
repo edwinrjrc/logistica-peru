@@ -34,7 +34,7 @@ public class UsuarioDaoImpl implements UsuarioDao{
 		boolean resultado = false;
 		Connection conn = null;
 		CallableStatement cs = null;
-		String sql = "{? = call seguridad.fn_ingresarusuario(?,?,?,?,?,?)}";
+		String sql = "{? = call seguridad.fn_ingresarusuario(?,?,?,?,?,?,?)}";
 		
 		try {
 			conn = UtilConexion.obtenerConexion();
@@ -47,6 +47,7 @@ public class UsuarioDaoImpl implements UsuarioDao{
 			cs.setString(i++, UtilJdbc.convertirMayuscula(usuario.getNombres()));
 			cs.setString(i++, UtilJdbc.convertirMayuscula(usuario.getApellidoPaterno()));
 			cs.setString(i++, UtilJdbc.convertirMayuscula(usuario.getApellidoMaterno()));
+			cs.setDate(i++, UtilJdbc.convertirUtilDateSQLDate(usuario.getFechaNacimiento()));
 			cs.execute();
 			
 			resultado = cs.getBoolean(1);
@@ -343,15 +344,14 @@ public class UsuarioDaoImpl implements UsuarioDao{
 		boolean resultado = false;
 		Connection conn = null;
 		CallableStatement cs = null;
-		String sql = "{? = call seguridad.fn_cambiarclaveusuario(?,?,?)}";
+		String sql = "{? = call seguridad.fn_cambiarclaveusuario2(?,?)}";
 		
 		try {
 			conn = UtilConexion.obtenerConexion();
 			cs = conn.prepareCall(sql);
 			int i=1;
 			cs.registerOutParameter(i++, Types.BOOLEAN);
-			cs.setString(i++, usuario.getUsuario());
-			cs.setString(i++, UtilEncripta.encriptaCadena(usuario.getCredencial()));
+			cs.setInt(i++, usuario.getCodigoEntero());
 			cs.setString(i++, UtilEncripta.encriptaCadena(usuario.getCredencialNueva()));
 			cs.execute();
 			
