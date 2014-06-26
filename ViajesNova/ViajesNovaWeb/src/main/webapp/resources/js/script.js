@@ -14,6 +14,18 @@ function mostrarModal(idform){
 	}
 }
 
+function mostrarModalCC(idform){
+	var mostrarModal = document.getElementById('idFormHidden:idShowModal').value;
+	var tipoModal = document.getElementById('idFormHidden:idTipoModal').value;
+	
+	if (tipoModal == "1" && eval(mostrarModal)){
+		document.getElementById(idform+':idBotonModalCorrectoCC').click();
+	}
+	else if (tipoModal == "2" && eval(mostrarModal)){
+		document.getElementById(idform+':idBotonModalErrorCC').click();
+	}
+}
+
 function cerrarModalBoton(idform,idBoton){
 	try{
 		var direccionAgregada = document.getElementById(idform+':idHdDirAgr').value;

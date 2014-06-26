@@ -37,7 +37,7 @@
 				<h:panelGrid columns="1" border="0" cellpadding="0" cellspacing="0">
 					<h:inputText id="idUsuario" value="#{usuarioMBean.usuario.usuario}"
 						required="true" requiredMessage="Ingrese el usuario"
-						rendered="#{usuarioMBean.nuevoUsuario}" />
+						rendered="#{usuarioMBean.nuevoUsuario}" maxlength="10" />
 					<h:outputText value="#{usuarioMBean.usuario.usuario}"
 						rendered="#{usuarioMBean.editarUsuario}" />
 					<rich:message for="idUsuario" showDetail="false" showSummary="true"
@@ -49,7 +49,7 @@
 					rendered="#{usuarioMBean.nuevoUsuario}">
 					<h:inputSecret id="idClave" required="true"
 						requiredMessage="Ingrese la clave"
-						value="#{usuarioMBean.usuario.credencial}" />
+						value="#{usuarioMBean.usuario.credencial}" maxlength="10" />
 					<rich:message for="idClave" showDetail="true" showSummary="false"
 						ajaxRendered="true" />
 				</h:panelGrid>
@@ -57,7 +57,7 @@
 					rendered="#{usuarioMBean.nuevoUsuario}"
 					style="width: 100px; text-align:left" />
 				<h:inputSecret value="#{usuarioMBean.reCredencial}"
-					rendered="#{usuarioMBean.nuevoUsuario}" />
+					rendered="#{usuarioMBean.nuevoUsuario}" maxlength="10"/>
 				<h:outputLabel value="Rol" style="width: 100px; text-align:left" />
 				<h:panelGrid columns="1" border="0" cellpadding="0" cellspacing="0">
 					<h:selectOneMenu id="idRol"
