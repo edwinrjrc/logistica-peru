@@ -51,7 +51,7 @@
 				<h:panelGrid columns="1" border="0" cellpadding="0" cellspacing="0">
 					<h:inputSecret id="idCredenNueva"
 						value="#{usuarioMBean.credencialNueva}" required="true"
-						requiredMessage="Ingrese la contraseña nueva"/>
+						requiredMessage="Ingrese la contraseña nueva" />
 					<rich:message for="idCredenNueva" showSummary="true"
 						showDetail="false" ajaxRendered="true" />
 				</h:panelGrid>
@@ -60,7 +60,7 @@
 				<h:panelGrid columns="1" border="0" cellpadding="0" cellspacing="0">
 					<h:inputSecret id="idReCredenNueva"
 						value="#{usuarioMBean.usuario.credencialNueva}" required="true"
-						requiredMessage="Ingrese la contraseña nueva"/>
+						requiredMessage="Ingrese la contraseña nueva" />
 					<rich:message for="idReCredenNueva" showSummary="true"
 						showDetail="false" ajaxRendered="true" />
 				</h:panelGrid>
@@ -75,12 +75,18 @@
 										cellspacing="0">
 										<a4j:commandButton value="Grabar"
 											style="height:20px; width:100px"
-											actionListener="#{destinoMBean.ejecutarMetodo}"
-											render="idFormHidden,idPanelHidden,idPanelBotones,idModalcorrecto,idModalError"
-											oncomplete="mostrarModal('idformadmdestino')" />
+											actionListener="#{usuarioMBean.cambiarClave}"
+											render="idFormHiddenCC,idPanelHiddenCC,idPanelBotones,idModalcorrecto,idModalError"
+											oncomplete="mostrarModalCC('idFormcambioclave')" />
 										<a4j:commandButton value="Cancelar"
 											style="height:20px; width:100px"
-											oncomplete="#{rich:component('idModalformdestino')}.hide();return false;" />
+											oncomplete="#{rich:component('idModalformcambioclave')}.hide();return false;" />
+										<a4j:commandButton id="idBotonModalCorrecto"
+											style="display:none;" type="button"
+											oncomplete="#{rich:component('idModalcorrectoCC')}.show();" />
+										<a4j:commandButton id="idBotonModalError"
+											style="display:none;" type="button"
+											oncomplete="#{rich:component('idModalErrorCC')}.show();" />
 									</h:panelGrid></td>
 							</tr>
 						</table>
@@ -88,5 +94,10 @@
 				</f:facet>
 			</h:panelGrid>
 		</h:form>
+
+		<ui:include src="/resources/includes/includemensajeCC.xhtml">
+			<ui:param name="backBean" value="#{usuarioMBean}" />
+			<ui:param name="idModalForm" value="idModalformcambioclave" />
+		</ui:include>
 	</rich:popupPanel>
 </ui:composition>
