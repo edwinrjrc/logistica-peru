@@ -14,6 +14,7 @@ import java.util.List;
 import pe.com.logistica.bean.negocio.Usuario;
 import pe.com.logistica.negocio.dao.UsuarioDao;
 import pe.com.logistica.negocio.util.UtilConexion;
+import pe.com.logistica.negocio.util.UtilEncripta;
 import pe.com.logistica.negocio.util.UtilJdbc;
 
 /**
@@ -41,7 +42,7 @@ public class UsuarioDaoImpl implements UsuarioDao{
 			int i=1;
 			cs.registerOutParameter(i++, Types.BOOLEAN);
 			cs.setString(i++, usuario.getUsuario());
-			cs.setString(i++, usuario.getCredencial());
+			cs.setString(i++, UtilEncripta.encriptaCadena(usuario.getCredencial()));
 			cs.setInt(i++, usuario.getRol().getCodigoEntero());
 			cs.setString(i++, UtilJdbc.convertirMayuscula(usuario.getNombres()));
 			cs.setString(i++, UtilJdbc.convertirMayuscula(usuario.getApellidoPaterno()));
@@ -248,8 +249,8 @@ public class UsuarioDaoImpl implements UsuarioDao{
 			cs = conn.prepareCall(sql);
 			int i=1;
 			cs.registerOutParameter(i++, Types.BOOLEAN);
-			cs.setString(i++, usuario.getUsuario());
-			cs.setString(i++, usuario.getCredencial());
+			cs.setString(i++, UtilJdbc.convertirMayuscula(usuario.getUsuario()));
+			cs.setString(i++, UtilEncripta.encriptaCadena(usuario.getCredencial()));
 			
 			cs.execute();
 			
@@ -286,14 +287,14 @@ public class UsuarioDaoImpl implements UsuarioDao{
 		Connection conn = null;
 		CallableStatement cs = null;
 		ResultSet rs = null;
-		String sql = "select id, usuario, id_rol, nombre, nombres, apepaterno, apematerno" +
-				" from seguridad.vw_listarusuarios where usuario = ? and credencial = ?";
+		String sql = "select id, usuario, credencial, id_rol, nombre, nombres, apepaterno, apematerno" +
+				" from seguridad.vw_listarusuarios where upper(usuario) = ?";
 
 		try {
 			conn = UtilConexion.obtenerConexion();
 			cs = conn.prepareCall(sql);
-			cs.setString(1, usuario.getUsuario());
-			cs.setString(2, usuario.getCredencial());
+			cs.setString(1, UtilJdbc.convertirMayuscula(usuario.getUsuario()));
+			//cs.setString(2, UtilEncripta.encriptaCadena(usuario.getCredencial()));
 			rs = cs.executeQuery();
 			
 			resultado = new Usuario();
@@ -305,7 +306,8 @@ public class UsuarioDaoImpl implements UsuarioDao{
 				resultado.setNombres(UtilJdbc.obtenerCadena(rs,"nombres"));
 				resultado.setApellidoPaterno(UtilJdbc.obtenerCadena(rs,"apepaterno"));
 				resultado.setApellidoMaterno(UtilJdbc.obtenerCadena(rs,"apematerno"));
-				resultado.setEncontrado(true);
+				String credencial = UtilJdbc.obtenerCadena(rs,"credencial");
+				resultado.setEncontrado(UtilEncripta.desencriptaCadena(credencial).equals(usuario.getCredencial()));
 			}
 		} catch (SQLException e) {
 			resultado = null;
@@ -349,8 +351,8 @@ public class UsuarioDaoImpl implements UsuarioDao{
 			int i=1;
 			cs.registerOutParameter(i++, Types.BOOLEAN);
 			cs.setString(i++, usuario.getUsuario());
-			cs.setString(i++, usuario.getCredencial());
-			cs.setString(i++, usuario.getCredencialNueva());
+			cs.setString(i++, UtilEncripta.encriptaCadena(usuario.getCredencial()));
+			cs.setString(i++, UtilEncripta.encriptaCadena(usuario.getCredencialNueva()));
 			cs.execute();
 			
 			resultado = cs.getBoolean(1);
