@@ -36,6 +36,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import pe.com.logistica.bean.negocio.Cliente;
 import pe.com.logistica.bean.negocio.ProgramaNovios;
+import pe.com.logistica.bean.negocio.ServicioNovios;
 import pe.com.logistica.bean.negocio.Usuario;
 import pe.com.logistica.web.servicio.NegocioServicio;
 import pe.com.logistica.web.servicio.impl.NegocioServicioImpl;
@@ -56,6 +57,7 @@ public class NoviosMBean extends BaseMBean {
 	private ProgramaNovios programaNovios;
 	private ProgramaNovios programaNoviosBusqueda;
 	private Cliente clienteBusqueda;
+	private ServicioNovios servicioNovios;
 
 	private int tipoBusqueda;
 
@@ -63,6 +65,7 @@ public class NoviosMBean extends BaseMBean {
 	private boolean registroExito;
 
 	private List<ProgramaNovios> listadoNovios;
+	private List<ServicioNovios> listadoServicios;
 	private List<Cliente> listadoClientes;
 	private List<Cliente> listadoInvitados;
 
@@ -373,6 +376,10 @@ public class NoviosMBean extends BaseMBean {
 		exporter.setConfiguration(configuration);
 		exporter.exportReport();
 	}
+	
+	public void agregarServicio(){
+		
+	}
 
 	/**
 	 * @return the programaNovios
@@ -537,6 +544,41 @@ public class NoviosMBean extends BaseMBean {
 	 */
 	public void setRegistroExito(boolean registroExito) {
 		this.registroExito = registroExito;
+	}
+
+	/**
+	 * @return the listadoServicios
+	 */
+	public List<ServicioNovios> getListadoServicios() {
+		if (listadoServicios == null){
+			listadoServicios = new ArrayList<ServicioNovios>();
+		}
+		
+		return listadoServicios;
+	}
+
+	/**
+	 * @param listadoServicios the listadoServicios to set
+	 */
+	public void setListadoServicios(List<ServicioNovios> listadoServicios) {
+		this.listadoServicios = listadoServicios;
+	}
+
+	/**
+	 * @return the servicioNovios
+	 */
+	public ServicioNovios getServicioNovios() {
+		if (servicioNovios == null){
+			servicioNovios = new ServicioNovios();
+		}
+		return servicioNovios;
+	}
+
+	/**
+	 * @param servicioNovios the servicioNovios to set
+	 */
+	public void setServicioNovios(ServicioNovios servicioNovios) {
+		this.servicioNovios = servicioNovios;
 	}
 
 }
