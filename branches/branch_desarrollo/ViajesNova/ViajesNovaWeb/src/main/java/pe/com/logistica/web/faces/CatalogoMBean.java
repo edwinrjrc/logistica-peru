@@ -48,6 +48,7 @@ public class CatalogoMBean implements Serializable{
 	private List<SelectItem> catalogoContinente;
 	private List<SelectItem> catalogoTipoDestino;
 	private List<SelectItem> catalogoDestino;
+	private List<SelectItem> catalogoTipoServicio;
 
 	private SeguridadServicio seguridadServicio;
 	private SoporteServicio soporteServicio;
@@ -345,6 +346,20 @@ public class CatalogoMBean implements Serializable{
 	 */
 	public void setCatalogoDestino(List<SelectItem> catalogoDestino) {
 		this.catalogoDestino = catalogoDestino;
+	}
+
+	/**
+	 * @return the catalogoTipoServicio
+	 */
+	public List<SelectItem> getCatalogoTipoServicio() {
+		return catalogoTipoServicio;
+	}
+
+	/**
+	 * @param catalogoTipoServicio the catalogoTipoServicio to set
+	 */
+	public void setCatalogoTipoServicio(List<SelectItem> catalogoTipoServicio) {
+		this.catalogoTipoServicio = catalogoTipoServicio;
 	}
 
 }

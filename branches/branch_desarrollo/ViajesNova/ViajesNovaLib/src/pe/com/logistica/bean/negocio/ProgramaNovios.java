@@ -36,7 +36,12 @@ public class ProgramaNovios extends BaseNegocio {
 	private String observaciones;
 	
 	private List<Cliente> listaInvitados;
+	private List<ServicioNovios> listaServicios;
 	private int cantidadInvitados;
+	
+	private BigDecimal montoTotalServiciosPrograma;
+	private BigDecimal montoIgvServiciosPrograma;
+	private BigDecimal montoSinIgvServiciosPrograma;
 
 	/**
 	 * 
@@ -265,6 +270,64 @@ public class ProgramaNovios extends BaseNegocio {
 	 */
 	public void setCantidadInvitados(int cantidadInvitados) {
 		this.cantidadInvitados = cantidadInvitados;
+	}
+
+	/**
+	 * @return the listaServicios
+	 */
+	public List<ServicioNovios> getListaServicios() {
+		return listaServicios;
+	}
+
+	/**
+	 * @param listaServicios the listaServicios to set
+	 */
+	public void setListaServicios(List<ServicioNovios> listaServicios) {
+		this.listaServicios = listaServicios;
+	}
+
+	/**
+	 * @return the montoTotalServiciosPrograma
+	 */
+	public BigDecimal getMontoTotalServiciosPrograma() {
+		return montoTotalServiciosPrograma;
+	}
+
+	/**
+	 * @param montoTotalServiciosPrograma the montoTotalServiciosPrograma to set
+	 */
+	public void setMontoTotalServiciosPrograma(
+			BigDecimal montoTotalServiciosPrograma) {
+		this.montoTotalServiciosPrograma = montoTotalServiciosPrograma;
+	}
+
+	/**
+	 * @return the montoIgvServiciosPrograma
+	 */
+	public BigDecimal getMontoIgvServiciosPrograma() {
+		return montoIgvServiciosPrograma;
+	}
+
+	/**
+	 * @param montoIgvServiciosPrograma the montoIgvServiciosPrograma to set
+	 */
+	public void setMontoIgvServiciosPrograma(BigDecimal montoIgvServiciosPrograma) {
+		this.montoIgvServiciosPrograma = montoIgvServiciosPrograma;
+	}
+
+	/**
+	 * @return the montoSinIgvServiciosPrograma
+	 */
+	public BigDecimal getMontoSinIgvServiciosPrograma() {
+		return montoSinIgvServiciosPrograma;
+	}
+
+	/**
+	 * @param montoSinIgvServiciosPrograma the montoSinIgvServiciosPrograma to set
+	 */
+	public void setMontoSinIgvServiciosPrograma(
+			BigDecimal montoSinIgvServiciosPrograma) {
+		this.montoSinIgvServiciosPrograma = montoSinIgvServiciosPrograma;
 	}
 
 }
