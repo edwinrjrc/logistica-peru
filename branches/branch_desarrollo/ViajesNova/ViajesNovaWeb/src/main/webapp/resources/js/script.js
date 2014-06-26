@@ -15,8 +15,8 @@ function mostrarModal(idform){
 }
 
 function mostrarModalCC(idform){
-	var mostrarModal = document.getElementById('idFormHidden:idShowModal').value;
-	var tipoModal = document.getElementById('idFormHidden:idTipoModal').value;
+	var mostrarModal = document.getElementById('idFormHiddenCC:idShowModal').value;
+	var tipoModal = document.getElementById('idFormHiddenCC:idTipoModal').value;
 	
 	if (tipoModal == "1" && eval(mostrarModal)){
 		document.getElementById(idform+':idBotonModalCorrectoCC').click();

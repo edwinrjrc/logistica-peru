@@ -76,15 +76,15 @@
 										<a4j:commandButton value="Grabar"
 											style="height:20px; width:100px"
 											actionListener="#{usuarioMBean.cambiarClave}"
-											render="idFormHiddenCC,idPanelHiddenCC,idPanelBotones,idModalcorrecto,idModalError"
+											render="idPanelHiddenCC,idPanelBotones,idModalcorrectoCC,idModalErrorCC"
 											oncomplete="mostrarModalCC('idFormcambioclave')" />
 										<a4j:commandButton value="Cancelar"
 											style="height:20px; width:100px"
 											oncomplete="#{rich:component('idModalformcambioclave')}.hide();return false;" />
-										<a4j:commandButton id="idBotonModalCorrecto"
+										<a4j:commandButton id="idBotonModalCorrectoCC"
 											style="display:none;" type="button"
 											oncomplete="#{rich:component('idModalcorrectoCC')}.show();" />
-										<a4j:commandButton id="idBotonModalError"
+										<a4j:commandButton id="idBotonModalErrorCC"
 											style="display:none;" type="button"
 											oncomplete="#{rich:component('idModalErrorCC')}.show();" />
 									</h:panelGrid></td>
