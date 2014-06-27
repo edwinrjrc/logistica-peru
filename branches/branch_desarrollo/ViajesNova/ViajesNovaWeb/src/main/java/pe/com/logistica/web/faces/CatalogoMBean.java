@@ -352,6 +352,16 @@ public class CatalogoMBean implements Serializable{
 	 * @return the catalogoTipoServicio
 	 */
 	public List<SelectItem> getCatalogoTipoServicio() {
+		int idmaestro = UtilWeb.obtenerEnteroPropertieMaestro(
+				"maestroTipoServicios", "aplicacionDatos");
+
+		try {
+			List<BaseVO> lista = soporteServicio
+					.listarCatalogoMaestro(idmaestro);
+			catalogoTipoServicio = UtilWeb.convertirSelectItem(lista);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		return catalogoTipoServicio;
 	}
 
