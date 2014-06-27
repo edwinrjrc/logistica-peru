@@ -50,7 +50,6 @@ public class ClienteDaoImpl implements ClienteDao {
 
 		try {
 			conn = UtilConexion.obtenerConexion();
-			conn.setAutoCommit(false);
 			cs = conn.prepareCall(sql);
 			int i = 1;
 			cs.registerOutParameter(i++, Types.OTHER);
@@ -105,7 +104,6 @@ public class ClienteDaoImpl implements ClienteDao {
 				resultado.add(persona2);
 			}
 			
-			conn.commit();
 		} catch (SQLException e) {
 			resultado = null;
 			throw new SQLException(e);
@@ -145,7 +143,6 @@ public class ClienteDaoImpl implements ClienteDao {
 
 		try {
 			conn = UtilConexion.obtenerConexion();
-			conn.setAutoCommit(false);
 			cs = conn.prepareCall(sql);
 			int i = 1;
 			cs.registerOutParameter(i++, Types.OTHER);
@@ -214,7 +211,6 @@ public class ClienteDaoImpl implements ClienteDao {
 				resultado.add(persona2);
 			}
 			
-			conn.commit();
 		} catch (SQLException e) {
 			resultado = null;
 			throw new SQLException(e);
@@ -373,7 +369,6 @@ public class ClienteDaoImpl implements ClienteDao {
 
 		try {
 			conn = UtilConexion.obtenerConexion();
-			conn.setAutoCommit(false);
 			cs = conn.prepareCall(sql);
 			int i = 1;
 			cs.registerOutParameter(i++, Types.OTHER);
@@ -407,7 +402,6 @@ public class ClienteDaoImpl implements ClienteDao {
 				resultado.add(persona2);
 			}
 			
-			conn.commit();
 		} catch (SQLException e) {
 			resultado = null;
 			throw new SQLException(e);

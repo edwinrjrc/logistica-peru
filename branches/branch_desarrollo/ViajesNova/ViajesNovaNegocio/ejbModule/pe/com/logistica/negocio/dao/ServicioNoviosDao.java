@@ -9,6 +9,7 @@ import java.util.List;
 
 import pe.com.logistica.bean.negocio.Cliente;
 import pe.com.logistica.bean.negocio.ProgramaNovios;
+import pe.com.logistica.bean.negocio.ServicioNovios;
 
 /**
  * @author Edwin
@@ -25,4 +26,7 @@ public interface ServicioNoviosDao {
 			throws SQLException, Exception;
 	
 	public List<ProgramaNovios> consultarNovios(ProgramaNovios programaNovios) throws SQLException;
+
+	boolean ingresarServicioNovios(ServicioNovios servicioNovios, int idnovios,
+			Connection conexion) throws SQLException;
 }

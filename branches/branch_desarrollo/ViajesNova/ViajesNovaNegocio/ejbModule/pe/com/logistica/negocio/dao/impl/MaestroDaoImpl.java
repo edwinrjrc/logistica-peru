@@ -442,7 +442,7 @@ public class MaestroDaoImpl implements MaestroDao {
 		List<BaseVO> listaPaises = null;
 		try {
 			conn = UtilConexion.obtenerConexion();
-			conn.setAutoCommit(false);
+			
 			cs = conn.prepareCall(sql);
 			cs.registerOutParameter(1, Types.OTHER);
 			cs.setInt(2, idcontinente);
@@ -458,7 +458,6 @@ public class MaestroDaoImpl implements MaestroDao {
 				listaPaises.add(pais);
 			}
 			
-			conn.commit();
 		} catch (SQLException e) {
 			throw new SQLException(e);
 		} finally {

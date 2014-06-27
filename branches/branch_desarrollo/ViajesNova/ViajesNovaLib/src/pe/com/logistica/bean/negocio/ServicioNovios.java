@@ -36,6 +36,9 @@ public class ServicioNovios extends BaseNegocio{
 	 * @return the tipoServicio
 	 */
 	public BaseVO getTipoServicio() {
+		if (tipoServicio == null){
+			tipoServicio = new BaseVO();
+		}
 		return tipoServicio;
 	}
 
@@ -112,9 +115,11 @@ public class ServicioNovios extends BaseNegocio{
 			
 			montoTotalTipoServicio = this.getPrecioUnitario().multiply(cant);
 		} catch (NumberFormatException e) {
+			montoTotalTipoServicio = BigDecimal.ZERO;
 			e.printStackTrace();
 		} catch (Exception e){
-			
+			montoTotalTipoServicio = BigDecimal.ZERO;
+			e.printStackTrace();
 		}
 		
 		return montoTotalTipoServicio;

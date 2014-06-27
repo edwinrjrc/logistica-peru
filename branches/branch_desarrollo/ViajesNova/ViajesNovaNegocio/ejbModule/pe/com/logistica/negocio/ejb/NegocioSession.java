@@ -8,12 +8,14 @@ import javax.ejb.Stateless;
 
 import org.apache.commons.lang3.StringUtils;
 
+import pe.com.logistica.bean.base.BaseVO;
 import pe.com.logistica.bean.negocio.Cliente;
 import pe.com.logistica.bean.negocio.Contacto;
 import pe.com.logistica.bean.negocio.Direccion;
 import pe.com.logistica.bean.negocio.Maestro;
 import pe.com.logistica.bean.negocio.ProgramaNovios;
 import pe.com.logistica.bean.negocio.Proveedor;
+import pe.com.logistica.bean.negocio.ServicioNovios;
 import pe.com.logistica.bean.negocio.Telefono;
 import pe.com.logistica.bean.negocio.Ubigeo;
 import pe.com.logistica.negocio.dao.ClienteDao;
@@ -661,33 +663,38 @@ public class NegocioSession implements NegocioSessionRemote,
 	
 	@Override
 	public Integer registrarNovios(ProgramaNovios programaNovios) throws SQLException, Exception{
-		ServicioNoviosDao servicioNovios = new ServicioNoviosDaoImpl();
+		ServicioNoviosDao servicioNoviosDao = new ServicioNoviosDaoImpl();
 		
 		Connection conexion = null;
 		try {
 			conexion = UtilConexion.obtenerConexion();
-			conexion.setAutoCommit(false);
-			
-			Integer idnovios = servicioNovios.registrarNovios(programaNovios, conexion);
+						
+			Integer idnovios = servicioNoviosDao.registrarNovios(programaNovios, conexion);
 			
 			if (programaNovios.getListaInvitados() != null && !programaNovios.getListaInvitados().isEmpty()){
 				for (Cliente invitado : programaNovios.getListaInvitados()) {
-					boolean exitoRegistro = servicioNovios.registrarInvitado(invitado, idnovios, conexion);
+					boolean exitoRegistro = servicioNoviosDao.registrarInvitado(invitado, idnovios, conexion);
 					if (!exitoRegistro){
 						throw new ErrorRegistroDataException("No se puedo registrar los invitados de los novios");
 					}
 				}
 			}
 			
-			conexion.commit();
+			if (programaNovios.getListaServicios() != null && !programaNovios.getListaServicios().isEmpty()){
+				for (ServicioNovios servicioNovios : programaNovios.getListaServicios()) {
+					boolean exitoRegistro = servicioNoviosDao.ingresarServicioNovios(servicioNovios, idnovios, conexion);
+					if (!exitoRegistro){
+						throw new ErrorRegistroDataException("No se puedo registrar los servicios de los novios");
+					}
+				}
+			}
+			
 			return idnovios;
 		}
 		catch (ErrorRegistroDataException e){
-			conexion.rollback();
 			throw new ErrorRegistroDataException(e.getMensajeError(), e);
 		}
 		catch (SQLException e){
-			conexion.rollback();
 			throw new SQLException(e);
 		}
 		finally {
@@ -707,5 +714,17 @@ public class NegocioSession implements NegocioSessionRemote,
 	public List<ProgramaNovios> consultarNovios(ProgramaNovios programaNovios) throws SQLException, Exception{
 		ServicioNoviosDao servicioNovios = new ServicioNoviosDaoImpl();
 		return servicioNovios.consultarNovios(programaNovios);
+	}
+	
+	@Override
+	public ServicioNovios agregarServicio(ServicioNovios servicioNovios) throws SQLException, Exception{
+		Integer idTipoServicio = servicioNovios.getTipoServicio().getCodigoEntero();
+		MaestroDao maestroDao = new MaestroDaoImpl();
+		Maestro hijoMaestro = new Maestro();
+		hijoMaestro.setCodigoMaestro(12);
+		hijoMaestro.setCodigoEntero(idTipoServicio);
+		servicioNovios.setTipoServicio((BaseVO)maestroDao.consultarHijoMaestro(hijoMaestro));
+		
+		return servicioNovios;
 	}
 }
