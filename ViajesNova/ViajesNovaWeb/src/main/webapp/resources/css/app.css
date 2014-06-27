@@ -107,3 +107,13 @@
 .estilocampo1 {
 	text-transform: uppercase;
 }
+.col1RSPN{
+	width: 90%;
+	text-align: left;
+	font-weight: bold;
+}
+.col2RSPN{
+	width: 10%;
+	text-align: right;
+	font-weight: bold;
+}

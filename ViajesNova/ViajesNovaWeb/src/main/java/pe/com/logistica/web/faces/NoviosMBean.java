@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -35,11 +36,14 @@ import net.sf.jasperreports.export.SimplePdfExporterConfiguration;
 import org.apache.commons.lang3.StringUtils;
 
 import pe.com.logistica.bean.negocio.Cliente;
+import pe.com.logistica.bean.negocio.Parametro;
 import pe.com.logistica.bean.negocio.ProgramaNovios;
 import pe.com.logistica.bean.negocio.ServicioNovios;
 import pe.com.logistica.bean.negocio.Usuario;
 import pe.com.logistica.web.servicio.NegocioServicio;
+import pe.com.logistica.web.servicio.ParametroServicio;
 import pe.com.logistica.web.servicio.impl.NegocioServicioImpl;
+import pe.com.logistica.web.servicio.impl.ParametroServicioImpl;
 
 /**
  * @author edwreb
@@ -73,6 +77,7 @@ public class NoviosMBean extends BaseMBean {
 
 	// private SoporteServicio soporteServicio;
 	private NegocioServicio negocioServicio;
+	private ParametroServicio parametroServicio;
 
 	/**
 	 * 
@@ -83,6 +88,7 @@ public class NoviosMBean extends BaseMBean {
 					.getCurrentInstance().getExternalContext().getContext();
 			// soporteServicio = new SoporteServicioImpl(servletContext);
 			negocioServicio = new NegocioServicioImpl(servletContext);
+			parametroServicio = new ParametroServicioImpl(servletContext);
 		} catch (NamingException e) {
 			e.printStackTrace();
 		}
@@ -134,6 +140,7 @@ public class NoviosMBean extends BaseMBean {
 
 					getProgramaNovios()
 							.setListaInvitados(getListadoInvitados());
+					getProgramaNovios().setListaServicios(getListadoServicios());
 					HttpSession session = obtenerSession(false);
 					Usuario usuario = (Usuario) session
 							.getAttribute("usuarioSession");
@@ -282,7 +289,7 @@ public class NoviosMBean extends BaseMBean {
 			jasperStream = facesContext.getExternalContext()
 					.getResourceAsStream(rutaJasper);
 
-			imprimirPDF(enviarParametros(), stream, jasperStream);
+			//imprimirPDF(enviarParametros(), stream, jasperStream);
 
 			facesContext.responseComplete();
 
@@ -358,7 +365,7 @@ public class NoviosMBean extends BaseMBean {
 		return null;
 	}
 
-	private void imprimirPDF(Map<String, Object> map,
+	/*private void imprimirPDF(Map<String, Object> map,
 			OutputStream outputStream, InputStream jasperStream)
 			throws JRException {
 
@@ -375,10 +382,109 @@ public class NoviosMBean extends BaseMBean {
 		configuration.setCreatingBatchModeBookmarks(true);
 		exporter.setConfiguration(configuration);
 		exporter.exportReport();
-	}
+	}*/
 	
 	public void agregarServicio(){
-		
+		try {
+			if (validarServicioAgregar()){
+				HttpSession session = obtenerSession(false);
+				Usuario usuario = (Usuario) session
+						.getAttribute("usuarioSession");
+				getServicioNovios()
+						.setUsuarioCreacion(usuario.getUsuario());
+				getServicioNovios().setIpCreacion(
+						obtenerRequest().getRemoteAddr());
+				
+				this.getListadoServicios().add(this.negocioServicio.agregarServicioNovios(getServicioNovios()));
+				this.setServicioNovios(null);
+				
+				calcularTotales();
+			}
+		} catch (SQLException e) {
+			this.setShowModal(true);
+			this.setMensajeModal(e.getMessage());
+			this.setTipoModal(TIPO_MODAL_ERROR);
+			e.printStackTrace();
+		} catch (Exception e) {
+			this.setShowModal(true);
+			this.setMensajeModal(e.getMessage());
+			this.setTipoModal(TIPO_MODAL_ERROR);
+			e.printStackTrace();
+		}
+	}
+	
+	public void eliminarServicio(ServicioNovios servicioNovios){
+		try {
+			this.getListadoServicios().remove(servicioNovios);
+				
+			calcularTotales();
+		} catch (Exception e) {
+			this.setShowModal(true);
+			this.setMensajeModal(e.getMessage());
+			this.setTipoModal(TIPO_MODAL_ERROR);
+			e.printStackTrace();
+		}
+	}
+
+	private void calcularTotales() {
+		BigDecimal montoSubtotal = BigDecimal.ZERO;
+		BigDecimal montoIgv = BigDecimal.ZERO;
+		BigDecimal porcenIgv = BigDecimal.ZERO;
+		BigDecimal montoTotal = BigDecimal.ZERO;
+		try {
+			String valorIGV = "0";
+			try {
+				Parametro paramIGV = parametroServicio.consultarParametro(1);
+				valorIGV = paramIGV.getValor();
+			} catch (SQLException e) {
+				valorIGV = "0";
+				e.printStackTrace();
+			}
+			for (ServicioNovios servicioNovios : this.getListadoServicios()){
+				montoTotal = montoTotal.add(servicioNovios.getMontoTotalTipoServicio());
+			}
+			porcenIgv = BigDecimal.valueOf(Double.valueOf(valorIGV));
+			BigDecimal decimalIGVmas1 = porcenIgv.add(BigDecimal.ONE);
+			montoSubtotal = montoTotal.divide(decimalIGVmas1, 2, RoundingMode.DOWN);
+			montoIgv = montoSubtotal.multiply(porcenIgv);
+		} catch (NumberFormatException e) {
+			e.printStackTrace();
+		} catch (Exception e){
+			e.printStackTrace();
+			montoSubtotal = BigDecimal.ZERO;
+			montoIgv = BigDecimal.ZERO;
+			montoTotal = BigDecimal.ZERO;
+		}
+		this.getProgramaNovios().setMontoSinIgvServiciosPrograma(montoSubtotal);
+		this.getProgramaNovios().setMontoIgvServiciosPrograma(montoIgv);
+		this.getProgramaNovios().setPorcentajeIgv(porcenIgv);
+		this.getProgramaNovios().setMontoTotalServiciosPrograma(montoTotal);
+	}
+
+	private boolean validarServicioAgregar() {
+		boolean resultado = true;
+		String idFormulario = "idFormNovios";
+		if (this.getServicioNovios().getTipoServicio().getCodigoEntero() == null || this.getServicioNovios().getTipoServicio().getCodigoEntero().intValue() == 0){
+			this.agregarMensaje(idFormulario + ":idSelTipoServicio",
+					"Seleccione el tipo de servicio", "", FacesMessage.SEVERITY_ERROR);
+			resultado = false;
+		}
+		if (StringUtils.isBlank(this.getServicioNovios().getDescripcionServicio())){
+			this.agregarMensaje(idFormulario + ":idDescServicio",
+					"Ingrese la descripcion del servicio", "", FacesMessage.SEVERITY_ERROR);
+			resultado = false;
+		}
+		if (this.getServicioNovios().getCantidad() == 0){
+			this.agregarMensaje(idFormulario + ":idCantidad",
+					"Ingrese la cantidad", "", FacesMessage.SEVERITY_ERROR);
+			resultado = false;
+		}
+		if (this.getServicioNovios().getPrecioUnitario() == null || this.getServicioNovios().getPrecioUnitario().doubleValue() == 0.0){
+			this.agregarMensaje(idFormulario + ":idPrecUnitario",
+					"Ingrese el precio unitario del servicio", "", FacesMessage.SEVERITY_ERROR);
+			resultado = false;
+		}
+		return resultado;
 	}
 
 	/**

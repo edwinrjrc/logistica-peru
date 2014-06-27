@@ -10,6 +10,7 @@ import pe.com.logistica.bean.negocio.Contacto;
 import pe.com.logistica.bean.negocio.Direccion;
 import pe.com.logistica.bean.negocio.ProgramaNovios;
 import pe.com.logistica.bean.negocio.Proveedor;
+import pe.com.logistica.bean.negocio.ServicioNovios;
 import pe.com.logistica.negocio.exception.ResultadoCeroDaoException;
 
 @Remote
@@ -50,5 +51,8 @@ public interface NegocioSessionRemote {
 	public List<Cliente> listarClientesNovios(String genero) throws SQLException, Exception;
 	
 	List<ProgramaNovios> consultarNovios(ProgramaNovios programaNovios)
+			throws SQLException, Exception;
+
+	ServicioNovios agregarServicio(ServicioNovios servicioNovios)
 			throws SQLException, Exception;
 }

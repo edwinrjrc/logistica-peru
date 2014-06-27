@@ -24,6 +24,11 @@ import pe.com.logistica.web.servicio.impl.ParametroServicioImpl;
 @SessionScoped()
 public class ParametroMBean extends BaseMBean {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 3310865321325342819L;
+
 	private List<Parametro> listaParametros;
 	
 	private Parametro parametro;

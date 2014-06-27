@@ -41,6 +41,7 @@ public class ProgramaNovios extends BaseNegocio {
 	
 	private BigDecimal montoTotalServiciosPrograma;
 	private BigDecimal montoIgvServiciosPrograma;
+	private BigDecimal porcentajeIgv;
 	private BigDecimal montoSinIgvServiciosPrograma;
 
 	/**
@@ -328,6 +329,20 @@ public class ProgramaNovios extends BaseNegocio {
 	public void setMontoSinIgvServiciosPrograma(
 			BigDecimal montoSinIgvServiciosPrograma) {
 		this.montoSinIgvServiciosPrograma = montoSinIgvServiciosPrograma;
+	}
+
+	/**
+	 * @return the porcentajeIgv
+	 */
+	public BigDecimal getPorcentajeIgv() {
+		return porcentajeIgv;
+	}
+
+	/**
+	 * @param porcentajeIgv the porcentajeIgv to set
+	 */
+	public void setPorcentajeIgv(BigDecimal porcentajeIgv) {
+		this.porcentajeIgv = porcentajeIgv;
 	}
 
 }

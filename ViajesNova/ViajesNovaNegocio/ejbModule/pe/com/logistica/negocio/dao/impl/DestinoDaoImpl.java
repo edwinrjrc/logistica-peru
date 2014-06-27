@@ -139,7 +139,6 @@ public class DestinoDaoImpl implements DestinoDao {
 		List<Destino> listaDestinos = null;
 		try {
 			conn = UtilConexion.obtenerConexion();
-			conn.setAutoCommit(false);
 			cs = conn.prepareCall(sql);
 			cs.registerOutParameter(1, Types.OTHER);
 			cs.execute();
@@ -161,7 +160,6 @@ public class DestinoDaoImpl implements DestinoDao {
 				listaDestinos.add(destino);
 			}
 			
-			conn.commit();
 		} catch (SQLException e) {
 			throw new SQLException(e);
 		} finally {

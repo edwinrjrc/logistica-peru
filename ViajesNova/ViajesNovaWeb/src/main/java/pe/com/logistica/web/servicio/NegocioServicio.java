@@ -11,6 +11,7 @@ import pe.com.logistica.bean.negocio.Contacto;
 import pe.com.logistica.bean.negocio.Direccion;
 import pe.com.logistica.bean.negocio.ProgramaNovios;
 import pe.com.logistica.bean.negocio.Proveedor;
+import pe.com.logistica.bean.negocio.ServicioNovios;
 import pe.com.logistica.negocio.exception.ResultadoCeroDaoException;
 
 /**
@@ -56,5 +57,8 @@ public interface NegocioServicio {
 			Exception;
 
 	List<ProgramaNovios> consultarNovios(ProgramaNovios programaNovios)
+			throws SQLException, Exception;
+
+	ServicioNovios agregarServicioNovios(ServicioNovios servicioNovios)
 			throws SQLException, Exception; 
 }

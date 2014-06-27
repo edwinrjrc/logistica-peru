@@ -17,6 +17,7 @@ import pe.com.logistica.bean.negocio.Contacto;
 import pe.com.logistica.bean.negocio.Direccion;
 import pe.com.logistica.bean.negocio.ProgramaNovios;
 import pe.com.logistica.bean.negocio.Proveedor;
+import pe.com.logistica.bean.negocio.ServicioNovios;
 import pe.com.logistica.negocio.ejb.NegocioSessionRemote;
 import pe.com.logistica.negocio.exception.ResultadoCeroDaoException;
 import pe.com.logistica.web.servicio.NegocioServicio;
@@ -135,6 +136,12 @@ public class NegocioServicioImpl implements NegocioServicio {
 	public List<ProgramaNovios> consultarNovios(ProgramaNovios programaNovios)
 			throws SQLException, Exception {
 		return ejbSession.consultarNovios(programaNovios);
+	}
+	
+	@Override
+	public ServicioNovios agregarServicioNovios(ServicioNovios servicioNovios)
+			throws SQLException, Exception {
+		return ejbSession.agregarServicio(servicioNovios);
 	}
 }
 	

@@ -15,7 +15,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import pe.com.logistica.bean.negocio.Cliente;
 import pe.com.logistica.bean.negocio.ProgramaNovios;
-import pe.com.logistica.bean.negocio.Telefono;
+import pe.com.logistica.bean.negocio.ServicioNovios;
 import pe.com.logistica.negocio.dao.ServicioNoviosDao;
 import pe.com.logistica.negocio.util.UtilConexion;
 import pe.com.logistica.negocio.util.UtilJdbc;
@@ -100,7 +100,7 @@ public class ServicioNoviosDaoImpl implements ServicioNoviosDao {
 			throws SQLException, Exception {
 		Integer codigoNovios = 0;
 		CallableStatement cs = null;
-		String sql = "{ ? = call negocio.fn_ingresarservicionovios(?,?,?,?,?,?,?,?,?,?,?,?,?) }";
+		String sql = "{ ? = call negocio.fn_ingresarprogramanovios(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) }";
 		try {
 			cs = conn.prepareCall(sql);
 			int i=1;
@@ -121,6 +121,10 @@ public class ServicioNoviosDaoImpl implements ServicioNoviosDao {
 			else {
 				cs.setNull(i++, Types.VARCHAR);
 			}
+			cs.setBigDecimal(i++, programaNovios.getMontoSinIgvServiciosPrograma());
+			cs.setBigDecimal(i++, programaNovios.getMontoIgvServiciosPrograma());
+			cs.setBigDecimal(i++, programaNovios.getPorcentajeIgv());
+			cs.setBigDecimal(i++, programaNovios.getMontoTotalServiciosPrograma());
 			cs.setString(i++, programaNovios.getUsuarioCreacion());
 			cs.setString(i++, programaNovios.getIpCreacion());
 			cs.execute();
@@ -197,7 +201,6 @@ public class ServicioNoviosDaoImpl implements ServicioNoviosDao {
 
 		try {
 			conn = UtilConexion.obtenerConexion();
-			conn.setAutoCommit(false);
 			cs = conn.prepareCall(sql);
 			int i = 1;
 			cs.registerOutParameter(i++, Types.OTHER);
@@ -263,7 +266,6 @@ public class ServicioNoviosDaoImpl implements ServicioNoviosDao {
 				resultado.add(programaNovios2);
 			}
 			
-			conn.commit();
 		} catch (SQLException e) {
 			resultado = null;
 			throw new SQLException(e);
@@ -293,4 +295,40 @@ public class ServicioNoviosDaoImpl implements ServicioNoviosDao {
 		return resultado;
 	}
 
+	@Override
+	public boolean ingresarServicioNovios(ServicioNovios servicioNovios, int idnovios, Connection conexion) throws SQLException{
+		boolean resultado = false;
+		CallableStatement cs = null;
+		String sql = "{ ? = call negocio.fn_ingresarservicionovios(?,?,?,?,?,?,?,?) }";
+		
+		try {
+			cs = conexion.prepareCall(sql);
+			int i=1;
+			cs.registerOutParameter(i++, Types.BOOLEAN);
+			cs.setInt(i++, idnovios);
+			cs.setInt(i++, servicioNovios.getTipoServicio().getCodigoEntero().intValue());
+			cs.setString(i++, servicioNovios.getDescripcionServicio());
+			cs.setInt(i++, servicioNovios.getCantidad());
+			cs.setBigDecimal(i++, servicioNovios.getPrecioUnitario());
+			cs.setBigDecimal(i++, servicioNovios.getMontoTotalTipoServicio());
+			cs.setString(i++, servicioNovios.getUsuarioCreacion());
+			cs.setString(i++, servicioNovios.getIpCreacion());
+			cs.execute();
+			
+			resultado = cs.getBoolean(1);
+		} catch (SQLException e) {
+			resultado = false;
+			throw new SQLException(e);
+		} finally{
+			try {
+				if (cs != null){
+					cs.close();
+				}
+			} catch (SQLException e) {
+				throw new SQLException(e);
+			}
+		}
+		
+		return resultado;
+	}
 }
