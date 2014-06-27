@@ -216,13 +216,13 @@ public class ServicioNoviosDaoImpl implements ServicioNoviosDao {
 			else{
 				cs.setNull(i++, Types.VARCHAR);
 			}
-			if (programaNovios.getNovia().getCodigoEntero().intValue()!= 0 && programaNovios.getNovia().getCodigoEntero()!=null){
+			if (programaNovios.getNovia().getCodigoEntero()!=null && programaNovios.getNovia().getCodigoEntero().intValue()!= 0){
 				cs.setInt(i++, programaNovios.getNovia().getCodigoEntero().intValue());
 			}
 			else{
 				cs.setNull(i++, Types.INTEGER);
 			}
-			if (programaNovios.getNovio().getCodigoEntero().intValue()!= 0 && programaNovios.getNovio().getCodigoEntero()!=null){
+			if (programaNovios.getNovio().getCodigoEntero()!=null && programaNovios.getNovio().getCodigoEntero().intValue()!= 0){
 				cs.setInt(i++, programaNovios.getNovio().getCodigoEntero().intValue());
 			}
 			else{
