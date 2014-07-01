@@ -52,6 +52,11 @@
     NAME="output10" PATH="/paginas/negocio/novios/administrar.xhtml"
     TARGET="rules:#paginas#negocio#novios#administrar.xhtml"
     TITLE="irProgramaNovios" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT
+    ID="irAdministrarVentaServicios::#paginas#negocio#servicios#administrar.xhtml"
+    NAME="output11" PATH="/paginas/negocio/servicios/administrar.xhtml"
+    TARGET="rules:#paginas#negocio#servicios#administrar.xhtml"
+    TITLE="irAdministrarVentaServicios" model-entity="JSFProcessItemOutput"/>
   </PROCESS-ITEM>
  </PROCESS-ITEM>
  <PROCESS-ITEM NAME="rules:#paginas#seguridad#usuario#administrar.xhtml"
@@ -123,4 +128,7 @@
  <PROCESS-ITEM NAME="rules:#paginas#negocio#novios#administrar.xhtml"
   PATH="/paginas/negocio/novios/administrar.xhtml" SHAPE="364,44,0,0"
   model-entity="JSFProcessGroup" persistent="true"/>
+ <PROCESS-ITEM NAME="rules:#paginas#negocio#servicios#administrar.xhtml"
+  PATH="/paginas/negocio/servicios/administrar.xhtml"
+  SHAPE="428,650,0,0" model-entity="JSFProcessGroup" persistent="true"/>
 </PROCESS>

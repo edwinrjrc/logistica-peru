@@ -7,6 +7,7 @@ import javax.ejb.Remote;
 
 import pe.com.logistica.bean.negocio.Cliente;
 import pe.com.logistica.bean.negocio.Contacto;
+import pe.com.logistica.bean.negocio.DetalleServicioAgencia;
 import pe.com.logistica.bean.negocio.Direccion;
 import pe.com.logistica.bean.negocio.ProgramaNovios;
 import pe.com.logistica.bean.negocio.Proveedor;
@@ -55,4 +56,8 @@ public interface NegocioSessionRemote {
 
 	ServicioNovios agregarServicio(ServicioNovios servicioNovios)
 			throws SQLException, Exception;
+
+	DetalleServicioAgencia agregarServicioVenta(
+			DetalleServicioAgencia detalleServicio) throws SQLException,
+			Exception;
 }

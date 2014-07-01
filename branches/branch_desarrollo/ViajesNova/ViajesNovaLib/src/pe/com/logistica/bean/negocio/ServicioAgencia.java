@@ -32,6 +32,8 @@ public class ServicioAgencia extends BaseNegocio{
 	private Date fechaPrimerCuota;
 	private Date fechaUltimaCuota;
 	
+	private BigDecimal montoTotalServicios;
+	
 	private List<DetalleServicioAgencia> listaDetalleServicio;
 	
 
@@ -48,6 +50,9 @@ public class ServicioAgencia extends BaseNegocio{
 	 * @return the cliente
 	 */
 	public Cliente getCliente() {
+		if (cliente == null){
+			cliente = new Cliente();
+		}
 		return cliente;
 	}
 
@@ -102,6 +107,9 @@ public class ServicioAgencia extends BaseNegocio{
 	 * @return the destino
 	 */
 	public BaseVO getDestino() {
+		if (destino == null){
+			destino = new BaseVO();
+		}
 		return destino;
 	}
 
@@ -151,6 +159,9 @@ public class ServicioAgencia extends BaseNegocio{
 	 * @return the formaPago
 	 */
 	public BaseVO getFormaPago() {
+		if (formaPago == null){
+			formaPago = new BaseVO();
+		}
 		return formaPago;
 	}
 
@@ -169,6 +180,9 @@ public class ServicioAgencia extends BaseNegocio{
 	 * @return the estadoPago
 	 */
 	public BaseVO getEstadoPago() {
+		if (estadoPago == null){
+			estadoPago = new BaseVO();
+		}
 		return estadoPago;
 	}
 
@@ -269,5 +283,23 @@ public class ServicioAgencia extends BaseNegocio{
 	 */
 	public void setFechaUltimaCuota(Date fechaUltimaCuota) {
 		this.fechaUltimaCuota = fechaUltimaCuota;
+	}
+
+
+
+	/**
+	 * @return the montoTotalServicios
+	 */
+	public BigDecimal getMontoTotalServicios() {
+		return montoTotalServicios;
+	}
+
+
+
+	/**
+	 * @param montoTotalServicios the montoTotalServicios to set
+	 */
+	public void setMontoTotalServicios(BigDecimal montoTotalServicios) {
+		this.montoTotalServicios = montoTotalServicios;
 	}
 }

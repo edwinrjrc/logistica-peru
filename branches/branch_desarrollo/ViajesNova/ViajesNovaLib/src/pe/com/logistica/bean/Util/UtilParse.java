@@ -23,4 +23,10 @@ public class UtilParse {
 	public static BigDecimal parseIntABigDecimal(int numero){
 		return BigDecimal.valueOf(numero);
 	}
+	
+	public static BigDecimal parseStringABigDecimal(String numero){
+		Double val = Double.valueOf(numero);
+		
+		return BigDecimal.valueOf(val.doubleValue());
+	}
 }
