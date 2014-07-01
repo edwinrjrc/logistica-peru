@@ -12,14 +12,14 @@
 <ui:composition template="/templates/plantillainicio.xhtml">
 	<ui:define name="cuerpo">
 
-		<h:form id="idformadmproveedor">
+		<h:form id="idformadmservicios">
 			<h:panelGrid columns="1" border="0" cellpadding="0" cellspacing="0"
 				width="100%;text-align:center;">
 				<f:facet name="header">
 					<h:panelGrid width="100%" border="0" cellpadding="0"
 						cellspacing="0" style="text-align: left;vertical-align: top; ">
-						<h:outputText value="Administrar Venta Servicios" style="height: 100px"
-							styleClass="subtitulo" />
+						<h:outputText value="Administrar Venta Servicios"
+							style="height: 100px" styleClass="subtitulo" />
 						<hr width="100%" />
 					</h:panelGrid>
 				</f:facet>
@@ -42,19 +42,20 @@
 								columnClasses="col1fil1proveedor,col2fil1proveedor,col3fil1proveedor,col4fil1proveedor">
 								<h:outputText value="Tipo documento" />
 								<h:selectOneMenu
-									value="#{proveedorMBean.proveedor.documentoIdentidad.tipoDocumento.codigoEntero}">
+									value="#{servicioAgenteMBean.servicioAgencia.cliente.documentoIdentidad.tipoDocumento.codigoEntero}">
 									<f:selectItem itemLabel="-Seleccione-" />
 									<f:selectItems value="#{catalogoMBean.catalogoTipoDocumento}" />
 								</h:selectOneMenu>
 								<h:outputText value="Numero documento" />
 								<h:inputText maxlength="11"
-									value="#{proveedorMBean.proveedor.documentoIdentidad.numeroDocumento}" />
+									value="#{servicioAgenteMBean.servicioAgencia.cliente.documentoIdentidad.numeroDocumento}" />
 							</h:panelGrid>
 							<h:panelGrid columns="2" border="0" cellpadding="0"
 								cellspacing="0" style="width:100%;text-align:left;"
 								columnClasses="col1fil2proveedor,col2fil2proveedor">
 								<h:outputText value="Nombres" />
-								<h:inputText value="#{proveedorMBean.proveedor.nombres}"
+								<h:inputText
+									value="#{servicioAgenteMBean.servicioAgencia.cliente.nombres}"
 									size="100" maxlength="100" styleClass="estilocampo1" />
 							</h:panelGrid>
 						</h:panelGrid>
@@ -62,7 +63,7 @@
 							<h:panelGrid columns="1" border="0" cellpadding="0"
 								cellspacing="0" style="width:100%;text-align:center;">
 								<a4j:commandButton value="Buscar" render="idTabla"
-									action="#{proveedorMBean.buscarProveedor()}"
+									action="#{servicioAgenteMBean.buscarServicioRegistrado()}"
 									style="height:20px; width:150px" />
 							</h:panelGrid>
 						</f:facet>
@@ -70,46 +71,40 @@
 
 					<h:panelGrid columns="1" border="0" style="width:100%;">
 						<rich:dataTable var="row" id="idTabla" rows="10"
-							value="#{proveedorMBean.listaProveedores}" style="width:100%;">
+							value="#{servicioAgenteMBean.listadoServicioAgencia}"
+							style="width:100%;">
 
 							<f:facet name="noData">
 								<h:outputText value="No se encontraron registros" />
 							</f:facet>
 							<rich:column>
 								<f:facet name="header">
-									<h:outputText value="Documento" />
+									<h:outputText value="Cliente" />
 								</f:facet>
-								<h:outputText
-									value="#{row.documentoIdentidad.tipoDocumento.nombre} - #{row.documentoIdentidad.numeroDocumento}" />
+								<h:outputText value="#{row.cliente.nombreCompleto}" />
 							</rich:column>
 
 							<rich:column>
 								<f:facet name="header">
-									<h:outputText value="Nombre" />
+									<h:outputText value="Destino" />
 								</f:facet>
-								<h:outputText value="#{row.nombreCompleto}" />
+								<h:outputText value="#{row.destino.nombre}" />
 							</rich:column>
 
 							<rich:column>
 								<f:facet name="header">
-									<h:outputText value="Rubro" />
+									<h:outputText value="Fecha Servicio" />
 								</f:facet>
-								<h:outputText value="#{row.rubro.nombre}" />
+								<h:outputText value="#{row.fechaServicio}">
+									<f:convertDateTime pattern="dd/MM/yyyy" />
+								</h:outputText>
 							</rich:column>
 
 							<rich:column>
 								<f:facet name="header">
-									<h:outputText value="Dirección" />
+									<h:outputText value="Estado Pago" />
 								</f:facet>
-								<h:outputText value="#{row.direccion.direccion}" />
-							</rich:column>
-
-							<rich:column>
-								<f:facet name="header">
-									<h:outputText value="Teléfono" />
-								</f:facet>
-								<h:outputText
-									value="#{row.direccion.telefonos[0].numeroTelefono}" />
+								<h:outputText value="#{row.estadoPago.nombre}" />
 							</rich:column>
 
 							<rich:column>
@@ -117,7 +112,7 @@
 									<h:outputText value="Opciones" />
 								</f:facet>
 								<a4j:commandLink
-									action="#{proveedorMBean.consultarProveedor(row.codigoEntero)}"
+									action="#{servicioAgenteMBean.consultarServicioRegistrado(row.codigoEntero)}"
 									render="idTabPanelFormProveedor, idNomModal"
 									oncomplete="#{rich:component('idModalformproveedor')}.show();">
 									<h:graphicImage height="25" width="20"
@@ -134,10 +129,10 @@
 							<h:panelGrid border="0" cellpadding="0" cellspacing="0"
 								style="height: 50px" width="100%">
 								<a4j:commandButton value="REGISTRAR VENTA"
-									action="#{proveedorMBean.nuevoProveedor()}"
+									action="#{servicioAgenteMBean.registrarNuevaVenta()}"
 									style="height:20px; width:150px"
-									render="idTabPanelFormProveedor, idNomModal"
-									oncomplete="#{rich:component('idModalformproveedor')}.show();">
+									render="idGrRegisVenServicio, idNomModal"
+									oncomplete="#{rich:component('idModalfrventaservicio')}.show();">
 								</a4j:commandButton>
 								<a4j:commandButton id="idBotonModalCorrecto"
 									style="display:none;" type="button"
@@ -149,20 +144,19 @@
 						</h:panelGroup>
 					</f:facet>
 				</h:panelGrid>
-				
-				
+
+
 			</h:panelGrid>
 		</h:form>
-		<ui:include src="/paginas/negocio/proveedor/formproveedor.xhtml" />
-		<ui:include src="/paginas/negocio/proveedor/formdireccion.xhtml" />
-		<ui:include src="/paginas/negocio/proveedor/formcontacto.xhtml" />
+		<ui:include
+			src="/paginas/negocio/servicios/registroventaservicio.xhtml"></ui:include>
 		<ui:include src="/resources/includes/includemensaje.xhtml">
-			<ui:param name="backBean" value="#{proveedorMBean}" />
-			<ui:param name="idModalForm" value="idModalformproveedor" />
+			<ui:param name="backBean" value="#{servicioAgenteMBean}" />
+			<ui:param name="idModalForm" value="idModalfrventaservicio" />
 			<ui:param name="idrender" value="idTabla" />
 		</ui:include>
 		<script type="text/javascript">
-		mostrarModal('idformadmproveedor');
+		mostrarModal('idformadmservicios');
 		</script>
 	</ui:define>
 </ui:composition>

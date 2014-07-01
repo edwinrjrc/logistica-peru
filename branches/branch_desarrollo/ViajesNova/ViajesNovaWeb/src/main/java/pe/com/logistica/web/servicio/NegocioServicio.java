@@ -8,6 +8,7 @@ import java.util.List;
 
 import pe.com.logistica.bean.negocio.Cliente;
 import pe.com.logistica.bean.negocio.Contacto;
+import pe.com.logistica.bean.negocio.DetalleServicioAgencia;
 import pe.com.logistica.bean.negocio.Direccion;
 import pe.com.logistica.bean.negocio.ProgramaNovios;
 import pe.com.logistica.bean.negocio.Proveedor;
@@ -60,5 +61,9 @@ public interface NegocioServicio {
 			throws SQLException, Exception;
 
 	ServicioNovios agregarServicioNovios(ServicioNovios servicioNovios)
-			throws SQLException, Exception; 
+			throws SQLException, Exception;
+
+	DetalleServicioAgencia agregarServicioVenta(
+			DetalleServicioAgencia detalleServicio) throws SQLException,
+			Exception; 
 }

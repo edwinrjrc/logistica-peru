@@ -67,6 +67,11 @@
   <navigation-case>
    <from-outcome>irProgramaNovios</from-outcome>
    <to-view-id>/paginas/negocio/novios/administrar.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>irAdministrarVentaServicios</from-outcome>
+   <to-view-id>/paginas/negocio/servicios/administrar.xhtml</to-view-id>
    <redirect></redirect>
   </navigation-case>
  </navigation-rule>

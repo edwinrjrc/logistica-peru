@@ -42,6 +42,9 @@ public class DetalleServicioAgencia extends BaseNegocio {
 	 * @return the tipoServicio
 	 */
 	public BaseVO getTipoServicio() {
+		if (tipoServicio == null){
+			tipoServicio = new BaseVO();
+		}
 		return tipoServicio;
 	}
 
@@ -70,6 +73,9 @@ public class DetalleServicioAgencia extends BaseNegocio {
 	 * @return the destino
 	 */
 	public BaseVO getDestino() {
+		if (destino == null){
+			destino = new BaseVO();
+		}
 		return destino;
 	}
 
