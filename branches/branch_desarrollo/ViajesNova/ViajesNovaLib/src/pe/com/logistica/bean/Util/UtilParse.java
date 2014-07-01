@@ -3,6 +3,8 @@
  */
 package pe.com.logistica.bean.Util;
 
+import java.math.BigDecimal;
+
 import org.apache.commons.lang3.StringUtils;
 
 /**
@@ -18,4 +20,7 @@ public class UtilParse {
 		return cadena;
 	}
 
+	public static BigDecimal parseIntABigDecimal(int numero){
+		return BigDecimal.valueOf(numero);
+	}
 }
