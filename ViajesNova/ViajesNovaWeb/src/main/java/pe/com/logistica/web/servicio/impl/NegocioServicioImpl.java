@@ -14,6 +14,7 @@ import javax.servlet.ServletContext;
 
 import pe.com.logistica.bean.negocio.Cliente;
 import pe.com.logistica.bean.negocio.Contacto;
+import pe.com.logistica.bean.negocio.DetalleServicioAgencia;
 import pe.com.logistica.bean.negocio.Direccion;
 import pe.com.logistica.bean.negocio.ProgramaNovios;
 import pe.com.logistica.bean.negocio.Proveedor;
@@ -142,6 +143,12 @@ public class NegocioServicioImpl implements NegocioServicio {
 	public ServicioNovios agregarServicioNovios(ServicioNovios servicioNovios)
 			throws SQLException, Exception {
 		return ejbSession.agregarServicio(servicioNovios);
+	}
+	
+	@Override
+	public DetalleServicioAgencia agregarServicioVenta(DetalleServicioAgencia detalleServicio)
+			throws SQLException, Exception {
+		return ejbSession.agregarServicioVenta(detalleServicio);
 	}
 }
 	

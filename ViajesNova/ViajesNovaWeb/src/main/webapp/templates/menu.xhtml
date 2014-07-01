@@ -23,9 +23,10 @@
 
 	<h:form id="idFormMenu">
 		<rich:toolbar height="20px">
-			<rich:dropDownMenu mode="ajax" style="width:50px;text-align:center;" rendered="#{sessionScope.usuarioSession.rol.codigoEntero == 1}">
-				<rich:menuItem action="irInicio2Sistema"
-					label="Inicio Sistema" style="text-align:left" />
+			<rich:dropDownMenu mode="ajax" style="width:50px;text-align:center;"
+				rendered="#{sessionScope.usuarioSession.rol.codigoEntero == 1}">
+				<rich:menuItem action="irInicio2Sistema" label="Inicio Sistema"
+					style="text-align:left" />
 				<f:facet name="label">
 					<h:outputText value="Inicio" style="width:50px;" />
 				</f:facet>
@@ -44,15 +45,15 @@
 						label="Administrar Proveedores" style="text-align:left" />
 					<rich:menuItem action="#{clienteMBean.inicioAdministrador()}"
 						label="Administrar Clientes" style="text-align:left" />
-					<rich:menuItem action="irProgramaNovios"
-						label="Programa Novios" style="text-align:left">
+					<rich:menuItem action="irProgramaNovios" label="Programa Novios"
+						style="text-align:left">
 						<f:facet name="icon">
 							<h:graphicImage
 								value="#{facesContext.externalContext.requestContextPath}/../resources/img/novioicon.gif" />
 						</f:facet>
 					</rich:menuItem>
-					<rich:menuItem
-						label="Registro Servicios" style="text-align:left" />
+					<rich:menuItem action="irAdministrarVentaServicios"
+						label="Administrar Registro Servicios" style="text-align:left"></rich:menuItem>
 				</rich:menuGroup>
 				<rich:menuGroup label="Destinos" style="text-align:left">
 					<rich:menuItem action="irAdministrarPaises"
@@ -64,10 +65,11 @@
 				<rich:menuItem action="#{usuarioMBean.salirSesion}" label="Salir"
 					style="text-align:left" />
 			</rich:dropDownMenu>
-			
-			<rich:dropDownMenu mode="ajax" style="width:50px;text-align:center;" rendered="#{sessionScope.usuarioSession.rol.codigoEntero == 2}">
-				<rich:menuItem action="irInicio2Sistema"
-					label="Inicio Sistema" style="text-align:left" />
+
+			<rich:dropDownMenu mode="ajax" style="width:50px;text-align:center;"
+				rendered="#{sessionScope.usuarioSession.rol.codigoEntero == 2}">
+				<rich:menuItem action="irInicio2Sistema" label="Inicio Sistema"
+					style="text-align:left" />
 				<f:facet name="label">
 					<h:outputText value="Inicio" style="width:50px;" />
 				</f:facet>
@@ -76,15 +78,15 @@
 						label="Administrar Proveedores" style="text-align:left" />
 					<rich:menuItem action="#{clienteMBean.inicioAdministrador()}"
 						label="Administrar Clientes" style="text-align:left" />
-					<rich:menuItem action="irProgramaNovios"
-						label="Programa Novios" style="text-align:left">
+					<rich:menuItem action="irProgramaNovios" label="Programa Novios"
+						style="text-align:left">
 						<f:facet name="icon">
 							<h:graphicImage
 								value="#{facesContext.externalContext.requestContextPath}/../resources/img/novioicon.gif" />
 						</f:facet>
 					</rich:menuItem>
-					<rich:menuItem
-						label="Registro Servicios" style="text-align:left" />
+					<rich:menuItem action="irAdministrarVentaServicios"
+						label="Administrar Registro Servicios" style="text-align:left"></rich:menuItem>
 				</rich:menuGroup>
 				<rich:menuGroup label="Destinos" style="text-align:left">
 					<rich:menuItem action="irAdministrarPaises"
@@ -92,7 +94,7 @@
 					<rich:menuItem action="irAdministrarDestino"
 						label="Administrar Destinos" style="text-align:left" />
 				</rich:menuGroup>
-				<rich:menuSeparator/>
+				<rich:menuSeparator />
 				<rich:menuItem action="#{usuarioMBean.salirSesion}" label="Salir"
 					style="text-align:left" />
 			</rich:dropDownMenu>

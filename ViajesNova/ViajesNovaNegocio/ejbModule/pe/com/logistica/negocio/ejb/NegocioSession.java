@@ -11,10 +11,12 @@ import org.apache.commons.lang3.StringUtils;
 import pe.com.logistica.bean.base.BaseVO;
 import pe.com.logistica.bean.negocio.Cliente;
 import pe.com.logistica.bean.negocio.Contacto;
+import pe.com.logistica.bean.negocio.DetalleServicioAgencia;
 import pe.com.logistica.bean.negocio.Direccion;
 import pe.com.logistica.bean.negocio.Maestro;
 import pe.com.logistica.bean.negocio.ProgramaNovios;
 import pe.com.logistica.bean.negocio.Proveedor;
+import pe.com.logistica.bean.negocio.ServicioAgencia;
 import pe.com.logistica.bean.negocio.ServicioNovios;
 import pe.com.logistica.bean.negocio.Telefono;
 import pe.com.logistica.bean.negocio.Ubigeo;
@@ -726,5 +728,17 @@ public class NegocioSession implements NegocioSessionRemote,
 		servicioNovios.setTipoServicio((BaseVO)maestroDao.consultarHijoMaestro(hijoMaestro));
 		
 		return servicioNovios;
+	}
+	
+	@Override
+	public DetalleServicioAgencia agregarServicioVenta(DetalleServicioAgencia detalleServicio) throws SQLException, Exception{
+		Integer idTipoServicio = detalleServicio.getTipoServicio().getCodigoEntero();
+		MaestroDao maestroDao = new MaestroDaoImpl();
+		Maestro hijoMaestro = new Maestro();
+		hijoMaestro.setCodigoMaestro(12);
+		hijoMaestro.setCodigoEntero(idTipoServicio);
+		detalleServicio.setTipoServicio((BaseVO)maestroDao.consultarHijoMaestro(hijoMaestro));
+		
+		return detalleServicio;
 	}
 }
