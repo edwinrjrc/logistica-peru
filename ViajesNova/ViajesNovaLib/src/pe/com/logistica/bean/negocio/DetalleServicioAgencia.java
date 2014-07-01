@@ -6,6 +6,7 @@ package pe.com.logistica.bean.negocio;
 import java.math.BigDecimal;
 import java.util.Date;
 
+import pe.com.logistica.bean.Util.UtilParse;
 import pe.com.logistica.bean.base.BaseNegocio;
 import pe.com.logistica.bean.base.BaseVO;
 
@@ -24,6 +25,7 @@ public class DetalleServicioAgencia extends BaseNegocio {
 	private BaseVO destino;
 	private int dias;
 	private int noches;
+	private Date fechaServicio;
 	private Date fechaIda;
 	private Date fechaRegreso;
 	private int cantidad;
@@ -160,6 +162,26 @@ public class DetalleServicioAgencia extends BaseNegocio {
 	 */
 	public void setPrecioUnitario(BigDecimal precioUnitario) {
 		this.precioUnitario = precioUnitario;
+	}
+	
+	public BigDecimal getTotalServicio(){
+		BigDecimal cantidadDecimal = UtilParse.parseIntABigDecimal(cantidad);
+		BigDecimal total = this.precioUnitario.multiply(cantidadDecimal);
+		return total;
+	}
+
+	/**
+	 * @return the fechaServicio
+	 */
+	public Date getFechaServicio() {
+		return fechaServicio;
+	}
+
+	/**
+	 * @param fechaServicio the fechaServicio to set
+	 */
+	public void setFechaServicio(Date fechaServicio) {
+		this.fechaServicio = fechaServicio;
 	}
 
 }

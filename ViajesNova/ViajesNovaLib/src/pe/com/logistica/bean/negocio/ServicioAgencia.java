@@ -3,6 +3,7 @@
  */
 package pe.com.logistica.bean.negocio;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -23,6 +24,13 @@ public class ServicioAgencia extends BaseNegocio{
 	private Date fechaServicio;
 	private int cantidadServicios;
 	private BaseVO destino;
+	private BaseVO formaPago;
+	private BaseVO estadoPago;
+	private int nroCuotas;
+	private BigDecimal tea;
+	private BigDecimal valorCuota;
+	private Date fechaPrimerCuota;
+	private Date fechaUltimaCuota;
 	
 	private List<DetalleServicioAgencia> listaDetalleServicio;
 	
@@ -124,4 +132,142 @@ public class ServicioAgencia extends BaseNegocio{
 		this.listaDetalleServicio = listaDetalleServicio;
 	}
 
+	public BigDecimal getMontoTotal(){
+		BigDecimal monto = BigDecimal.ZERO;
+		
+		if (this.listaDetalleServicio != null && !this.listaDetalleServicio.isEmpty()){
+			for (DetalleServicioAgencia detalleServicio : this.listaDetalleServicio) {
+				
+				monto = monto.add(detalleServicio.getTotalServicio());
+			}
+		}
+		
+		return monto;
+	}
+
+
+
+	/**
+	 * @return the formaPago
+	 */
+	public BaseVO getFormaPago() {
+		return formaPago;
+	}
+
+
+
+	/**
+	 * @param formaPago the formaPago to set
+	 */
+	public void setFormaPago(BaseVO formaPago) {
+		this.formaPago = formaPago;
+	}
+
+
+
+	/**
+	 * @return the estadoPago
+	 */
+	public BaseVO getEstadoPago() {
+		return estadoPago;
+	}
+
+
+
+	/**
+	 * @param estadoPago the estadoPago to set
+	 */
+	public void setEstadoPago(BaseVO estadoPago) {
+		this.estadoPago = estadoPago;
+	}
+
+
+
+	/**
+	 * @return the nroCuotas
+	 */
+	public int getNroCuotas() {
+		return nroCuotas;
+	}
+
+
+
+	/**
+	 * @param nroCuotas the nroCuotas to set
+	 */
+	public void setNroCuotas(int nroCuotas) {
+		this.nroCuotas = nroCuotas;
+	}
+
+
+
+	/**
+	 * @return the tea
+	 */
+	public BigDecimal getTea() {
+		return tea;
+	}
+
+
+
+	/**
+	 * @param tea the tea to set
+	 */
+	public void setTea(BigDecimal tea) {
+		this.tea = tea;
+	}
+
+
+
+	/**
+	 * @return the valorCuota
+	 */
+	public BigDecimal getValorCuota() {
+		return valorCuota;
+	}
+
+
+
+	/**
+	 * @param valorCuota the valorCuota to set
+	 */
+	public void setValorCuota(BigDecimal valorCuota) {
+		this.valorCuota = valorCuota;
+	}
+
+
+
+	/**
+	 * @return the fechaPrimerCuota
+	 */
+	public Date getFechaPrimerCuota() {
+		return fechaPrimerCuota;
+	}
+
+
+
+	/**
+	 * @param fechaPrimerCuota the fechaPrimerCuota to set
+	 */
+	public void setFechaPrimerCuota(Date fechaPrimerCuota) {
+		this.fechaPrimerCuota = fechaPrimerCuota;
+	}
+
+
+
+	/**
+	 * @return the fechaUltimaCuota
+	 */
+	public Date getFechaUltimaCuota() {
+		return fechaUltimaCuota;
+	}
+
+
+
+	/**
+	 * @param fechaUltimaCuota the fechaUltimaCuota to set
+	 */
+	public void setFechaUltimaCuota(Date fechaUltimaCuota) {
+		this.fechaUltimaCuota = fechaUltimaCuota;
+	}
 }
