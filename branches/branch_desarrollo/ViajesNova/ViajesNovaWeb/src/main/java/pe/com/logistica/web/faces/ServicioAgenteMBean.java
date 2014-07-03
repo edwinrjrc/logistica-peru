@@ -66,13 +66,7 @@ public class ServicioAgenteMBean extends BaseMBean{
 			e.printStackTrace();
 		}
 		
-		try {
-			int idtasatea = 3;
-			BigDecimal ttea = UtilParse.parseStringABigDecimal(parametroServicio.consultarParametro(idtasatea).getValor()); 
-			this.getServicioAgencia().setTea(ttea);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+		consultarTasaPredeterminada();
 	}
 	
 	public void consultarClientes(){
@@ -123,10 +117,15 @@ public class ServicioAgenteMBean extends BaseMBean{
 		this.setNombreFormulario("Nuevo Registro Venta");
 		this.setNuevaVenta(true);
 		this.setEditarVenta(false);
+		this.setServicioAgencia(null);
+		this.setDetalleServicio(null);
+		this.setTransaccionExito(false);
+		
+		consultarTasaPredeterminada();
 	}
 	public void agregarServicio(){
 		try {
-			if (validarServicioVenta()){
+			if (validarRegistroServicioVenta()){
 				HttpSession session = obtenerSession(false);
 				Usuario usuario = (Usuario) session
 						.getAttribute("usuarioSession");
@@ -150,6 +149,46 @@ public class ServicioAgenteMBean extends BaseMBean{
 		}
 	}
 	
+	private boolean validarRegistroServicioVenta() {
+		boolean resultado = true;
+		String idFormulario = "idFormVentaServi";
+		if (this.getServicioAgencia().getCliente() == null || this.getServicioAgencia().getCliente().getCodigoEntero() == null || this.getServicioAgencia().getCliente().getCodigoEntero().intValue()==0){
+			this.agregarMensaje(idFormulario + ":idFrCliente",
+					"Seleccione el cliente del servicio", "", FacesMessage.SEVERITY_ERROR);
+			resultado = false;
+		}
+		if (this.getServicioAgencia().getDestino().getCodigoEntero() == null || this.getServicioAgencia().getDestino().getCodigoEntero().intValue() == 0){
+			this.agregarMensaje(idFormulario + ":idSelDestino",
+					"Seleccione el destino global del servicio", "", FacesMessage.SEVERITY_ERROR);
+			resultado = false;
+		}
+		if (this.getServicioAgencia().getFormaPago().getCodigoEntero() == null || this.getServicioAgencia().getFormaPago().getCodigoEntero().intValue() == 0){
+			this.agregarMensaje(idFormulario + ":idSelDestino",
+					"Seleccione el destino global del servicio", "", FacesMessage.SEVERITY_ERROR);
+			resultado = false;
+		}
+		else {
+			if (this.getServicioAgencia().getFormaPago().getCodigoEntero().intValue() == 2){
+				if (this.getServicioAgencia().getTea() == null || this.getServicioAgencia().getTea().compareTo(BigDecimal.ZERO)==0){
+					this.agregarMensaje(idFormulario + ":idTea",
+							"Ingrese la tasa de interes", "", FacesMessage.SEVERITY_ERROR);
+					resultado = false;
+				}
+				if (this.getServicioAgencia().getNroCuotas() == 0){
+					this.agregarMensaje(idFormulario + ":idNroCuotas",
+							"Ingrese el número de cuotas", "", FacesMessage.SEVERITY_ERROR);
+					resultado = false;
+				}
+				if (this.getServicioAgencia().getFechaPrimerCuota() == null){
+					this.agregarMensaje(idFormulario + ":idFecPriVcto",
+							"Ingrese la fecha de primer vencimiento", "", FacesMessage.SEVERITY_ERROR);
+					resultado = false;
+				}
+			}
+		}
+		return resultado;
+	}
+
 	private boolean validarServicioVenta() {
 		boolean resultado = true;
 		String idFormulario = "idFormVentaServi";
@@ -200,20 +239,30 @@ public class ServicioAgenteMBean extends BaseMBean{
 
 	public void ejecutarMetodo(){
 		try {
-			if (this.isNuevaVenta()){
-				HttpSession session = obtenerSession(false);
-				Usuario usuario = (Usuario) session
-						.getAttribute("usuarioSession");
-				getServicioAgencia().setUsuarioCreacion(
-						usuario.getUsuario());
-				getServicioAgencia().setIpCreacion(
-						obtenerRequest().getRemoteAddr());
-				
-				Integer idServicio = this.negocioServicio.registrarVentaServicio(getServicioAgencia());
-				this.getServicioAgencia().setCodigoEntero(idServicio);
-				this.getServicioAgencia().setCronogramaPago(this.negocioServicio.consultarCronogramaPago(getServicioAgencia()));
-				
+			if (validarServicioVenta()){
+				if (this.isNuevaVenta()){
+					HttpSession session = obtenerSession(false);
+					Usuario usuario = (Usuario) session
+							.getAttribute("usuarioSession");
+					getServicioAgencia().setUsuarioCreacion(
+							usuario.getUsuario());
+					getServicioAgencia().setIpCreacion(
+							obtenerRequest().getRemoteAddr());
+					
+					Integer idServicio = this.negocioServicio.registrarVentaServicio(getServicioAgencia());
+					
+					if (idServicio != null && idServicio.intValue() != 0){
+						this.getServicioAgencia().setCodigoEntero(idServicio);
+						this.getServicioAgencia().setCronogramaPago(this.negocioServicio.consultarCronogramaPago(getServicioAgencia()));
+						this.setTransaccionExito(true);
+					}
+					
+					this.setShowModal(true);
+					this.setMensajeModal("Servicio Venta registrado satisfactoriamente");
+					this.setTipoModal(TIPO_MODAL_EXITO);
+				}
 			}
+			
 		} catch (ErrorRegistroDataException e) {
 			e.printStackTrace();
 		} catch (SQLException e) {
@@ -233,6 +282,16 @@ public class ServicioAgenteMBean extends BaseMBean{
 			e.printStackTrace();
 		}
 		this.getServicioAgencia().setValorCuota(valorCuota);
+	}
+	
+	public void consultarTasaPredeterminada(){
+		try {
+			int idtasatea = 3;
+			BigDecimal ttea = UtilParse.parseStringABigDecimal(parametroServicio.consultarParametro(idtasatea).getValor()); 
+			this.getServicioAgencia().setTea(ttea);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 
 	/**
