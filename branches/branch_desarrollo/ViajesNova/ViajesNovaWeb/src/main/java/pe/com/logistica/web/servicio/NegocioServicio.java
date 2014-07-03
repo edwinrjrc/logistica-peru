@@ -3,16 +3,20 @@
  */
 package pe.com.logistica.web.servicio;
 
+import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.util.List;
 
 import pe.com.logistica.bean.negocio.Cliente;
 import pe.com.logistica.bean.negocio.Contacto;
+import pe.com.logistica.bean.negocio.CronogramaPago;
 import pe.com.logistica.bean.negocio.DetalleServicioAgencia;
 import pe.com.logistica.bean.negocio.Direccion;
 import pe.com.logistica.bean.negocio.ProgramaNovios;
 import pe.com.logistica.bean.negocio.Proveedor;
+import pe.com.logistica.bean.negocio.ServicioAgencia;
 import pe.com.logistica.bean.negocio.ServicioNovios;
+import pe.com.logistica.negocio.exception.ErrorRegistroDataException;
 import pe.com.logistica.negocio.exception.ResultadoCeroDaoException;
 
 /**
@@ -65,5 +69,17 @@ public interface NegocioServicio {
 
 	DetalleServicioAgencia agregarServicioVenta(
 			DetalleServicioAgencia detalleServicio) throws SQLException,
+			Exception;
+
+	public BigDecimal calcularValorCuota(ServicioAgencia servicioAgencia) throws SQLException, Exception;
+
+	List<CronogramaPago> consultarCronogramaPago(ServicioAgencia servicioAgencia)
+			throws SQLException, Exception;
+
+	Integer registrarVentaServicio(ServicioAgencia servicioAgencia)
+			throws ErrorRegistroDataException, SQLException, Exception;
+
+	List<DetalleServicioAgencia> ordenarServiciosVenta(
+			List<DetalleServicioAgencia> listaServicio) throws SQLException,
 			Exception; 
 }
