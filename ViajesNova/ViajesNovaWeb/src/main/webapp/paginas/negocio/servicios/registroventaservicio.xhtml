@@ -337,13 +337,13 @@
 							<f:facet name="header">
 								<h:outputText value="Cronograma de Pagos" />
 							</f:facet>
-							<rich:column>
+							<rich:column style="text-align:right;">
 								<f:facet name="header">
 									<h:outputText value="Nro Cuota" />
 								</f:facet>
 								<h:outputText value="#{cuota.nroCuota}" />
 							</rich:column>
-							<rich:column>
+							<rich:column style="text-align:center;">
 								<f:facet name="header">
 									<h:outputText value="Fecha Vencimiento" />
 								</f:facet>
@@ -351,25 +351,31 @@
 									<f:convertDateTime pattern="dd/MM/yyyy" />
 								</h:outputText>
 							</rich:column>
-							<rich:column>
+							<rich:column style="text-align:right;">
 								<f:facet name="header">
 									<h:outputText value="Capital" />
 								</f:facet>
-								<h:outputText value="#{cuota.capital}" />
+								<h:outputText value="#{cuota.capital}">
+									<f:convertNumber pattern="###,##0.00" />
+								</h:outputText>
 							</rich:column>
-							<rich:column>
+							<rich:column style="text-align:right;">
 								<f:facet name="header">
 									<h:outputText value="Interes" />
 								</f:facet>
-								<h:outputText value="#{cuota.interes}" />
+								<h:outputText value="#{cuota.interes}">
+									<f:convertNumber pattern="###,##0.00" />
+								</h:outputText>
 							</rich:column>
-							<rich:column>
+							<rich:column style="text-align:right;">
 								<f:facet name="header">
 									<h:outputText value="Total Cuota" />
 								</f:facet>
-								<h:outputText value="#{cuota.totalCuota}" />
+								<h:outputText value="#{cuota.totalCuota}">
+									<f:convertNumber pattern="###,##0.00" />
+								</h:outputText>
 							</rich:column>
-							<rich:column>
+							<rich:column style="text-align:center;">
 								<f:facet name="header">
 									<h:outputText value="Estado Pago" />
 								</f:facet>
