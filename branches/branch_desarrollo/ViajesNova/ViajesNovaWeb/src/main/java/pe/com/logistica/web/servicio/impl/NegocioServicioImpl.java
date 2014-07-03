@@ -3,6 +3,7 @@
  */
 package pe.com.logistica.web.servicio.impl;
 
+import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Properties;
@@ -14,12 +15,15 @@ import javax.servlet.ServletContext;
 
 import pe.com.logistica.bean.negocio.Cliente;
 import pe.com.logistica.bean.negocio.Contacto;
+import pe.com.logistica.bean.negocio.CronogramaPago;
 import pe.com.logistica.bean.negocio.DetalleServicioAgencia;
 import pe.com.logistica.bean.negocio.Direccion;
 import pe.com.logistica.bean.negocio.ProgramaNovios;
 import pe.com.logistica.bean.negocio.Proveedor;
+import pe.com.logistica.bean.negocio.ServicioAgencia;
 import pe.com.logistica.bean.negocio.ServicioNovios;
 import pe.com.logistica.negocio.ejb.NegocioSessionRemote;
+import pe.com.logistica.negocio.exception.ErrorRegistroDataException;
 import pe.com.logistica.negocio.exception.ResultadoCeroDaoException;
 import pe.com.logistica.web.servicio.NegocioServicio;
 
@@ -149,6 +153,27 @@ public class NegocioServicioImpl implements NegocioServicio {
 	public DetalleServicioAgencia agregarServicioVenta(DetalleServicioAgencia detalleServicio)
 			throws SQLException, Exception {
 		return ejbSession.agregarServicioVenta(detalleServicio);
+	}
+	
+	@Override
+	public List<DetalleServicioAgencia> ordenarServiciosVenta(List<DetalleServicioAgencia> listaServicio)
+			throws SQLException, Exception {
+		return ejbSession.ordenarServiciosVenta(listaServicio);
+	}
+
+	@Override
+	public BigDecimal calcularValorCuota(ServicioAgencia servicioAgencia) throws SQLException, Exception {
+		return ejbSession.calcularValorCuota(servicioAgencia);
+	}
+
+	@Override
+	public List<CronogramaPago> consultarCronogramaPago(ServicioAgencia servicioAgencia) throws SQLException, Exception {
+		return ejbSession.consultarCronograma(servicioAgencia);
+	}
+	
+	@Override
+	public Integer registrarVentaServicio(ServicioAgencia servicioAgencia) throws ErrorRegistroDataException, SQLException, Exception {
+		return ejbSession.registrarVentaServicio(servicioAgencia);
 	}
 }
 	
