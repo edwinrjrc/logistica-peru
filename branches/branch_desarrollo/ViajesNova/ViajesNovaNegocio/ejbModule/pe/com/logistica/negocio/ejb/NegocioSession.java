@@ -774,47 +774,16 @@ public class NegocioSession implements NegocioSessionRemote,
 	public List<DetalleServicioAgencia> ordenarServiciosVenta(
 			List<DetalleServicioAgencia> listaServicio) throws SQLException,
 			Exception {
-		List<DetalleServicioAgencia> listaNuevaServicios = new ArrayList<DetalleServicioAgencia>();
-		
-		/*System.out.println("tamaño ::"+listaServicio.size());
 
-		if (listaServicio != null && !listaServicio.isEmpty()) {
-			for (int i = 0; i < listaServicio.size(); i++) {
-				DetalleServicioAgencia primerServicio = listaServicio.get(i);
-				if (!estaEnLista(listaNuevaServicios,
-						primerServicio)) {
-					for (DetalleServicioAgencia detalleServicioAgencia : listaServicio) {
-						if (!estaEnLista(listaNuevaServicios,
-								detalleServicioAgencia)) {
-							if (detalleServicioAgencia.getFechaIda().before(
-									primerServicio.getFechaIda())) {
-								primerServicio = detalleServicioAgencia;
-							}
-						}
-					}
-				}
-				if (!estaEnLista(listaNuevaServicios,
-						primerServicio)) {
-					listaNuevaServicios.add(primerServicio);
-				}
-			}
-		}
-		*/
-		
-		//Comparator<Date> comparador = Collections.reverseOrder();
-		Collections.sort(listaServicio, new Comparator(){
+		Collections.sort(listaServicio, new Comparator<DetalleServicioAgencia>(){
 			@Override
-			public int compare(Object arg0, Object arg1) {
-				DetalleServicioAgencia s1 = (DetalleServicioAgencia)arg0;
-				DetalleServicioAgencia s2 = (DetalleServicioAgencia)arg1;
-				if (s1.getFechaServicio().before(s2.getFechaServicio())){
-					return 1;
-				}
-				if (s1.getFechaServicio().equals(s2.getFechaServicio())){
-					return 0;
-				}
-				if (s1.getFechaServicio().after(s2.getFechaServicio())){
+			public int compare(DetalleServicioAgencia s1, DetalleServicioAgencia s2) {
+				
+				if (s1.getFechaIda().before(s2.getFechaIda())){
 					return -1;
+				}
+				if (s1.getFechaIda().after(s2.getFechaIda())){
+					return 1;
 				}
 				return 0;
 			}
@@ -823,19 +792,6 @@ public class NegocioSession implements NegocioSessionRemote,
 		return listaServicio;
 	}
 
-	private boolean estaEnLista(
-			List<DetalleServicioAgencia> listaNuevaServicios,
-			DetalleServicioAgencia servicio) {
-		if (!listaNuevaServicios.isEmpty()) {
-			for (DetalleServicioAgencia detalleServicioAgencia : listaNuevaServicios) {
-				if (detalleServicioAgencia.equals(servicio)) {
-					System.out.println("encontrado :: "+servicio.getFechaIda());
-					return true;
-				}
-			}
-		}
-		return false;
-	}
 
 	@Override
 	public BigDecimal calcularValorCuota(ServicioAgencia servicioAgencia)
