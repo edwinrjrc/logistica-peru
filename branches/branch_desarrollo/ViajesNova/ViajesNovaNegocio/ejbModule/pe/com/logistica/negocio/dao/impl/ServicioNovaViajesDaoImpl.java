@@ -300,7 +300,7 @@ public class ServicioNovaViajesDaoImpl implements ServicioNovaViajesDao {
 		boolean resultado = false;
 		CallableStatement cs = null;
 
-		String sql = "{ ? = call soporte.fn_generarcronogramapago(?,?,?,?,?,?,?)}";
+		String sql = "{ ? = call negocio.fn_generarcronogramapago(?,?,?,?,?,?,?)}";
 		
 		try {
 			cs = conn.prepareCall(sql);
@@ -325,18 +325,8 @@ public class ServicioNovaViajesDaoImpl implements ServicioNovaViajesDao {
 				if (cs != null) {
 					cs.close();
 				}
-				if (conn != null) {
-					conn.close();
-				}
 			} catch (SQLException e) {
-				try {
-					if (conn != null) {
-						conn.close();
-					}
-					throw new SQLException(e);
-				} catch (SQLException e1) {
-					throw new SQLException(e);
-				}
+				throw new SQLException(e);
 			}
 		}
 
@@ -349,7 +339,7 @@ public class ServicioNovaViajesDaoImpl implements ServicioNovaViajesDao {
 		Connection conn = null;
 		CallableStatement cs = null;
 		ResultSet rs = null;
-		String sql = "{ ? = call soporte.fn_consultarcronogramapago(?)}";
+		String sql = "{ ? = call negocio.fn_consultarcronogramapago(?)}";
 		List<CronogramaPago> cronograma = null;
 		try {
 			conn = UtilConexion.obtenerConexion();
