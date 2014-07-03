@@ -117,3 +117,16 @@
 	text-align: right;
 	font-weight: bold;
 }
+.col1form{
+	width: 20%;
+	text-align: left;
+	font-weight: bold;
+}
+.col2form{
+	width: 30%;
+	text-align: left;
+}
+.col3form{
+	width: 80%;
+	text-align: left;
+}

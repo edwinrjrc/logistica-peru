@@ -37,7 +37,7 @@
 
 							<h:panelGrid columns="2" border="0" cellpadding="0"
 								cellspacing="0" style="width:100%;"
-								columnClasses="col1fil3formulario,col2fil3formulario">
+								columnClasses="col1form,col3form" id="idGrSelcliente">
 								<h:outputText value="Cliente" />
 								<h:panelGrid columns="2" border="0" cellpadding="0"
 									cellspacing="0" id="idGrcliente"
@@ -46,7 +46,7 @@
 										value="#{servicioAgenteMBean.servicioAgencia.cliente.nombreCompleto}" />
 									<a4j:commandLink
 										action="#{servicioAgenteMBean.consultarClientes()}"
-										oncomplete="#{rich:component('idModalbusqnovios')}.show();"
+										oncomplete="#{rich:component('idModalbusqclientes')}.show();"
 										render="idTablaClientes" immediate="true">
 										<h:graphicImage style="border:0px;"
 											value="#{facesContext.externalContext.requestContextPath}/../resources/img/iconoLupa.gif" />
@@ -58,7 +58,7 @@
 
 							<h:panelGrid columns="3" border="0" cellpadding="0"
 								cellspacing="0" style="width:100%;"
-								columnClasses="col1fil3formulario,col2fil3formulario">
+								columnClasses="col1form,col3form">
 								<h:outputText value="Destino" />
 								<h:panelGrid columns="1" border="0" cellpadding="0"
 									cellspacing="0"
@@ -74,21 +74,65 @@
 								</h:panelGrid>
 							</h:panelGrid>
 							<h:panelGrid columns="4" border="0" cellpadding="0"
-								cellspacing="0" style="width:100%;" id="idGrfpago">
+								cellspacing="0" style="width:100%;" id="idGrfpago"
+								columnClasses="col1form,col2form,col1form,col2form">
 								<h:outputText value="Forma Pago" />
 								<h:selectOneMenu
 									value="#{servicioAgenteMBean.servicioAgencia.formaPago.codigoEntero}">
 									<f:selectItem itemLabel="-Seleccione la forma de pago-" />
 									<f:selectItems value="#{catalogoMBean.catalogoFormaPago}" />
-									<a4j:ajax event="valueChange" render="idGrfpago" />
+									<a4j:ajax event="valueChange" render="idfrcred" />
 								</h:selectOneMenu>
 
-								<h:outputText
-									rendered="#{servicioAgenteMBean.servicioAgencia.formaPago.codigoEntero == 2}"
-									value="Tasa Interes (TEA)" />
+								<h:outputText value="Fecha Servicio" />
+								<rich:calendar datePattern="dd/MM/yyyy"
+									value="#{servicioAgenteMBean.servicioAgencia.fechaServicio}"></rich:calendar>
+
+							</h:panelGrid>
+
+							<h:panelGrid columns="4" border="0" cellpadding="0"
+								cellspacing="0" style="width:100%;" id="idfrcred"
+								columnClasses="col1form,col2form,col1form,col2form">
+
+								<h:outputText value="Tasa Interes (TEA)"
+									rendered="#{servicioAgenteMBean.servicioAgencia.formaPago.codigoEntero == 2}" />
 								<h:inputText size="5" maxlength="5"
 									rendered="#{servicioAgenteMBean.servicioAgencia.formaPago.codigoEntero == 2}"
 									value="#{servicioAgenteMBean.servicioAgencia.tea}" />
+
+								<h:outputText
+									rendered="#{servicioAgenteMBean.servicioAgencia.formaPago.codigoEntero == 2}"
+									value="Nro Cuotas" />
+								<h:inputText size="4" maxlength="2"
+									rendered="#{servicioAgenteMBean.servicioAgencia.formaPago.codigoEntero == 2}"
+									value="#{servicioAgenteMBean.servicioAgencia.nroCuotas}" />
+
+								<h:outputText value=""
+									rendered="#{servicioAgenteMBean.servicioAgencia.formaPago.codigoEntero == 2}" />
+								<a4j:commandButton value="Calcular Cuota" render="idfrcred"
+									action="#{servicioAgenteMBean.calcularCuota()}"
+									rendered="#{servicioAgenteMBean.servicioAgencia.formaPago.codigoEntero == 2}"
+									disabled="#{servicioAgenteMBean.servicioAgencia.montoTotalServicios == 0}" />
+
+								<h:outputText value="Valor Cuota"
+									rendered="#{servicioAgenteMBean.servicioAgencia.formaPago.codigoEntero == 2}" />
+								<h:outputText
+									value="#{servicioAgenteMBean.servicioAgencia.valorCuota}"
+									rendered="#{servicioAgenteMBean.servicioAgencia.formaPago.codigoEntero == 2}">
+									<f:convertNumber pattern="###,##0.00" />
+								</h:outputText>
+
+								<h:outputText value="Fecha Primer Vencimiento"
+									rendered="#{servicioAgenteMBean.servicioAgencia.formaPago.codigoEntero == 2}" />
+								<rich:calendar
+									rendered="#{servicioAgenteMBean.servicioAgencia.formaPago.codigoEntero == 2}"
+									value="#{servicioAgenteMBean.servicioAgencia.fechaPrimerCuota}"
+									datePattern="dd/MM/yyyy"></rich:calendar>
+
+								<h:outputText value=""
+									rendered="#{servicioAgenteMBean.servicioAgencia.formaPago.codigoEntero == 2}" />
+								<h:outputText value=""
+									rendered="#{servicioAgenteMBean.servicioAgencia.formaPago.codigoEntero == 2}" />
 							</h:panelGrid>
 						</h:panelGrid>
 					</rich:tab>
@@ -142,8 +186,8 @@
 									<h:panelGrid columns="1" cellpadding="0" cellspacing="0"
 										border="0">
 										<h:inputText id="idCantidad"
-											value="#{servicioAgenteMBean.detalleServicio.cantidad}" size="5"
-											maxlength="2" />
+											value="#{servicioAgenteMBean.detalleServicio.cantidad}"
+											size="5" maxlength="2" />
 										<rich:message for="idCantidad" showDetail="false"
 											showSummary="true" ajaxRendered="true" />
 									</h:panelGrid>
@@ -161,32 +205,40 @@
 
 								<h:panelGrid columns="4" cellpadding="0" cellspacing="0"
 									border="0" style="width:100%;"
-									columnClasses="col1fil1formulario,col2fil1formulario,col3fil1formulario,col4fil1formulario"
-									rendered="#{servicioAgenteMBean.detalleServicio.tipoServicio.codigoEntero == 5}">
-									
-									<h:outputText value="Dias" />
-									<h:inputText value="#{servicioAgenteMBean.detalleServicio.dias}" />
-									<h:outputText value="Noches" />
-									<h:inputText value="#{servicioAgenteMBean.detalleServicio.noches}" />
+									columnClasses="col1fil1formulario,col2fil1formulario,col3fil1formulario,col4fil1formulario">
 
+									<h:outputText value="Fecha Servicio" />
+									<h:panelGrid columns="1" cellpadding="0" cellspacing="0"
+										border="0">
+										<rich:calendar datePattern="dd/MM/yyyy" id="idFecServicio"
+											value="#{servicioAgenteMBean.detalleServicio.fechaIda}"></rich:calendar>
+										<rich:message for="idFecServicio"></rich:message>
+									</h:panelGrid>
+									<h:outputText value="Fecha Regreso" />
+									<rich:calendar datePattern="dd/MM/yyyy"
+										value="#{servicioAgenteMBean.detalleServicio.fechaRegreso}"></rich:calendar>
 								</h:panelGrid>
+
 								<h:panelGrid columns="4" cellpadding="0" cellspacing="0"
 									border="0" style="width:100%;"
 									columnClasses="col1fil1formulario,col2fil1formulario,col3fil1formulario,col4fil1formulario"
-									rendered="#{servicioAgenteMBean.detalleServicio.tipoServicio.codigoEntero == 1}">
-									
-									<h:outputText value="Fecha Ida" />
-									<rich:calendar value="#{servicioAgenteMBean.detalleServicio.fechaIda}"></rich:calendar>
-									<h:outputText value="Fecha Vuelta" />
-									<rich:calendar value="#{servicioAgenteMBean.detalleServicio.fechaRegreso}"></rich:calendar>
+									rendered="#{servicioAgenteMBean.detalleServicio.tipoServicio.codigoEntero == 5}">
+
+									<h:outputText value="Dias" />
+									<h:inputText
+										value="#{servicioAgenteMBean.detalleServicio.dias}" />
+									<h:outputText value="Noches" />
+									<h:inputText
+										value="#{servicioAgenteMBean.detalleServicio.noches}" />
 
 								</h:panelGrid>
+
 
 								<f:facet name="footer">
 									<h:panelGrid cellpadding="0" cellspacing="0" border="0"
 										style="width:100%;text-align:center;" columns="1">
 										<a4j:commandButton value="Agregar"
-											render="idServVenta,idFrNuevServicio,idTotalesServicios"
+											render="idServVenta,idFrNuevServicio,idTotalesServicios,idfrcred"
 											action="#{servicioAgenteMBean.agregarServicio()}" />
 									</h:panelGrid>
 								</f:facet>
@@ -194,7 +246,8 @@
 							<h:panelGrid columns="1" cellpadding="0" cellspacing="0"
 								border="0" style="width:100%;">
 								<rich:dataTable id="idServVenta" var="row"
-									value="#{servicioAgenteMBean.listadoDetalleServicio}" style="width:100%;">
+									value="#{servicioAgenteMBean.listadoDetalleServicio}"
+									style="width:100%;">
 									<rich:column style="text-align:right;width: 4%;">
 										<f:facet name="header">
 											<h:panelGrid cellpadding="0" cellspacing="0" border="0"
@@ -203,6 +256,17 @@
 											</h:panelGrid>
 										</f:facet>
 										<h:outputText value="#{row.cantidad}" />
+									</rich:column>
+									<rich:column style="text-align:right;width: 4%;">
+										<f:facet name="header">
+											<h:panelGrid cellpadding="0" cellspacing="0" border="0"
+												style="text-align:center;">
+												<h:outputText value="Fecha Servicio" />
+											</h:panelGrid>
+										</f:facet>
+										<h:outputText value="#{row.fechaIda}">
+											<f:convertDateTime pattern="dd/MM/yyyy" />
+										</h:outputText>
 									</rich:column>
 									<rich:column style="text-align:left;width: 75%;">
 										<f:facet name="header">
@@ -261,24 +325,70 @@
 							</h:panelGrid>
 						</h:panelGrid>
 					</rich:tab>
+					<rich:tab
+						rendered="#{servicioAgenteMBean.servicioAgencia.formaPago.codigoEntero == 2}">
+						<f:facet name="header">
+							<h:outputText value="Cronograma" />
+						</f:facet>
+
+						<rich:dataTable id="idTablaCronograma"
+							value="#{servicioAgenteMBean.servicioAgencia.cronogramaPago}"
+							var="cuota" style="width: 100%;">
+							<f:facet name="header">
+								<h:outputText value="Cronograma de Pagos" />
+							</f:facet>
+							<rich:column>
+								<f:facet name="header">
+									<h:outputText value="Nro Cuota" />
+								</f:facet>
+								<h:outputText value="#{cuota.nroCuota}" />
+							</rich:column>
+							<rich:column>
+								<f:facet name="header">
+									<h:outputText value="Fecha Vencimiento" />
+								</f:facet>
+								<h:outputText value="#{cuota.fechaVencimiento}">
+									<f:convertDateTime pattern="dd/MM/yyyy" />
+								</h:outputText>
+							</rich:column>
+							<rich:column>
+								<f:facet name="header">
+									<h:outputText value="Capital" />
+								</f:facet>
+								<h:outputText value="#{cuota.capital}" />
+							</rich:column>
+							<rich:column>
+								<f:facet name="header">
+									<h:outputText value="Interes" />
+								</f:facet>
+								<h:outputText value="#{cuota.interes}" />
+							</rich:column>
+							<rich:column>
+								<f:facet name="header">
+									<h:outputText value="Total Cuota" />
+								</f:facet>
+								<h:outputText value="#{cuota.totalCuota}" />
+							</rich:column>
+							<rich:column>
+								<f:facet name="header">
+									<h:outputText value="Estado Pago" />
+								</f:facet>
+								<h:outputText value="#{cuota.estadoCuota.nombre}" />
+							</rich:column>
+						</rich:dataTable>
+					</rich:tab>
 				</rich:tabPanel>
 
 				<f:facet name="footer">
 					<h:panelGrid border="0" cellpadding="0" cellspacing="0" columns="2"
-						style="heght:50px; width:100%;text-align:center;" id="idBotNovios">
-						<h:inputHidden id="idHidRegExito"
-							value="#{noviosMBean.registroExito}" />
+						style="heght:50px; width:100%;text-align:center;"
+						id="idBotVenServicio">
+
 						<a4j:commandButton value="Grabar"
-							rendered="#{!noviosMBean.registroExito}"
-							actionListener="#{noviosMBean.ejecutarMetodo}"
-							render="idFormHidden,idPanelHidden,idPanelBotones,idModalcorrecto,idModalError,idBotNovios"
+							actionListener="#{servicioAgenteMBean.ejecutarMetodo()}"
+							render="idFormHidden,idPanelHidden,idPanelBotones,idModalcorrecto,idModalError,idGrRegisVenServicio"
 							oncomplete="mostrarModal('idFormVentaServi')" />
-						<a4j:commandButton value="Imprimir Registro Novios"
-							rendered="#{noviosMBean.registroExito}"
-							onclick="document.getElementById('idformadmnovios:idbtnImpNovios').click();" />
-						<a4j:commandButton value="Salir"
-							rendered="#{noviosMBean.registroExito}"
-							oncomplete="#{rich:component('idModalformnovios')}.hide(); return false;" />
+
 					</h:panelGrid>
 				</f:facet>
 			</h:panelGrid>
