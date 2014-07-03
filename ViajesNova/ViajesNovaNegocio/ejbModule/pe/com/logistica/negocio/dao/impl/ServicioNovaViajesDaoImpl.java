@@ -90,7 +90,7 @@ public class ServicioNovaViajesDaoImpl implements ServicioNovaViajesDao {
 			throws SQLException {
 		Integer idservicio = 0;
 		CallableStatement cs = null;
-		String sql = "{ ? = call soporte.fn_ingresarserviciocabecera(?,?,?,?,?,?,?,?)}";
+		String sql = "{ ? = call negocio.fn_ingresarserviciocabecera(?,?,?,?,?,?,?,?)}";
 		
 		try {
 			cs = conn.prepareCall(sql);
