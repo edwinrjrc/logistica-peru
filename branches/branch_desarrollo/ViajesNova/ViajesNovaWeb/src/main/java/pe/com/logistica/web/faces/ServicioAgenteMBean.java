@@ -4,7 +4,6 @@
 package pe.com.logistica.web.faces;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,11 +19,11 @@ import javax.servlet.http.HttpSession;
 import org.apache.commons.lang3.StringUtils;
 
 import pe.com.logistica.bean.Util.UtilParse;
+import pe.com.logistica.bean.negocio.Cliente;
 import pe.com.logistica.bean.negocio.DetalleServicioAgencia;
-import pe.com.logistica.bean.negocio.Parametro;
 import pe.com.logistica.bean.negocio.ServicioAgencia;
-import pe.com.logistica.bean.negocio.ServicioNovios;
 import pe.com.logistica.bean.negocio.Usuario;
+import pe.com.logistica.negocio.exception.ErrorRegistroDataException;
 import pe.com.logistica.web.servicio.NegocioServicio;
 import pe.com.logistica.web.servicio.ParametroServicio;
 import pe.com.logistica.web.servicio.impl.NegocioServicioImpl;
@@ -44,9 +43,11 @@ public class ServicioAgenteMBean extends BaseMBean{
 	
 	private ServicioAgencia servicioAgencia;
 	private DetalleServicioAgencia detalleServicio;
+	private Cliente clienteBusqueda;
 	
 	private List<ServicioAgencia> listadoServicioAgencia;
 	private List<DetalleServicioAgencia> listadoDetalleServicio;
+	private List<Cliente> listadoClientes;
 	
 	public boolean nuevaVenta;
 	public boolean editarVenta;
@@ -75,9 +76,41 @@ public class ServicioAgenteMBean extends BaseMBean{
 	}
 	
 	public void consultarClientes(){
-		
+		try {
+			this.setClienteBusqueda(null);
+
+			this.setListadoClientes(this.negocioServicio.listarCliente());
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
+	public void buscarCliente(){
+		
+
+	}
+	
+	public void seleccionarCliente(){
+		this.getServicioAgencia().setCliente(obtenerClienteListado());
+	}
+	
+	private Cliente obtenerClienteListado() {
+		try {
+			for (Cliente clienteLocal : this.getListadoClientes()) {
+				if (clienteLocal.getCodigoEntero().equals(
+						clienteLocal.getCodigoSeleccionado())) {
+					return clienteLocal;
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return null;
+	}
+
 	public void buscarServicioRegistrado(){
 		
 	}
@@ -102,6 +135,8 @@ public class ServicioAgenteMBean extends BaseMBean{
 				getDetalleServicio().setIpCreacion(
 						obtenerRequest().getRemoteAddr());
 				this.getListadoDetalleServicio().add(negocioServicio.agregarServicioVenta(getDetalleServicio()));
+				
+				this.setListadoDetalleServicio(negocioServicio.ordenarServiciosVenta(getListadoDetalleServicio()));
 				
 				this.setDetalleServicio(null);
 				
@@ -138,6 +173,11 @@ public class ServicioAgenteMBean extends BaseMBean{
 					"Ingrese el precio unitario del servicio", "", FacesMessage.SEVERITY_ERROR);
 			resultado = false;
 		}
+		if (this.getDetalleServicio().getFechaIda() == null){
+			this.agregarMensaje(idFormulario + ":idPrecUnitario",
+					"Ingrese la fecha del servicio", "", FacesMessage.SEVERITY_ERROR);
+			resultado = false;
+		}
 		
 		return resultado;
 	}
@@ -159,7 +199,40 @@ public class ServicioAgenteMBean extends BaseMBean{
 	}
 
 	public void ejecutarMetodo(){
-		
+		try {
+			if (this.isNuevaVenta()){
+				HttpSession session = obtenerSession(false);
+				Usuario usuario = (Usuario) session
+						.getAttribute("usuarioSession");
+				getServicioAgencia().setUsuarioCreacion(
+						usuario.getUsuario());
+				getServicioAgencia().setIpCreacion(
+						obtenerRequest().getRemoteAddr());
+				
+				Integer idServicio = this.negocioServicio.registrarVentaServicio(getServicioAgencia());
+				this.getServicioAgencia().setCodigoEntero(idServicio);
+				this.getServicioAgencia().setCronogramaPago(this.negocioServicio.consultarCronogramaPago(getServicioAgencia()));
+				
+			}
+		} catch (ErrorRegistroDataException e) {
+			e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void calcularCuota(){
+		BigDecimal valorCuota = BigDecimal.ZERO;
+		try {
+			valorCuota = this.negocioServicio.calcularValorCuota(this.getServicioAgencia());
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		this.getServicioAgencia().setValorCuota(valorCuota);
 	}
 
 	/**
@@ -253,6 +326,37 @@ public class ServicioAgenteMBean extends BaseMBean{
 	 */
 	public void setListadoDetalleServicio(List<DetalleServicioAgencia> listadoDetalleServicio) {
 		this.listadoDetalleServicio = listadoDetalleServicio;
+	}
+
+	/**
+	 * @return the clienteBusqueda
+	 */
+	public Cliente getClienteBusqueda() {
+		if (clienteBusqueda == null){
+			clienteBusqueda = new Cliente();
+		}
+		return clienteBusqueda;
+	}
+
+	/**
+	 * @param clienteBusqueda the clienteBusqueda to set
+	 */
+	public void setClienteBusqueda(Cliente clienteBusqueda) {
+		this.clienteBusqueda = clienteBusqueda;
+	}
+
+	/**
+	 * @return the listadoClientes
+	 */
+	public List<Cliente> getListadoClientes() {
+		return listadoClientes;
+	}
+
+	/**
+	 * @param listadoClientes the listadoClientes to set
+	 */
+	public void setListadoClientes(List<Cliente> listadoClientes) {
+		this.listadoClientes = listadoClientes;
 	}
 
 }
