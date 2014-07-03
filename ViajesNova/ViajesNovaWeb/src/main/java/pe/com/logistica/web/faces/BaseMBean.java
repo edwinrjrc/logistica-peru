@@ -31,6 +31,7 @@ public class BaseMBean implements Serializable {
 	private String modalNombre;
 
 	private boolean showModal;
+	private boolean transaccionExito;
 	
 	public static final String TIPO_MODAL_EXITO = "1";
 	public static final String TIPO_MODAL_ERROR = "2";
@@ -149,5 +150,19 @@ public class BaseMBean implements Serializable {
 		FacesMessage faceMessage = new FacesMessage(severity, mensajeSuma,
 				mensajeDetalle);
 		obtenerContexto().addMessage(idComponente, faceMessage);
+	}
+
+	/**
+	 * @return the transaccionExito
+	 */
+	public boolean isTransaccionExito() {
+		return transaccionExito;
+	}
+
+	/**
+	 * @param transaccionExito the transaccionExito to set
+	 */
+	public void setTransaccionExito(boolean transaccionExito) {
+		this.transaccionExito = transaccionExito;
 	}
 }
