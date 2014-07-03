@@ -5,6 +5,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import javax.ejb.Stateless;
@@ -774,6 +775,8 @@ public class NegocioSession implements NegocioSessionRemote,
 			List<DetalleServicioAgencia> listaServicio) throws SQLException,
 			Exception {
 		List<DetalleServicioAgencia> listaNuevaServicios = new ArrayList<DetalleServicioAgencia>();
+		
+		/*System.out.println("tamaño ::"+listaServicio.size());
 
 		if (listaServicio != null && !listaServicio.isEmpty()) {
 			for (int i = 0; i < listaServicio.size(); i++) {
@@ -796,8 +799,28 @@ public class NegocioSession implements NegocioSessionRemote,
 				}
 			}
 		}
+		*/
+		
+		//Comparator<Date> comparador = Collections.reverseOrder();
+		Collections.sort(listaServicio, new Comparator(){
+			@Override
+			public int compare(Object arg0, Object arg1) {
+				DetalleServicioAgencia s1 = (DetalleServicioAgencia)arg0;
+				DetalleServicioAgencia s2 = (DetalleServicioAgencia)arg1;
+				if (s1.getFechaServicio().before(s2.getFechaServicio())){
+					return 1;
+				}
+				if (s1.getFechaServicio().equals(s2.getFechaServicio())){
+					return 0;
+				}
+				if (s1.getFechaServicio().after(s2.getFechaServicio())){
+					return -1;
+				}
+				return 0;
+			}
+		}); 
 
-		return listaNuevaServicios;
+		return listaServicio;
 	}
 
 	private boolean estaEnLista(
