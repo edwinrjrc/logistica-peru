@@ -4,6 +4,7 @@
 package pe.com.logistica.bean.negocio;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -35,7 +36,7 @@ public class ServicioAgencia extends BaseNegocio{
 	private BigDecimal montoTotalServicios;
 	
 	private List<DetalleServicioAgencia> listaDetalleServicio;
-	
+	private List<CronogramaPago> cronogramaPago;
 
 	/**
 	 * 
@@ -291,6 +292,9 @@ public class ServicioAgencia extends BaseNegocio{
 	 * @return the montoTotalServicios
 	 */
 	public BigDecimal getMontoTotalServicios() {
+		if (montoTotalServicios == null){
+			montoTotalServicios = BigDecimal.ZERO;
+		}
 		return montoTotalServicios;
 	}
 
@@ -301,5 +305,26 @@ public class ServicioAgencia extends BaseNegocio{
 	 */
 	public void setMontoTotalServicios(BigDecimal montoTotalServicios) {
 		this.montoTotalServicios = montoTotalServicios;
+	}
+
+
+
+	/**
+	 * @return the cronogramaPago
+	 */
+	public List<CronogramaPago> getCronogramaPago() {
+		if (cronogramaPago == null){
+			cronogramaPago = new ArrayList<CronogramaPago>();
+		}
+		return cronogramaPago;
+	}
+
+
+
+	/**
+	 * @param cronogramaPago the cronogramaPago to set
+	 */
+	public void setCronogramaPago(List<CronogramaPago> cronogramaPago) {
+		this.cronogramaPago = cronogramaPago;
 	}
 }

@@ -1,5 +1,6 @@
 package pe.com.logistica.negocio.ejb;
 
+import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -7,11 +8,14 @@ import javax.ejb.Remote;
 
 import pe.com.logistica.bean.negocio.Cliente;
 import pe.com.logistica.bean.negocio.Contacto;
+import pe.com.logistica.bean.negocio.CronogramaPago;
 import pe.com.logistica.bean.negocio.DetalleServicioAgencia;
 import pe.com.logistica.bean.negocio.Direccion;
 import pe.com.logistica.bean.negocio.ProgramaNovios;
 import pe.com.logistica.bean.negocio.Proveedor;
+import pe.com.logistica.bean.negocio.ServicioAgencia;
 import pe.com.logistica.bean.negocio.ServicioNovios;
+import pe.com.logistica.negocio.exception.ErrorRegistroDataException;
 import pe.com.logistica.negocio.exception.ResultadoCeroDaoException;
 
 @Remote
@@ -46,7 +50,7 @@ public interface NegocioSessionRemote {
 
 	List<Cliente> listarCliente() throws SQLException;
 	
-	Integer registrarNovios(ProgramaNovios programaNovios) throws SQLException,
+	Integer registrarNovios(ProgramaNovios programaNovios) throws ErrorRegistroDataException, SQLException,
 	Exception;
 	
 	public List<Cliente> listarClientesNovios(String genero) throws SQLException, Exception;
@@ -60,4 +64,12 @@ public interface NegocioSessionRemote {
 	DetalleServicioAgencia agregarServicioVenta(
 			DetalleServicioAgencia detalleServicio) throws SQLException,
 			Exception;
+
+	public List<DetalleServicioAgencia> ordenarServiciosVenta(List<DetalleServicioAgencia> listaServicio) throws SQLException, Exception;
+	
+	public BigDecimal calcularValorCuota(ServicioAgencia servicioAgencia) throws SQLException, Exception;
+	
+	public Integer registrarVentaServicio(ServicioAgencia servicioAgencia) throws ErrorRegistroDataException, SQLException, Exception;
+	
+	public List<CronogramaPago> consultarCronograma(ServicioAgencia servicioAgencia) throws SQLException, Exception;
 }
