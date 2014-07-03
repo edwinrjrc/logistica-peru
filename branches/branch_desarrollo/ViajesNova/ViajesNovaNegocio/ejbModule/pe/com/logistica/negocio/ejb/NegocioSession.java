@@ -1,7 +1,10 @@
 package pe.com.logistica.negocio.ejb;
 
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javax.ejb.Stateless;
@@ -11,6 +14,7 @@ import org.apache.commons.lang3.StringUtils;
 import pe.com.logistica.bean.base.BaseVO;
 import pe.com.logistica.bean.negocio.Cliente;
 import pe.com.logistica.bean.negocio.Contacto;
+import pe.com.logistica.bean.negocio.CronogramaPago;
 import pe.com.logistica.bean.negocio.DetalleServicioAgencia;
 import pe.com.logistica.bean.negocio.Direccion;
 import pe.com.logistica.bean.negocio.Maestro;
@@ -26,6 +30,8 @@ import pe.com.logistica.negocio.dao.DireccionDao;
 import pe.com.logistica.negocio.dao.MaestroDao;
 import pe.com.logistica.negocio.dao.PersonaDao;
 import pe.com.logistica.negocio.dao.ProveedorDao;
+import pe.com.logistica.negocio.dao.ServicioNegocioDao;
+import pe.com.logistica.negocio.dao.ServicioNovaViajesDao;
 import pe.com.logistica.negocio.dao.ServicioNoviosDao;
 import pe.com.logistica.negocio.dao.TelefonoDao;
 import pe.com.logistica.negocio.dao.UbigeoDao;
@@ -35,6 +41,8 @@ import pe.com.logistica.negocio.dao.impl.DireccionDaoImpl;
 import pe.com.logistica.negocio.dao.impl.MaestroDaoImpl;
 import pe.com.logistica.negocio.dao.impl.PersonaDaoImpl;
 import pe.com.logistica.negocio.dao.impl.ProveedorDaoImpl;
+import pe.com.logistica.negocio.dao.impl.ServicioNegocioDaoImpl;
+import pe.com.logistica.negocio.dao.impl.ServicioNovaViajesDaoImpl;
 import pe.com.logistica.negocio.dao.impl.ServicioNoviosDaoImpl;
 import pe.com.logistica.negocio.dao.impl.TelefonoDaoImpl;
 import pe.com.logistica.negocio.dao.impl.UbigeoDaoImpl;
@@ -182,7 +190,7 @@ public class NegocioSession implements NegocioSessionRemote,
 					}
 					contactoDao.registrarContactoProveedor(idPersona, contacto,
 							conexion);
-					
+
 					contactoDao.ingresarCorreoElectronico(contacto, conexion);
 				}
 			}
@@ -219,7 +227,8 @@ public class NegocioSession implements NegocioSessionRemote,
 
 			proveedor.setTipoPersona(2);
 
-			Integer idPersona = personaDao.actualizarPersona(proveedor, conexion); 
+			Integer idPersona = personaDao.actualizarPersona(proveedor,
+					conexion);
 			if (idPersona == 0) {
 				throw new ResultadoCeroDaoException(
 						"No se pudo completar la actualización de la persona");
@@ -228,17 +237,17 @@ public class NegocioSession implements NegocioSessionRemote,
 			if (proveedor.getListaDirecciones() != null) {
 				int idDireccion = 0;
 				for (Direccion direccion : proveedor.getListaDirecciones()) {
-					idDireccion = direccionDao
-							.actualizarDireccion(direccion, conexion);
+					idDireccion = direccionDao.actualizarDireccion(direccion,
+							conexion);
 					int idTelefono = 0;
 					if (idDireccion == 0) {
 						throw new ResultadoCeroDaoException(
 								"No se pudo completar la actualización de la dirección");
-					}
-					else {
-						direccionDao.eliminarTelefonoDireccion(direccion, conexion);
+					} else {
+						direccionDao.eliminarTelefonoDireccion(direccion,
+								conexion);
 						List<Telefono> listTelefonos = direccion.getTelefonos();
-						if (!listTelefonos.isEmpty()){
+						if (!listTelefonos.isEmpty()) {
 							for (Telefono telefono : listTelefonos) {
 								telefono.getEmpresaOperadora().setCodigoEntero(
 										0);
@@ -253,7 +262,7 @@ public class NegocioSession implements NegocioSessionRemote,
 							}
 						}
 					}
-					
+
 					direccionDao.registrarPersonaDireccion(
 							proveedor.getCodigoEntero(),
 							proveedor.getTipoPersona(), idDireccion, conexion);
@@ -265,11 +274,11 @@ public class NegocioSession implements NegocioSessionRemote,
 				int idContacto = 0;
 				for (Contacto contacto : proveedor.getListaContactos()) {
 					contacto.setTipoPersona(3);
-					
+
 					idContacto = personaDao
 							.registrarPersona(contacto, conexion);
 					contacto.setCodigoEntero(idContacto);
-					
+
 					if (!contacto.getListaTelefonos().isEmpty()) {
 						for (Telefono telefono : contacto.getListaTelefonos()) {
 							int idTelefono = telefonoDao.registrarTelefono(
@@ -284,9 +293,9 @@ public class NegocioSession implements NegocioSessionRemote,
 					}
 					contactoDao.registrarContactoProveedor(idPersona, contacto,
 							conexion);
-					
+
 					contactoDao.eliminarCorreosContacto(contacto, conexion);
-					
+
 					contactoDao.ingresarCorreoElectronico(contacto, conexion);
 				}
 			}
@@ -377,12 +386,13 @@ public class NegocioSession implements NegocioSessionRemote,
 
 		return UtilJdbc.convertirMayuscula(direccionCompleta);
 	}
-	
+
 	@Override
 	public List<Proveedor> buscarProveedor(Proveedor proveedor)
-			throws SQLException{
+			throws SQLException {
 		ProveedorDao proveedorDao = new ProveedorDaoImpl();
-		List<Proveedor> listaProveedores = proveedorDao.buscarProveedor(proveedor);
+		List<Proveedor> listaProveedores = proveedorDao
+				.buscarProveedor(proveedor);
 
 		MaestroDao maestroDao = new MaestroDaoImpl();
 
@@ -397,12 +407,13 @@ public class NegocioSession implements NegocioSessionRemote,
 							proveedor2.getDireccion(), hijoMaestro));
 
 		}
-		
+
 		return listaProveedores;
 	}
 
 	@Override
-	public boolean registrarCliente(Cliente cliente) throws ResultadoCeroDaoException, SQLException, Exception {
+	public boolean registrarCliente(Cliente cliente)
+			throws ResultadoCeroDaoException, SQLException, Exception {
 		PersonaDao personaDao = new PersonaDaoImpl();
 		DireccionDao direccionDao = new DireccionDaoImpl();
 		TelefonoDao telefonoDao = new TelefonoDaoImpl();
@@ -472,7 +483,7 @@ public class NegocioSession implements NegocioSessionRemote,
 					}
 					contactoDao.registrarContactoProveedor(idPersona, contacto,
 							conexion);
-					
+
 					contactoDao.ingresarCorreoElectronico(contacto, conexion);
 				}
 			}
@@ -495,7 +506,8 @@ public class NegocioSession implements NegocioSessionRemote,
 	}
 
 	@Override
-	public boolean actualizarCliente(Cliente cliente) throws SQLException, ResultadoCeroDaoException, Exception {
+	public boolean actualizarCliente(Cliente cliente) throws SQLException,
+			ResultadoCeroDaoException, Exception {
 		PersonaDao personaDao = new PersonaDaoImpl();
 		DireccionDao direccionDao = new DireccionDaoImpl();
 		TelefonoDao telefonoDao = new TelefonoDaoImpl();
@@ -508,7 +520,7 @@ public class NegocioSession implements NegocioSessionRemote,
 
 			cliente.setTipoPersona(1);
 
-			Integer idPersona = personaDao.actualizarPersona(cliente, conexion); 
+			Integer idPersona = personaDao.actualizarPersona(cliente, conexion);
 			if (idPersona == 0) {
 				throw new ResultadoCeroDaoException(
 						"No se pudo completar la actualización de la persona");
@@ -517,17 +529,17 @@ public class NegocioSession implements NegocioSessionRemote,
 			if (cliente.getListaDirecciones() != null) {
 				int idDireccion = 0;
 				for (Direccion direccion : cliente.getListaDirecciones()) {
-					idDireccion = direccionDao
-							.actualizarDireccion(direccion, conexion);
+					idDireccion = direccionDao.actualizarDireccion(direccion,
+							conexion);
 					int idTelefono = 0;
 					if (idDireccion == 0) {
 						throw new ResultadoCeroDaoException(
 								"No se pudo completar la actualización de la dirección");
-					}
-					else {
-						direccionDao.eliminarTelefonoDireccion(direccion, conexion);
+					} else {
+						direccionDao.eliminarTelefonoDireccion(direccion,
+								conexion);
 						List<Telefono> listTelefonos = direccion.getTelefonos();
-						if (!listTelefonos.isEmpty()){
+						if (!listTelefonos.isEmpty()) {
 							for (Telefono telefono : listTelefonos) {
 								telefono.getEmpresaOperadora().setCodigoEntero(
 										0);
@@ -542,7 +554,7 @@ public class NegocioSession implements NegocioSessionRemote,
 							}
 						}
 					}
-					
+
 					direccionDao.registrarPersonaDireccion(
 							cliente.getCodigoEntero(),
 							cliente.getTipoPersona(), idDireccion, conexion);
@@ -554,11 +566,11 @@ public class NegocioSession implements NegocioSessionRemote,
 				int idContacto = 0;
 				for (Contacto contacto : cliente.getListaContactos()) {
 					contacto.setTipoPersona(3);
-					
+
 					idContacto = personaDao
 							.registrarPersona(contacto, conexion);
 					contacto.setCodigoEntero(idContacto);
-					
+
 					if (!contacto.getListaTelefonos().isEmpty()) {
 						for (Telefono telefono : contacto.getListaTelefonos()) {
 							int idTelefono = telefonoDao.registrarTelefono(
@@ -573,9 +585,9 @@ public class NegocioSession implements NegocioSessionRemote,
 					}
 					contactoDao.registrarContactoProveedor(idPersona, contacto,
 							conexion);
-					
+
 					contactoDao.eliminarCorreosContacto(contacto, conexion);
-					
+
 					contactoDao.ingresarCorreoElectronico(contacto, conexion);
 				}
 			}
@@ -596,10 +608,9 @@ public class NegocioSession implements NegocioSessionRemote,
 			}
 		}
 	}
-	
+
 	@Override
-	public List<Cliente> listarCliente()
-			throws SQLException{
+	public List<Cliente> listarCliente() throws SQLException {
 		ClienteDao clienteDao = new ClienteDaoImpl();
 		List<Cliente> listaClientes = clienteDao.consultarPersona(null);
 
@@ -612,17 +623,16 @@ public class NegocioSession implements NegocioSessionRemote,
 					.getCodigoEntero());
 			hijoMaestro = maestroDao.consultarHijoMaestro(hijoMaestro);
 			cliente2.getDireccion().setDireccion(
-					UtilDatos.obtenerDireccionCompleta(
-							cliente2.getDireccion(), hijoMaestro));
+					UtilDatos.obtenerDireccionCompleta(cliente2.getDireccion(),
+							hijoMaestro));
 
 		}
-		
+
 		return listaClientes;
 	}
-	
+
 	@Override
-	public List<Cliente> buscarCliente(Cliente cliente)
-			throws SQLException{
+	public List<Cliente> buscarCliente(Cliente cliente) throws SQLException {
 		ClienteDao clienteDao = new ClienteDaoImpl();
 		List<Cliente> listaClientes = clienteDao.buscarPersona(cliente);
 
@@ -635,16 +645,17 @@ public class NegocioSession implements NegocioSessionRemote,
 					.getCodigoEntero());
 			hijoMaestro = maestroDao.consultarHijoMaestro(hijoMaestro);
 			cliente2.getDireccion().setDireccion(
-					UtilDatos.obtenerDireccionCompleta(
-							cliente2.getDireccion(), hijoMaestro));
+					UtilDatos.obtenerDireccionCompleta(cliente2.getDireccion(),
+							hijoMaestro));
 
 		}
-		
+
 		return listaClientes;
 	}
 
 	@Override
-	public Cliente consultarCliente(int idcliente) throws SQLException, Exception {
+	public Cliente consultarCliente(int idcliente) throws SQLException,
+			Exception {
 		DireccionDao direccionDao = new DireccionDaoImpl();
 		ClienteDao clienteDao = new ClienteDaoImpl();
 		ContactoDao contactoDao = new ContactoDaoImpl();
@@ -662,83 +673,207 @@ public class NegocioSession implements NegocioSessionRemote,
 
 		return cliente;
 	}
-	
+
 	@Override
-	public Integer registrarNovios(ProgramaNovios programaNovios) throws SQLException, Exception{
+	public Integer registrarNovios(ProgramaNovios programaNovios)
+			throws ErrorRegistroDataException, SQLException, Exception {
 		ServicioNoviosDao servicioNoviosDao = new ServicioNoviosDaoImpl();
-		
+
 		Connection conexion = null;
 		try {
 			conexion = UtilConexion.obtenerConexion();
-						
-			Integer idnovios = servicioNoviosDao.registrarNovios(programaNovios, conexion);
-			
-			if (programaNovios.getListaInvitados() != null && !programaNovios.getListaInvitados().isEmpty()){
+
+			Integer idnovios = servicioNoviosDao.registrarNovios(
+					programaNovios, conexion);
+
+			if (programaNovios.getListaInvitados() != null
+					&& !programaNovios.getListaInvitados().isEmpty()) {
 				for (Cliente invitado : programaNovios.getListaInvitados()) {
-					boolean exitoRegistro = servicioNoviosDao.registrarInvitado(invitado, idnovios, conexion);
-					if (!exitoRegistro){
-						throw new ErrorRegistroDataException("No se puedo registrar los invitados de los novios");
+					boolean exitoRegistro = servicioNoviosDao
+							.registrarInvitado(invitado, idnovios, conexion);
+					if (!exitoRegistro) {
+						throw new ErrorRegistroDataException(
+								"No se pudo registrar los invitados de los novios");
 					}
 				}
 			}
-			
-			if (programaNovios.getListaServicios() != null && !programaNovios.getListaServicios().isEmpty()){
-				for (ServicioNovios servicioNovios : programaNovios.getListaServicios()) {
-					boolean exitoRegistro = servicioNoviosDao.ingresarServicioNovios(servicioNovios, idnovios, conexion);
-					if (!exitoRegistro){
-						throw new ErrorRegistroDataException("No se puedo registrar los servicios de los novios");
+
+			if (programaNovios.getListaServicios() != null
+					&& !programaNovios.getListaServicios().isEmpty()) {
+				for (ServicioNovios servicioNovios : programaNovios
+						.getListaServicios()) {
+					boolean exitoRegistro = servicioNoviosDao
+							.ingresarServicioNovios(servicioNovios, idnovios,
+									conexion);
+					if (!exitoRegistro) {
+						throw new ErrorRegistroDataException(
+								"No se pudo registrar los servicios de los novios");
 					}
 				}
 			}
-			
+
 			return idnovios;
-		}
-		catch (ErrorRegistroDataException e){
+		} catch (ErrorRegistroDataException e) {
 			throw new ErrorRegistroDataException(e.getMensajeError(), e);
-		}
-		catch (SQLException e){
+		} catch (SQLException e) {
 			throw new SQLException(e);
-		}
-		finally {
+		} finally {
 			if (conexion != null) {
 				conexion.close();
 			}
 		}
 	}
-	
+
 	@Override
-	public List<Cliente> listarClientesNovios(String genero) throws SQLException, Exception{
+	public List<Cliente> listarClientesNovios(String genero)
+			throws SQLException, Exception {
 		ClienteDao clienteDao = new ClienteDaoImpl();
 		return clienteDao.listarClientesNovios(genero);
 	}
-	
+
 	@Override
-	public List<ProgramaNovios> consultarNovios(ProgramaNovios programaNovios) throws SQLException, Exception{
+	public List<ProgramaNovios> consultarNovios(ProgramaNovios programaNovios)
+			throws SQLException, Exception {
 		ServicioNoviosDao servicioNovios = new ServicioNoviosDaoImpl();
 		return servicioNovios.consultarNovios(programaNovios);
 	}
-	
+
 	@Override
-	public ServicioNovios agregarServicio(ServicioNovios servicioNovios) throws SQLException, Exception{
-		Integer idTipoServicio = servicioNovios.getTipoServicio().getCodigoEntero();
+	public ServicioNovios agregarServicio(ServicioNovios servicioNovios)
+			throws SQLException, Exception {
+		Integer idTipoServicio = servicioNovios.getTipoServicio()
+				.getCodigoEntero();
 		MaestroDao maestroDao = new MaestroDaoImpl();
 		Maestro hijoMaestro = new Maestro();
 		hijoMaestro.setCodigoMaestro(12);
 		hijoMaestro.setCodigoEntero(idTipoServicio);
-		servicioNovios.setTipoServicio((BaseVO)maestroDao.consultarHijoMaestro(hijoMaestro));
-		
+		servicioNovios.setTipoServicio((BaseVO) maestroDao
+				.consultarHijoMaestro(hijoMaestro));
+
 		return servicioNovios;
 	}
-	
+
 	@Override
-	public DetalleServicioAgencia agregarServicioVenta(DetalleServicioAgencia detalleServicio) throws SQLException, Exception{
-		Integer idTipoServicio = detalleServicio.getTipoServicio().getCodigoEntero();
+	public DetalleServicioAgencia agregarServicioVenta(
+			DetalleServicioAgencia detalleServicio) throws SQLException,
+			Exception {
+		Integer idTipoServicio = detalleServicio.getTipoServicio()
+				.getCodigoEntero();
 		MaestroDao maestroDao = new MaestroDaoImpl();
 		Maestro hijoMaestro = new Maestro();
 		hijoMaestro.setCodigoMaestro(12);
 		hijoMaestro.setCodigoEntero(idTipoServicio);
-		detalleServicio.setTipoServicio((BaseVO)maestroDao.consultarHijoMaestro(hijoMaestro));
-		
+		detalleServicio.setTipoServicio((BaseVO) maestroDao
+				.consultarHijoMaestro(hijoMaestro));
+
 		return detalleServicio;
+	}
+
+	@Override
+	public List<DetalleServicioAgencia> ordenarServiciosVenta(
+			List<DetalleServicioAgencia> listaServicio) throws SQLException,
+			Exception {
+		List<DetalleServicioAgencia> listaNuevaServicios = new ArrayList<DetalleServicioAgencia>();
+
+		if (listaServicio != null && !listaServicio.isEmpty()) {
+			for (int i = 0; i < listaServicio.size(); i++) {
+				DetalleServicioAgencia primerServicio = listaServicio.get(i);
+				if (!estaEnLista(listaNuevaServicios,
+						primerServicio)) {
+					for (DetalleServicioAgencia detalleServicioAgencia : listaServicio) {
+						if (!estaEnLista(listaNuevaServicios,
+								detalleServicioAgencia)) {
+							if (detalleServicioAgencia.getFechaIda().before(
+									primerServicio.getFechaIda())) {
+								primerServicio = detalleServicioAgencia;
+							}
+						}
+					}
+				}
+				if (!estaEnLista(listaNuevaServicios,
+						primerServicio)) {
+					listaNuevaServicios.add(primerServicio);
+				}
+			}
+		}
+
+		return listaNuevaServicios;
+	}
+
+	private boolean estaEnLista(
+			List<DetalleServicioAgencia> listaNuevaServicios,
+			DetalleServicioAgencia servicio) {
+		if (!listaNuevaServicios.isEmpty()) {
+			for (DetalleServicioAgencia detalleServicioAgencia : listaNuevaServicios) {
+				if (detalleServicioAgencia.equals(servicio)) {
+					System.out.println("encontrado :: "+servicio.getFechaIda());
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
+	@Override
+	public BigDecimal calcularValorCuota(ServicioAgencia servicioAgencia)
+			throws SQLException, Exception {
+		BigDecimal valorCuota = BigDecimal.ZERO;
+
+		ServicioNegocioDao servicioNegocioDao = new ServicioNegocioDaoImpl();
+
+		valorCuota = servicioNegocioDao.calcularCuota(servicioAgencia);
+
+		return valorCuota;
+	}
+
+	@Override
+	public Integer registrarVentaServicio(ServicioAgencia servicioAgencia)
+			throws ErrorRegistroDataException, SQLException, Exception {
+		ServicioNovaViajesDao servicioNovaViajesDao = new ServicioNovaViajesDaoImpl();
+
+		Connection conexion = null;
+		Integer idServicio = 0;
+
+		try {
+			conexion = UtilConexion.obtenerConexion();
+
+			idServicio = servicioNovaViajesDao.ingresarCabeceraServicio(
+					servicioAgencia, conexion);
+
+			servicioAgencia.setCodigoEntero(idServicio);
+			if (servicioAgencia.getListaDetalleServicio() != null
+					&& !servicioAgencia.getListaDetalleServicio().isEmpty()) {
+				for (DetalleServicioAgencia detalleServicio : servicioAgencia
+						.getListaDetalleServicio()) {
+					boolean resultado = servicioNovaViajesDao
+							.ingresarDetalleServicio(detalleServicio,
+									idServicio, conexion);
+					if (!resultado) {
+						throw new ErrorRegistroDataException(
+								"No se pudo registrar los servicios de la venta");
+					}
+				}
+			}
+
+			if (servicioAgencia.getFormaPago().getCodigoEntero().intValue() == 2) {
+				boolean resultado = servicioNovaViajesDao
+						.generarCronogramaPago(servicioAgencia, conexion);
+				if (!resultado) {
+					throw new ErrorRegistroDataException(
+							"No se pudo generar el cronograma de pagos");
+				}
+			}
+
+			return idServicio;
+		} catch (ErrorRegistroDataException e) {
+			throw new ErrorRegistroDataException(e.getMensajeError(), e);
+		}
+	}
+
+	@Override
+	public List<CronogramaPago> consultarCronograma(
+			ServicioAgencia servicioAgencia) throws SQLException, Exception {
+		ServicioNovaViajesDao servicioNovaViajesDao = new ServicioNovaViajesDaoImpl();
+		return servicioNovaViajesDao.consultarCronogramaPago(servicioAgencia);
 	}
 }
