@@ -97,10 +97,6 @@ public class NoviosMBean extends BaseMBean {
 		this.setRegistroExito(false);
 	}
 
-	public void consultaClientes() {
-
-	}
-
 	public void consultaClientes(String genero, long busqueda) {
 		try {
 			this.setClienteBusqueda(null);
