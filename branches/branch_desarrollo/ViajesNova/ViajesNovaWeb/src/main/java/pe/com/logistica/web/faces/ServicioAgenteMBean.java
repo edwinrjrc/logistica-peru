@@ -82,7 +82,11 @@ public class ServicioAgenteMBean extends BaseMBean{
 	}
 	
 	public void buscarCliente(){
-		
+		try {
+			this.setListadoClientes(this.negocioServicio.buscarCliente(getClienteBusqueda()));
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 
 	}
 	
