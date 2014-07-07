@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.util.Enumeration;
 import java.util.List;
 
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
@@ -91,24 +92,37 @@ public class UsuarioMBean extends BaseMBean {
 	
 	public void ejecutarMetodo(ActionEvent e){
 		try {
-			if (this.isNuevoUsuario()){
-				seguridadServicio.registrarUsuario(getUsuario());
-				this.setShowModal(true);
-				this.setTipoModal("1");
-				this.setMensajeModal("Usuario registrado Satisfactoriamente");
+			if (validarUsuarioFormulario()){
+				if (this.isNuevoUsuario()){
+					seguridadServicio.registrarUsuario(getUsuario());
+					this.setShowModal(true);
+					this.setTipoModal("1");
+					this.setMensajeModal("Usuario registrado Satisfactoriamente");
+				}
+				else if(this.isEditarUsuario()){
+					seguridadServicio.actualizarUsuario(usuario);
+					this.setShowModal(true);
+					this.setTipoModal("1");
+					this.setMensajeModal("Usuario actualizado Satisfactoriamente");
+				}
 			}
-			else if(this.isEditarUsuario()){
-				seguridadServicio.actualizarUsuario(usuario);
-				this.setShowModal(true);
-				this.setTipoModal("1");
-				this.setMensajeModal("Usuario actualizado Satisfactoriamente");
-			}
+			
 		} catch (SQLException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 	}
 	
+	private boolean validarUsuarioFormulario() {
+		String idFormulario = "idFormUsuario";
+		if (!this.getUsuario().getCredencial().equals(this.getReCredencial())){
+			this.agregarMensaje(idFormulario + ":idReClave",
+					"Las claves no coinciden", "", FacesMessage.SEVERITY_ERROR);
+			return false;
+		}
+		return true;
+	}
+
 	public String inicioSesion(){
 		try {
 			usuario = seguridadServicio.inicioSesion(usuario);

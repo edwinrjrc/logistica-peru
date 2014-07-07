@@ -81,5 +81,8 @@ public interface NegocioServicio {
 
 	List<DetalleServicioAgencia> ordenarServiciosVenta(
 			List<DetalleServicioAgencia> listaServicio) throws SQLException,
-			Exception; 
+			Exception;
+
+	List<ServicioAgencia> consultarVentaServicio(ServicioAgencia servicioAgencia)
+			throws SQLException, Exception; 
 }

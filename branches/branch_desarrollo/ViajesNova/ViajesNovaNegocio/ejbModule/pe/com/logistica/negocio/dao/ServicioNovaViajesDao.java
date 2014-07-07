@@ -36,4 +36,7 @@ public interface ServicioNovaViajesDao {
 
 	List<CronogramaPago> consultarCronogramaPago(ServicioAgencia servicioAgencia)
 			throws SQLException;
+
+	List<ServicioAgencia> consultarServiciosVenta(
+			ServicioAgencia servicioAgencia) throws SQLException;
 }

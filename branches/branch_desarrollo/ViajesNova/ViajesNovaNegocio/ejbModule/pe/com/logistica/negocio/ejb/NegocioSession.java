@@ -3,7 +3,6 @@ package pe.com.logistica.negocio.ejb;
 import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -130,7 +129,6 @@ public class NegocioSession implements NegocioSessionRemote,
 		Connection conexion = null;
 		try {
 			conexion = UtilConexion.obtenerConexion();
-			conexion.setAutoCommit(false);
 
 			proveedor.setTipoPersona(2);
 			int idPersona = personaDao.registrarPersona(proveedor, conexion);
@@ -197,7 +195,6 @@ public class NegocioSession implements NegocioSessionRemote,
 			}
 			proveedorDao.registroProveedor(proveedor, conexion);
 
-			conexion.commit();
 			return true;
 		} catch (ResultadoCeroDaoException e) {
 			conexion.rollback();
@@ -224,7 +221,6 @@ public class NegocioSession implements NegocioSessionRemote,
 		Connection conexion = null;
 		try {
 			conexion = UtilConexion.obtenerConexion();
-			conexion.setAutoCommit(false);
 
 			proveedor.setTipoPersona(2);
 
@@ -302,7 +298,6 @@ public class NegocioSession implements NegocioSessionRemote,
 			}
 			proveedorDao.actualizarProveedor(proveedor, conexion);
 
-			conexion.commit();
 			return true;
 		} catch (ResultadoCeroDaoException e) {
 			conexion.rollback();
@@ -423,7 +418,6 @@ public class NegocioSession implements NegocioSessionRemote,
 		Connection conexion = null;
 		try {
 			conexion = UtilConexion.obtenerConexion();
-			conexion.setAutoCommit(false);
 
 			cliente.setTipoPersona(1);
 			int idPersona = personaDao.registrarPersona(cliente, conexion);
@@ -491,7 +485,6 @@ public class NegocioSession implements NegocioSessionRemote,
 			ClienteDao clienteDao = new ClienteDaoImpl();
 			clienteDao.registroCliente(cliente, conexion);
 
-			conexion.commit();
 			return true;
 		} catch (ResultadoCeroDaoException e) {
 			conexion.rollback();
@@ -517,7 +510,6 @@ public class NegocioSession implements NegocioSessionRemote,
 		Connection conexion = null;
 		try {
 			conexion = UtilConexion.obtenerConexion();
-			conexion.setAutoCommit(false);
 
 			cliente.setTipoPersona(1);
 
@@ -595,7 +587,6 @@ public class NegocioSession implements NegocioSessionRemote,
 			ClienteDao clienteDao = new ClienteDaoImpl();
 			clienteDao.actualizarPersonaAdicional(cliente, conexion);
 
-			conexion.commit();
 			return true;
 		} catch (ResultadoCeroDaoException e) {
 			conexion.rollback();
@@ -854,5 +845,11 @@ public class NegocioSession implements NegocioSessionRemote,
 			ServicioAgencia servicioAgencia) throws SQLException, Exception {
 		ServicioNovaViajesDao servicioNovaViajesDao = new ServicioNovaViajesDaoImpl();
 		return servicioNovaViajesDao.consultarCronogramaPago(servicioAgencia);
+	}
+	
+	@Override
+	public List<ServicioAgencia> consultarServicioVenta(ServicioAgencia servicioAgencia) throws SQLException, Exception{
+		ServicioNovaViajesDao servicioNovaViajesDao = new ServicioNovaViajesDaoImpl();
+		return servicioNovaViajesDao.consultarServiciosVenta(servicioAgencia);
 	}
 }
