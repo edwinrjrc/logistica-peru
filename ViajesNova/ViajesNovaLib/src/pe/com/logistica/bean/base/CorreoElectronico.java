@@ -16,6 +16,7 @@ public class CorreoElectronico extends Base {
 
 
 	private String direccion;
+	private boolean seleccionado;
 
 
 	/**
@@ -31,5 +32,21 @@ public class CorreoElectronico extends Base {
 	 */
 	public void setDireccion(String direccion) {
 		this.direccion = direccion;
+	}
+
+
+	/**
+	 * @return the seleccionado
+	 */
+	public boolean isSeleccionado() {
+		return seleccionado;
+	}
+
+
+	/**
+	 * @param seleccionado the seleccionado to set
+	 */
+	public void setSeleccionado(boolean seleccionado) {
+		this.seleccionado = seleccionado;
 	}
 }

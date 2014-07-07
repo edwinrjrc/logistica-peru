@@ -65,7 +65,8 @@
 									columnClasses="col1iconoformulario,col1iconoformulario">
 									<rich:select enableManualInput="true" id="idSelDestino"
 										value="#{servicioAgenteMBean.servicioAgencia.destino.codigoEntero}"
-										defaultLabel="Seleccione el destino">
+										defaultLabel="Seleccione el destino"
+										valueChangeListener="#{servicioAgenteMBean.cambiarDestinoServicio}">
 										<f:selectItem itemLabel="-Seleccione el destino-" />
 										<f:selectItems value="#{catalogoMBean.catalogoDestino}" />
 									</rich:select>

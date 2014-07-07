@@ -4,8 +4,13 @@
 package pe.com.logistica.negocio.util;
 
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.Properties;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
@@ -20,19 +25,21 @@ import org.apache.commons.lang3.StringUtils;
  */
 public class UtilConexion {
 
-	private final static String JNDI = "java:/jboss/jdbc/logisticaDS";
-	/**
-	 * 
-	 */
-	public UtilConexion() {
-		// TODO Auto-generated constructor stub
-	}
+	private static String JNDI = "java:/jboss/jdbc/novaviajesDS";
 	
 	public static Connection obtenerConexion(){
 		
 		try {
 			Context ic = new InitialContext();
-			DataSource dataSource = (DataSource) ic.lookup(JNDI);
+			DataSource dataSource = null;
+			
+			String jndiProperties = getJndiProperties();
+			if (StringUtils.isNotBlank(jndiProperties)){
+				dataSource = (DataSource) ic.lookup(jndiProperties);
+			}
+			else{
+				dataSource = (DataSource) ic.lookup(JNDI);
+			}
 			
 			return dataSource.getConnection();
 		} catch (NamingException e) {
@@ -61,6 +68,41 @@ public class UtilConexion {
 		}
 		
 		return null;
+	}
+
+
+	/**
+	 * @return the jndiProperties
+	 */
+	public static String getJndiProperties() {
+		String c = "C:\\aplicaciones\\aplicacionConfiguracion.properties";
+		String d = "D:\\aplicaciones\\aplicacionConfiguracion.properties";
+		File fc = new File(c);
+		
+		Properties prop = new Properties();
+		InputStream input = null;
+		String jndiProperties = "";
+		
+		try {
+			if (fc.exists()){
+				input = new FileInputStream(fc);
+				prop.load(input);
+			}
+			else{
+				fc = new File(d);
+				if (fc.exists()){
+					input = new FileInputStream(fc);
+					prop.load(input);
+				}
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (Exception e){
+			e.printStackTrace();
+		}
+		jndiProperties = prop.getProperty("jndi_ds");
+		
+		return jndiProperties;
 	}
 
 }

@@ -56,8 +56,12 @@
 				<h:outputLabel value="Re Clave"
 					rendered="#{usuarioMBean.nuevoUsuario}"
 					style="width: 100px; text-align:left" />
-				<h:inputSecret value="#{usuarioMBean.reCredencial}"
-					rendered="#{usuarioMBean.nuevoUsuario}" maxlength="10"/>
+				<h:panelGrid columns="1" cellpadding="0" cellspacing="0" border="0">
+					<h:inputSecret id="idReClave" value="#{usuarioMBean.reCredencial}"
+						rendered="#{usuarioMBean.nuevoUsuario}" maxlength="10" />
+					<rich:message for="idReClave" showDetail="false" showSummary="true"
+						ajaxRendered="true" />
+				</h:panelGrid>
 				<h:outputLabel value="Rol" style="width: 100px; text-align:left" />
 				<h:panelGrid columns="1" border="0" cellpadding="0" cellspacing="0">
 					<h:selectOneMenu id="idRol"
@@ -97,14 +101,13 @@
 				<h:outputLabel value="Fecha Nacimiento"
 					style="width: 100px; text-align:left" />
 				<h:panelGrid columns="1" border="0" cellpadding="0" cellspacing="0">
-					<rich:calendar id="idfecnacimiento"
-					datePattern="dd/MM/yyyy"
+					<rich:calendar id="idfecnacimiento" datePattern="dd/MM/yyyy"
 						value="#{usuarioMBean.usuario.fechaNacimiento}" required="true"
 						requiredMessage="Ingrese la fecha nacimiento" />
 					<rich:message for="idfecnacimiento" showDetail="true"
 						showSummary="false" ajaxRendered="true" />
 				</h:panelGrid>
-				
+
 				<f:facet name="footer">
 					<h:panelGrid border="0" cellpadding="0" cellspacing="0"
 						style="width:100%;text-align:center;">
