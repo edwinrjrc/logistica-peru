@@ -68,4 +68,5 @@ public interface NegocioSessionLocal {
 	
 	public List<CronogramaPago> consultarCronograma(ServicioAgencia servicioAgencia) throws SQLException, Exception;
 	
+	public List<ServicioAgencia> consultarServicioVenta(ServicioAgencia servicioAgencia) throws SQLException, Exception;
 }

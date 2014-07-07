@@ -12,6 +12,7 @@ import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
+import javax.faces.event.ValueChangeEvent;
 import javax.naming.NamingException;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpSession;
@@ -20,14 +21,17 @@ import org.apache.commons.lang3.StringUtils;
 
 import pe.com.logistica.bean.Util.UtilParse;
 import pe.com.logistica.bean.negocio.Cliente;
+import pe.com.logistica.bean.negocio.Destino;
 import pe.com.logistica.bean.negocio.DetalleServicioAgencia;
 import pe.com.logistica.bean.negocio.ServicioAgencia;
 import pe.com.logistica.bean.negocio.Usuario;
 import pe.com.logistica.negocio.exception.ErrorRegistroDataException;
 import pe.com.logistica.web.servicio.NegocioServicio;
 import pe.com.logistica.web.servicio.ParametroServicio;
+import pe.com.logistica.web.servicio.SoporteServicio;
 import pe.com.logistica.web.servicio.impl.NegocioServicioImpl;
 import pe.com.logistica.web.servicio.impl.ParametroServicioImpl;
+import pe.com.logistica.web.servicio.impl.SoporteServicioImpl;
 
 /**
  * @author Edwin
@@ -42,6 +46,7 @@ public class ServicioAgenteMBean extends BaseMBean{
 	private static final long serialVersionUID = 3451688997471435575L;
 	
 	private ServicioAgencia servicioAgencia;
+	private ServicioAgencia servicioAgenciaBusqueda;
 	private DetalleServicioAgencia detalleServicio;
 	private Cliente clienteBusqueda;
 	
@@ -54,6 +59,7 @@ public class ServicioAgenteMBean extends BaseMBean{
 
 	private ParametroServicio parametroServicio;
 	private NegocioServicio negocioServicio;
+	private SoporteServicio soporteServicio;
 	/**
 	 * 
 	 */
@@ -62,6 +68,8 @@ public class ServicioAgenteMBean extends BaseMBean{
 			ServletContext servletContext = (ServletContext)FacesContext.getCurrentInstance().getExternalContext().getContext();
 			parametroServicio = new ParametroServicioImpl(servletContext);
 			negocioServicio = new NegocioServicioImpl(servletContext);
+			soporteServicio = new SoporteServicioImpl(servletContext);
+			
 		} catch (NamingException e) {
 			e.printStackTrace();
 		}
@@ -129,7 +137,7 @@ public class ServicioAgenteMBean extends BaseMBean{
 	}
 	public void agregarServicio(){
 		try {
-			if (validarRegistroServicioVenta()){
+			if (validarServicioVenta()){
 				HttpSession session = obtenerSession(false);
 				Usuario usuario = (Usuario) session
 						.getAttribute("usuarioSession");
@@ -243,7 +251,7 @@ public class ServicioAgenteMBean extends BaseMBean{
 
 	public void ejecutarMetodo(){
 		try {
-			if (validarServicioVenta()){
+			if (validarRegistroServicioVenta()){
 				if (this.isNuevaVenta()){
 					HttpSession session = obtenerSession(false);
 					Usuario usuario = (Usuario) session
@@ -269,10 +277,19 @@ public class ServicioAgenteMBean extends BaseMBean{
 			
 		} catch (ErrorRegistroDataException e) {
 			e.printStackTrace();
+			this.setShowModal(true);
+			this.setMensajeModal(e.getMessage());
+			this.setTipoModal(TIPO_MODAL_ERROR);
 		} catch (SQLException e) {
 			e.printStackTrace();
+			this.setShowModal(true);
+			this.setMensajeModal(e.getMessage());
+			this.setTipoModal(TIPO_MODAL_ERROR);
 		} catch (Exception e) {
 			e.printStackTrace();
+			this.setShowModal(true);
+			this.setMensajeModal(e.getMessage());
+			this.setTipoModal(TIPO_MODAL_ERROR);
 		}
 	}
 	
@@ -297,6 +314,28 @@ public class ServicioAgenteMBean extends BaseMBean{
 			e.printStackTrace();
 		}
 	}
+	
+	public void cambiarDestinoServicio(ValueChangeEvent e){
+		Object oe = e.getNewValue();
+		try {
+			if (oe != null){
+				String valor = oe.toString();
+				
+				List<Destino> listaDestino = this.soporteServicio.listarDestinos();
+				
+				for(Destino destino : listaDestino){
+					if (destino.getCodigoEntero().equals(Integer.valueOf(valor))){
+						this.getServicioAgencia().getDestino().setNombre(destino.getDescripcion());
+						break;
+					}
+				}
+			}
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+		} catch (Exception e1) {
+			e1.printStackTrace();
+		}
+	}
 
 	/**
 	 * @return the servicioAgencia
@@ -319,6 +358,16 @@ public class ServicioAgenteMBean extends BaseMBean{
 	 * @return the listadoServicioAgencia
 	 */
 	public List<ServicioAgencia> getListadoServicioAgencia() {
+		try {
+			if (listadoServicioAgencia == null){
+				listadoServicioAgencia = this.negocioServicio.consultarVentaServicio(getServicioAgenciaBusqueda());
+			}
+			this.setShowModal(false);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		return listadoServicioAgencia;
 	}
 
@@ -420,6 +469,23 @@ public class ServicioAgenteMBean extends BaseMBean{
 	 */
 	public void setListadoClientes(List<Cliente> listadoClientes) {
 		this.listadoClientes = listadoClientes;
+	}
+
+	/**
+	 * @return the servicioAgenciaBusqueda
+	 */
+	public ServicioAgencia getServicioAgenciaBusqueda() {
+		if (servicioAgenciaBusqueda == null){
+			servicioAgenciaBusqueda = new ServicioAgencia();
+		}
+		return servicioAgenciaBusqueda;
+	}
+
+	/**
+	 * @param servicioAgenciaBusqueda the servicioAgenciaBusqueda to set
+	 */
+	public void setServicioAgenciaBusqueda(ServicioAgencia servicioAgenciaBusqueda) {
+		this.servicioAgenciaBusqueda = servicioAgenciaBusqueda;
 	}
 
 }

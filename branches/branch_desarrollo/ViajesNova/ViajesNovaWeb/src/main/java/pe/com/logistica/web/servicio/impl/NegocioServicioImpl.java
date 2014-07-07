@@ -175,5 +175,10 @@ public class NegocioServicioImpl implements NegocioServicio {
 	public Integer registrarVentaServicio(ServicioAgencia servicioAgencia) throws ErrorRegistroDataException, SQLException, Exception {
 		return ejbSession.registrarVentaServicio(servicioAgencia);
 	}
+	
+	@Override
+	public List<ServicioAgencia> consultarVentaServicio(ServicioAgencia servicioAgencia) throws SQLException, Exception{
+		return ejbSession.consultarServicioVenta(servicioAgencia);
+	}
 }
 	

@@ -302,7 +302,7 @@ public class ClienteDaoImpl implements ClienteDao {
 
 		try {
 			conn = UtilConexion.obtenerConexion();
-			conn.setAutoCommit(false);
+			
 			cs = conn.prepareCall(sql);
 			cs.registerOutParameter(1, Types.OTHER);
 			cs.setInt(2, idcliente);
@@ -328,7 +328,7 @@ public class ClienteDaoImpl implements ClienteDao {
 				resultado.setIpCreacion(UtilJdbc.obtenerCadena(rs, "ipcreacion"));
 				resultado.setFechaNacimiento(rs.getDate("fecnacimiento"));
 			}
-			conn.commit();
+			
 		} catch (SQLException e) {
 			resultado = null;
 			throw new SQLException(e);

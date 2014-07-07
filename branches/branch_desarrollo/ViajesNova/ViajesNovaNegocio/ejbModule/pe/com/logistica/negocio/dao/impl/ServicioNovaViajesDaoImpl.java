@@ -11,6 +11,8 @@ import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
+
 import pe.com.logistica.bean.Util.UtilParse;
 import pe.com.logistica.bean.negocio.CronogramaPago;
 import pe.com.logistica.bean.negocio.DetalleServicioAgencia;
@@ -41,7 +43,7 @@ public class ServicioNovaViajesDaoImpl implements ServicioNovaViajesDao {
 		Integer idservicio = 0;
 		Connection conn = null;
 		CallableStatement cs = null;
-		String sql = "{ ? = call soporte.fn_ingresarserviciocabecera(?,?,?,?,?,?,?,?)}";
+		String sql = "{ ? = call soporte.fn_ingresarserviciocabecera(?,?,?,?,?,?,?,?,?)}";
 		
 		try {
 			conn = UtilConexion.obtenerConexion();
@@ -54,6 +56,7 @@ public class ServicioNovaViajesDaoImpl implements ServicioNovaViajesDao {
 			cs.setInt(i++, servicioAgencia.getCantidadServicios());
 			cs.setInt(i++, servicioAgencia.getDestino().getCodigoEntero().intValue());
 			cs.setString(i++, servicioAgencia.getDestino().getNombre());
+			cs.setInt(i++, servicioAgencia.getFormaPago().getCodigoEntero().intValue());
 			cs.setString(i++, servicioAgencia.getUsuarioCreacion());
 			cs.setString(i++, servicioAgencia.getIpCreacion());
 			cs.execute();
@@ -90,7 +93,7 @@ public class ServicioNovaViajesDaoImpl implements ServicioNovaViajesDao {
 			throws SQLException {
 		Integer idservicio = 0;
 		CallableStatement cs = null;
-		String sql = "{ ? = call negocio.fn_ingresarserviciocabecera(?,?,?,?,?,?,?,?)}";
+		String sql = "{ ? = call negocio.fn_ingresarserviciocabecera(?,?,?,?,?,?,?,?,?)}";
 		
 		try {
 			cs = conn.prepareCall(sql);
@@ -102,6 +105,7 @@ public class ServicioNovaViajesDaoImpl implements ServicioNovaViajesDao {
 			cs.setInt(i++, servicioAgencia.getCantidadServicios());
 			cs.setInt(i++, servicioAgencia.getDestino().getCodigoEntero().intValue());
 			cs.setString(i++, servicioAgencia.getDestino().getNombre());
+			cs.setInt(i++, servicioAgencia.getFormaPago().getCodigoEntero().intValue());
 			cs.setString(i++, servicioAgencia.getUsuarioCreacion());
 			cs.setString(i++, servicioAgencia.getIpCreacion());
 			cs.execute();
@@ -389,5 +393,85 @@ public class ServicioNovaViajesDaoImpl implements ServicioNovaViajesDao {
 		}
 
 		return cronograma;
+	}
+	
+	@Override
+	public List<ServicioAgencia> consultarServiciosVenta(ServicioAgencia servicioAgencia)
+			throws SQLException {
+		Connection conn = null;
+		CallableStatement cs = null;
+		ResultSet rs = null;
+		String sql = "{ ? = call negocio.fn_consultarservicioventa(?,?,?)}";
+		List<ServicioAgencia> listaVentaServicios = null;
+		try {
+			conn = UtilConexion.obtenerConexion();
+			cs = conn.prepareCall(sql);
+			int i=1;
+			cs.registerOutParameter(i++, Types.OTHER);
+			if (servicioAgencia.getCliente().getDocumentoIdentidad().getTipoDocumento().getCodigoEntero() != null && servicioAgencia.getCliente().getDocumentoIdentidad().getTipoDocumento().getCodigoEntero().intValue() != 0){
+				cs.setInt(i++, servicioAgencia.getCliente().getDocumentoIdentidad().getTipoDocumento().getCodigoEntero().intValue());
+			}
+			else{
+				cs.setNull(i++, Types.INTEGER);
+			}
+			if (StringUtils.isNotBlank(servicioAgencia.getCliente().getDocumentoIdentidad().getNumeroDocumento())){
+				cs.setString(i++, servicioAgencia.getCliente().getDocumentoIdentidad().getNumeroDocumento());
+			}
+			else{
+				cs.setNull(i++, Types.VARCHAR);
+			}
+			if (StringUtils.isNotBlank(servicioAgencia.getCliente().getNombres())){
+				cs.setString(i++, servicioAgencia.getCliente().getNombres());
+			}
+			else{
+				cs.setNull(i++, Types.VARCHAR);
+			}
+			cs.execute();
+			
+			rs = (ResultSet)cs.getObject(1);
+			ServicioAgencia servicioAgencia2 = null;
+			listaVentaServicios = new ArrayList<ServicioAgencia>();
+			while (rs.next()){
+				servicioAgencia2 = new ServicioAgencia();
+				servicioAgencia2.setCodigoEntero(UtilJdbc.obtenerNumero(rs, "id"));
+				servicioAgencia2.getCliente().setCodigoEntero(UtilJdbc.obtenerNumero(rs, "idcliente"));
+				servicioAgencia2.getCliente().setNombres(UtilJdbc.obtenerCadena(rs, "nombres"));
+				servicioAgencia2.getCliente().setApellidoPaterno(UtilJdbc.obtenerCadena(rs, "apellidopaterno"));
+				servicioAgencia2.getCliente().setApellidoMaterno(UtilJdbc.obtenerCadena(rs, "apellidomaterno"));
+				servicioAgencia2.setFechaServicio(UtilJdbc.obtenerFecha(rs, "fechaservicio"));
+				servicioAgencia2.setMontoTotalServicios(UtilJdbc.obtenerBigDecimal(rs, "montototal"));
+				servicioAgencia2.setCantidadServicios(UtilJdbc.obtenerNumero(rs, "cantidadservicios"));
+				servicioAgencia2.getDestino().setCodigoEntero(UtilJdbc.obtenerNumero(rs, "iddestino"));
+				servicioAgencia2.getDestino().setNombre(UtilJdbc.obtenerCadena(rs, "descdestino"));
+				servicioAgencia2.getFormaPago().setCodigoEntero(UtilJdbc.obtenerNumero(rs, "idmediopago"));
+				servicioAgencia2.getFormaPago().setNombre(UtilJdbc.obtenerCadena(rs, "nommediopago"));
+				servicioAgencia2.getEstadoPago().setCodigoEntero(UtilJdbc.obtenerNumero(rs, "idestadopago"));
+				servicioAgencia2.getEstadoPago().setNombre(UtilJdbc.obtenerCadena(rs, "nomestpago"));
+				listaVentaServicios.add(servicioAgencia2);
+			}
+		} catch (SQLException e) {
+			servicioAgencia = null;
+			throw new SQLException(e);
+		} finally {
+			try {
+				if (cs != null) {
+					cs.close();
+				}
+				if (conn != null) {
+					conn.close();
+				}
+			} catch (SQLException e) {
+				try {
+					if (conn != null) {
+						conn.close();
+					}
+					throw new SQLException(e);
+				} catch (SQLException e1) {
+					throw new SQLException(e);
+				}
+			}
+		}
+
+		return listaVentaServicios;
 	}
 }
