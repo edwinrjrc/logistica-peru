@@ -24,6 +24,10 @@ import pe.com.logistica.web.servicio.impl.SoporteServicioImpl;
 @SessionScoped()
 public class MaestroMBean extends BaseMBean {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 8487737481921274643L;
 	private List<Maestro> listaMaestros;
 	private List<Maestro> listaHijosMaestro;
 
