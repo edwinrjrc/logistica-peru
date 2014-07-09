@@ -248,21 +248,46 @@ public class ServicioNovaViajesDaoImpl implements ServicioNovaViajesDao {
 		boolean resultado = false;
 		CallableStatement cs = null;
 
-		String sql = "{ ? = call soporte.fn_ingresarserviciodetalle(?,?,?,?,?,?,?,?,?,?,?,?,?,?)}";
+		String sql = "{ ? = call negocio.fn_ingresarserviciodetalle(?,?,?,?,?,?,?,?,?,?,?,?,?)}";
 		
 		try {
 			cs = conn.prepareCall(sql);
 			int i=1;
-			cs.registerOutParameter(i++, Types.INTEGER);
+			cs.registerOutParameter(i++, Types.BOOLEAN);
 			cs.setInt(i++, detalleServicio.getTipoServicio().getCodigoEntero().intValue());
 			cs.setInt(i++, idServicio);
 			cs.setString(i++, detalleServicio.getDescripcionServicio());
-			cs.setInt(i++, detalleServicio.getDestino().getCodigoEntero().intValue());
-			cs.setString(i++, detalleServicio.getDestino().getNombre());
-			cs.setInt(i++, detalleServicio.getDias());
-			cs.setInt(i++, detalleServicio.getNoches());
+			if (detalleServicio.getDestino().getCodigoEntero() != null && detalleServicio.getDestino().getCodigoEntero().intValue()!=0){
+				cs.setInt(i++, detalleServicio.getDestino().getCodigoEntero().intValue());
+			}
+			else{
+				cs.setNull(i++, Types.INTEGER);
+			}
+			if (StringUtils.isNotBlank(detalleServicio.getDestino().getNombre())){
+				cs.setString(i++, detalleServicio.getDestino().getNombre());
+			}
+			else{
+				cs.setNull(i++, Types.VARCHAR);
+			}
+			if (detalleServicio.getDias() != 0){
+				cs.setInt(i++, detalleServicio.getDias());
+			}
+			else{
+				cs.setNull(i++, Types.INTEGER);
+			}
+			if (detalleServicio.getNoches() != 0){
+				cs.setInt(i++, detalleServicio.getNoches());
+			}
+			else{
+				cs.setNull(i++, Types.INTEGER);
+			}
 			cs.setDate(i++, UtilJdbc.convertirUtilDateSQLDate(detalleServicio.getFechaIda()));
-			cs.setDate(i++, UtilJdbc.convertirUtilDateSQLDate(detalleServicio.getFechaRegreso()));
+			if (detalleServicio.getFechaRegreso() != null){
+				cs.setDate(i++, UtilJdbc.convertirUtilDateSQLDate(detalleServicio.getFechaRegreso()));
+			}
+			else{
+				cs.setNull(i++, Types.DATE);
+			}
 			cs.setInt(i++, detalleServicio.getCantidad());
 			cs.setBigDecimal(i++, detalleServicio.getPrecioUnitario());
 
@@ -270,7 +295,7 @@ public class ServicioNovaViajesDaoImpl implements ServicioNovaViajesDao {
 			cs.setString(i++, detalleServicio.getIpCreacion());
 			cs.execute();
 			
-			resultado = true;
+			resultado = cs.getBoolean(1);
 		} catch (SQLException e) {
 			resultado = false;
 			throw new SQLException(e);
