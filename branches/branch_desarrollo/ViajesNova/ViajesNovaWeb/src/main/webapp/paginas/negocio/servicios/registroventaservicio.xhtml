@@ -233,7 +233,8 @@
 										border="0">
 										<rich:calendar datePattern="dd/MM/yyyy" id="idFecServicio"
 											value="#{servicioAgenteMBean.detalleServicio.fechaIda}"></rich:calendar>
-										<rich:message for="idFecServicio"></rich:message>
+										<rich:message for="idFecServicio" showDetail="false"
+											showSummary="true" ajaxRendered="true" ></rich:message>
 									</h:panelGrid>
 									<h:outputText value="Fecha Regreso" />
 									<rich:calendar datePattern="dd/MM/yyyy"

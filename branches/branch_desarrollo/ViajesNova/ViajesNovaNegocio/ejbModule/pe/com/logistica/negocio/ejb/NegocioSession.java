@@ -5,6 +5,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 
 import javax.ejb.Stateless;
@@ -806,6 +807,11 @@ public class NegocioSession implements NegocioSessionRemote,
 
 		try {
 			conexion = UtilConexion.obtenerConexion();
+			
+			if (servicioAgencia.getFechaServicio() == null){
+				Date fechaSer = servicioAgencia.getListaDetalleServicio().get(0).getFechaIda();
+				servicioAgencia.setFechaServicio(fechaSer);
+			}
 
 			idServicio = servicioNovaViajesDao.ingresarCabeceraServicio(
 					servicioAgencia, conexion);

@@ -129,6 +129,9 @@ public class ServicioAgencia extends BaseNegocio{
 	 * @return the listaDetalleServicio
 	 */
 	public List<DetalleServicioAgencia> getListaDetalleServicio() {
+		if (listaDetalleServicio == null){
+			listaDetalleServicio = new ArrayList<DetalleServicioAgencia>();
+		}
 		return listaDetalleServicio;
 	}
 
