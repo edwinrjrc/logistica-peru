@@ -359,9 +359,8 @@ public class ServicioAgenteMBean extends BaseMBean{
 	 */
 	public List<ServicioAgencia> getListadoServicioAgencia() {
 		try {
-			if (listadoServicioAgencia == null){
-				listadoServicioAgencia = this.negocioServicio.consultarVentaServicio(getServicioAgenciaBusqueda());
-			}
+			listadoServicioAgencia = this.negocioServicio.consultarVentaServicio(getServicioAgenciaBusqueda());
+			
 			this.setShowModal(false);
 		} catch (SQLException e) {
 			e.printStackTrace();
