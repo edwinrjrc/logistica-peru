@@ -19,6 +19,8 @@ import javax.sql.DataSource;
 
 import org.apache.commons.lang3.StringUtils;
 
+import pe.com.logistica.bean.Util.UtilProperties;
+
 /**
  * @author Edwin
  *
@@ -75,32 +77,9 @@ public class UtilConexion {
 	 * @return the jndiProperties
 	 */
 	public static String getJndiProperties() {
-		String c = "C:\\aplicaciones\\aplicacionConfiguracion.properties";
-		String d = "D:\\aplicaciones\\aplicacionConfiguracion.properties";
-		File fc = new File(c);
+		Properties prop = UtilProperties.cargaArchivo("aplicacionConfiguracion.properties");
 		
-		Properties prop = new Properties();
-		InputStream input = null;
-		String jndiProperties = "";
-		
-		try {
-			if (fc.exists()){
-				input = new FileInputStream(fc);
-				prop.load(input);
-			}
-			else{
-				fc = new File(d);
-				if (fc.exists()){
-					input = new FileInputStream(fc);
-					prop.load(input);
-				}
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (Exception e){
-			e.printStackTrace();
-		}
-		jndiProperties = prop.getProperty("jndi_ds");
+		String jndiProperties = prop.getProperty("jndi_ds");
 		
 		return jndiProperties;
 	}
