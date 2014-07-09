@@ -7,13 +7,9 @@
 	xmlns:rich="http://richfaces.org/rich">
 <h:head>
 	<title>Nova Viajes Web</title>
-	<h:outputStylesheet name="screen.css" library="css" />
-	<h:outputStylesheet name="app.css" library="css" />
-	<h:outputScript library="js" name="script.js" />
-	<h:outputScript library="js" name="validacion.js" />
 	<!-- definición del comportamiento en javascript tras la perdida de sesión -->
 </h:head>
-<h:body style="background: #FFFFFF">
+<h:body>
 	<table border="0" cellpadding="0" cellspacing="1" bgcolor="#F1F1F1"
 		style="height: 600px" width="100%">
 		<tr>
@@ -21,7 +17,7 @@
 					style="height: 600px" bgcolor="#FFFFFF" width="100%">
 					<tr>
 						<td height="20" valign="top"><ui:insert name="cabecera">
-								<ui:include src="/templates/cabecera.xhtml" />
+								<ui:include src="/templates/cabeceraeditor.xhtml" />
 							</ui:insert></td>
 					</tr>
 					<tr>
@@ -34,7 +30,7 @@
 					</tr>
 					<tr>
 						<td height="10" valign="bottom"><ui:insert name="pie">
-								<ui:include src="/templates/pie.xhtml" />
+								<ui:include src="/templates/pieeditor.xhtml" />
 							</ui:insert></td>
 					</tr>
 				</table></td>
