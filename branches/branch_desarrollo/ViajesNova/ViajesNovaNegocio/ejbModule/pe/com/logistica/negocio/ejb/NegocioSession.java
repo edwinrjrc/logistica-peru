@@ -852,4 +852,8 @@ public class NegocioSession implements NegocioSessionRemote,
 		ServicioNovaViajesDao servicioNovaViajesDao = new ServicioNovaViajesDaoImpl();
 		return servicioNovaViajesDao.consultarServiciosVenta(servicioAgencia);
 	}
+	
+	public void enviarCorreoMasivo(List<Cliente> listaClientes){
+		
+	}
 }
