@@ -149,6 +149,8 @@ public class ServicioAgenteMBean extends BaseMBean{
 				
 				this.setListadoDetalleServicio(negocioServicio.ordenarServiciosVenta(getListadoDetalleServicio()));
 				
+				this.getServicioAgencia().setListaDetalleServicio(getListadoDetalleServicio());
+				
 				this.setDetalleServicio(null);
 				
 				calcularTotales();
@@ -225,7 +227,7 @@ public class ServicioAgenteMBean extends BaseMBean{
 			resultado = false;
 		}
 		if (this.getDetalleServicio().getFechaIda() == null){
-			this.agregarMensaje(idFormulario + ":idPrecUnitario",
+			this.agregarMensaje(idFormulario + ":idFecServicio",
 					"Ingrese la fecha del servicio", "", FacesMessage.SEVERITY_ERROR);
 			resultado = false;
 		}
