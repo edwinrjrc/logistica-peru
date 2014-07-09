@@ -42,6 +42,7 @@ public class BaseMBean implements Serializable {
 	public BaseMBean() {
 		// TODO Auto-generated constructor stub
 	}
+	
 
 	public void aceptarBoton() {
 		this.setShowModal(false);
