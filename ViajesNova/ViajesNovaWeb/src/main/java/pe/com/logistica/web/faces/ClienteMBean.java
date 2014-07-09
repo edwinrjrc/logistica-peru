@@ -187,20 +187,10 @@ public class ClienteMBean extends BaseMBean {
 	private boolean validarTelefonoCliente() {
 		boolean resultado = false;
 		
-		List<Direccion> listaDire = this.getCliente().getListaDirecciones();
-		for (Direccion direccion : listaDire) {
-			List<Telefono> listTelefono = direccion.getTelefonos();
-			for (Telefono telefono : listTelefono) {
-				if (StringUtils.isNotBlank(telefono.getNumeroTelefono())){
-					resultado = true;
-					break;
-				}
-			}
-		}
-		if (!resultado){
-			List<Contacto> listaContacto = this.getCliente().getListaContactos();
-			for (Contacto contacto : listaContacto) {
-				List<Telefono> listTelefono = contacto.getListaTelefonos();
+		if (false){
+			List<Direccion> listaDire = this.getCliente().getListaDirecciones();
+			for (Direccion direccion : listaDire) {
+				List<Telefono> listTelefono = direccion.getTelefonos();
 				for (Telefono telefono : listTelefono) {
 					if (StringUtils.isNotBlank(telefono.getNumeroTelefono())){
 						resultado = true;
@@ -208,7 +198,21 @@ public class ClienteMBean extends BaseMBean {
 					}
 				}
 			}
+			if (!resultado){
+				List<Contacto> listaContacto = this.getCliente().getListaContactos();
+				for (Contacto contacto : listaContacto) {
+					List<Telefono> listTelefono = contacto.getListaTelefonos();
+					for (Telefono telefono : listTelefono) {
+						if (StringUtils.isNotBlank(telefono.getNumeroTelefono())){
+							resultado = true;
+							break;
+						}
+					}
+				}
+			}
 		}
+		
+		resultado = true;
 		
 		return resultado;
 	}
@@ -219,6 +223,7 @@ public class ClienteMBean extends BaseMBean {
 
 		resultado = !(this.getCliente().getListaContactos().isEmpty());
 		
+		resultado = true;
 
 		return resultado;
 	}
@@ -227,20 +232,23 @@ public class ClienteMBean extends BaseMBean {
 	private boolean validarDireccionCliente(ActionEvent e) throws NoEnvioDatoException {
 		boolean resultado = true;
 
-		resultado = !(this.getCliente().getListaDirecciones().isEmpty());
-		
-		int principales = 0;
-		if (resultado){
-			for(Direccion direccion : this.getCliente().getListaDirecciones()){
-				if (direccion.isPrincipal()){
-					principales++;
+		if (false){
+			resultado = !(this.getCliente().getListaDirecciones().isEmpty());
+			
+			int principales = 0;
+			if (resultado){
+				for(Direccion direccion : this.getCliente().getListaDirecciones()){
+					if (direccion.isPrincipal()){
+						principales++;
+					}
 				}
+			}
+			
+			if (principales == 0){
+				throw new NoEnvioDatoException("1010","Debe ingresar una direccion principal");
 			}
 		}
 		
-		if (principales == 0){
-			throw new NoEnvioDatoException("1010","Debe ingresar una direccion principal");
-		}
 
 		return resultado;
 	}
