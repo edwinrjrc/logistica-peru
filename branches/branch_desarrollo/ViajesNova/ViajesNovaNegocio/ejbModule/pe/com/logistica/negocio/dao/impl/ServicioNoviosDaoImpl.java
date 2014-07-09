@@ -100,7 +100,7 @@ public class ServicioNoviosDaoImpl implements ServicioNoviosDao {
 			throws SQLException, Exception {
 		Integer codigoNovios = 0;
 		CallableStatement cs = null;
-		String sql = "{ ? = call negocio.fn_ingresarprogramanovios(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) }";
+		String sql = "{ ? = call negocio.fn_ingresarprogramanovios(?,?,?,?,?,?,?,?,?,?,?,?,?,?) }";
 		try {
 			cs = conn.prepareCall(sql);
 			int i=1;
@@ -121,9 +121,6 @@ public class ServicioNoviosDaoImpl implements ServicioNoviosDao {
 			else {
 				cs.setNull(i++, Types.VARCHAR);
 			}
-			cs.setBigDecimal(i++, programaNovios.getMontoSinIgvServiciosPrograma());
-			cs.setBigDecimal(i++, programaNovios.getMontoIgvServiciosPrograma());
-			cs.setBigDecimal(i++, programaNovios.getPorcentajeIgv());
 			cs.setBigDecimal(i++, programaNovios.getMontoTotalServiciosPrograma());
 			cs.setString(i++, programaNovios.getUsuarioCreacion());
 			cs.setString(i++, programaNovios.getIpCreacion());
