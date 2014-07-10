@@ -17,6 +17,7 @@ import pe.com.logistica.bean.base.Persona;
 import pe.com.logistica.bean.negocio.Cliente;
 import pe.com.logistica.bean.negocio.Telefono;
 import pe.com.logistica.negocio.dao.ClienteDao;
+import pe.com.logistica.negocio.dao.TelefonoDao;
 import pe.com.logistica.negocio.util.UtilConexion;
 import pe.com.logistica.negocio.util.UtilJdbc;
 
@@ -428,6 +429,78 @@ public class ClienteDaoImpl implements ClienteDao {
 			}
 		}
 
+		return resultado;
+	}
+	
+	@Override
+	public List<Cliente> listarClientes(Persona persona) throws SQLException {
+		List<Cliente> resultado = null;
+		Connection conn = null;
+		CallableStatement cs = null;
+		ResultSet rs = null;
+		String sql = "{ ? = call negocio.fn_consultarpersonas2(?,?,?,?) }";
+		
+		try {
+			conn = UtilConexion.obtenerConexion();
+			cs = conn.prepareCall(sql);
+			int i=1;
+			cs.registerOutParameter(i++, Types.OTHER);
+			cs.setInt(i++, persona.getTipoPersona());
+			if (UtilJdbc.enteroNoNuloNoCero(persona.getDocumentoIdentidad().getTipoDocumento().getCodigoEntero())){
+				cs.setInt(i++, persona.getDocumentoIdentidad().getTipoDocumento().getCodigoEntero().intValue());
+			}
+			else{
+				cs.setNull(i++, Types.INTEGER);
+			}
+			if (StringUtils.isNotBlank(persona.getDocumentoIdentidad().getNumeroDocumento())){
+				cs.setString(i++, persona.getDocumentoIdentidad().getNumeroDocumento());
+			}
+			else{
+				cs.setNull(i++, Types.VARCHAR);
+			}
+			if (StringUtils.isNotBlank(persona.getDocumentoIdentidad().getNumeroDocumento())){
+				cs.setString(i++, persona.getDocumentoIdentidad().getNumeroDocumento());
+			}
+			else{
+				cs.setNull(i++, Types.VARCHAR);
+			}
+			rs = cs.executeQuery();
+			
+			resultado = new ArrayList<Cliente>();
+			Cliente cliente = null;
+			TelefonoDao telefonoDao = new TelefonoDaoImpl();
+			while (rs.next()) {
+				cliente = new Cliente();
+				
+				resultado.add(cliente);
+			}
+			
+		} catch (SQLException e) {
+			resultado = null;
+			throw new SQLException(e);
+		} finally {
+			try {
+				if (rs != null){
+					rs.close();
+				}
+				if (cs != null){
+					cs.close();
+				}
+				if (conn != null){
+					conn.close();
+				}
+			} catch (SQLException e) {
+				try {
+					if (conn != null){
+						conn.close();
+					}
+					throw new SQLException(e);
+				} catch (SQLException e1) {
+					throw new SQLException(e);
+				}
+			}
+		}
+		
 		return resultado;
 	}
 }

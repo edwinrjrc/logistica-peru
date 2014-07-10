@@ -79,4 +79,8 @@ public class UtilJdbc {
 	public static java.sql.Date convertirUtilDateSQLDate(java.util.Date fecha){
 		return new java.sql.Date(fecha.getTime());
 	}
+	
+	public static boolean enteroNoNuloNoCero(Integer numero){
+		return (numero != null && numero.intValue() != 0);
+	}
 }
