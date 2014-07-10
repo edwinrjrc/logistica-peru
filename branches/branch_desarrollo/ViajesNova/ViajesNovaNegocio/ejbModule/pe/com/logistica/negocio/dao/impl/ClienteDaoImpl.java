@@ -433,8 +433,8 @@ public class ClienteDaoImpl implements ClienteDao {
 	}
 	
 	@Override
-	public List<Cliente> listarClientes(Persona persona) throws SQLException {
-		List<Cliente> resultado = null;
+	public List<Persona> listarClientes(Persona persona) throws SQLException {
+		List<Persona> resultado = null;
 		Connection conn = null;
 		CallableStatement cs = null;
 		ResultSet rs = null;
@@ -466,12 +466,11 @@ public class ClienteDaoImpl implements ClienteDao {
 			}
 			rs = cs.executeQuery();
 			
-			resultado = new ArrayList<Cliente>();
-			Cliente cliente = null;
-			TelefonoDao telefonoDao = new TelefonoDaoImpl();
+			resultado = new ArrayList<Persona>();
+			Persona cliente = null;
 			while (rs.next()) {
 				cliente = new Cliente();
-				
+				cliente.setCodigoEntero(UtilJdbc.obtenerNumero(rs, "id"));
 				resultado.add(cliente);
 			}
 			
