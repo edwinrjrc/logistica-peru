@@ -33,6 +33,7 @@ public abstract class Persona extends BaseNegocio {
 	private Date fechaNacimiento;
 	
 	private int tipoPersona;
+	private BaseVO rubro;
 
 	public Persona() {
 
@@ -226,6 +227,23 @@ public abstract class Persona extends BaseNegocio {
 	 */
 	public void setFechaNacimiento(Date fechaNacimiento) {
 		this.fechaNacimiento = fechaNacimiento;
+	}
+
+	/**
+	 * @return the rubro
+	 */
+	public BaseVO getRubro() {
+		if (rubro == null){
+			rubro = new BaseVO();
+		}
+		return rubro;
+	}
+
+	/**
+	 * @param rubro the rubro to set
+	 */
+	public void setRubro(BaseVO rubro) {
+		this.rubro = rubro;
 	}
 
 }

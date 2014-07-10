@@ -3,7 +3,6 @@ package pe.com.logistica.bean.negocio;
 import java.util.ArrayList;
 import java.util.List;
 
-import pe.com.logistica.bean.base.BaseVO;
 import pe.com.logistica.bean.base.Persona;
 
 /**
@@ -20,7 +19,7 @@ public class Cliente extends Persona {
 	private String correoElectronico;
 	private List<Contacto> listaContactos;
 	private List<CuentaBancaria> listaCuentas;
-	private BaseVO rubro;
+	
 	
 	private String telefonoInvitadoNovios;
 	private Integer codigoSeleccionado;
@@ -77,23 +76,6 @@ public class Cliente extends Persona {
 	 */
 	public void setListaCuentas(List<CuentaBancaria> listaCuentas) {
 		this.listaCuentas = listaCuentas;
-	}
-
-	/**
-	 * @return the rubro
-	 */
-	public BaseVO getRubro() {
-		if (rubro == null){
-			rubro = new BaseVO();
-		}
-		return rubro;
-	}
-
-	/**
-	 * @param rubro the rubro to set
-	 */
-	public void setRubro(BaseVO rubro) {
-		this.rubro = rubro;
 	}
 
 	/**
