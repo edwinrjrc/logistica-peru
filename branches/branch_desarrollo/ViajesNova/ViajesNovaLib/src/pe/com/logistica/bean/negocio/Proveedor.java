@@ -19,7 +19,6 @@ public class Proveedor extends Persona {
 	private static final long serialVersionUID = 4758923398707358761L;
 	private List<Contacto> listaContactos;
 	private List<CuentaBancaria> listaCuentas;
-	private BaseVO rubro;
 
 	public Proveedor() {
 
@@ -63,24 +62,6 @@ public class Proveedor extends Persona {
 	 */
 	public void setListaCuentas(List<CuentaBancaria> listaCuentas) {
 		this.listaCuentas = listaCuentas;
-	}
-
-	/**
-	 * @return the rubro
-	 */
-	public BaseVO getRubro() {
-		if (rubro == null){
-			rubro = new BaseVO();
-		}
-		return rubro;
-	}
-
-	/**
-	 * @param rubro
-	 *            the rubro to set
-	 */
-	public void setRubro(BaseVO rubro) {
-		this.rubro = rubro;
 	}
 
 }

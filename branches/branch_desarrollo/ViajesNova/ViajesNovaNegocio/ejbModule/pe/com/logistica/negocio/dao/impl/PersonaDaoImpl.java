@@ -5,15 +5,20 @@ package pe.com.logistica.negocio.dao.impl;
 
 import java.sql.CallableStatement;
 import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 
 import pe.com.logistica.bean.base.Persona;
+import pe.com.logistica.bean.negocio.Direccion;
 import pe.com.logistica.bean.negocio.Proveedor;
 import pe.com.logistica.negocio.dao.PersonaDao;
+import pe.com.logistica.negocio.dao.TelefonoDao;
+import pe.com.logistica.negocio.util.UtilConexion;
 import pe.com.logistica.negocio.util.UtilJdbc;
 
 /**
@@ -28,15 +33,7 @@ public class PersonaDaoImpl implements PersonaDao {
 	public PersonaDaoImpl() {
 		// TODO Auto-generated constructor stub
 	}
-
-	/* (non-Javadoc)
-	 * @see pe.com.logistica.negocio.dao.ProveedorDao#listarProveedores()
-	 */
-	@Override
-	public List<Proveedor> listarPersonas() throws SQLException {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	
 
 	/* (non-Javadoc)
 	 * @see pe.com.logistica.negocio.dao.ProveedorDao#registrarProveedor(pe.com.logistica.bean.negocio.Proveedor)
