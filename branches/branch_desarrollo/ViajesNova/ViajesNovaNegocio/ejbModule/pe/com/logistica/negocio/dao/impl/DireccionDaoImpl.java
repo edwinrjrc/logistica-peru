@@ -373,4 +373,142 @@ public class DireccionDaoImpl implements DireccionDao {
 		}
 		return resultado;
 	}
+
+	@Override
+	public List<Direccion> consultarDireccionPersona(int idPersona)
+			throws SQLException {
+		List<Direccion> resultado = null;
+		Connection conn = null;
+		CallableStatement cs = null;
+		ResultSet rs = null;
+		String sql = "{ ? = call negocio.fn_direccionesxpersona(?) }";
+		
+		
+		try {
+			conn = UtilConexion.obtenerConexion();
+			cs = conn.prepareCall(sql);
+			cs.setInt(1, idPersona);
+			rs = cs.executeQuery();
+			
+			resultado = new ArrayList<Direccion>();
+			Direccion direccion = null;
+			TelefonoDao telefonoDao = new TelefonoDaoImpl();
+			while (rs.next()) {
+				direccion = new Direccion();
+				direccion.setCodigoEntero(UtilJdbc.obtenerNumero(rs, "id"));
+				direccion.getVia().setCodigoEntero(UtilJdbc.obtenerNumero(rs, "idvia"));
+				direccion.setNombreVia(UtilJdbc.obtenerCadena(rs, "nombrevia"));
+				direccion.setNumero(UtilJdbc.obtenerCadena(rs, "numero"));
+				direccion.setInterior(UtilJdbc.obtenerCadena(rs, "interior"));
+				direccion.setManzana(UtilJdbc.obtenerCadena(rs, "manzana"));
+				direccion.setLote(UtilJdbc.obtenerCadena(rs, "lote"));
+				direccion.setPrincipal(UtilJdbc.convertirBooleanSiNo(rs, "principal"));
+				direccion.getUbigeo().setCodigoCadena(UtilJdbc.obtenerCadena(rs, "idubigeo"));
+				direccion.getUbigeo().getDepartamento().setCodigoCadena(UtilJdbc.obtenerCadena(rs, "iddepartamento"));
+				direccion.getUbigeo().getDepartamento().setNombre(UtilJdbc.obtenerCadena(rs, "departamento"));
+				direccion.getUbigeo().getProvincia().setCodigoCadena(UtilJdbc.obtenerCadena(rs, "idprovincia"));
+				direccion.getUbigeo().getProvincia().setNombre(UtilJdbc.obtenerCadena(rs, "provincia"));
+				direccion.getUbigeo().getDistrito().setCodigoCadena(UtilJdbc.obtenerCadena(rs, "iddistrito"));
+				direccion.getUbigeo().getDistrito().setNombre(UtilJdbc.obtenerCadena(rs, "distrito"));
+				direccion.setUsuarioCreacion(UtilJdbc.obtenerCadena(rs, "usuariocreacion"));
+				direccion.setFechaCreacion(UtilJdbc.obtenerFecha(rs, "fechacreacion"));
+				direccion.setIpCreacion(UtilJdbc.obtenerCadena(rs, "ipcreacion"));
+				direccion.setObservaciones(UtilJdbc.obtenerCadena(rs, "observacion"));
+				direccion.setReferencia(UtilJdbc.obtenerCadena(rs, "referencia"));
+				direccion.setTelefonos(telefonoDao.consultarTelefonoDireccion(direccion.getCodigoEntero().intValue(), conn));
+				resultado.add(direccion);
+			}
+			
+		} catch (SQLException e) {
+			resultado = null;
+			throw new SQLException(e);
+		} finally {
+			try {
+				if (rs != null){
+					rs.close();
+				}
+				if (cs != null){
+					cs.close();
+				}
+				if (conn != null){
+					conn.close();
+				}
+			} catch (SQLException e) {
+				try {
+					if (conn != null){
+						conn.close();
+					}
+					throw new SQLException(e);
+				} catch (SQLException e1) {
+					throw new SQLException(e);
+				}
+			}
+		}
+		
+		return resultado;
+	}
+	
+	@Override
+	public List<Direccion> consultarDireccionPersona(int idPersona, Connection conn)
+			throws SQLException {
+		List<Direccion> resultado = null;
+		CallableStatement cs = null;
+		ResultSet rs = null;
+		String sql = "{ ? = call negocio.fn_direccionesxpersona(?) }";
+		
+		
+		try {
+			cs = conn.prepareCall(sql);
+			cs.setInt(1, idPersona);
+			rs = cs.executeQuery();
+			
+			resultado = new ArrayList<Direccion>();
+			Direccion direccion = null;
+			TelefonoDao telefonoDao = new TelefonoDaoImpl();
+			while (rs.next()) {
+				direccion = new Direccion();
+				direccion.setCodigoEntero(UtilJdbc.obtenerNumero(rs, "id"));
+				direccion.getVia().setCodigoEntero(UtilJdbc.obtenerNumero(rs, "idvia"));
+				direccion.setNombreVia(UtilJdbc.obtenerCadena(rs, "nombrevia"));
+				direccion.setNumero(UtilJdbc.obtenerCadena(rs, "numero"));
+				direccion.setInterior(UtilJdbc.obtenerCadena(rs, "interior"));
+				direccion.setManzana(UtilJdbc.obtenerCadena(rs, "manzana"));
+				direccion.setLote(UtilJdbc.obtenerCadena(rs, "lote"));
+				direccion.setPrincipal(UtilJdbc.convertirBooleanSiNo(rs, "principal"));
+				direccion.getUbigeo().setCodigoCadena(UtilJdbc.obtenerCadena(rs, "idubigeo"));
+				direccion.getUbigeo().getDepartamento().setCodigoCadena(UtilJdbc.obtenerCadena(rs, "iddepartamento"));
+				direccion.getUbigeo().getDepartamento().setNombre(UtilJdbc.obtenerCadena(rs, "departamento"));
+				direccion.getUbigeo().getProvincia().setCodigoCadena(UtilJdbc.obtenerCadena(rs, "idprovincia"));
+				direccion.getUbigeo().getProvincia().setNombre(UtilJdbc.obtenerCadena(rs, "provincia"));
+				direccion.getUbigeo().getDistrito().setCodigoCadena(UtilJdbc.obtenerCadena(rs, "iddistrito"));
+				direccion.getUbigeo().getDistrito().setNombre(UtilJdbc.obtenerCadena(rs, "distrito"));
+				direccion.setUsuarioCreacion(UtilJdbc.obtenerCadena(rs, "usuariocreacion"));
+				direccion.setFechaCreacion(UtilJdbc.obtenerFecha(rs, "fechacreacion"));
+				direccion.setIpCreacion(UtilJdbc.obtenerCadena(rs, "ipcreacion"));
+				direccion.setObservaciones(UtilJdbc.obtenerCadena(rs, "observacion"));
+				direccion.setReferencia(UtilJdbc.obtenerCadena(rs, "referencia"));
+				direccion.setTelefonos(telefonoDao.consultarTelefonoDireccion(direccion.getCodigoEntero().intValue(), conn));
+				resultado.add(direccion);
+			}
+			
+		} catch (SQLException e) {
+			resultado = null;
+			throw new SQLException(e);
+		} finally {
+			try {
+				if (rs != null){
+					rs.close();
+				}
+				if (cs != null){
+					cs.close();
+				}
+
+			} catch (SQLException e) {
+				throw new SQLException(e);
+
+			}
+		}
+		
+		return resultado;
+	}
 }

@@ -30,4 +30,9 @@ public interface DireccionDao {
 
 	boolean eliminarDireccionPersona(Persona persona, Connection conexion)
 			throws SQLException;
+	
+	List<Direccion> consultarDireccionPersona(int idPersona) throws SQLException;
+
+	List<Direccion> consultarDireccionPersona(int idPersona, Connection conn)
+			throws SQLException;
 }

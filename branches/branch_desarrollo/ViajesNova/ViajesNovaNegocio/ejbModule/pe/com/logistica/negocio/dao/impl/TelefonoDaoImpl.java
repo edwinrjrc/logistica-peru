@@ -15,6 +15,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import pe.com.logistica.bean.negocio.Telefono;
 import pe.com.logistica.negocio.dao.TelefonoDao;
+import pe.com.logistica.negocio.util.UtilConexion;
 import pe.com.logistica.negocio.util.UtilJdbc;
 
 /**
@@ -288,6 +289,61 @@ public class TelefonoDaoImpl implements TelefonoDao {
 				throw new SQLException(e);
 			}
 		}
+		return resultado;
+	}
+
+	@Override
+	public List<Telefono> consultarTelefonosDireccion(int idDireccion)
+			throws SQLException {
+		Connection conn = null;
+		CallableStatement cs = null;
+		String sql = "{ ? = call negocio.fn_telefonosxdireccion(?) }";
+		ResultSet rs = null;
+		List<Telefono> resultado = null;
+		
+		try {
+			conn = UtilConexion.obtenerConexion();
+			cs = conn.prepareCall(sql);
+			int i=1;
+			cs.registerOutParameter(i++, Types.OTHER);
+			cs.setInt(i++, idDireccion);
+			cs.execute();
+			
+			rs = (ResultSet)cs.getObject(1);
+			resultado = new ArrayList<Telefono>();
+			Telefono telefono = null;
+			while (rs.next()) {
+				telefono = new Telefono();
+				telefono.setCodigoEntero(UtilJdbc.obtenerNumero(rs, "id"));
+				telefono.setNumeroTelefono(UtilJdbc.obtenerCadena(rs, "numero"));
+				telefono.getEmpresaOperadora().setCodigoEntero(UtilJdbc.obtenerNumero(rs, "idempresaproveedor"));
+				resultado.add(telefono);
+			}
+		} catch (SQLException e) {
+			throw new SQLException(e);
+		} finally{
+			try {
+				if (rs != null){
+					rs.close();
+				}
+				if (cs != null){
+					cs.close();
+				}
+				if (conn == null){
+					conn.close();
+				}
+			} catch (SQLException e) {
+				try {
+					if (conn != null){
+						conn.close();
+					}
+					throw new SQLException(e);
+				} catch (SQLException e1) {
+					throw new SQLException(e);
+				}
+			}
+		}
+		
 		return resultado;
 	}
 }
