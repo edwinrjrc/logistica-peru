@@ -29,6 +29,9 @@ public interface TelefonoDao {
 	
 	List<Telefono> consultarTelefonoDireccion(int idDireccion, Connection conn)
 			throws SQLException;
+	
+	List<Telefono> consultarTelefonosDireccion(int idDireccion)
+			throws SQLException;
 
 	List<Telefono> consultarTelefonoContacto(int idcontacto, Connection conn)
 			throws SQLException;

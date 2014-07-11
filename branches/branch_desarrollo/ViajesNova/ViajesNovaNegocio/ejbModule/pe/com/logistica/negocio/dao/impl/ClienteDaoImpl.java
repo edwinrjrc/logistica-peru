@@ -17,7 +17,6 @@ import pe.com.logistica.bean.base.Persona;
 import pe.com.logistica.bean.negocio.Cliente;
 import pe.com.logistica.bean.negocio.Telefono;
 import pe.com.logistica.negocio.dao.ClienteDao;
-import pe.com.logistica.negocio.dao.TelefonoDao;
 import pe.com.logistica.negocio.util.UtilConexion;
 import pe.com.logistica.negocio.util.UtilJdbc;
 
@@ -471,6 +470,18 @@ public class ClienteDaoImpl implements ClienteDao {
 			while (rs.next()) {
 				cliente = new Cliente();
 				cliente.setCodigoEntero(UtilJdbc.obtenerNumero(rs, "id"));
+				cliente.getDocumentoIdentidad().getTipoDocumento().setCodigoEntero(UtilJdbc.obtenerNumero(rs, "idtipodocumento"));
+				cliente.getDocumentoIdentidad().getTipoDocumento().setNombre(UtilJdbc.obtenerCadena(rs, "nombretipodocumento"));
+				cliente.getDocumentoIdentidad().setNumeroDocumento(UtilJdbc.obtenerCadena(rs, "numerodocumento"));
+				cliente.setNombres(UtilJdbc.obtenerCadena(rs, "nombres"));
+				cliente.setApellidoPaterno(UtilJdbc.obtenerCadena(rs, "apellidopaterno"));
+				cliente.setApellidoMaterno(UtilJdbc.obtenerCadena(rs, "apellidomaterno"));
+				cliente.getGenero().setCodigoEntero(UtilJdbc.obtenerNumero(rs, "idgenero"));
+				cliente.getGenero().setNombre(UtilJdbc.obtenerCadena(rs, "genero"));
+				cliente.getEstadoCivil().setCodigoEntero(UtilJdbc.obtenerNumero(rs, "idestadocivil"));
+				cliente.getEstadoCivil().setNombre(UtilJdbc.obtenerCadena(rs, "nombre"));
+				cliente.getRubro().setCodigoEntero(UtilJdbc.obtenerNumero(rs, "idrubro"));
+				cliente.getRubro().setNombre(UtilJdbc.obtenerCadena(rs, "nomrubro"));
 				resultado.add(cliente);
 			}
 			
@@ -497,6 +508,77 @@ public class ClienteDaoImpl implements ClienteDao {
 				} catch (SQLException e1) {
 					throw new SQLException(e);
 				}
+			}
+		}
+		
+		return resultado;
+	}
+	
+	@Override
+	public List<Persona> listarClientes(Persona persona, Connection conn) throws SQLException {
+		List<Persona> resultado = null;
+		CallableStatement cs = null;
+		ResultSet rs = null;
+		String sql = "{ ? = call negocio.fn_consultarpersonas2(?,?,?,?) }";
+		
+		try {
+			cs = conn.prepareCall(sql);
+			int i=1;
+			cs.registerOutParameter(i++, Types.OTHER);
+			cs.setInt(i++, persona.getTipoPersona());
+			if (UtilJdbc.enteroNoNuloNoCero(persona.getDocumentoIdentidad().getTipoDocumento().getCodigoEntero())){
+				cs.setInt(i++, persona.getDocumentoIdentidad().getTipoDocumento().getCodigoEntero().intValue());
+			}
+			else{
+				cs.setNull(i++, Types.INTEGER);
+			}
+			if (StringUtils.isNotBlank(persona.getDocumentoIdentidad().getNumeroDocumento())){
+				cs.setString(i++, persona.getDocumentoIdentidad().getNumeroDocumento());
+			}
+			else{
+				cs.setNull(i++, Types.VARCHAR);
+			}
+			if (StringUtils.isNotBlank(persona.getDocumentoIdentidad().getNumeroDocumento())){
+				cs.setString(i++, persona.getDocumentoIdentidad().getNumeroDocumento());
+			}
+			else{
+				cs.setNull(i++, Types.VARCHAR);
+			}
+			rs = cs.executeQuery();
+			
+			resultado = new ArrayList<Persona>();
+			Persona cliente = null;
+			while (rs.next()) {
+				cliente = new Cliente();
+				cliente.setCodigoEntero(UtilJdbc.obtenerNumero(rs, "id"));
+				cliente.getDocumentoIdentidad().getTipoDocumento().setCodigoEntero(UtilJdbc.obtenerNumero(rs, "idtipodocumento"));
+				cliente.getDocumentoIdentidad().getTipoDocumento().setNombre(UtilJdbc.obtenerCadena(rs, "nombretipodocumento"));
+				cliente.getDocumentoIdentidad().setNumeroDocumento(UtilJdbc.obtenerCadena(rs, "numerodocumento"));
+				cliente.setNombres(UtilJdbc.obtenerCadena(rs, "nombres"));
+				cliente.setApellidoPaterno(UtilJdbc.obtenerCadena(rs, "apellidopaterno"));
+				cliente.setApellidoMaterno(UtilJdbc.obtenerCadena(rs, "apellidomaterno"));
+				cliente.getGenero().setCodigoEntero(UtilJdbc.obtenerNumero(rs, "idgenero"));
+				cliente.getGenero().setNombre(UtilJdbc.obtenerCadena(rs, "genero"));
+				cliente.getEstadoCivil().setCodigoEntero(UtilJdbc.obtenerNumero(rs, "idestadocivil"));
+				cliente.getEstadoCivil().setNombre(UtilJdbc.obtenerCadena(rs, "nombre"));
+				cliente.getRubro().setCodigoEntero(UtilJdbc.obtenerNumero(rs, "idrubro"));
+				cliente.getRubro().setNombre(UtilJdbc.obtenerCadena(rs, "nomrubro"));
+				resultado.add(cliente);
+			}
+			
+		} catch (SQLException e) {
+			resultado = null;
+			throw new SQLException(e);
+		} finally {
+			try {
+				if (rs != null){
+					rs.close();
+				}
+				if (cs != null){
+					cs.close();
+				}
+			} catch (SQLException e) {
+				throw new SQLException(e);
 			}
 		}
 		
