@@ -329,7 +329,7 @@ public class TelefonoDaoImpl implements TelefonoDao {
 				if (cs != null){
 					cs.close();
 				}
-				if (conn == null){
+				if (conn != null){
 					conn.close();
 				}
 			} catch (SQLException e) {
@@ -341,6 +341,149 @@ public class TelefonoDaoImpl implements TelefonoDao {
 				} catch (SQLException e1) {
 					throw new SQLException(e);
 				}
+			}
+		}
+		
+		return resultado;
+	}
+	
+	@Override
+	public List<Telefono> consultarTelefonosDireccion(int idDireccion, Connection conn)
+			throws SQLException {
+		CallableStatement cs = null;
+		String sql = "{ ? = call negocio.fn_telefonosxdireccion(?) }";
+		ResultSet rs = null;
+		List<Telefono> resultado = null;
+		
+		try {
+			cs = conn.prepareCall(sql);
+			int i=1;
+			cs.registerOutParameter(i++, Types.OTHER);
+			cs.setInt(i++, idDireccion);
+			cs.execute();
+			
+			rs = (ResultSet)cs.getObject(1);
+			resultado = new ArrayList<Telefono>();
+			Telefono telefono = null;
+			while (rs.next()) {
+				telefono = new Telefono();
+				telefono.setCodigoEntero(UtilJdbc.obtenerNumero(rs, "id"));
+				telefono.setNumeroTelefono(UtilJdbc.obtenerCadena(rs, "numero"));
+				telefono.getEmpresaOperadora().setCodigoEntero(UtilJdbc.obtenerNumero(rs, "idempresaproveedor"));
+				resultado.add(telefono);
+			}
+		} catch (SQLException e) {
+			throw new SQLException(e);
+		} finally{
+			try {
+				if (rs != null){
+					rs.close();
+				}
+				if (cs != null){
+					cs.close();
+				}
+				
+			} catch (SQLException e) {
+				throw new SQLException(e);
+			}
+		}
+		
+		return resultado;
+	}
+	
+	@Override
+	public List<Telefono> consultarTelefonosXPersona(int idPersona)
+			throws SQLException {
+		Connection conn = null;
+		CallableStatement cs = null;
+		String sql = "{ ? = call negocio.fn_telefonosxpersona(?) }";
+		ResultSet rs = null;
+		List<Telefono> resultado = null;
+		
+		try {
+			conn = UtilConexion.obtenerConexion();
+			cs = conn.prepareCall(sql);
+			int i=1;
+			cs.registerOutParameter(i++, Types.OTHER);
+			cs.setInt(i++, idPersona);
+			cs.execute();
+			
+			rs = (ResultSet)cs.getObject(1);
+			resultado = new ArrayList<Telefono>();
+			Telefono telefono = null;
+			while (rs.next()) {
+				telefono = new Telefono();
+				telefono.setCodigoEntero(UtilJdbc.obtenerNumero(rs, "id"));
+				telefono.setNumeroTelefono(UtilJdbc.obtenerCadena(rs, "numero"));
+				telefono.getEmpresaOperadora().setCodigoEntero(UtilJdbc.obtenerNumero(rs, "idempresaproveedor"));
+				resultado.add(telefono);
+			}
+		} catch (SQLException e) {
+			throw new SQLException(e);
+		} finally{
+			try {
+				if (rs != null){
+					rs.close();
+				}
+				if (cs != null){
+					cs.close();
+				}
+				if (conn != null){
+					conn.close();
+				}
+			} catch (SQLException e) {
+				try {
+					if (conn != null){
+						conn.close();
+					}
+					throw new SQLException(e);
+				} catch (SQLException e1) {
+					throw new SQLException(e);
+				}
+			}
+		}
+		
+		return resultado;
+	}
+	
+	@Override
+	public List<Telefono> consultarTelefonosXPersona(int idPersona, Connection conn)
+			throws SQLException {
+		CallableStatement cs = null;
+		String sql = "{ ? = call negocio.fn_telefonosxpersona(?) }";
+		ResultSet rs = null;
+		List<Telefono> resultado = null;
+		
+		try {
+			cs = conn.prepareCall(sql);
+			int i=1;
+			cs.registerOutParameter(i++, Types.OTHER);
+			cs.setInt(i++, idPersona);
+			cs.execute();
+			
+			rs = (ResultSet)cs.getObject(1);
+			resultado = new ArrayList<Telefono>();
+			Telefono telefono = null;
+			while (rs.next()) {
+				telefono = new Telefono();
+				telefono.setCodigoEntero(UtilJdbc.obtenerNumero(rs, "id"));
+				telefono.setNumeroTelefono(UtilJdbc.obtenerCadena(rs, "numero"));
+				telefono.getEmpresaOperadora().setCodigoEntero(UtilJdbc.obtenerNumero(rs, "idempresaproveedor"));
+				resultado.add(telefono);
+			}
+		} catch (SQLException e) {
+			throw new SQLException(e);
+		} finally{
+			try {
+				if (rs != null){
+					rs.close();
+				}
+				if (cs != null){
+					cs.close();
+				}
+			} catch (SQLException e) {
+				throw new SQLException(e);
+				
 			}
 		}
 		

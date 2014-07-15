@@ -35,4 +35,13 @@ public interface TelefonoDao {
 
 	List<Telefono> consultarTelefonoContacto(int idcontacto, Connection conn)
 			throws SQLException;
+
+	List<Telefono> consultarTelefonosDireccion(int idDireccion, Connection conn)
+			throws SQLException;
+
+	List<Telefono> consultarTelefonosXPersona(int idPersona)
+			throws SQLException;
+
+	List<Telefono> consultarTelefonosXPersona(int idPersona, Connection conn)
+			throws SQLException;
 }
