@@ -180,5 +180,11 @@ public class NegocioServicioImpl implements NegocioServicio {
 	public List<ServicioAgencia> consultarVentaServicio(ServicioAgencia servicioAgencia) throws SQLException, Exception{
 		return ejbSession.consultarServicioVenta(servicioAgencia);
 	}
+
+	@Override
+	public List<Cliente> consultarCliente2(Cliente cliente)
+			throws SQLException, Exception {
+		return ejbSession.consultarCliente2(cliente);
+	}
 }
 	

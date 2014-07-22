@@ -23,6 +23,8 @@ public class Cliente extends Persona {
 	
 	private String telefonoInvitadoNovios;
 	private Integer codigoSeleccionado;
+	
+	private int infoCliente;
 
 	public Cliente() {
 
@@ -104,6 +106,20 @@ public class Cliente extends Persona {
 	 */
 	public void setCodigoSeleccionado(Integer codigoSeleccionado) {
 		this.codigoSeleccionado = codigoSeleccionado;
+	}
+
+	/**
+	 * @return the infoCliente
+	 */
+	public int getInfoCliente() {
+		return infoCliente;
+	}
+
+	/**
+	 * @param infoCliente the infoCliente to set
+	 */
+	public void setInfoCliente(int infoCliente) {
+		this.infoCliente = infoCliente;
 	}
 
 }

@@ -91,8 +91,8 @@ public class ClienteMBean extends BaseMBean {
 	}
 	
 	public String inicioAdministrador(){
+		buscarCliente();
 		this.setBusquedaRealizada(false);
-		
 		return "irAdministrarCliente";
 	}
 	
@@ -100,9 +100,11 @@ public class ClienteMBean extends BaseMBean {
 	public void buscarCliente(){
 		try {
 			this.setShowModal(false);
-			this.setListaClientes(this.negocioServicio.buscarCliente(getClienteBusqueda()));
+			this.setListaClientes(this.negocioServicio.consultarCliente2(getClienteBusqueda()));
 			this.setBusquedaRealizada(true);
 		} catch (SQLException e) {
+			e.printStackTrace();
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
@@ -892,12 +894,14 @@ public class ClienteMBean extends BaseMBean {
 		try {
 			this.setShowModal(false);
 			if (!this.isBusquedaRealizada()){
-				listaClientes = this.negocioServicio.listarCliente();
+				this.setListaClientes(this.negocioServicio.consultarCliente2(getClienteBusqueda()));
 			}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
+
 		return listaClientes;
 	}
 		

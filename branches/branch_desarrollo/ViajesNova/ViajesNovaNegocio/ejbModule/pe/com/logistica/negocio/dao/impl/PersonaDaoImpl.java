@@ -5,20 +5,13 @@ package pe.com.logistica.negocio.dao.impl;
 
 import java.sql.CallableStatement;
 import java.sql.Connection;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
-import java.util.ArrayList;
-import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 
 import pe.com.logistica.bean.base.Persona;
-import pe.com.logistica.bean.negocio.Direccion;
-import pe.com.logistica.bean.negocio.Proveedor;
 import pe.com.logistica.negocio.dao.PersonaDao;
-import pe.com.logistica.negocio.dao.TelefonoDao;
-import pe.com.logistica.negocio.util.UtilConexion;
 import pe.com.logistica.negocio.util.UtilJdbc;
 
 /**
@@ -42,7 +35,7 @@ public class PersonaDaoImpl implements PersonaDao {
 	public int registrarPersona(Persona persona, Connection conexion) throws SQLException {
 		int resultado = 0;
 		CallableStatement cs = null;
-		String sql = "{ ? = call negocio.fn_ingresarpersona(?,?,?,?,?,?,?,?,?,?,?) }";
+		String sql = "{ ? = call negocio.fn_ingresarpersona(?,?,?,?,?,?,?,?,?,?,?,?,?) }";
 		
 		try {
 			cs = conexion.prepareCall(sql);
@@ -105,6 +98,18 @@ public class PersonaDaoImpl implements PersonaDao {
 			}
 			if (persona.getFechaNacimiento() != null){
 				cs.setDate(i++, UtilJdbc.convertirUtilDateSQLDate(persona.getFechaNacimiento()));
+			}
+			else{
+				cs.setNull(i++, Types.DATE);
+			}
+			if (StringUtils.isNotBlank(persona.getNroPasaporte())){
+				cs.setString(i++, persona.getNroPasaporte());
+			}
+			else{
+				cs.setNull(i++, Types.VARCHAR);
+			}
+			if (persona.getFechaVctoPasaporte() != null){
+				cs.setDate(i++, UtilJdbc.convertirUtilDateSQLDate(persona.getFechaVctoPasaporte()));
 			}
 			else{
 				cs.setNull(i++, Types.DATE);

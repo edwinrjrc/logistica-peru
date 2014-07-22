@@ -9,6 +9,7 @@ import org.apache.commons.lang3.StringUtils;
 import pe.com.logistica.bean.Util.UtilParse;
 import pe.com.logistica.bean.negocio.Direccion;
 import pe.com.logistica.bean.negocio.DocumentoIdentidad;
+import pe.com.logistica.bean.negocio.Telefono;
 
 /**
  * @author Edwin
@@ -23,7 +24,8 @@ public abstract class Persona extends BaseNegocio {
 	private static final long serialVersionUID = 4643534946632179203L;
 	private String apellidoMaterno;
 	private String apellidoPaterno;
-	private Direccion direccion;	
+	private Direccion direccion;
+	private Telefono telefonoMovil;
 	private DocumentoIdentidad documentoIdentidad;
 	private BaseVO estadoCivil;
 	private BaseVO genero;
@@ -34,6 +36,9 @@ public abstract class Persona extends BaseNegocio {
 	
 	private int tipoPersona;
 	private BaseVO rubro;
+	
+	private String nroPasaporte;
+	private Date fechaVctoPasaporte;
 
 	public Persona() {
 
@@ -244,6 +249,48 @@ public abstract class Persona extends BaseNegocio {
 	 */
 	public void setRubro(BaseVO rubro) {
 		this.rubro = rubro;
+	}
+
+	/**
+	 * @return the telefonoMovil
+	 */
+	public Telefono getTelefonoMovil() {
+		return telefonoMovil;
+	}
+
+	/**
+	 * @param telefonoMovil the telefonoMovil to set
+	 */
+	public void setTelefonoMovil(Telefono telefonoMovil) {
+		this.telefonoMovil = telefonoMovil;
+	}
+
+	/**
+	 * @return the nroPasaporte
+	 */
+	public String getNroPasaporte() {
+		return nroPasaporte;
+	}
+
+	/**
+	 * @param nroPasaporte the nroPasaporte to set
+	 */
+	public void setNroPasaporte(String nroPasaporte) {
+		this.nroPasaporte = nroPasaporte;
+	}
+
+	/**
+	 * @return the fechaVctoPasaporte
+	 */
+	public Date getFechaVctoPasaporte() {
+		return fechaVctoPasaporte;
+	}
+
+	/**
+	 * @param fechaVctoPasaporte the fechaVctoPasaporte to set
+	 */
+	public void setFechaVctoPasaporte(Date fechaVctoPasaporte) {
+		this.fechaVctoPasaporte = fechaVctoPasaporte;
 	}
 
 }

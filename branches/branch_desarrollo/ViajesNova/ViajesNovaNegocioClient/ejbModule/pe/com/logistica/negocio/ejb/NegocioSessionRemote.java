@@ -74,4 +74,6 @@ public interface NegocioSessionRemote {
 	public List<CronogramaPago> consultarCronograma(ServicioAgencia servicioAgencia) throws SQLException, Exception;
 	
 	public List<ServicioAgencia> consultarServicioVenta(ServicioAgencia servicioAgencia) throws SQLException, Exception;
+	
+	public List<Cliente> consultarCliente2(Cliente cliente) throws SQLException, Exception;
 }
