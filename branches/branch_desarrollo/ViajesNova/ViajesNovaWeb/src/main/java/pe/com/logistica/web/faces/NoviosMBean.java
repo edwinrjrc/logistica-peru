@@ -40,6 +40,7 @@ import pe.com.logistica.bean.negocio.Parametro;
 import pe.com.logistica.bean.negocio.ProgramaNovios;
 import pe.com.logistica.bean.negocio.ServicioNovios;
 import pe.com.logistica.bean.negocio.Usuario;
+import pe.com.logistica.negocio.exception.ValidacionException;
 import pe.com.logistica.web.servicio.NegocioServicio;
 import pe.com.logistica.web.servicio.ParametroServicio;
 import pe.com.logistica.web.servicio.impl.NegocioServicioImpl;
@@ -170,6 +171,10 @@ public class NoviosMBean extends BaseMBean {
 					this.setTipoModal(TIPO_MODAL_EXITO);
 				}
 			}
+		} catch (ValidacionException e1){
+			this.setShowModal(true);
+			this.setMensajeModal(e1.getMessage());
+			this.setTipoModal(TIPO_MODAL_ERROR);
 		} catch (Exception e1) {
 			this.setShowModal(true);
 			this.setMensajeModal(e1.getMessage());
@@ -179,7 +184,7 @@ public class NoviosMBean extends BaseMBean {
 
 	}
 
-	private boolean validarNuevoNovios() {
+	private boolean validarNuevoNovios() throws ValidacionException {
 		boolean resultado = true;
 		String idFormulario = "idFormNovios";
 		if (this.getProgramaNovios().getNovia() == null
@@ -243,6 +248,15 @@ public class NoviosMBean extends BaseMBean {
 					"Ingrese el monto de la cuota inicial", "",
 					FacesMessage.SEVERITY_ERROR);
 			resultado = false;
+		}
+		if (this.getProgramaNovios().getFechaBoda().after(this.getProgramaNovios().getFechaViaje())){
+			throw new ValidacionException("La fecha de la boda no puede ser mayor a la fecha del viaje");
+		}
+		if (this.getProgramaNovios().getFechaViaje().before(this.getProgramaNovios().getFechaShower())){
+			throw new ValidacionException("La fecha del viaje no puede ser mayor a la fecha del Shower");
+		}
+		if (this.getProgramaNovios().getFechaShower().before(this.getProgramaNovios().getFechaBoda())){
+			throw new ValidacionException("La fecha del Shower no puede ser mayor a la fecha de la boda");
 		}
 		return resultado;
 	}

@@ -30,8 +30,8 @@ public interface ClienteDao {
 	
 	public List<Cliente> listarClientesNovios(String genero) throws SQLException;
 
-	List<Persona> listarClientes(Persona persona) throws SQLException;
+	List<Cliente> listarClientes(Persona persona) throws SQLException;
 
-	List<Persona> listarClientes(Persona persona, Connection conn)
+	List<Cliente> listarClientes(Persona persona, Connection conn)
 			throws SQLException; 
 }

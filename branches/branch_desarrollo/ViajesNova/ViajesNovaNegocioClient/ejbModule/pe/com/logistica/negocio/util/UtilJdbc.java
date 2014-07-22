@@ -83,4 +83,12 @@ public class UtilJdbc {
 	public static boolean enteroNoNuloNoCero(Integer numero){
 		return (numero != null && numero.intValue() != 0);
 	}
+	
+	public static String borrarEspacioMayusculas(String cadena){
+		cadena = StringUtils.normalizeSpace(cadena);
+		cadena = cadena.replaceAll(" ", cadena);
+		cadena = StringUtils.upperCase(cadena);
+		
+		return cadena;
+	}
 }

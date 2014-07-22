@@ -149,6 +149,25 @@
 										showSummary="true" showDetail="false" />
 								</h:panelGrid>
 
+								<h:outputText value="" />
+								<h:outputText value="" />
+
+								<h:outputText value="Número Pasaporte" />
+								<h:inputText value="#{clienteMBean.cliente.nroPasaporte}"
+									maxlength="10" onkeypress="return js_soloEntero();" />
+
+								<h:outputText value="Fecha Vcto Pasaporte" />
+								<h:panelGrid border="0" cellpadding="0" cellspacing="0"
+									columns="1">
+									<rich:calendar id="idFPFecVctoPass" required="true"
+										value="#{clienteMBean.cliente.fechaVctoPasaporte}"
+										datePattern="dd/MM/yyyy"
+										requiredMessage="Ingrese la fecha de Vencimiento Pasaporte" popup="true">
+									</rich:calendar>
+									<rich:message for="idFPFecVctoPass" ajaxRendered="true"
+										showSummary="true" showDetail="false" />
+								</h:panelGrid>
+
 							</h:panelGrid>
 							<h:panelGrid border="0" cellpadding="0" cellspacing="0"
 								style="width:100%;" columns="4"
