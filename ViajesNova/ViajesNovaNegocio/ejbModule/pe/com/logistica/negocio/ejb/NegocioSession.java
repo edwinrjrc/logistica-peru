@@ -862,4 +862,66 @@ public class NegocioSession implements NegocioSessionRemote,
 	public void enviarCorreoMasivo(List<Cliente> listaClientes){
 		
 	}
+	
+	@Override
+	public List<Cliente> consultarCliente2(Cliente cliente) throws SQLException, Exception{
+		ClienteDao clienteDao = new ClienteDaoImpl();
+		DireccionDao direccionDao = new DireccionDaoImpl();
+		TelefonoDao telefonoDao = new TelefonoDaoImpl();
+		ContactoDao contactoDao = new ContactoDaoImpl();
+		
+		Connection conn = null;
+		
+		
+		List<Cliente> listarCliente;
+		try {
+			conn = UtilConexion.obtenerConexion();
+			cliente.setTipoPersona(1);
+			listarCliente = clienteDao.listarClientes(cliente, conn);
+			int info=0;
+			for (Cliente cliente2 : listarCliente) {
+				info=1;
+				cliente2.setInfoCliente(info);
+				List<Direccion> listaDireccion = direccionDao.consultarDireccionPersona(cliente2.getCodigoEntero(), conn);
+				if (listaDireccion != null && listaDireccion.size()>0){
+					info++;
+					cliente2.setInfoCliente(info);
+					cliente2.setDireccion(listaDireccion.get(0));
+					cliente2.getDireccion().setDireccion(this.obtenerDireccionCompleta(cliente2.getDireccion()));
+					for (Direccion direccion : listaDireccion) {
+						List<Telefono> listaTelefono = telefonoDao.consultarTelefonosDireccion(direccion.getCodigoEntero(), conn);
+						if (listaTelefono != null && listaTelefono.size()>0){
+							info++;
+							cliente2.setInfoCliente(info);
+						}
+					}
+				}
+				
+				List<Contacto> listaContacto = contactoDao.listarContactosXPersona(cliente2.getCodigoEntero(), conn);
+				if (listaContacto != null && listaContacto.size()>0){
+					info++;
+					cliente2.setInfoCliente(info);
+					for (Contacto contacto : listaContacto) {
+						List<Telefono> listaTelefono = telefonoDao.consultarTelefonosXPersona(contacto.getCodigoEntero(), conn);
+						if (listaTelefono != null && listaTelefono.size()>0){
+							info++;
+							cliente2.setInfoCliente(info);
+							cliente2.setTelefonoMovil(listaTelefono.get(0));
+						}
+					}
+				}	
+			}
+		} catch (SQLException e) {
+			throw new SQLException(e);
+		} catch (Exception e) {
+			throw new Exception(e);
+		} finally {
+			if (conn != null) {
+				conn.close();
+			}
+		}
+		
+		
+		return listarCliente;
+	}
 }

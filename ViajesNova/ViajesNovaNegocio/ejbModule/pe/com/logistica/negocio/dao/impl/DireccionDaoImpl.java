@@ -387,9 +387,11 @@ public class DireccionDaoImpl implements DireccionDao {
 		try {
 			conn = UtilConexion.obtenerConexion();
 			cs = conn.prepareCall(sql);
-			cs.setInt(1, idPersona);
-			rs = cs.executeQuery();
+			cs.registerOutParameter(1, Types.OTHER);
+			cs.setInt(2, idPersona);
+			cs.execute();
 			
+			rs = (ResultSet)cs.getObject(1);
 			resultado = new ArrayList<Direccion>();
 			Direccion direccion = null;
 			TelefonoDao telefonoDao = new TelefonoDaoImpl();
@@ -459,9 +461,11 @@ public class DireccionDaoImpl implements DireccionDao {
 		
 		try {
 			cs = conn.prepareCall(sql);
-			cs.setInt(1, idPersona);
-			rs = cs.executeQuery();
+			cs.registerOutParameter(1, Types.OTHER);
+			cs.setInt(2, idPersona);
+			cs.execute();
 			
+			rs = (ResultSet)cs.getObject(1);
 			resultado = new ArrayList<Direccion>();
 			Direccion direccion = null;
 			TelefonoDao telefonoDao = new TelefonoDaoImpl();
