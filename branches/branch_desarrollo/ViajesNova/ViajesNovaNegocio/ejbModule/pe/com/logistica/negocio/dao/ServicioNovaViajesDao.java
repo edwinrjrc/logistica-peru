@@ -39,4 +39,7 @@ public interface ServicioNovaViajesDao {
 
 	List<ServicioAgencia> consultarServiciosVenta(
 			ServicioAgencia servicioAgencia) throws SQLException;
+
+	Integer ingresarCabeceraServicio2(ServicioAgencia servicioAgencia,
+			Connection conn) throws SQLException;
 }
