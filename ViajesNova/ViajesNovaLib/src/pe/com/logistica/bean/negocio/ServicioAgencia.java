@@ -22,6 +22,7 @@ public class ServicioAgencia extends BaseNegocio{
 	private static final long serialVersionUID = 52998145587384961L;
 	
 	private Cliente cliente;
+	private Cliente cliente2;
 	private Date fechaServicio;
 	private int cantidadServicios;
 	private BaseVO destino;
@@ -34,9 +35,13 @@ public class ServicioAgencia extends BaseNegocio{
 	private Date fechaUltimaCuota;
 	
 	private BigDecimal montoTotalServicios;
+	private BigDecimal montoTotalFee;
+	private BigDecimal montoTotalComision;
 	
 	private List<DetalleServicioAgencia> listaDetalleServicio;
 	private List<CronogramaPago> cronogramaPago;
+	
+	private BaseVO vendedor;
 
 	/**
 	 * 
@@ -329,5 +334,77 @@ public class ServicioAgencia extends BaseNegocio{
 	 */
 	public void setCronogramaPago(List<CronogramaPago> cronogramaPago) {
 		this.cronogramaPago = cronogramaPago;
+	}
+
+
+
+	/**
+	 * @return the cliente2
+	 */
+	public Cliente getCliente2() {
+		return cliente2;
+	}
+
+
+
+	/**
+	 * @param cliente2 the cliente2 to set
+	 */
+	public void setCliente2(Cliente cliente2) {
+		this.cliente2 = cliente2;
+	}
+
+
+
+	/**
+	 * @return the montoTotalFee
+	 */
+	public BigDecimal getMontoTotalFee() {
+		return montoTotalFee;
+	}
+
+
+
+	/**
+	 * @param montoTotalFee the montoTotalFee to set
+	 */
+	public void setMontoTotalFee(BigDecimal montoTotalFee) {
+		this.montoTotalFee = montoTotalFee;
+	}
+
+
+
+	/**
+	 * @return the montoTotalComision
+	 */
+	public BigDecimal getMontoTotalComision() {
+		return montoTotalComision;
+	}
+
+
+
+	/**
+	 * @param montoTotalComision the montoTotalComision to set
+	 */
+	public void setMontoTotalComision(BigDecimal montoTotalComision) {
+		this.montoTotalComision = montoTotalComision;
+	}
+
+
+
+	/**
+	 * @return the vendedor
+	 */
+	public BaseVO getVendedor() {
+		return vendedor;
+	}
+
+
+
+	/**
+	 * @param vendedor the vendedor to set
+	 */
+	public void setVendedor(BaseVO vendedor) {
+		this.vendedor = vendedor;
 	}
 }
