@@ -74,4 +74,8 @@ public class SeguridadServicioImpl implements SeguridadServicio{
 	public boolean cambiarClaveUsuario(Usuario usuario) throws SQLException, Exception {
 		return ejbSession.cambiarClaveUsuario(usuario);
 	}
+	@Override
+	public boolean actualizarClaveUsuario(Usuario usuario) throws SQLException, Exception {
+		return ejbSession.actualizarClaveUsuario(usuario);
+	}
 }

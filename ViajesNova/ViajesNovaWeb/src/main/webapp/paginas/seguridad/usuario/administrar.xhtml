@@ -70,15 +70,24 @@
 									<f:facet name="header">
 										<h:outputText value="Opciones" />
 									</f:facet>
-									<a4j:commandLink
-										action="#{usuarioMBean.consultarUsuario(row.codigoEntero)}"
-										oncomplete="#{rich:component('idModalformusuario')}.show()"
-										render="idGridFormUsuario, idNomModal">
-										<h:graphicImage height="25" width="20"
-											url="/resources/img/editar2.png" style="border:0" />
-									</a4j:commandLink>
+									<h:panelGrid columns="2" cellpadding="0" cellspacing="0"
+										border="0" style="width: 100%; text-align: center;">
+										<a4j:commandLink
+											action="#{usuarioMBean.consultarUsuario(row.codigoEntero)}"
+											oncomplete="#{rich:component('idModalformusuario')}.show()"
+											render="idGridFormUsuario, idNomModal">
+											<h:graphicImage height="25" width="20"
+												url="/resources/img/editar2.png" style="border:0" />
+										</a4j:commandLink>
+										<a4j:commandLink
+											action="#{usuarioMBean.consultarCambioClave(row.codigoEntero)}"
+											oncomplete="#{rich:component('idModalfrcambioclaveusuario')}.show()"
+											render="idGrFrcambioclaveusu, idNomModalCCusu">
+											<h:graphicImage height="25" width="20"
+												url="/resources/img/llaves2.gif" style="border:0" />
+										</a4j:commandLink>
+									</h:panelGrid>
 								</rich:column>
-
 							</rich:dataTable></td>
 					</tr>
 				</table>
@@ -106,9 +115,10 @@
 			</h:panelGrid>
 		</h:form>
 		<ui:include src="/paginas/seguridad/usuario/formusuario.xhtml" />
+		<ui:include src="/paginas/seguridad/usuario/cambioclaveusuario.xhtml" />
 		<ui:include src="/resources/includes/includemensaje.xhtml">
 			<ui:param name="backBean" value="#{usuarioMBean}" />
-			<ui:param name="idModalForm" value="idModalformusuario" />
+			<ui:param name="idModalForm" value="#{usuarioMBean.idModalPopup}" />
 			<ui:param name="idrender" value="idTabla" />
 		</ui:include>
 		<script type="text/javascript">
