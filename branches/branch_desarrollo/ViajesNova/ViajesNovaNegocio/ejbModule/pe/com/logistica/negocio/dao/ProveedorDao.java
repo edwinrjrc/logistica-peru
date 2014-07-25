@@ -9,6 +9,7 @@ import java.util.List;
 
 import pe.com.logistica.bean.negocio.Contacto;
 import pe.com.logistica.bean.negocio.Proveedor;
+import pe.com.logistica.bean.negocio.ServicioProveedor;
 
 /**
  * @author Edwin
@@ -28,4 +29,7 @@ public interface ProveedorDao {
 	void actualizarProveedor(Proveedor proveedor, Connection conexion) throws SQLException;
 
 	List<Proveedor> buscarProveedor(Proveedor proveedor) throws SQLException;
+
+	boolean ingresarServicioProveedor(Integer idproveedor,
+			ServicioProveedor servicio, Connection conn) throws SQLException;
 }

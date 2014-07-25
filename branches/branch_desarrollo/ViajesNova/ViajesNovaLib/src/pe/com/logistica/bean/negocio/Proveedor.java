@@ -3,7 +3,6 @@ package pe.com.logistica.bean.negocio;
 import java.util.ArrayList;
 import java.util.List;
 
-import pe.com.logistica.bean.base.BaseVO;
 import pe.com.logistica.bean.base.Persona;
 
 /**
@@ -19,6 +18,7 @@ public class Proveedor extends Persona {
 	private static final long serialVersionUID = 4758923398707358761L;
 	private List<Contacto> listaContactos;
 	private List<CuentaBancaria> listaCuentas;
+	private List<ServicioProveedor> listaServicioProveedor;
 
 	public Proveedor() {
 
@@ -62,6 +62,23 @@ public class Proveedor extends Persona {
 	 */
 	public void setListaCuentas(List<CuentaBancaria> listaCuentas) {
 		this.listaCuentas = listaCuentas;
+	}
+
+	/**
+	 * @return the listaServicioProveedor
+	 */
+	public List<ServicioProveedor> getListaServicioProveedor() {
+		if (listaServicioProveedor == null){
+			listaServicioProveedor = new ArrayList<ServicioProveedor>();
+		}
+		return listaServicioProveedor;
+	}
+
+	/**
+	 * @param listaServicioProveedor the listaServicioProveedor to set
+	 */
+	public void setListaServicioProveedor(List<ServicioProveedor> listaServicioProveedor) {
+		this.listaServicioProveedor = listaServicioProveedor;
 	}
 
 }

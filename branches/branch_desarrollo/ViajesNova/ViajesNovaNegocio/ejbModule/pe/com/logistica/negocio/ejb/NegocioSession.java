@@ -23,6 +23,7 @@ import pe.com.logistica.bean.negocio.ProgramaNovios;
 import pe.com.logistica.bean.negocio.Proveedor;
 import pe.com.logistica.bean.negocio.ServicioAgencia;
 import pe.com.logistica.bean.negocio.ServicioNovios;
+import pe.com.logistica.bean.negocio.ServicioProveedor;
 import pe.com.logistica.bean.negocio.Telefono;
 import pe.com.logistica.bean.negocio.Ubigeo;
 import pe.com.logistica.negocio.dao.ClienteDao;
@@ -194,14 +195,22 @@ public class NegocioSession implements NegocioSessionRemote,
 					contactoDao.ingresarCorreoElectronico(contacto, conexion);
 				}
 			}
+			if (proveedor.getListaServicioProveedor()!= null){
+				for (ServicioProveedor servicio : proveedor.getListaServicioProveedor()) {
+					boolean resultado = proveedorDao.ingresarServicioProveedor(idPersona, servicio, conexion);
+					if (!resultado){
+						throw new ResultadoCeroDaoException(
+								"No se pudo completar el registro del servicios");
+					}
+				}
+			}
+			
 			proveedorDao.registroProveedor(proveedor, conexion);
 
 			return true;
 		} catch (ResultadoCeroDaoException e) {
-			conexion.rollback();
 			throw new ResultadoCeroDaoException(e.getMensajeError(), e);
 		} catch (SQLException e) {
-			conexion.rollback();
 			throw new SQLException(e);
 		} finally {
 			if (conexion != null) {
