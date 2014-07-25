@@ -17,6 +17,7 @@ public class ServicioProveedor extends BaseNegocio {
 	private BaseVO tipoServicio;
 	private BigDecimal porcentajeComision;
 	private BigDecimal porcentajeFee;
+	private String nombreProveedor;
 	
 	/**
 	 * 
@@ -73,6 +74,20 @@ public class ServicioProveedor extends BaseNegocio {
 	 */
 	public void setPorcentajeFee(BigDecimal porcentajeFee) {
 		this.porcentajeFee = porcentajeFee;
+	}
+
+	/**
+	 * @return the nombreProveedor
+	 */
+	public String getNombreProveedor() {
+		return nombreProveedor;
+	}
+
+	/**
+	 * @param nombreProveedor the nombreProveedor to set
+	 */
+	public void setNombreProveedor(String nombreProveedor) {
+		this.nombreProveedor = nombreProveedor;
 	}
 
 }
