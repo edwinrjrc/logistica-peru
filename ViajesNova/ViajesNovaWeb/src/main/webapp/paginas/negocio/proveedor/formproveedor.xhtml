@@ -198,7 +198,7 @@
 					</rich:tab>
 					<rich:tab header="Contactos">
 						<h:panelGrid border="0" cellpadding="o" cellspacing="0"
-							style="width:100%;" columns="4">
+							style="width:100%;" columns="1">
 							<rich:dataTable style="width:100%;" id="idTablaContactos"
 								value="#{proveedorMBean.proveedor.listaContactos}" var="fila">
 								<rich:column>
@@ -241,6 +241,46 @@
 											action="#{proveedorMBean.nuevoContacto()}"
 											oncomplete="#{rich:component('idModalFormContacto')}.show();"
 											render="idNomModalContacto,idGrdFCon" />
+									</h:panelGrid>
+								</f:facet>
+							</rich:dataTable>
+						</h:panelGrid>
+					</rich:tab>
+					<rich:tab header="Servicios">
+						<h:panelGrid border="0" cellpadding="o" cellspacing="0"
+							style="width:100%;" columns="1" id="idGrdListaServicio">
+							<rich:dataTable style="width:100%;" var="row"
+								value="#{proveedorMBean.proveedor.listaServicioProveedor}">
+								<rich:column>
+									<f:facet name="header">
+										<h:outputText value="Tipo Servicio" />
+									</f:facet>
+									<h:selectOneMenu value="#{row.tipoServicio.codigoEntero}">
+										<f:selectItem itemLabel="-Seleccione-" />
+										<f:selectItems value="#{catalogoMBean.catalogoTipoServicio}" />
+									</h:selectOneMenu>
+								</rich:column>
+								<rich:column>
+									<f:facet name="header">
+										<h:outputText value="Porcentaje Comision" />
+									</f:facet>
+									<h:inputText value="#{row.porcentajeComision}" onkeypress="return js_soloEntero(event)" />
+								</rich:column>
+								<rich:column>
+									<f:facet name="header">
+										<h:outputText value="Porcentaje Fee" />
+									</f:facet>
+									<h:inputText value="#{row.porcentajeFee}" onkeypress="return js_soloEntero(event)"/>
+								</rich:column>
+								<rich:column>
+									<a4j:commandButton value="Eliminar" render="idGrdListaServicio"
+										action="#{proveedorMBean.eliminarServicio(row)}" />
+								</rich:column>
+								<f:facet name="header">
+									<h:panelGrid style="width:100%;text-align:right;">
+										<a4j:commandButton value="Agregar"
+											action="#{proveedorMBean.agregarServicio()}"
+											render="idGrdListaServicio" immediate="true" />
 									</h:panelGrid>
 								</f:facet>
 							</rich:dataTable>

@@ -25,10 +25,12 @@ import pe.com.logistica.bean.base.CorreoElectronico;
 import pe.com.logistica.bean.negocio.Contacto;
 import pe.com.logistica.bean.negocio.Direccion;
 import pe.com.logistica.bean.negocio.Proveedor;
+import pe.com.logistica.bean.negocio.ServicioProveedor;
 import pe.com.logistica.bean.negocio.Telefono;
 import pe.com.logistica.bean.negocio.Ubigeo;
 import pe.com.logistica.bean.negocio.Usuario;
 import pe.com.logistica.negocio.exception.NoEnvioDatoException;
+import pe.com.logistica.negocio.exception.ValidacionException;
 import pe.com.logistica.web.servicio.NegocioServicio;
 import pe.com.logistica.web.servicio.SoporteServicio;
 import pe.com.logistica.web.servicio.impl.NegocioServicioImpl;
@@ -42,6 +44,11 @@ import pe.com.logistica.web.util.UtilWeb;
 @ManagedBean(name = "proveedorMBean")
 @SessionScoped()
 public class ProveedorMBean extends BaseMBean {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 5592946026376816097L;
 
 	private List<Proveedor> listaProveedores;
 
@@ -147,7 +154,6 @@ public class ProveedorMBean extends BaseMBean {
 		try {
 			this.setListaProveedores(this.negocioServicio.buscarProveedor(getProveedor()));
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -217,6 +223,10 @@ public class ProveedorMBean extends BaseMBean {
 					this.setMensajeModal("No se ha agregado ninguna dirección al proveedor");
 				}
 			}
+		} catch (ValidacionException ex){
+			this.setShowModal(true);
+			this.setTipoModal("2");
+			this.setMensajeModal(ex.getMessage());
 		} catch (NoEnvioDatoException ex){
 			this.setShowModal(true);
 			this.setTipoModal("2");
@@ -259,7 +269,7 @@ public class ProveedorMBean extends BaseMBean {
 		return resultado;
 	}
 
-	private boolean validarProveedor(ActionEvent e) {
+	private boolean validarProveedor(ActionEvent e) throws ValidacionException {
 		boolean resultado = true;
 		String idFormulario = "idFormProveedor";
 		int tipoDocDNI = UtilWeb.obtenerEnteroPropertieMaestro(
@@ -305,6 +315,9 @@ public class ProveedorMBean extends BaseMBean {
 						FacesMessage.SEVERITY_ERROR);
 				resultado = false;
 			}
+		}
+		if (this.getProveedor().getListaServicioProveedor()== null || this.getProveedor().getListaServicioProveedor().isEmpty()){
+			throw new ValidacionException("Registre al menos 1 servicio para el proveedor");
 		}
 		
 		return resultado;
@@ -586,6 +599,23 @@ public class ProveedorMBean extends BaseMBean {
 		}
 
 		return resultado;
+	}
+	
+	public void agregarServicio(){
+		ServicioProveedor servicio = new ServicioProveedor();
+		
+		HttpSession session = obtenerSession(false);
+		Usuario usuario = (Usuario) session
+				.getAttribute("usuarioSession");
+		servicio.setUsuarioCreacion(
+				usuario.getUsuario());
+		servicio.setIpCreacion(
+				obtenerRequest().getRemoteAddr());
+		this.getProveedor().getListaServicioProveedor().add(servicio);
+	}
+	
+	public void eliminarServicio(ServicioProveedor servicio){
+		this.getProveedor().getListaServicioProveedor().remove(servicio);
 	}
 
 	/**
