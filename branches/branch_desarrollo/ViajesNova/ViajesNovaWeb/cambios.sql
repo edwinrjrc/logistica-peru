@@ -1,52 +1,27 @@
--- Function: seguridad.fn_actualizarclaveusuario(integer, character varying)
+-- Function: negocio.fn_proveedorxservicio(integer)
 
--- DROP FUNCTION seguridad.fn_actualizarclaveusuario(integer, character varying);
+-- DROP FUNCTION negocio.fn_proveedorxservicio(integer);
 
-CREATE OR REPLACE FUNCTION seguridad.fn_actualizarclaveusuario(p_idusuario integer, p_credencialnueva character varying)
-  RETURNS boolean AS
+CREATE OR REPLACE FUNCTION negocio.fn_proveedorxservicio(p_idservicio integer)
+  RETURNS refcursor AS
 $BODY$
-
-declare idusuario integer;
+declare micursor refcursor;
 
 begin
 
+open micursor for
+SELECT per.id, per.nombres, proser.porcencomision, proser.porcenfee
+  FROM negocio."Persona" per,
+       negocio."ProveedorTipoServicio" proser
+ WHERE per.idestadoregistro    = 1 
+   AND proser.idestadoregistro = 1 
+   AND per.idtipopersona       = 2
+   AND per.id                  = proser.idproveedor
+   AND proser.idservicio       = p_idservicio;
 
-update seguridad.usuario
-   set credencial = p_credencialnueva
- where id 	  = p_idusuario;
-
-
-return true;
+return micursor;
 
 end;
 $BODY$
   LANGUAGE plpgsql VOLATILE
   COST 100;
-ALTER FUNCTION seguridad.fn_actualizarclaveusuario(integer, character varying)
-  OWNER TO postgres;
-  
-  
--- Table: negocio."ProveedorTipoServicio"
-
--- DROP TABLE negocio."ProveedorTipoServicio";
-
-CREATE TABLE negocio."ProveedorTipoServicio"
-(
-  idproveedor integer NOT NULL,
-  idservicio integer NOT NULL,
-  porcencomision numeric NOT NULL,
-  porcenfee numeric NOT NULL,
-  usuariocreacion character varying(15) NOT NULL,
-  fechacreacion timestamp with time zone NOT NULL,
-  ipcreacion character varying(15) NOT NULL,
-  usuariomodificacion character varying(15) NOT NULL,
-  fechamodificacion timestamp with time zone NOT NULL,
-  ipmodificacion character varying(15) NOT NULL,
-  idestadoregistro integer NOT NULL DEFAULT 1
-)
-WITH (
-  OIDS=FALSE
-);
-ALTER TABLE negocio."ProveedorTipoServicio"
-  OWNER TO postgres;
-
