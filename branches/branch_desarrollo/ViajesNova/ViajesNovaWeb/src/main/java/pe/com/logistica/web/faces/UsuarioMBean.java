@@ -17,6 +17,7 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpSession;
 
 import pe.com.logistica.bean.negocio.Usuario;
+import pe.com.logistica.negocio.exception.ValidacionException;
 import pe.com.logistica.web.servicio.SeguridadServicio;
 import pe.com.logistica.web.servicio.impl.SeguridadServicioImpl;
 
@@ -41,6 +42,7 @@ public class UsuarioMBean extends BaseMBean {
 	private String credencialNueva;
 	private String reCredencial;
 	private String msjeError;
+	private String idModalPopup;
 	
 	private String modalNombre;
 	
@@ -67,11 +69,13 @@ public class UsuarioMBean extends BaseMBean {
 		this.setEditarUsuario(false);
 		this.setUsuario(null);
 		this.setNombreFormulario("Nuevo Usuario");
+		this.setIdModalPopup("idModalformusuario");
 	}
 	
 	public void consultarUsuario(Integer id){
 		try {
 			this.setNombreFormulario("Editar Usuario");
+			this.setIdModalPopup("idModalformusuario");
 			this.setEditarUsuario(true);
 			this.setNuevoUsuario(false);
 			this.setUsuario(this.seguridadServicio.consultarUsuario(id));
@@ -155,11 +159,14 @@ public class UsuarioMBean extends BaseMBean {
 	
 	public void cambiarClave(){
 		try {
-			this.seguridadServicio.cambiarClaveUsuario(getUsuario());
+			if (validarClave()){
+				this.seguridadServicio.cambiarClaveUsuario(getUsuario());
+				
+				this.setShowModal(true);
+				this.setTipoModal("1");
+				this.setMensajeModal("Cambio de clave Satisfactorio");
+			}
 			
-			this.setShowModal(true);
-			this.setTipoModal("1");
-			this.setMensajeModal("Cambio de clave Satisfactorio");
 		} catch (SQLException e) {
 			this.setTipoModal("2");
 			this.setShowModal(true);
@@ -173,6 +180,40 @@ public class UsuarioMBean extends BaseMBean {
 		}
 	}
 	
+	public void actualizarClave(){
+		try {
+			if (validarClave()){
+				this.seguridadServicio.actualizarClaveUsuario(getUsuario());
+				
+				this.setShowModal(true);
+				this.setTipoModal("1");
+				this.setMensajeModal("Cambio de clave Satisfactorio");
+			}
+			
+		} catch (ValidacionException e){
+			this.setTipoModal("2");
+			this.setShowModal(true);
+			this.setMensajeModal(e.getMessage());
+		} catch (SQLException e) {
+			this.setTipoModal("2");
+			this.setShowModal(true);
+			this.setMensajeModal(e.getMessage());
+			e.printStackTrace();
+		} catch (Exception e) {
+			this.setTipoModal("2");
+			this.setShowModal(true);
+			this.setMensajeModal(e.getMessage());
+			e.printStackTrace();
+		}
+	}
+		
+	private boolean validarClave() throws ValidacionException {
+		if (!getUsuario().getCredencialNueva().equals(this.getCredencialNueva())){
+			throw new ValidacionException("Las claves no coinciden");
+		}
+		return true;
+	}
+
 	public String salirSesion(){
 		try {
 			HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(true);
@@ -188,6 +229,10 @@ public class UsuarioMBean extends BaseMBean {
 		}
 		
 		return "irSalirSistema";
+	}
+	
+	public void consultarCambioClave(Integer id){
+		this.setIdModalPopup("idModalfrcambioclaveusuario");
 	}
 	/**
 	 * @return the listaUsuarios
@@ -318,6 +363,20 @@ public class UsuarioMBean extends BaseMBean {
 	 */
 	public void setCredencialNueva(String credencialNueva) {
 		this.credencialNueva = credencialNueva;
+	}
+
+	/**
+	 * @return the idModalPopup
+	 */
+	public String getIdModalPopup() {
+		return idModalPopup;
+	}
+
+	/**
+	 * @param idModalPopup the idModalPopup to set
+	 */
+	public void setIdModalPopup(String idModalPopup) {
+		this.idModalPopup = idModalPopup;
 	}
 
 }
