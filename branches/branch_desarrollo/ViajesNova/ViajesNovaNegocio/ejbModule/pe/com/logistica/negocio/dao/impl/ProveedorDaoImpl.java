@@ -15,6 +15,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import pe.com.logistica.bean.negocio.Contacto;
 import pe.com.logistica.bean.negocio.Proveedor;
+import pe.com.logistica.bean.negocio.ServicioProveedor;
 import pe.com.logistica.bean.negocio.Telefono;
 import pe.com.logistica.negocio.dao.ProveedorDao;
 import pe.com.logistica.negocio.util.UtilConexion;
@@ -303,4 +304,37 @@ public class ProveedorDaoImpl implements ProveedorDao {
 		}
 	}
 	
+	@Override
+	public boolean ingresarServicioProveedor(Integer idproveedor, ServicioProveedor servicio, Connection conn) throws SQLException {
+		boolean resultado = false;
+		CallableStatement cs = null;
+		String sql = "{ ? = call negocio.fn_ingresarservicioproveedor(?,?,?,?,?,?) }";
+		
+		try {
+			cs = conn.prepareCall(sql);
+			int i=1;
+			cs.registerOutParameter(i++, Types.BOOLEAN);
+			cs.setInt(i++, idproveedor);
+			cs.setInt(i++, servicio.getTipoServicio().getCodigoEntero().intValue());
+			cs.setBigDecimal(i++, servicio.getPorcentajeComision());
+			cs.setBigDecimal(i++, servicio.getPorcentajeFee());
+			cs.setString(i++, servicio.getUsuarioCreacion());
+			cs.setString(i++, servicio.getIpCreacion());
+			cs.execute();
+			
+			resultado = cs.getBoolean(1);
+		} catch (SQLException e) {
+			throw new SQLException(e);
+		} finally{
+			try {
+				if (cs != null){
+					cs.close();
+				}
+			} catch (SQLException e) {
+				throw new SQLException(e);
+			}
+		}
+		
+		return resultado;
+	}
 }
