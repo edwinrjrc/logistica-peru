@@ -73,6 +73,13 @@ public class SeguridadSession implements SeguridadRemote, SeguridadLocal {
 			throw new SQLException("Informacion de usuario incorrecta");
 		}
 		
-    	return usuarioDao.cambiarClaveUsuario(usuario2);
+    	return usuarioDao.actualizarClaveUsuario(usuario2);
+	}
+	
+	@Override
+	public boolean actualizarClaveUsuario(Usuario usuario) throws SQLException, Exception {
+		usuarioDao = new UsuarioDaoImpl();
+				
+    	return usuarioDao.actualizarClaveUsuario(usuario);
 	}
 }

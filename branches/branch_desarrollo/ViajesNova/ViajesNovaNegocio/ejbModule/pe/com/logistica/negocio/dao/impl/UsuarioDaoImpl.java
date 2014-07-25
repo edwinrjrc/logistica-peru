@@ -382,4 +382,48 @@ public class UsuarioDaoImpl implements UsuarioDao{
 		
 		return resultado;
 	}
+	
+	@Override
+	public boolean actualizarClaveUsuario(Usuario usuario) throws SQLException {
+		boolean resultado = false;
+		Connection conn = null;
+		CallableStatement cs = null;
+		String sql = "{? = call seguridad.fn_actualizarclaveusuario(?,?)}";
+		
+		try {
+			conn = UtilConexion.obtenerConexion();
+			cs = conn.prepareCall(sql);
+			int i=1;
+			cs.registerOutParameter(i++, Types.BOOLEAN);
+			cs.setInt(i++, usuario.getCodigoEntero());
+			cs.setString(i++, UtilEncripta.encriptaCadena(usuario.getCredencialNueva()));
+			cs.execute();
+			
+			resultado = cs.getBoolean(1);
+		} catch (SQLException e) {
+			resultado = false;
+			throw new SQLException(e);
+		} finally{
+			try {
+				if (cs != null){
+					cs.close();
+				}
+				if (conn != null){
+					conn.close();
+				}
+			} catch (SQLException e) {
+				try {
+					if (conn != null){
+						conn.close();
+					}
+					throw new SQLException(e);
+				} catch (SQLException e1) {
+					throw new SQLException(e);
+				}
+			}
+		}
+		
+		
+		return resultado;
+	}
 }
