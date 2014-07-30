@@ -23,5 +23,6 @@ public interface UsuarioDao {
 	Usuario inicioSesion2(Usuario usuario) throws SQLException;
 	boolean cambiarClaveUsuario(Usuario usuario) throws SQLException;
 	boolean actualizarClaveUsuario(Usuario usuario) throws SQLException;
+	List<Usuario> listarVendedores() throws SQLException;
 	
 }

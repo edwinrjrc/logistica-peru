@@ -25,4 +25,5 @@ public interface SeguridadServicio {
 	boolean cambiarClaveUsuario(Usuario usuario) throws SQLException, Exception;
 	boolean actualizarClaveUsuario(Usuario usuario) throws SQLException,
 			Exception;
+	List<Usuario> listarVendedores() throws SQLException;
 }

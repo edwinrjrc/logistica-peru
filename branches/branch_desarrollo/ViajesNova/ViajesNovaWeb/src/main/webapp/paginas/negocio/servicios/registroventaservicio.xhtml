@@ -7,8 +7,8 @@
 	xmlns:a4j="http://richfaces.org/a4j"
 	xmlns:rich="http://richfaces.org/rich">
 
-	<rich:popupPanel id="idModalfrventaservicio" modal="true" width="800"
-		height="500" style="background-color: #FFFFFF">
+	<rich:popupPanel id="idModalfrventaservicio" modal="true" width="900"
+		height="600" style="background-color: #FFFFFF">
 
 		<f:facet name="header">
 			<h:outputText id="idNomModal"
@@ -95,6 +95,25 @@
 									value="#{servicioAgenteMBean.servicioAgencia.fechaServicio}"></rich:calendar>
 
 							</h:panelGrid>
+							<h:panelGrid columns="4" border="0" cellpadding="0"
+								cellspacing="0" style="width:100%;" id="idGrAgente"
+								columnClasses="col1form,col2form,col1form,col2form">
+								<h:outputText value="Agente Viajes" />
+								<h:panelGrid columns="1" border="0" cellpadding="0"
+									cellspacing="0">
+									<h:selectOneMenu id="idSelVende"
+										value="#{servicioAgenteMBean.servicioAgencia.vendedor.codigoEntero}">
+										<f:selectItem itemLabel="-Seleccione el agente-" />
+										<f:selectItems value="#{catalogoMBean.catalogoVendedores}" />
+									</h:selectOneMenu>
+									<rich:message for="idSelVende" showDetail="false"
+										showSummary="true" ajaxRendered="true" />
+								</h:panelGrid>
+
+								<h:outputText value="" />
+								<h:outputText value="" />
+
+							</h:panelGrid>
 
 							<h:panelGrid columns="4" border="0" cellpadding="0"
 								cellspacing="0" style="width:100%;" id="idfrcred"
@@ -119,8 +138,8 @@
 									<h:inputText size="4" maxlength="2" id="idNroCuotas"
 										rendered="#{servicioAgenteMBean.servicioAgencia.formaPago.codigoEntero == 2}"
 										value="#{servicioAgenteMBean.servicioAgencia.nroCuotas}" />
-									<rich:message for="idNroCuotas" showDetail="false" showSummary="true"
-										ajaxRendered="true" />
+									<rich:message for="idNroCuotas" showDetail="false"
+										showSummary="true" ajaxRendered="true" />
 								</h:panelGrid>
 
 								<h:outputText value=""
@@ -142,12 +161,12 @@
 									rendered="#{servicioAgenteMBean.servicioAgencia.formaPago.codigoEntero == 2}" />
 								<h:panelGrid columns="1" border="0" cellpadding="0"
 									cellspacing="0">
-								<rich:calendar id="idFecPriVcto"
-									rendered="#{servicioAgenteMBean.servicioAgencia.formaPago.codigoEntero == 2}"
-									value="#{servicioAgenteMBean.servicioAgencia.fechaPrimerCuota}"
-									datePattern="dd/MM/yyyy"></rich:calendar>
-									<rich:message for="idFecPriVcto" showDetail="false" showSummary="true"
-										ajaxRendered="true" />
+									<rich:calendar id="idFecPriVcto"
+										rendered="#{servicioAgenteMBean.servicioAgencia.formaPago.codigoEntero == 2}"
+										value="#{servicioAgenteMBean.servicioAgencia.fechaPrimerCuota}"
+										datePattern="dd/MM/yyyy"></rich:calendar>
+									<rich:message for="idFecPriVcto" showDetail="false"
+										showSummary="true" ajaxRendered="true" />
 								</h:panelGrid>
 
 								<h:outputText value=""
@@ -174,18 +193,29 @@
 									<h:panelGrid columns="1" cellpadding="0" cellspacing="0"
 										border="0">
 										<h:selectOneMenu id="idSelTipoServicio"
-											value="#{servicioAgenteMBean.detalleServicio.tipoServicio.codigoEntero}">
+											value="#{servicioAgenteMBean.detalleServicio.tipoServicio.codigoEntero}"
+											valueChangeListener="#{servicioAgenteMBean.cargarProveedores}">
 											<f:selectItem itemLabel="-Seleccione-" />
 											<f:selectItems value="#{catalogoMBean.catalogoTipoServicio}" />
-											<a4j:ajax event="valueChange" render="idFrNuevServicio"></a4j:ajax>
+											<a4j:ajax event="valueChange" render="idFrNuevServicio" />
 										</h:selectOneMenu>
 										<rich:message for="idSelTipoServicio" showDetail="false"
 											showSummary="true" ajaxRendered="true" />
 									</h:panelGrid>
 
-									<h:outputText value="" />
-									<h:outputText value="" />
-
+									<h:outputText value="Empresa Proveedor" />
+									<h:panelGrid columns="1" cellpadding="0" cellspacing="0"
+										border="0">
+										<h:selectOneMenu id="idSelEmpServicio"
+											value="#{servicioAgenteMBean.detalleServicio.servicioProveedor.proveedor.codigoEntero}"
+											valueChangeListener="#{servicioAgenteMBean.seleccionarEmpresa}">
+											<f:selectItem itemLabel="-Seleccione-" />
+											<f:selectItems value="#{servicioAgenteMBean.listadoEmpresas}" />
+											<a4j:ajax event="valueChange" render="idFrNuevServicio" />
+										</h:selectOneMenu>
+										<rich:message for="idSelEmpServicio" showDetail="false"
+											showSummary="true" ajaxRendered="true" />
+									</h:panelGrid>
 								</h:panelGrid>
 								<h:panelGrid columns="2" cellpadding="0" cellspacing="0"
 									border="0" style="width:100%;"
@@ -217,6 +247,7 @@
 									<h:panelGrid columns="1" cellpadding="0" cellspacing="0"
 										border="0">
 										<h:inputText id="idPrecUnitario"
+											onkeypress="return js_soloDecimal();"
 											value="#{servicioAgenteMBean.detalleServicio.precioUnitario}"
 											size="10" maxlength="8" />
 										<rich:message for="idPrecUnitario" showDetail="false"
@@ -234,7 +265,7 @@
 										<rich:calendar datePattern="dd/MM/yyyy" id="idFecServicio"
 											value="#{servicioAgenteMBean.detalleServicio.fechaIda}"></rich:calendar>
 										<rich:message for="idFecServicio" showDetail="false"
-											showSummary="true" ajaxRendered="true" ></rich:message>
+											showSummary="true" ajaxRendered="true"></rich:message>
 									</h:panelGrid>
 									<h:outputText value="Fecha Regreso" />
 									<rich:calendar datePattern="dd/MM/yyyy"
@@ -255,6 +286,19 @@
 
 								</h:panelGrid>
 
+								<h:panelGrid columns="4" cellpadding="0" cellspacing="0"
+									border="0" style="width:100%;"
+									columnClasses="col1fil1formulario,col2fil1formulario,col3fil1formulario,col4fil1formulario"
+									rendered="#{servicioAgenteMBean.detalleServicio.servicioProveedor.proveedor.codigoEntero != null}">
+
+									<h:outputText value="Comision" />
+									<h:inputText
+										value="#{servicioAgenteMBean.detalleServicio.servicioProveedor.porcentajeComision}" />
+									<h:outputText value="Fee" />
+									<h:inputText
+										value="#{servicioAgenteMBean.detalleServicio.servicioProveedor.porcentajeFee}" />
+
+								</h:panelGrid>
 
 								<f:facet name="footer">
 									<h:panelGrid cellpadding="0" cellspacing="0" border="0"
@@ -300,6 +344,16 @@
 										<h:outputText
 											value="#{row.tipoServicio.nombre} - #{row.descripcionServicio}" />
 									</rich:column>
+									<rich:column style="text-align:left;width: 75%;">
+										<f:facet name="header">
+											<h:panelGrid cellpadding="0" cellspacing="0" border="0"
+												style="width:100%; text-align:center;">
+												<h:outputText value="Proveedor" />
+											</h:panelGrid>
+										</f:facet>
+										<h:outputText
+											value="#{row.servicioProveedor.proveedor.nombres}" />
+									</rich:column>
 									<rich:column style="text-align:right;width: 10%;">
 										<f:facet name="header">
 											<h:panelGrid cellpadding="0" cellspacing="0" border="0"
@@ -308,7 +362,7 @@
 											</h:panelGrid>
 										</f:facet>
 										<h:outputText value="#{row.precioUnitario}">
-											<f:convertNumber pattern="###,##0.00" />
+											<f:convertNumber pattern="###,##0.00" locale="en_US" />
 										</h:outputText>
 									</rich:column>
 									<rich:column style="text-align:right;width: 10%;">
@@ -319,7 +373,7 @@
 											</h:panelGrid>
 										</f:facet>
 										<h:outputText value="#{row.totalServicio}">
-											<f:convertNumber pattern="###,##0.00" />
+											<f:convertNumber pattern="###,##0.00" locale="en_US" />
 										</h:outputText>
 									</rich:column>
 									<rich:column style="text-align:center;width: 1%;">
@@ -336,12 +390,20 @@
 								<h:panelGrid columns="2" cellpadding="0" cellspacing="0"
 									border="0" style="width:100%;" id="idTotalesServicios"
 									columnClasses="col1RSPN,col2RSPN">
-									<h:outputText value="" />
-									<h:outputText value="" />
+									<h:outputText value="Total Comision" />
+									<h:outputText
+										value="#{servicioAgenteMBean.servicioAgencia.montoTotalComision}">
+										<f:convertNumber pattern="###,##0.00" locale="en_US" />
+									</h:outputText>
+									<h:outputText value="Total Fee" />
+									<h:outputText
+										value="#{servicioAgenteMBean.servicioAgencia.montoTotalFee}">
+										<f:convertNumber pattern="###,##0.00" locale="en_US" />
+									</h:outputText>
 									<h:outputText value="Total Servicios" />
 									<h:outputText
 										value="#{servicioAgenteMBean.servicioAgencia.montoTotalServicios}">
-										<f:convertNumber pattern="###,##0.00" />
+										<f:convertNumber pattern="###,##0.00" locale="en_US" />
 									</h:outputText>
 								</h:panelGrid>
 							</h:panelGrid>

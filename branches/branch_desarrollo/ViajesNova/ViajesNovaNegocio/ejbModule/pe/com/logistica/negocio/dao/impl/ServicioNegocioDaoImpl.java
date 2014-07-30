@@ -61,6 +61,9 @@ public class ServicioNegocioDaoImpl implements ServicioNegocioDao {
 				if (cs != null){
 					cs.close();
 				}
+				if (conn != null){
+					conn.close();
+				}
 			} catch (SQLException e) {
 				throw new SQLException(e);
 			}
@@ -74,7 +77,7 @@ public class ServicioNegocioDaoImpl implements ServicioNegocioDao {
 		Connection conn = null;
 		CallableStatement cs = null;
 		ResultSet rs = null;
-		String sql = "{ ? = call negocio.fn_calcularcuota(?,?,?) }";
+		String sql = "{ ? = call negocio.fn_proveedorxservicio(?) }";
 		
 		try {
 			conn = UtilConexion.obtenerConexion();
@@ -89,6 +92,7 @@ public class ServicioNegocioDaoImpl implements ServicioNegocioDao {
 			ServicioProveedor servicio2 = null;
 			while(rs.next()){
 				servicio2 = new ServicioProveedor();
+				servicio2.setCodigoEntero(UtilJdbc.obtenerNumero(rs, "id"));
 				servicio2.setNombreProveedor(UtilJdbc.obtenerCadena(rs, "nombres"));
 				servicio2.setPorcentajeComision(UtilJdbc.obtenerBigDecimal(rs, "porcencomision"));
 				servicio2.setPorcentajeFee(UtilJdbc.obtenerBigDecimal(rs, "porcenfee"));
@@ -98,8 +102,14 @@ public class ServicioNegocioDaoImpl implements ServicioNegocioDao {
 			throw new SQLException(e);
 		} finally{
 			try {
+				if (rs != null){
+					rs.close();
+				}
 				if (cs != null){
 					cs.close();
+				}
+				if (conn != null){
+					conn.close();
 				}
 			} catch (SQLException e) {
 				throw new SQLException(e);

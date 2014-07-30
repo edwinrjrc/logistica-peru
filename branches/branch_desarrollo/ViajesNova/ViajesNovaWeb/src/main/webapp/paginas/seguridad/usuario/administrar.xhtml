@@ -65,6 +65,13 @@
 									</f:facet>
 									<h:outputText value="#{row.apellidoMaterno}" />
 								</rich:column>
+								
+								<rich:column>
+									<f:facet name="header">
+										<h:outputText value="Vendedor" />
+									</f:facet>
+									<h:outputText value="#{row.vendedor?'SI':'NO'}" />
+								</rich:column>
 
 								<rich:column>
 									<f:facet name="header">
