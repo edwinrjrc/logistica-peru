@@ -19,4 +19,5 @@ public interface SeguridadLocal {
 	Usuario inicioSesion(Usuario usuario) throws SQLException, Exception;
 	boolean cambiarClaveUsuario(Usuario usuario) throws SQLException, Exception;
 	boolean actualizarClaveUsuario(Usuario usuario) throws SQLException, Exception;
+	public List<Usuario> listarVendedores() throws SQLException;
 }

@@ -13,6 +13,7 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.servlet.ServletContext;
 
+import pe.com.logistica.bean.base.BaseVO;
 import pe.com.logistica.bean.negocio.Cliente;
 import pe.com.logistica.bean.negocio.Contacto;
 import pe.com.logistica.bean.negocio.CronogramaPago;
@@ -22,6 +23,7 @@ import pe.com.logistica.bean.negocio.ProgramaNovios;
 import pe.com.logistica.bean.negocio.Proveedor;
 import pe.com.logistica.bean.negocio.ServicioAgencia;
 import pe.com.logistica.bean.negocio.ServicioNovios;
+import pe.com.logistica.bean.negocio.ServicioProveedor;
 import pe.com.logistica.negocio.ejb.NegocioSessionRemote;
 import pe.com.logistica.negocio.exception.ErrorRegistroDataException;
 import pe.com.logistica.negocio.exception.ResultadoCeroDaoException;
@@ -185,6 +187,13 @@ public class NegocioServicioImpl implements NegocioServicio {
 	public List<Cliente> consultarCliente2(Cliente cliente)
 			throws SQLException, Exception {
 		return ejbSession.consultarCliente2(cliente);
+	}
+	
+	@Override
+	public List<ServicioProveedor> proveedoresXServicio(int idServicio) throws SQLException, Exception{
+		BaseVO servicio = new BaseVO(idServicio);
+		
+		return ejbSession.proveedoresXServicio(servicio);
 	}
 }
 	

@@ -56,9 +56,10 @@
 				<h:outputLabel value="Re Clave"
 					rendered="#{usuarioMBean.nuevoUsuario}"
 					style="width: 100px; text-align:left" />
-				<h:panelGrid columns="1" cellpadding="0" cellspacing="0" border="0" rendered="#{usuarioMBean.nuevoUsuario}">
+				<h:panelGrid columns="1" cellpadding="0" cellspacing="0" border="0"
+					rendered="#{usuarioMBean.nuevoUsuario}">
 					<h:inputSecret id="idReClave" value="#{usuarioMBean.reCredencial}"
-						 maxlength="10" />
+						maxlength="10" />
 					<rich:message for="idReClave" showDetail="false" showSummary="true"
 						ajaxRendered="true" />
 				</h:panelGrid>
@@ -100,13 +101,24 @@
 				</h:panelGrid>
 				<h:outputLabel value="Fecha Nacimiento"
 					style="width: 100px; text-align:left" />
-				<h:panelGrid columns="1" border="0" cellpadding="0" cellspacing="0">
+				<h:panelGrid columns="1" border="0" cellpadding="0" cellspacing="0"
+					rendered="#{usuarioMBean.nuevoUsuario}">
 					<rich:calendar id="idfecnacimiento" datePattern="dd/MM/yyyy"
 						value="#{usuarioMBean.usuario.fechaNacimiento}" required="true"
 						requiredMessage="Ingrese la fecha nacimiento" />
 					<rich:message for="idfecnacimiento" showDetail="true"
 						showSummary="false" ajaxRendered="true" />
 				</h:panelGrid>
+				<h:outputText value="#{usuarioMBean.usuario.fechaNacimiento}"
+					rendered="#{usuarioMBean.editarUsuario}">
+					<f:convertDateTime pattern="dd/MM/yyyy" />
+				</h:outputText>
+
+				<h:outputLabel value="Vendedor" />
+				<h:selectBooleanCheckbox value="#{usuarioMBean.usuario.vendedor}"
+					rendered="#{usuarioMBean.nuevoUsuario}" />
+				<h:outputText value="#{usuarioMBean.usuario.vendedor?'SI':'NO'}"
+					rendered="#{usuarioMBean.editarUsuario}" />
 
 				<f:facet name="footer">
 					<h:panelGrid border="0" cellpadding="0" cellspacing="0"

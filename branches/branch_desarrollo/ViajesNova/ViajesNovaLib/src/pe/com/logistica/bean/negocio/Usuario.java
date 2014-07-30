@@ -22,6 +22,7 @@ public class Usuario extends Persona {
 	private String credencialNueva;
 	private BaseVO rol;
 	private boolean encontrado;
+	private boolean vendedor;
 	
 	/**
 	 * 
@@ -104,6 +105,20 @@ public class Usuario extends Persona {
 	 */
 	public void setCredencialNueva(String credencialNueva) {
 		this.credencialNueva = credencialNueva;
+	}
+
+	/**
+	 * @return the vendedor
+	 */
+	public boolean isVendedor() {
+		return vendedor;
+	}
+
+	/**
+	 * @param vendedor the vendedor to set
+	 */
+	public void setVendedor(boolean vendedor) {
+		this.vendedor = vendedor;
 	}
 
 }

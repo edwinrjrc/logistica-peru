@@ -18,6 +18,7 @@ public class ServicioProveedor extends BaseNegocio {
 	private BigDecimal porcentajeComision;
 	private BigDecimal porcentajeFee;
 	private String nombreProveedor;
+	private Proveedor proveedor;
 	
 	/**
 	 * 
@@ -88,6 +89,23 @@ public class ServicioProveedor extends BaseNegocio {
 	 */
 	public void setNombreProveedor(String nombreProveedor) {
 		this.nombreProveedor = nombreProveedor;
+	}
+
+	/**
+	 * @return the proveedor
+	 */
+	public Proveedor getProveedor() {
+		if (proveedor == null){
+			proveedor = new Proveedor();
+		}
+		return proveedor;
+	}
+
+	/**
+	 * @param proveedor the proveedor to set
+	 */
+	public void setProveedor(Proveedor proveedor) {
+		this.proveedor = proveedor;
 	}
 
 }
