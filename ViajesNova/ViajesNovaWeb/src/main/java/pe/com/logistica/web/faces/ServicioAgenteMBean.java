@@ -421,9 +421,9 @@ public class ServicioAgenteMBean extends BaseMBean{
 			
 			this.setShowModal(false);
 		} catch (SQLException e) {
-			//e.printStackTrace();
+			e.printStackTrace();
 		} catch (Exception e) {
-			//e.printStackTrace();
+			e.printStackTrace();
 		}
 		return listadoServicioAgencia;
 	}
