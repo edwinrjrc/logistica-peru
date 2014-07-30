@@ -550,6 +550,9 @@ public class ServicioNovaViajesDaoImpl implements ServicioNovaViajesDao {
 			throw new SQLException(e);
 		} finally {
 			try {
+				if (rs != null) {
+					rs.close();
+				}
 				if (cs != null) {
 					cs.close();
 				}
@@ -610,16 +613,20 @@ public class ServicioNovaViajesDaoImpl implements ServicioNovaViajesDao {
 			while (rs.next()){
 				servicioAgencia2 = new ServicioAgencia();
 				servicioAgencia2.setCodigoEntero(UtilJdbc.obtenerNumero(rs, "id"));
-				servicioAgencia2.getCliente().setCodigoEntero(UtilJdbc.obtenerNumero(rs, "idcliente"));
-				servicioAgencia2.getCliente().setNombres(UtilJdbc.obtenerCadena(rs, "nombres"));
-				servicioAgencia2.getCliente().setApellidoPaterno(UtilJdbc.obtenerCadena(rs, "apellidopaterno"));
-				servicioAgencia2.getCliente().setApellidoMaterno(UtilJdbc.obtenerCadena(rs, "apellidomaterno"));
+				servicioAgencia2.getCliente().setCodigoEntero(UtilJdbc.obtenerNumero(rs, "idcliente1"));
+				servicioAgencia2.getCliente().setNombres(UtilJdbc.obtenerCadena(rs, "nombres1"));
+				servicioAgencia2.getCliente().setApellidoPaterno(UtilJdbc.obtenerCadena(rs, "apellidopaterno1"));
+				servicioAgencia2.getCliente().setApellidoMaterno(UtilJdbc.obtenerCadena(rs, "apellidomaterno1"));
+				servicioAgencia2.getCliente2().setCodigoEntero(UtilJdbc.obtenerNumero(rs, "idcliente2"));
+				servicioAgencia2.getCliente2().setNombres(UtilJdbc.obtenerCadena(rs, "nombres2"));
+				servicioAgencia2.getCliente2().setApellidoPaterno(UtilJdbc.obtenerCadena(rs, "apellidopaterno2"));
+				servicioAgencia2.getCliente2().setApellidoMaterno(UtilJdbc.obtenerCadena(rs, "apellidomaterno2"));
 				servicioAgencia2.setFechaServicio(UtilJdbc.obtenerFecha(rs, "fechaservicio"));
 				servicioAgencia2.setMontoTotalServicios(UtilJdbc.obtenerBigDecimal(rs, "montototal"));
 				servicioAgencia2.setCantidadServicios(UtilJdbc.obtenerNumero(rs, "cantidadservicios"));
 				servicioAgencia2.getDestino().setCodigoEntero(UtilJdbc.obtenerNumero(rs, "iddestino"));
 				servicioAgencia2.getDestino().setNombre(UtilJdbc.obtenerCadena(rs, "descdestino"));
-				servicioAgencia2.getFormaPago().setCodigoEntero(UtilJdbc.obtenerNumero(rs, "idmediopago"));
+				servicioAgencia2.getFormaPago().setCodigoEntero(UtilJdbc.obtenerNumero(rs, "idformapago"));
 				servicioAgencia2.getFormaPago().setNombre(UtilJdbc.obtenerCadena(rs, "nommediopago"));
 				servicioAgencia2.getEstadoPago().setCodigoEntero(UtilJdbc.obtenerNumero(rs, "idestadopago"));
 				servicioAgencia2.getEstadoPago().setNombre(UtilJdbc.obtenerCadena(rs, "nomestpago"));
@@ -630,6 +637,9 @@ public class ServicioNovaViajesDaoImpl implements ServicioNovaViajesDao {
 			throw new SQLException(e);
 		} finally {
 			try {
+				if (rs != null) {
+					rs.close();
+				}
 				if (cs != null) {
 					cs.close();
 				}
