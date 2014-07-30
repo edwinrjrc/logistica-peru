@@ -34,7 +34,7 @@ public class UsuarioDaoImpl implements UsuarioDao{
 		boolean resultado = false;
 		Connection conn = null;
 		CallableStatement cs = null;
-		String sql = "{? = call seguridad.fn_ingresarusuario(?,?,?,?,?,?,?)}";
+		String sql = "{? = call seguridad.fn_ingresarusuario(?,?,?,?,?,?,?,?)}";
 		
 		try {
 			conn = UtilConexion.obtenerConexion();
@@ -48,6 +48,7 @@ public class UsuarioDaoImpl implements UsuarioDao{
 			cs.setString(i++, UtilJdbc.convertirMayuscula(usuario.getApellidoPaterno()));
 			cs.setString(i++, UtilJdbc.convertirMayuscula(usuario.getApellidoMaterno()));
 			cs.setDate(i++, UtilJdbc.convertirUtilDateSQLDate(usuario.getFechaNacimiento()));
+			cs.setBoolean(i++, usuario.isVendedor());
 			cs.execute();
 			
 			resultado = cs.getBoolean(1);
@@ -96,9 +97,7 @@ public class UsuarioDaoImpl implements UsuarioDao{
 			cs.setString(i++, UtilJdbc.convertirMayuscula(usuario.getApellidoPaterno()));
 			cs.setString(i++, UtilJdbc.convertirMayuscula(usuario.getApellidoMaterno()));
 			
-			boolean resul = cs.execute();
-			
-			System.out.println("resultado execute ::"+resul);
+			cs.execute();
 			
 			resultado = cs.getBoolean(1);
 		} catch (SQLException e) {
@@ -152,6 +151,8 @@ public class UsuarioDaoImpl implements UsuarioDao{
 				usuario.setNombres(UtilJdbc.obtenerCadena(rs,"nombres"));
 				usuario.setApellidoPaterno(UtilJdbc.obtenerCadena(rs,"apepaterno"));
 				usuario.setApellidoMaterno(UtilJdbc.obtenerCadena(rs,"apematerno"));
+				usuario.setVendedor(UtilJdbc.obtenerBoolean(rs, "vendedor"));
+				usuario.setFechaNacimiento(UtilJdbc.obtenerFecha(rs, "fecnacimiento"));
 				resultado.add(usuario);
 			}
 		} catch (SQLException e) {
@@ -189,7 +190,8 @@ public class UsuarioDaoImpl implements UsuarioDao{
 		Connection conn = null;
 		CallableStatement cs = null;
 		ResultSet rs = null;
-		String sql = "select id, usuario, credencial, id_rol, nombre, nombres, apepaterno, apematerno" +
+		String sql = "select id, usuario, credencial, id_rol, nombre, nombres, apepaterno, " +
+				"apematerno, fecnacimiento, vendedor" +
 				" from seguridad.vw_listarusuarios where id = ?";
 
 		try {
@@ -208,6 +210,8 @@ public class UsuarioDaoImpl implements UsuarioDao{
 				resultado.setNombres(UtilJdbc.obtenerCadena(rs,"nombres"));
 				resultado.setApellidoPaterno(UtilJdbc.obtenerCadena(rs,"apepaterno"));
 				resultado.setApellidoMaterno(UtilJdbc.obtenerCadena(rs,"apematerno"));
+				resultado.setFechaNacimiento(UtilJdbc.obtenerFecha(rs, "fecnacimiento"));
+				resultado.setVendedor(UtilJdbc.obtenerBoolean(rs, "vendedor"));
 			}
 		} catch (SQLException e) {
 			resultado = null;
@@ -423,6 +427,63 @@ public class UsuarioDaoImpl implements UsuarioDao{
 			}
 		}
 		
+		
+		return resultado;
+	}
+	
+	@Override
+	public List<Usuario> listarVendedores() throws SQLException {
+		List<Usuario> resultado = null;
+		Connection conn = null;
+		CallableStatement cs = null;
+		ResultSet rs = null;
+		String sql = "{? = call seguridad.fn_listarvendedores()}";
+		
+		try {
+			conn = UtilConexion.obtenerConexion();
+			cs = conn.prepareCall(sql);
+			int i=1;
+			cs.registerOutParameter(i++, Types.OTHER);
+			cs.execute();
+			
+			rs = (ResultSet)cs.getObject(1);
+			Usuario usuario = null;
+			resultado = new ArrayList<Usuario>();
+			while(rs.next()){
+				usuario = new Usuario();
+				usuario.setCodigoEntero(rs.getInt("id"));
+				usuario.setUsuario(UtilJdbc.obtenerCadena(rs, "usuario"));
+				usuario.setNombres(UtilJdbc.obtenerCadena(rs,"nombres"));
+				usuario.setApellidoPaterno(UtilJdbc.obtenerCadena(rs,"apepaterno"));
+				usuario.setApellidoMaterno(UtilJdbc.obtenerCadena(rs,"apematerno"));
+				usuario.setVendedor(UtilJdbc.obtenerBoolean(rs, "vendedor"));
+				usuario.setFechaNacimiento(UtilJdbc.obtenerFecha(rs, "fecnacimiento"));
+				resultado.add(usuario);
+			}
+		} catch (SQLException e) {
+			throw new SQLException(e);
+		} finally{
+			try {
+				if (rs != null){
+					rs.close();
+				}
+				if (cs != null){
+					cs.close();
+				}
+				if (conn != null){
+					conn.close();
+				}
+			} catch (SQLException e) {
+				try {
+					if (conn != null){
+						conn.close();
+					}
+					throw new SQLException(e);
+				} catch (SQLException e1) {
+					throw new SQLException(e);
+				}
+			}
+		}
 		
 		return resultado;
 	}

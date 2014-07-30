@@ -45,6 +45,12 @@ public class UtilJdbc {
 		}
 		return BigDecimal.ZERO;
 	}
+	public static boolean obtenerBoolean(ResultSet rs, String campo) throws SQLException {
+		if (rs != null && StringUtils.isNotBlank(campo)) {
+			return rs.getBoolean(campo);
+		}
+		return false;
+	}
 	
 	public static boolean convertirBooleanSiNo(ResultSet rs, String campo) throws SQLException{
 		String dato = obtenerCadena(rs, campo);

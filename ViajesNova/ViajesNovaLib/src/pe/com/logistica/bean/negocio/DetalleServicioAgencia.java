@@ -30,6 +30,9 @@ public class DetalleServicioAgencia extends BaseNegocio {
 	private Date fechaRegreso;
 	private int cantidad;
 	private BigDecimal precioUnitario;
+	private BigDecimal montoComision;
+	private BigDecimal montoFee;
+	private ServicioProveedor servicioProveedor;
 
 	/**
 	 * 
@@ -188,6 +191,51 @@ public class DetalleServicioAgencia extends BaseNegocio {
 	 */
 	public void setFechaServicio(Date fechaServicio) {
 		this.fechaServicio = fechaServicio;
+	}
+
+	/**
+	 * @return the servicioProveedor
+	 */
+	public ServicioProveedor getServicioProveedor() {
+		if (servicioProveedor == null){
+			servicioProveedor = new ServicioProveedor();
+		}
+		return servicioProveedor;
+	}
+
+	/**
+	 * @param servicioProveedor the servicioProveedor to set
+	 */
+	public void setServicioProveedor(ServicioProveedor servicioProveedor) {
+		this.servicioProveedor = servicioProveedor;
+	}
+
+	/**
+	 * @return the montoComision
+	 */
+	public BigDecimal getMontoComision() {
+		return montoComision;
+	}
+
+	/**
+	 * @param montoComision the montoComision to set
+	 */
+	public void setMontoComision(BigDecimal montoComision) {
+		this.montoComision = montoComision;
+	}
+
+	/**
+	 * @return the montoFee
+	 */
+	public BigDecimal getMontoFee() {
+		return montoFee;
+	}
+
+	/**
+	 * @param montoFee the montoFee to set
+	 */
+	public void setMontoFee(BigDecimal montoFee) {
+		this.montoFee = montoFee;
 	}
 
 }

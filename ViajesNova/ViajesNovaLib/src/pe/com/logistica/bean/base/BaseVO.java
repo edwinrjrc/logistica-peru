@@ -22,6 +22,14 @@ public class BaseVO extends Base {
 	public BaseVO() {
 		// TODO Auto-generated constructor stub
 	}
+	
+	public BaseVO(int id) {
+		this.setCodigoEntero(id);
+	}
+	
+	public BaseVO(String id) {
+		this.setCodigoCadena(id);
+	}
 
 	/**
 	 * @return the nombre

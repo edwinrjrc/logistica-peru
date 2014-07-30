@@ -16,6 +16,7 @@ import pe.com.logistica.bean.negocio.ProgramaNovios;
 import pe.com.logistica.bean.negocio.Proveedor;
 import pe.com.logistica.bean.negocio.ServicioAgencia;
 import pe.com.logistica.bean.negocio.ServicioNovios;
+import pe.com.logistica.bean.negocio.ServicioProveedor;
 import pe.com.logistica.negocio.exception.ErrorRegistroDataException;
 import pe.com.logistica.negocio.exception.ResultadoCeroDaoException;
 
@@ -87,4 +88,7 @@ public interface NegocioServicio {
 			throws SQLException, Exception;
 	
 	List<Cliente> consultarCliente2(Cliente cliente) throws SQLException, Exception;
+
+	List<ServicioProveedor> proveedoresXServicio(int idServicio)
+			throws SQLException, Exception;
 }

@@ -17,6 +17,7 @@ import javax.servlet.ServletContext;
 
 import pe.com.logistica.bean.base.BaseVO;
 import pe.com.logistica.bean.negocio.Destino;
+import pe.com.logistica.bean.negocio.Usuario;
 import pe.com.logistica.web.servicio.SeguridadServicio;
 import pe.com.logistica.web.servicio.SoporteServicio;
 import pe.com.logistica.web.servicio.impl.SeguridadServicioImpl;
@@ -50,6 +51,7 @@ public class CatalogoMBean implements Serializable{
 	private List<SelectItem> catalogoDestino;
 	private List<SelectItem> catalogoTipoServicio;
 	private List<SelectItem> catalogoFormaPago;
+	private List<SelectItem> catalogoVendedores;
 
 	private SeguridadServicio seguridadServicio;
 	private SoporteServicio soporteServicio;
@@ -395,6 +397,39 @@ public class CatalogoMBean implements Serializable{
 	 */
 	public void setCatalogoFormaPago(List<SelectItem> catalogoFormaPago) {
 		this.catalogoFormaPago = catalogoFormaPago;
+	}
+
+	/**
+	 * @return the catalogoVendedores
+	 */
+	public List<SelectItem> getCatalogoVendedores() {
+		try {
+			catalogoVendedores = new ArrayList<SelectItem>();
+			List<Usuario> listaVendedores = this.seguridadServicio.listarVendedores();
+			SelectItem si = null;
+			for (Usuario usuario : listaVendedores) {
+				si = new SelectItem();
+				si.setValue(usuario.getCodigoEntero());
+				String descripcionCompleto = usuario.getNombreCompleto();
+				si.setLabel(descripcionCompleto);
+				catalogoVendedores.add(si);
+			}
+
+		} catch (SQLException e) {
+			catalogoVendedores = new ArrayList<SelectItem>();
+			e.printStackTrace();
+		} catch (Exception e) {
+			catalogoVendedores = new ArrayList<SelectItem>();
+			e.printStackTrace();
+		}
+		return catalogoVendedores;
+	}
+
+	/**
+	 * @param catalogoVendedores the catalogoVendedores to set
+	 */
+	public void setCatalogoVendedores(List<SelectItem> catalogoVendedores) {
+		this.catalogoVendedores = catalogoVendedores;
 	}
 
 }

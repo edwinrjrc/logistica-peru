@@ -82,4 +82,10 @@ public class SeguridadSession implements SeguridadRemote, SeguridadLocal {
 				
     	return usuarioDao.actualizarClaveUsuario(usuario);
 	}
+	
+	@Override
+	public List<Usuario> listarVendedores() throws SQLException {
+		usuarioDao = new UsuarioDaoImpl();
+		return usuarioDao.listarVendedores();
+	}
 }
