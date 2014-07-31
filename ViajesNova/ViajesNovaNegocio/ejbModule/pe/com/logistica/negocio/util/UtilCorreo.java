@@ -3,17 +3,25 @@
  */
 package pe.com.logistica.negocio.util;
 
+import java.io.IOException;
 import java.io.InputStream;
+import java.util.Date;
 import java.util.Properties;
 
+import javax.activation.DataHandler;
 import javax.mail.Message;
 import javax.mail.MessagingException;
+import javax.mail.Multipart;
 import javax.mail.NoSuchProviderException;
 import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
+import javax.mail.internet.MimeMultipart;
+
+import org.apache.commons.io.IOUtils;
 
 import pe.com.logistica.bean.Util.UtilProperties;
 
@@ -73,13 +81,30 @@ public class UtilCorreo {
 			message.setFrom(new InternetAddress((String) properties.get("mail.smtp.mail.sender")));
 			message.addRecipient(Message.RecipientType.TO, new InternetAddress(correoDestino));
 			message.setSubject(asunto);
-			message.setText(mensaje);
+			message.setSentDate(new Date());
+			
+			MimeBodyPart messageBodyPart = new MimeBodyPart();
+	        messageBodyPart.setContent(mensaje, "text/html");
+	 
+	        // creates multi-part
+	        Multipart multipart = new MimeMultipart();
+	        multipart.addBodyPart(messageBodyPart);
+	        
+	        MimeBodyPart attachPart = new MimeBodyPart();
+	        
+	        byte[] data = IOUtils.toByteArray(archivoAdjunto);
+	        
+	        attachPart.setDataHandler(new DataHandler(data,"application/octet-stream"));
+            multipart.addBodyPart(attachPart);
+			
+	        message.setContent(multipart);
 			Transport t = session.getTransport("smtp");
 			t.connect((String) properties.get("mail.smtp.user"), (String) properties.get("mail.smtp.password"));
 			t.sendMessage(message, message.getAllRecipients());
 			t.close();
 			
-			
+		} catch (IOException ex) {
+            ex.printStackTrace();
 		} catch (AddressException e) {
 			e.printStackTrace();
 		} catch (NoSuchProviderException e) {
