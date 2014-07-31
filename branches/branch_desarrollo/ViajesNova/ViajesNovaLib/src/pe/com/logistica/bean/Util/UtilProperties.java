@@ -16,8 +16,8 @@ import java.util.Properties;
 public class UtilProperties {
 	
 	public static Properties cargaArchivo(String archivoProperties){
-		String c = "C:\\aplicaciones\\"+archivoProperties;
-		String d = "D:\\aplicaciones\\"+archivoProperties;
+		String c = "C:\\aplicacion\\"+archivoProperties;
+		String d = "D:\\aplicacion\\"+archivoProperties;
 		File fc = new File(c);
 		
 		Properties prop = new Properties();
