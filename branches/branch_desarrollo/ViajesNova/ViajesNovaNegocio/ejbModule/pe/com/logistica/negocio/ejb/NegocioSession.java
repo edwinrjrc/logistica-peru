@@ -14,8 +14,10 @@ import org.apache.commons.lang3.StringUtils;
 
 import pe.com.logistica.bean.Util.UtilParse;
 import pe.com.logistica.bean.base.BaseVO;
+import pe.com.logistica.bean.base.CorreoElectronico;
 import pe.com.logistica.bean.negocio.Cliente;
 import pe.com.logistica.bean.negocio.Contacto;
+import pe.com.logistica.bean.negocio.CorreoMasivo;
 import pe.com.logistica.bean.negocio.CronogramaPago;
 import pe.com.logistica.bean.negocio.DetalleServicioAgencia;
 import pe.com.logistica.bean.negocio.Direccion;
@@ -52,6 +54,7 @@ import pe.com.logistica.negocio.dao.impl.UbigeoDaoImpl;
 import pe.com.logistica.negocio.exception.ErrorRegistroDataException;
 import pe.com.logistica.negocio.exception.ResultadoCeroDaoException;
 import pe.com.logistica.negocio.util.UtilConexion;
+import pe.com.logistica.negocio.util.UtilCorreo;
 import pe.com.logistica.negocio.util.UtilDatos;
 import pe.com.logistica.negocio.util.UtilJdbc;
 
@@ -311,10 +314,8 @@ public class NegocioSession implements NegocioSessionRemote,
 
 			return true;
 		} catch (ResultadoCeroDaoException e) {
-			conexion.rollback();
 			throw new ResultadoCeroDaoException(e.getMensajeError(), e);
 		} catch (SQLException e) {
-			conexion.rollback();
 			throw new SQLException(e);
 		} finally {
 			if (conexion != null) {
@@ -498,10 +499,8 @@ public class NegocioSession implements NegocioSessionRemote,
 
 			return true;
 		} catch (ResultadoCeroDaoException e) {
-			conexion.rollback();
 			throw new ResultadoCeroDaoException(e.getMensajeError(), e);
 		} catch (SQLException e) {
-			conexion.rollback();
 			throw new SQLException(e);
 		} finally {
 			if (conexion != null) {
@@ -600,10 +599,8 @@ public class NegocioSession implements NegocioSessionRemote,
 
 			return true;
 		} catch (ResultadoCeroDaoException e) {
-			conexion.rollback();
 			throw new ResultadoCeroDaoException(e.getMensajeError(), e);
 		} catch (SQLException e) {
-			conexion.rollback();
 			throw new SQLException(e);
 		} finally {
 			if (conexion != null) {
@@ -884,8 +881,20 @@ public class NegocioSession implements NegocioSessionRemote,
 		return servicioNovaViajesDao.consultarServiciosVenta(servicioAgencia);
 	}
 	
-	public void enviarCorreoMasivo(List<Cliente> listaClientes){
-		
+	public void enviarCorreoMasivo(CorreoMasivo correoMasivo){
+		UtilCorreo utilCorreo = new UtilCorreo();
+		for (Cliente cliente : correoMasivo.getListaClientes()) {
+			for(Contacto contacto : cliente.getListaContactos()){
+				for (CorreoElectronico correo : contacto.getListaCorreos()){
+					if (correoMasivo.getArchivoAdjunto() == null){
+						utilCorreo.enviarCorreo(correo.getDireccion(), correoMasivo.getAsunto(), correoMasivo.getContenidoCorreo());
+					}
+					else{
+						utilCorreo.enviarCorreo(correo.getDireccion(), correoMasivo.getAsunto(), correoMasivo.getContenidoCorreo(), correoMasivo.getArchivoAdjunto());
+					}
+				}
+			}
+		}
 	}
 	
 	@Override
