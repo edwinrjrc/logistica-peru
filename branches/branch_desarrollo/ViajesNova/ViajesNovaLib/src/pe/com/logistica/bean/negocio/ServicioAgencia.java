@@ -396,6 +396,9 @@ public class ServicioAgencia extends BaseNegocio{
 	 * @return the vendedor
 	 */
 	public BaseVO getVendedor() {
+		if (vendedor == null){
+			vendedor = new BaseVO();
+		}
 		return vendedor;
 	}
 
