@@ -61,6 +61,7 @@ public class ServicioAgenteMBean extends BaseMBean{
 	
 	public boolean nuevaVenta;
 	public boolean editarVenta;
+	private boolean servicioCompleto;
 
 	private ParametroServicio parametroServicio;
 	private NegocioServicio negocioServicio;
@@ -250,7 +251,6 @@ public class ServicioAgenteMBean extends BaseMBean{
 			for (DetalleServicioAgencia detalleServicio : this.getListadoDetalleServicio()){
 				montoTotal = montoTotal.add(detalleServicio.getTotalServicio());
 				montoComision = montoComision.add(detalleServicio.getMontoComision());
-				montoFee = montoFee.add(detalleServicio.getMontoFee());
 			}
 
 		} catch (Exception e){
@@ -384,14 +384,12 @@ public class ServicioAgenteMBean extends BaseMBean{
 				for (ServicioProveedor servicioProveedor: this.listaProveedores){
 					if (servicioProveedor.getCodigoEntero().intValue() == UtilWeb.convertirCadenaEntero(valor)){
 						this.getDetalleServicio().getServicioProveedor().setPorcentajeComision(servicioProveedor.getPorcentajeComision());
-						this.getDetalleServicio().getServicioProveedor().setPorcentajeFee(servicioProveedor.getPorcentajeFee());
 						break;
 					}
 				}
 			}
 		} catch (Exception e1) {
 			this.getDetalleServicio().getServicioProveedor().setPorcentajeComision(BigDecimal.ZERO);
-			this.getDetalleServicio().getServicioProveedor().setPorcentajeFee(BigDecimal.ZERO);
 		}
 	}
 
@@ -574,6 +572,20 @@ public class ServicioAgenteMBean extends BaseMBean{
 	 */
 	public void setListaProveedores(List<ServicioProveedor> listaProveedores) {
 		this.listaProveedores = listaProveedores;
+	}
+
+	/**
+	 * @return the servicioCompleto
+	 */
+	public boolean isServicioCompleto() {
+		return servicioCompleto;
+	}
+
+	/**
+	 * @param servicioCompleto the servicioCompleto to set
+	 */
+	public void setServicioCompleto(boolean servicioCompleto) {
+		this.servicioCompleto = servicioCompleto;
 	}
 
 }

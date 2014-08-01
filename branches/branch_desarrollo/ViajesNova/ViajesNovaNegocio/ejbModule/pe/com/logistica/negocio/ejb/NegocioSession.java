@@ -766,17 +766,12 @@ public class NegocioSession implements NegocioSessionRemote,
 		detalleServicio.setTipoServicio((BaseVO) maestroDao
 				.consultarHijoMaestro(hijoMaestro));
 		BigDecimal comision = BigDecimal.ZERO;
-		BigDecimal fee = BigDecimal.ZERO;
 		
 		BigDecimal totalVenta = detalleServicio.getPrecioUnitario().multiply(UtilParse.parseIntABigDecimal(detalleServicio.getCantidad())); 
 		comision = detalleServicio.getServicioProveedor().getPorcentajeComision().multiply(totalVenta);
 		comision = comision.divide(BigDecimal.valueOf(100.0));
 		
-		fee = detalleServicio.getServicioProveedor().getPorcentajeFee().multiply(totalVenta);
-		fee = fee.divide(BigDecimal.valueOf(100.0));
-		
 		detalleServicio.setMontoComision(comision);
-		detalleServicio.setMontoFee(fee);
 		
 		Proveedor proveedor = consultarProveedor(detalleServicio.getServicioProveedor().getProveedor().getCodigoEntero().intValue());
 		detalleServicio.getServicioProveedor().setProveedor(proveedor);
