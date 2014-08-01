@@ -763,18 +763,38 @@ public class NegocioSession implements NegocioSessionRemote,
 		Maestro hijoMaestro = new Maestro();
 		hijoMaestro.setCodigoMaestro(12);
 		hijoMaestro.setCodigoEntero(idTipoServicio);
-		detalleServicio.setTipoServicio((BaseVO) maestroDao
-				.consultarHijoMaestro(hijoMaestro));
-		BigDecimal comision = BigDecimal.ZERO;
 		
-		BigDecimal totalVenta = detalleServicio.getPrecioUnitario().multiply(UtilParse.parseIntABigDecimal(detalleServicio.getCantidad())); 
-		comision = detalleServicio.getServicioProveedor().getPorcentajeComision().multiply(totalVenta);
-		comision = comision.divide(BigDecimal.valueOf(100.0));
+		Maestro consultaMaestro = maestroDao
+				.consultarHijoMaestro(hijoMaestro);
+		
+		detalleServicio.setTipoServicio((BaseVO) consultaMaestro);
+		BigDecimal comision = BigDecimal.ZERO;
+		BigDecimal totalVenta = BigDecimal.ZERO;
+		
+		if (StringUtils.isBlank(detalleServicio.getDescripcionServicio())){
+			detalleServicio.setDescripcionServicio(consultaMaestro.getDescripcion());
+		}
+		
+		if (detalleServicio.getCantidad() == 0){
+			detalleServicio.setCantidad(1);
+		}
+		
+		if (detalleServicio.getPrecioUnitario()!= null){
+			BigDecimal total = detalleServicio.getPrecioUnitario().multiply(UtilParse.parseIntABigDecimal(detalleServicio.getCantidad())); 
+			totalVenta = totalVenta.add(total);
+		}
+		
+		if (detalleServicio.getServicioProveedor().getPorcentajeComision()!=null){
+			comision = detalleServicio.getServicioProveedor().getPorcentajeComision().multiply(totalVenta);
+			comision = comision.divide(BigDecimal.valueOf(100.0));
+		}
+				
+		if (detalleServicio.getServicioProveedor().getProveedor().getCodigoEntero() != null ){
+			Proveedor proveedor = consultarProveedor(detalleServicio.getServicioProveedor().getProveedor().getCodigoEntero().intValue());
+			detalleServicio.getServicioProveedor().setProveedor(proveedor);
+		}
 		
 		detalleServicio.setMontoComision(comision);
-		
-		Proveedor proveedor = consultarProveedor(detalleServicio.getServicioProveedor().getProveedor().getCodigoEntero().intValue());
-		detalleServicio.getServicioProveedor().setProveedor(proveedor);
 
 		return detalleServicio;
 	}
