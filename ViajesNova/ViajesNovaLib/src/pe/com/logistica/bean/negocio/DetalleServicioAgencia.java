@@ -31,7 +31,6 @@ public class DetalleServicioAgencia extends BaseNegocio {
 	private int cantidad;
 	private BigDecimal precioUnitario;
 	private BigDecimal montoComision;
-	private BigDecimal montoFee;
 	private ServicioProveedor servicioProveedor;
 
 	/**
@@ -222,20 +221,6 @@ public class DetalleServicioAgencia extends BaseNegocio {
 	 */
 	public void setMontoComision(BigDecimal montoComision) {
 		this.montoComision = montoComision;
-	}
-
-	/**
-	 * @return the montoFee
-	 */
-	public BigDecimal getMontoFee() {
-		return montoFee;
-	}
-
-	/**
-	 * @param montoFee the montoFee to set
-	 */
-	public void setMontoFee(BigDecimal montoFee) {
-		this.montoFee = montoFee;
 	}
 
 }

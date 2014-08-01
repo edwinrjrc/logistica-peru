@@ -308,7 +308,7 @@ public class ProveedorDaoImpl implements ProveedorDao {
 	public boolean ingresarServicioProveedor(Integer idproveedor, ServicioProveedor servicio, Connection conn) throws SQLException {
 		boolean resultado = false;
 		CallableStatement cs = null;
-		String sql = "{ ? = call negocio.fn_ingresarservicioproveedor(?,?,?,?,?,?) }";
+		String sql = "{ ? = call negocio.fn_ingresarservicioproveedor(?,?,?,?,?) }";
 		
 		try {
 			cs = conn.prepareCall(sql);
@@ -317,7 +317,6 @@ public class ProveedorDaoImpl implements ProveedorDao {
 			cs.setInt(i++, idproveedor);
 			cs.setInt(i++, servicio.getTipoServicio().getCodigoEntero().intValue());
 			cs.setBigDecimal(i++, servicio.getPorcentajeComision());
-			cs.setBigDecimal(i++, servicio.getPorcentajeFee());
 			cs.setString(i++, servicio.getUsuarioCreacion());
 			cs.setString(i++, servicio.getIpCreacion());
 			cs.execute();
