@@ -173,7 +173,13 @@ public class DetalleServicioAgencia extends BaseNegocio {
 	}
 	
 	public BigDecimal getTotalServicio(){
-		BigDecimal cantidadDecimal = UtilParse.parseIntABigDecimal(cantidad);
+		BigDecimal cantidadDecimal = BigDecimal.ZERO;
+		if (cantidad != 0){
+			cantidadDecimal = cantidadDecimal.add(UtilParse.parseIntABigDecimal(cantidad));
+		}
+		else{
+			cantidadDecimal = BigDecimal.ONE;
+		}
 		BigDecimal total = this.precioUnitario.multiply(cantidadDecimal);
 		return total;
 	}
