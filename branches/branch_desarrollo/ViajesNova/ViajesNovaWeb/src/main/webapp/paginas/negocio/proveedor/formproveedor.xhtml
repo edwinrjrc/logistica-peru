@@ -267,12 +267,6 @@
 									<h:inputText value="#{row.porcentajeComision}" onkeypress="return js_soloEntero(event)" />
 								</rich:column>
 								<rich:column>
-									<f:facet name="header">
-										<h:outputText value="Porcentaje Fee" />
-									</f:facet>
-									<h:inputText value="#{row.porcentajeFee}" onkeypress="return js_soloEntero(event)"/>
-								</rich:column>
-								<rich:column>
 									<a4j:commandButton value="Eliminar" render="idGrdListaServicio"
 										action="#{proveedorMBean.eliminarServicio(row)}" />
 								</rich:column>
