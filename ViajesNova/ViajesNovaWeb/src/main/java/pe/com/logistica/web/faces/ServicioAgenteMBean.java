@@ -61,7 +61,7 @@ public class ServicioAgenteMBean extends BaseMBean{
 	
 	public boolean nuevaVenta;
 	public boolean editarVenta;
-	private boolean servicioCompleto;
+	private boolean servicioFee;
 
 	private ParametroServicio parametroServicio;
 	private NegocioServicio negocioServicio;
@@ -161,12 +161,20 @@ public class ServicioAgenteMBean extends BaseMBean{
 				this.setDetalleServicio(null);
 				
 				calcularTotales();
+				
+				this.setServicioFee(false);
 			}
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
+			this.setShowModal(true);
+			this.setMensajeModal(e.getMessage());
+			this.setTipoModal(TIPO_MODAL_ERROR);
 		} catch (Exception e) {
 			e.printStackTrace();
+			this.setShowModal(true);
+			this.setMensajeModal(e.getMessage());
+			this.setTipoModal(TIPO_MODAL_ERROR);
 		}
 	}
 	
@@ -213,30 +221,44 @@ public class ServicioAgenteMBean extends BaseMBean{
 	private boolean validarServicioVenta() {
 		boolean resultado = true;
 		String idFormulario = "idFormVentaServi";
-		if (this.getDetalleServicio().getTipoServicio().getCodigoEntero() == null || this.getDetalleServicio().getTipoServicio().getCodigoEntero().intValue() == 0){
-			this.agregarMensaje(idFormulario + ":idSelTipoServicio",
-					"Seleccione el tipo de servicio", "", FacesMessage.SEVERITY_ERROR);
-			resultado = false;
+		if (!this.isServicioFee()){
+			if (this.getDetalleServicio().getTipoServicio().getCodigoEntero() == null || this.getDetalleServicio().getTipoServicio().getCodigoEntero().intValue() == 0){
+				this.agregarMensaje(idFormulario + ":idSelTipoServicio",
+						"Seleccione el tipo de servicio", "", FacesMessage.SEVERITY_ERROR);
+				resultado = false;
+			}
+			if (StringUtils.isBlank(this.getDetalleServicio().getDescripcionServicio())){
+				this.agregarMensaje(idFormulario + ":idDescServicio",
+						"Ingrese la descripcion del servicio", "", FacesMessage.SEVERITY_ERROR);
+				resultado = false;
+			}
+			if (this.getDetalleServicio().getCantidad() == 0){
+				this.agregarMensaje(idFormulario + ":idCantidad",
+						"Ingrese la cantidad", "", FacesMessage.SEVERITY_ERROR);
+				resultado = false;
+			}
+			if (this.getDetalleServicio().getPrecioUnitario() == null || this.getDetalleServicio().getPrecioUnitario().doubleValue() == 0.0){
+				this.agregarMensaje(idFormulario + ":idPrecUnitario",
+						"Ingrese el precio base del servicio", "", FacesMessage.SEVERITY_ERROR);
+				resultado = false;
+			}
+			if (this.getDetalleServicio().getFechaIda() == null){
+				this.agregarMensaje(idFormulario + ":idFecServicio",
+						"Ingrese la fecha del servicio", "", FacesMessage.SEVERITY_ERROR);
+				resultado = false;
+			}
 		}
-		if (StringUtils.isBlank(this.getDetalleServicio().getDescripcionServicio())){
-			this.agregarMensaje(idFormulario + ":idDescServicio",
-					"Ingrese la descripcion del servicio", "", FacesMessage.SEVERITY_ERROR);
-			resultado = false;
-		}
-		if (this.getDetalleServicio().getCantidad() == 0){
-			this.agregarMensaje(idFormulario + ":idCantidad",
-					"Ingrese la cantidad", "", FacesMessage.SEVERITY_ERROR);
-			resultado = false;
-		}
-		if (this.getDetalleServicio().getPrecioUnitario() == null || this.getDetalleServicio().getPrecioUnitario().doubleValue() == 0.0){
-			this.agregarMensaje(idFormulario + ":idPrecUnitario",
-					"Ingrese el precio unitario del servicio", "", FacesMessage.SEVERITY_ERROR);
-			resultado = false;
-		}
-		if (this.getDetalleServicio().getFechaIda() == null){
-			this.agregarMensaje(idFormulario + ":idFecServicio",
-					"Ingrese la fecha del servicio", "", FacesMessage.SEVERITY_ERROR);
-			resultado = false;
+		else{
+			if (this.getDetalleServicio().getPrecioUnitario() == null || this.getDetalleServicio().getPrecioUnitario().doubleValue() == 0.0){
+				this.agregarMensaje(idFormulario + ":idMonFee",
+						"Ingrese el Monto Fee", "", FacesMessage.SEVERITY_ERROR);
+				resultado = false;
+			}
+			if (this.getDetalleServicio().getFechaIda() == null){
+				this.agregarMensaje(idFormulario + ":idFecServicioFee",
+						"Ingrese la fecha del servicio", "", FacesMessage.SEVERITY_ERROR);
+				resultado = false;
+			}
 		}
 		
 		return resultado;
@@ -357,15 +379,19 @@ public class ServicioAgenteMBean extends BaseMBean{
 			if (oe != null){
 				String valor = oe.toString();
 				
-				listaProveedores = this.negocioServicio.proveedoresXServicio(UtilWeb.convertirCadenaEntero(valor));
-				setListadoEmpresas(null);
-				
-				SelectItem si = null;
-				for(ServicioProveedor servicioProveedor : listaProveedores){
-					si = new SelectItem();
-					si.setValue(servicioProveedor.getCodigoEntero());
-					si.setLabel(servicioProveedor.getNombreProveedor());
-					getListadoEmpresas().add(si);
+				this.setServicioFee(UtilWeb.obtenerCadenaPropertieMaestro(
+						"codigoFee", "aplicacionDatos").equals(valor));
+				if (!this.isServicioFee()){
+					listaProveedores = this.negocioServicio.proveedoresXServicio(UtilWeb.convertirCadenaEntero(valor));
+					setListadoEmpresas(null);
+					
+					SelectItem si = null;
+					for(ServicioProveedor servicioProveedor : listaProveedores){
+						si = new SelectItem();
+						si.setValue(servicioProveedor.getCodigoEntero());
+						si.setLabel(servicioProveedor.getNombreProveedor());
+						getListadoEmpresas().add(si);
+					}
 				}
 			}
 		} catch (SQLException e1) {
@@ -575,17 +601,18 @@ public class ServicioAgenteMBean extends BaseMBean{
 	}
 
 	/**
-	 * @return the servicioCompleto
+	 * @return the servicioFee
 	 */
-	public boolean isServicioCompleto() {
-		return servicioCompleto;
+	public boolean isServicioFee() {
+		return servicioFee;
 	}
 
 	/**
-	 * @param servicioCompleto the servicioCompleto to set
+	 * @param servicioFee the servicioFee to set
 	 */
-	public void setServicioCompleto(boolean servicioCompleto) {
-		this.servicioCompleto = servicioCompleto;
+	public void setServicioFee(boolean servicioFee) {
+		this.servicioFee = servicioFee;
 	}
+
 
 }
