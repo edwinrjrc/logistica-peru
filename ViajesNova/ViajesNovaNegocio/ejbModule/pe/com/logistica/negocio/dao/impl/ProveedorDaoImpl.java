@@ -336,4 +336,131 @@ public class ProveedorDaoImpl implements ProveedorDao {
 		
 		return resultado;
 	}
+	
+	@Override
+	public boolean actualizarServicioProveedor(Integer idproveedor, ServicioProveedor servicio, Connection conn) throws SQLException {
+		boolean resultado = false;
+		CallableStatement cs = null;
+		String sql = "{ ? = call negocio.fn_actualizarproveedorservicio(?,?,?,?,?) }";
+		
+		try {
+			cs = conn.prepareCall(sql);
+			int i=1;
+			cs.registerOutParameter(i++, Types.BOOLEAN);
+			cs.setInt(i++, idproveedor);
+			cs.setInt(i++, servicio.getTipoServicio().getCodigoEntero().intValue());
+			cs.setBigDecimal(i++, servicio.getPorcentajeComision());
+			cs.setString(i++, servicio.getUsuarioModificacion());
+			cs.setString(i++, servicio.getIpModificacion());
+			cs.execute();
+			
+			resultado = cs.getBoolean(1);
+		} catch (SQLException e) {
+			throw new SQLException(e);
+		} finally{
+			try {
+				if (cs != null){
+					cs.close();
+				}
+			} catch (SQLException e) {
+				throw new SQLException(e);
+			}
+		}
+		
+		return resultado;
+	}
+	
+	@Override
+	public List<ServicioProveedor> consultarServicioProveedor(int idProveedor) throws SQLException {
+		List<ServicioProveedor> resultado = null;
+		Connection conn = null;
+		CallableStatement cs = null;
+		ResultSet rs = null;
+		String sql = "{ ? = call negocio.fn_consultarproveedorservicio(?) }";
+
+		try {
+			conn = UtilConexion.obtenerConexion();
+			cs = conn.prepareCall(sql);
+			cs.registerOutParameter(1, Types.OTHER);
+			cs.setInt(2, idProveedor);
+			cs.execute();
+			
+			rs = (ResultSet)cs.getObject(1);
+			resultado = new ArrayList<ServicioProveedor>();
+			ServicioProveedor servicioProveedor = null;
+			while (rs.next()){
+				servicioProveedor = new ServicioProveedor();
+				servicioProveedor.getProveedor().setCodigoEntero(UtilJdbc.obtenerNumero(rs, "idproveedor"));
+				servicioProveedor.getTipoServicio().setCodigoEntero(UtilJdbc.obtenerNumero(rs, "idservicio"));
+				servicioProveedor.setPorcentajeComision(UtilJdbc.obtenerBigDecimal(rs, "porcencomision"));
+				resultado.add(servicioProveedor);
+			}
+		} catch (SQLException e) {
+			resultado = null;
+			throw new SQLException(e);
+		} finally{
+			try {
+				if (rs != null){
+					rs.close();
+				}
+				if (cs != null){
+					cs.close();
+				}
+				if (conn != null){
+					conn.close();
+				}
+			} catch (SQLException e) {
+				try {
+					if (conn != null){
+						conn.close();
+					}
+					throw new SQLException(e);
+				} catch (SQLException e1) {
+					throw new SQLException(e);
+				}
+			}
+		}
+		
+		return resultado;
+	}
+	
+	@Override
+	public List<ServicioProveedor> consultarServicioProveedor(int idProveedor, Connection conn) throws SQLException {
+		List<ServicioProveedor> resultado = null;
+		CallableStatement cs = null;
+		ResultSet rs = null;
+		String sql = "{ ? = call negocio.fn_consultarproveedorservicio(?) }";
+
+		try {
+			cs = conn.prepareCall(sql);
+			cs.setInt(1, idProveedor);
+			rs = cs.executeQuery();
+			
+			resultado = new ArrayList<ServicioProveedor>();
+			ServicioProveedor servicioProveedor = null;
+			while (rs.next()){
+				servicioProveedor = new ServicioProveedor();
+				servicioProveedor.getProveedor().setCodigoEntero(UtilJdbc.obtenerNumero(rs, "idproveedor"));
+				servicioProveedor.getTipoServicio().setCodigoEntero(UtilJdbc.obtenerNumero(rs, "idservicio"));
+				servicioProveedor.setPorcentajeComision(UtilJdbc.obtenerBigDecimal(rs, "porcencomision"));
+				resultado.add(servicioProveedor);
+			}
+		} catch (SQLException e) {
+			resultado = null;
+			throw new SQLException(e);
+		} finally{
+			try {
+				if (rs != null){
+					rs.close();
+				}
+				if (cs != null){
+					cs.close();
+				}
+			} catch (SQLException e) {
+				throw new SQLException(e);
+			}
+		}
+		
+		return resultado;
+	}
 }

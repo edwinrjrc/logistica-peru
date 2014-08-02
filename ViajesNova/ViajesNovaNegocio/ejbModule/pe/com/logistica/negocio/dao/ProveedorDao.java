@@ -32,4 +32,13 @@ public interface ProveedorDao {
 
 	boolean ingresarServicioProveedor(Integer idproveedor,
 			ServicioProveedor servicio, Connection conn) throws SQLException;
+
+	boolean actualizarServicioProveedor(Integer idproveedor,
+			ServicioProveedor servicio, Connection conn) throws SQLException;
+
+	List<ServicioProveedor> consultarServicioProveedor(int idProveedor)
+			throws SQLException;
+
+	List<ServicioProveedor> consultarServicioProveedor(int idProveedor,
+			Connection conn) throws SQLException;
 }

@@ -140,7 +140,7 @@ public class PersonaDaoImpl implements PersonaDao {
 	public int actualizarPersona(Persona persona, Connection conexion) throws SQLException {
 		int resultado = 0;
 		CallableStatement cs = null;
-		String sql = "{ ? = call negocio.fn_actualizarpersona(?,?,?,?,?,?,?,?,?,?,?,?) }";
+		String sql = "{ ? = call negocio.fn_actualizarpersona(?,?,?,?,?,?,?,?,?,?,?,?,?,?) }";
 		
 		try {
 			cs = conexion.prepareCall(sql);
@@ -204,6 +204,18 @@ public class PersonaDaoImpl implements PersonaDao {
 			}
 			if (persona.getFechaNacimiento() != null){
 				cs.setDate(i++, UtilJdbc.convertirUtilDateSQLDate(persona.getFechaNacimiento()));
+			}
+			else{
+				cs.setNull(i++, Types.DATE);
+			}
+			if (StringUtils.isNotBlank(persona.getNroPasaporte())){
+				cs.setString(i++, persona.getNroPasaporte());
+			}
+			else{
+				cs.setNull(i++, Types.VARCHAR);
+			}
+			if (persona.getFechaVctoPasaporte() != null){
+				cs.setDate(i++, UtilJdbc.convertirUtilDateSQLDate(persona.getFechaVctoPasaporte()));
 			}
 			else{
 				cs.setNull(i++, Types.DATE);
