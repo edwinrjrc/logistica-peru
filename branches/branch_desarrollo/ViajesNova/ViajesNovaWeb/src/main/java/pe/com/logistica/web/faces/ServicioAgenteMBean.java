@@ -163,6 +163,7 @@ public class ServicioAgenteMBean extends BaseMBean{
 				calcularTotales();
 				
 				this.setServicioFee(false);
+				this.setListadoEmpresas(null);
 			}
 			
 		} catch (SQLException e) {

@@ -310,6 +310,15 @@ public class NegocioSession implements NegocioSessionRemote,
 					contactoDao.ingresarCorreoElectronico(contacto, conexion);
 				}
 			}
+			if (proveedor.getListaServicioProveedor()!= null){
+				for (ServicioProveedor servicio : proveedor.getListaServicioProveedor()) {
+					boolean resultado = proveedorDao.actualizarServicioProveedor(idPersona, servicio, conexion);
+					if (!resultado){
+						throw new ResultadoCeroDaoException(
+								"No se pudo completar la actualizacion del servicio");
+					}
+				}
+			}
 			proveedorDao.actualizarProveedor(proveedor, conexion);
 
 			return true;
@@ -365,6 +374,7 @@ public class NegocioSession implements NegocioSessionRemote,
 		proveedor.setListaDirecciones(listaDirecciones);
 		proveedor.setListaContactos(contactoDao
 				.consultarContactoProveedor(codigoProveedor));
+		proveedor.setListaServicioProveedor(proveedorDao.consultarServicioProveedor(codigoProveedor));
 
 		return proveedor;
 	}

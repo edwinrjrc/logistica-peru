@@ -611,6 +611,8 @@ public class ProveedorMBean extends BaseMBean {
 				usuario.getUsuario());
 		servicio.setIpCreacion(
 				obtenerRequest().getRemoteAddr());
+		servicio.setUsuarioModificacion(usuario.getUsuario());
+		servicio.setIpModificacion(obtenerRequest().getRemoteAddr());
 		this.getProveedor().getListaServicioProveedor().add(servicio);
 	}
 	
