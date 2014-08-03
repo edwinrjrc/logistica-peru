@@ -51,6 +51,7 @@ public class ParametroDaoImpl implements ParametroDao {
 				parametro.setDescripcion(UtilJdbc.obtenerCadena(rs,"descripcion"));
 				parametro.setValor(UtilJdbc.obtenerCadena(rs,"valor"));
 				parametro.getEstado().setCodigoCadena(UtilJdbc.obtenerCadena(rs, "estado"));
+				parametro.getEstado().setNombre("A".equals(parametro.getEstado().getCodigoCadena())?"Activo":"Inactivo");
 				parametro.setEditable(rs.getBoolean("editable"));
 				resultado.add(parametro);
 			}

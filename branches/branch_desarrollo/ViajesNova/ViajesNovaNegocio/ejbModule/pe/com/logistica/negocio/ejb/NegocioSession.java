@@ -890,6 +890,10 @@ public class NegocioSession implements NegocioSessionRemote,
 			return idServicio;
 		} catch (ErrorRegistroDataException e) {
 			throw new ErrorRegistroDataException(e.getMensajeError(), e);
+		} finally {
+			if (conexion != null) {
+				conexion.close();
+			}
 		}
 	}
 

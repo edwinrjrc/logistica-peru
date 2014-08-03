@@ -94,19 +94,94 @@ public class ServicioNovaViajesDaoImpl implements ServicioNovaViajesDao {
 			throws SQLException {
 		Integer idservicio = 0;
 		CallableStatement cs = null;
-		String sql = "{ ? = call negocio.fn_ingresarserviciocabecera(?,?,?,?,?,?,?,?,?)}";
+		String sql = "{ ? = call negocio.fn_ingresarserviciocabecera(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}";
 		
 		try {
 			cs = conn.prepareCall(sql);
 			int i=1;
 			cs.registerOutParameter(i++, Types.INTEGER);
 			cs.setInt(i++, servicioAgencia.getCliente().getCodigoEntero().intValue());
+			if (servicioAgencia.getCliente2().getCodigoEntero()!= null && servicioAgencia.getCliente2().getCodigoEntero().intValue()!=0){
+				cs.setInt(i++, servicioAgencia.getCliente2().getCodigoEntero().intValue());
+			}
+			else{
+				cs.setNull(i++, Types.INTEGER);
+			}
 			cs.setDate(i++, UtilJdbc.convertirUtilDateSQLDate(servicioAgencia.getFechaServicio()));
-			cs.setBigDecimal(i++, servicioAgencia.getMontoTotal());
-			cs.setInt(i++, servicioAgencia.getCantidadServicios());
-			cs.setInt(i++, servicioAgencia.getDestino().getCodigoEntero().intValue());
-			cs.setString(i++, servicioAgencia.getDestino().getNombre());
-			cs.setInt(i++, servicioAgencia.getFormaPago().getCodigoEntero().intValue());
+			if (servicioAgencia.getCantidadServicios() != 0){
+				cs.setInt(i++, servicioAgencia.getCantidadServicios());
+			}
+			else{
+				cs.setNull(i++, Types.INTEGER);
+			}
+			if (servicioAgencia.getMontoTotal() != null && !servicioAgencia.getMontoTotal().equals(BigDecimal.ZERO)){
+				cs.setBigDecimal(i++, servicioAgencia.getMontoTotal());
+			}
+			else{
+				cs.setNull(i++, Types.DECIMAL);
+			}
+			if (servicioAgencia.getMontoTotalFee() != null && !servicioAgencia.getMontoTotalFee().equals(BigDecimal.ZERO)){
+				cs.setBigDecimal(i++, servicioAgencia.getMontoTotal());
+			}
+			else{
+				cs.setNull(i++, Types.DECIMAL);
+			}
+			if (servicioAgencia.getMontoTotalComision() != null && !servicioAgencia.getMontoTotalComision().equals(BigDecimal.ZERO)){
+				cs.setBigDecimal(i++, servicioAgencia.getMontoTotal());
+			}
+			else{
+				cs.setNull(i++, Types.DECIMAL);
+			}
+			if (servicioAgencia.getDestino().getCodigoEntero()==null && servicioAgencia.getDestino().getCodigoEntero().intValue()!=0){
+				cs.setInt(i++, servicioAgencia.getDestino().getCodigoEntero().intValue());
+			}
+			else{
+				cs.setNull(i++, Types.INTEGER);
+			}
+			if (StringUtils.isNotBlank(servicioAgencia.getDestino().getNombre())){
+				cs.setString(i++, servicioAgencia.getDestino().getNombre());
+			}
+			else{
+				cs.setNull(i++, Types.VARCHAR);
+			}
+			if (servicioAgencia.getFormaPago().getCodigoEntero()!=null && servicioAgencia.getFormaPago().getCodigoEntero().intValue()!=0){
+				cs.setInt(i++, servicioAgencia.getFormaPago().getCodigoEntero().intValue());
+			}
+			else{
+				cs.setNull(i++, Types.INTEGER);
+			}
+			cs.setInt(i++, 1);
+			if (servicioAgencia.getNroCuotas()!=0){
+				cs.setInt(i++, servicioAgencia.getNroCuotas());
+			}
+			else{
+				cs.setNull(i++, Types.INTEGER);
+			}
+			if (servicioAgencia.getTea()!=null && servicioAgencia.getTea().equals(BigDecimal.ZERO)){
+				cs.setBigDecimal(i++, servicioAgencia.getTea());
+			}
+			else{
+				cs.setNull(i++, Types.DECIMAL);
+			}
+			if (servicioAgencia.getValorCuota()!=null && servicioAgencia.getValorCuota().equals(BigDecimal.ZERO)){
+				cs.setBigDecimal(i++, servicioAgencia.getValorCuota());
+			}
+			else{
+				cs.setNull(i++, Types.DECIMAL);
+			}
+			if (servicioAgencia.getFechaPrimerCuota()!=null){
+				cs.setDate(i++, UtilJdbc.convertirUtilDateSQLDate(servicioAgencia.getFechaPrimerCuota()));
+			}
+			else{
+				cs.setNull(i++, Types.DATE);
+			}
+			if (servicioAgencia.getFechaUltimaCuota()!=null){
+				cs.setDate(i++, UtilJdbc.convertirUtilDateSQLDate(servicioAgencia.getFechaUltimaCuota()));
+			}
+			else{
+				cs.setNull(i++, Types.DATE);
+			}
+			cs.setInt(i++, servicioAgencia.getVendedor().getCodigoEntero());
 			cs.setString(i++, servicioAgencia.getUsuarioCreacion());
 			cs.setString(i++, servicioAgencia.getIpCreacion());
 			cs.execute();
@@ -399,7 +474,7 @@ public class ServicioNovaViajesDaoImpl implements ServicioNovaViajesDao {
 		boolean resultado = false;
 		CallableStatement cs = null;
 
-		String sql = "{ ? = call negocio.fn_ingresarserviciodetalle(?,?,?,?,?,?,?,?,?,?,?,?,?)}";
+		String sql = "{ ? = call negocio.fn_ingresarserviciodetalle(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}";
 		
 		try {
 			cs = conn.prepareCall(sql);
@@ -441,7 +516,9 @@ public class ServicioNovaViajesDaoImpl implements ServicioNovaViajesDao {
 			}
 			cs.setInt(i++, detalleServicio.getCantidad());
 			cs.setBigDecimal(i++, detalleServicio.getPrecioUnitario());
-
+			cs.setBigDecimal(i++, detalleServicio.getServicioProveedor().getPorcentajeComision());
+			cs.setBigDecimal(i++, detalleServicio.getMontoComision());
+			cs.setBigDecimal(i++, detalleServicio.getTotalServicio());
 			cs.setString(i++, detalleServicio.getUsuarioCreacion());
 			cs.setString(i++, detalleServicio.getIpCreacion());
 			cs.execute();
@@ -455,18 +532,8 @@ public class ServicioNovaViajesDaoImpl implements ServicioNovaViajesDao {
 				if (cs != null) {
 					cs.close();
 				}
-				if (conn != null) {
-					conn.close();
-				}
 			} catch (SQLException e) {
-				try {
-					if (conn != null) {
-						conn.close();
-					}
-					throw new SQLException(e);
-				} catch (SQLException e1) {
-					throw new SQLException(e);
-				}
+				throw new SQLException(e);
 			}
 		}
 
