@@ -24,6 +24,7 @@ import pe.com.logistica.bean.Util.UtilParse;
 import pe.com.logistica.bean.negocio.Cliente;
 import pe.com.logistica.bean.negocio.Destino;
 import pe.com.logistica.bean.negocio.DetalleServicioAgencia;
+import pe.com.logistica.bean.negocio.Parametro;
 import pe.com.logistica.bean.negocio.ServicioAgencia;
 import pe.com.logistica.bean.negocio.ServicioProveedor;
 import pe.com.logistica.bean.negocio.Usuario;
@@ -141,6 +142,7 @@ public class ServicioAgenteMBean extends BaseMBean{
 		
 		consultarTasaPredeterminada();
 		this.setListadoEmpresas(null);
+		this.setListadoDetalleServicio(null);
 	}
 	public void agregarServicio(){
 		try {
@@ -271,9 +273,16 @@ public class ServicioAgenteMBean extends BaseMBean{
 		BigDecimal montoFee = BigDecimal.ZERO;
 		try {
 			
+			Parametro param = this.parametroServicio.consultarParametro(UtilWeb.obtenerEnteroPropertieMaestro(
+					"codigoParametroFee", "aplicacionDatos"));
+			
 			for (DetalleServicioAgencia detalleServicio : this.getListadoDetalleServicio()){
 				montoTotal = montoTotal.add(detalleServicio.getTotalServicio());
 				montoComision = montoComision.add(detalleServicio.getMontoComision());
+				
+				if (detalleServicio.getTipoServicio().getCodigoEntero().toString().equals(param.getValor())){
+					montoFee = montoFee.add(detalleServicio.getTotalServicio());
+				}
 			}
 
 		} catch (Exception e){
@@ -380,8 +389,9 @@ public class ServicioAgenteMBean extends BaseMBean{
 			if (oe != null){
 				String valor = oe.toString();
 				
-				this.setServicioFee(UtilWeb.obtenerCadenaPropertieMaestro(
-						"codigoFee", "aplicacionDatos").equals(valor));
+				Parametro param = this.parametroServicio.consultarParametro(UtilWeb.obtenerEnteroPropertieMaestro(
+						"codigoParametroFee", "aplicacionDatos"));
+				this.setServicioFee(valor.equals(param.getValor()));
 				if (!this.isServicioFee()){
 					listaProveedores = this.negocioServicio.proveedoresXServicio(UtilWeb.convertirCadenaEntero(valor));
 					setListadoEmpresas(null);
@@ -418,6 +428,12 @@ public class ServicioAgenteMBean extends BaseMBean{
 		} catch (Exception e1) {
 			this.getDetalleServicio().getServicioProveedor().setPorcentajeComision(BigDecimal.ZERO);
 		}
+	}
+	
+	public void eliminarServicio(DetalleServicioAgencia detalleServicio){
+		this.getListadoDetalleServicio().remove(detalleServicio);
+		
+		calcularTotales();
 	}
 
 	/**

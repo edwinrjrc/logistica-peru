@@ -342,6 +342,9 @@ public class ServicioAgencia extends BaseNegocio{
 	 * @return the cliente2
 	 */
 	public Cliente getCliente2() {
+		if (cliente2 == null){
+			cliente2 = new Cliente();
+		}
 		return cliente2;
 	}
 
