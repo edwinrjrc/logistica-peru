@@ -850,8 +850,9 @@ public class ServicioNovaViajesDaoImpl implements ServicioNovaViajesDao {
 			while (rs.next()){
 				detalleServicio = new DetalleServicioAgencia();
 
-				detalleServicio.setCodigoEntero(UtilJdbc.obtenerNumero(rs, "id"));
+				detalleServicio.setCodigoEntero(UtilJdbc.obtenerNumero(rs, "idSerdetalle"));
 				detalleServicio.getTipoServicio().setCodigoEntero(UtilJdbc.obtenerNumero(rs, "idtiposervicio"));
+				detalleServicio.getTipoServicio().setNombre(UtilJdbc.obtenerCadena(rs, "nomtipservicio"));
 				detalleServicio.setDescripcionServicio(UtilJdbc.obtenerCadena(rs, "descripcionservicio"));
 				detalleServicio.getDestino().setCodigoEntero(UtilJdbc.obtenerNumero(rs, "iddestino"));
 				detalleServicio.getDestino().setNombre(UtilJdbc.obtenerCadena(rs, "descripciondestino"));
