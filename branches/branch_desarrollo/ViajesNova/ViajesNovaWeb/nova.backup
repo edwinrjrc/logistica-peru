@@ -4,7 +4,7 @@
 
 -- Dumped from database version 9.2.3
 -- Dumped by pg_dump version 9.2.3
--- Started on 2014-07-30 01:12:39
+-- Started on 2014-08-04 00:36:12
 
 SET statement_timeout = 0;
 SET client_encoding = 'UTF8';
@@ -61,7 +61,7 @@ CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
 
 
 --
--- TOC entry 2303 (class 0 OID 0)
+-- TOC entry 2309 (class 0 OID 0)
 -- Dependencies: 224
 -- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner: 
 --
@@ -247,6 +247,66 @@ $$;
 ALTER FUNCTION negocio.fn_actualizarpersona(p_id integer, p_idtipopersona integer, p_nombres character varying, p_apepaterno character varying, p_apematerno character varying, p_idgenero character varying, p_idestadocivil integer, p_idtipodocumento integer, p_numerodocumento character varying, p_usuariomodificacion character varying, p_ipmodificacion character varying, p_fecnacimiento date) OWNER TO postgres;
 
 --
+-- TOC entry 302 (class 1255 OID 117465)
+-- Name: fn_actualizarpersona(integer, integer, character varying, character varying, character varying, character varying, integer, integer, character varying, character varying, character varying, date, character varying, date); Type: FUNCTION; Schema: negocio; Owner: postgres
+--
+
+CREATE FUNCTION fn_actualizarpersona(p_id integer, p_idtipopersona integer, p_nombres character varying, p_apepaterno character varying, p_apematerno character varying, p_idgenero character varying, p_idestadocivil integer, p_idtipodocumento integer, p_numerodocumento character varying, p_usuariomodificacion character varying, p_ipmodificacion character varying, p_fecnacimiento date, p_nropasaporte character varying, p_fecvctopasaporte date) RETURNS integer
+    LANGUAGE plpgsql
+    AS $$
+
+declare 
+
+fechahoy timestamp with time zone;
+cantidad integer;
+idpersona integer;
+
+begin
+
+select current_timestamp into fechahoy;
+
+select count(1)
+  into cantidad
+  from negocio."Persona"
+ where id               = p_id
+   AND idtipopersona    = p_idtipopersona;
+
+if cantidad = 1 then
+idpersona                  = p_id;
+UPDATE negocio."Persona"
+   SET nombres             = p_nombres, 
+       apellidopaterno     = p_apepaterno, 
+       apellidomaterno     = p_apematerno, 
+       idgenero            = p_idgenero, 
+       idestadocivil       = p_idestadocivil, 
+       idtipodocumento     = p_idtipodocumento, 
+       numerodocumento     = p_numerodocumento, 
+       usuariomodificacion = p_usuariomodificacion, 
+       fechamodificacion   = fechahoy, 
+       ipmodificacion      = p_ipmodificacion,
+       fecnacimiento       = p_fecnacimiento,
+       idestadoregistro    = 1,
+       nropasaporte        = p_nropasaporte,
+       fecvctopasaporte    = p_fecvctopasaporte
+ WHERE id                  = idpersona
+   AND idtipopersona       = p_idtipopersona;
+
+elsif cantidad = 0 then
+
+select negocio.fn_ingresarpersona(p_idtipopersona, p_nombres, p_apepaterno, p_apematerno, p_idgenero, p_idestadocivil, p_idtipodocumento, 
+p_numerodocumento, p_usuariomodificacion, p_ipmodificacion, p_nropasaporte, p_fecvctopasaporte) into idpersona;
+
+end if;
+
+return idpersona;
+
+ end;
+$$;
+
+
+ALTER FUNCTION negocio.fn_actualizarpersona(p_id integer, p_idtipopersona integer, p_nombres character varying, p_apepaterno character varying, p_apematerno character varying, p_idgenero character varying, p_idestadocivil integer, p_idtipodocumento integer, p_numerodocumento character varying, p_usuariomodificacion character varying, p_ipmodificacion character varying, p_fecnacimiento date, p_nropasaporte character varying, p_fecvctopasaporte date) OWNER TO postgres;
+
+--
 -- TOC entry 241 (class 1255 OID 116992)
 -- Name: fn_actualizarpersonaproveedor(integer, integer); Type: FUNCTION; Schema: negocio; Owner: postgres
 --
@@ -268,6 +328,57 @@ $$;
 
 
 ALTER FUNCTION negocio.fn_actualizarpersonaproveedor(p_idpersona integer, p_idrubro integer) OWNER TO postgres;
+
+--
+-- TOC entry 289 (class 1255 OID 117466)
+-- Name: fn_actualizarproveedorservicio(integer, integer, numeric, character varying, character varying); Type: FUNCTION; Schema: negocio; Owner: postgres
+--
+
+CREATE FUNCTION fn_actualizarproveedorservicio(p_idproveedor integer, p_idtiposervicio integer, p_porcencomision numeric, p_usuariomodificacion character varying, p_ipmodificacion character varying) RETURNS boolean
+    LANGUAGE plpgsql
+    AS $$
+
+declare 
+
+fechahoy timestamp with time zone;
+cantidad integer;
+resultado boolean;
+
+
+begin
+
+select current_timestamp into fechahoy;
+
+select count(1)
+  into cantidad
+  from negocio."ProveedorTipoServicio"
+ where idproveedor         = p_idproveedor
+   and idservicio          = p_idtiposervicio;
+
+if cantidad = 1 then
+UPDATE negocio."ProveedorTipoServicio"
+   SET porcencomision      = p_porcencomision, 
+       usuariomodificacion = p_usuariomodificacion, 
+       fechamodificacion   = fechahoy, 
+       ipmodificacion      = p_ipmodificacion
+ WHERE idproveedor         = p_idproveedor
+   AND idservicio          = p_idtiposervicio;
+else
+select negocio.fn_ingresarservicioproveedor(
+    p_idproveedor,
+    p_idtiposervicio,
+    p_porcencomision,
+    p_usuariomodificacion,
+    p_ipmodificacion) into resultado;
+end if;
+
+return true;
+
+ end;
+$$;
+
+
+ALTER FUNCTION negocio.fn_actualizarproveedorservicio(p_idproveedor integer, p_idtiposervicio integer, p_porcencomision numeric, p_usuariomodificacion character varying, p_ipmodificacion character varying) OWNER TO postgres;
 
 --
 -- TOC entry 242 (class 1255 OID 116993)
@@ -393,7 +504,7 @@ $$;
 ALTER FUNCTION negocio.fn_consultarclientesnovios(p_genero character varying) OWNER TO postgres;
 
 --
--- TOC entry 290 (class 1255 OID 117335)
+-- TOC entry 287 (class 1255 OID 117335)
 -- Name: fn_consultarcontactoxpersona(integer); Type: FUNCTION; Schema: negocio; Owner: postgres
 --
 
@@ -502,7 +613,7 @@ $$;
 ALTER FUNCTION negocio.fn_consultarnovios(p_id integer, p_codnovios character varying, p_idnovia integer, p_idnovio integer) OWNER TO postgres;
 
 --
--- TOC entry 295 (class 1255 OID 116999)
+-- TOC entry 293 (class 1255 OID 116999)
 -- Name: fn_consultarpersona(integer, integer); Type: FUNCTION; Schema: negocio; Owner: postgres
 --
 
@@ -582,7 +693,7 @@ $$;
 ALTER FUNCTION negocio.fn_consultarpersonas(p_idtipopersona integer, p_idtipodocumento integer, p_numerodocumento character varying, p_nombres character varying) OWNER TO postgres;
 
 --
--- TOC entry 293 (class 1255 OID 117001)
+-- TOC entry 291 (class 1255 OID 117001)
 -- Name: fn_consultarpersonas2(integer, integer, character varying, character varying); Type: FUNCTION; Schema: negocio; Owner: postgres
 --
 
@@ -620,7 +731,71 @@ $$;
 ALTER FUNCTION negocio.fn_consultarpersonas2(p_idtipopersona integer, p_idtipodocumento integer, p_numerodocumento character varying, p_nombres character varying) OWNER TO postgres;
 
 --
--- TOC entry 250 (class 1255 OID 117002)
+-- TOC entry 303 (class 1255 OID 117467)
+-- Name: fn_consultarproveedorservicio(integer); Type: FUNCTION; Schema: negocio; Owner: postgres
+--
+
+CREATE FUNCTION fn_consultarproveedorservicio(p_idproveedor integer) RETURNS refcursor
+    LANGUAGE plpgsql
+    AS $$
+declare micursor refcursor;
+
+begin
+
+open micursor for
+SELECT idproveedor, idservicio, porcencomision
+  FROM negocio."ProveedorTipoServicio"
+ WHERE idproveedor = p_idproveedor;
+
+return micursor;
+
+end;
+$$;
+
+
+ALTER FUNCTION negocio.fn_consultarproveedorservicio(p_idproveedor integer) OWNER TO postgres;
+
+--
+-- TOC entry 305 (class 1255 OID 117513)
+-- Name: fn_consultarservicioventa(integer); Type: FUNCTION; Schema: negocio; Owner: postgres
+--
+
+CREATE FUNCTION fn_consultarservicioventa(p_idservicio integer) RETURNS refcursor
+    LANGUAGE plpgsql
+    AS $$
+declare micursor refcursor;
+
+begin
+
+open micursor for
+select sercab.id, sercab.idcliente1, cli1.nombres as nombres1, cli1.apellidopaterno as apellidopaterno1, cli1.apellidomaterno as apellidomaterno1, 
+       sercab.idcliente2, cli2.nombres as nombres2, cli2.apellidopaterno as apellidopaterno2, cli2.apellidomaterno as apellidomaterno2, 
+       sercab.fechaservicio, sercab.montototal, sercab.cantidadservicios, 
+       sercab.iddestino, des.descripcion as descdestino, sercab.descripciondestino,
+       sercab.idformapago, maemp.nombre as nommediopago, maemp.descripcion as descmediopago,
+       sercab.idestadopago, maeep.nombre as nomestpago, maeep.descripcion as descestpago,
+       sercab.nrocuotas, sercab.tea, sercab.valorcuota, sercab.fechaprimercuota, sercab.fechaultcuota,
+       sercab.usuariocreacion, sercab.fechacreacion, sercab.ipcreacion, 
+       sercab.usuariomodificacion, sercab.fechamodificacion, sercab.ipmodificacion
+  from negocio."ServicioCabecera" sercab 
+ inner join negocio.vw_clientesnova cli1 on sercab.idcliente1 = cli1.id
+ inner join soporte.destino des on sercab.iddestino = des.id
+ inner join soporte."Tablamaestra" maemp on maemp.estado = 'A' and maemp.idmaestro = 13 and maemp.id = sercab.idformapago
+ inner join soporte."Tablamaestra" maeep on maeep.estado = 'A' and maeep.idmaestro = 14 and maeep.id = sercab.idestadopago
+  left join negocio.vw_clientesnova cli2 on sercab.idcliente2 = cli2.id
+ where sercab.idestadoregistro = 1
+   and sercab.id               = p_idservicio;
+
+return micursor;
+
+end;
+$$;
+
+
+ALTER FUNCTION negocio.fn_consultarservicioventa(p_idservicio integer) OWNER TO postgres;
+
+--
+-- TOC entry 298 (class 1255 OID 117453)
 -- Name: fn_consultarservicioventa(integer, character varying, character varying); Type: FUNCTION; Schema: negocio; Owner: postgres
 --
 
@@ -632,30 +807,25 @@ declare micursor refcursor;
 begin
 
 open micursor for
-select sercab.id, sercab.idcliente, cli.nombres, cli.apellidopaterno, cli.apellidomaterno, 
+select sercab.id, sercab.idcliente1, cli1.nombres as nombres1, cli1.apellidopaterno as apellidopaterno1, cli1.apellidomaterno as apellidomaterno1, 
+       sercab.idcliente2, cli2.nombres as nombres2, cli2.apellidopaterno as apellidopaterno2, cli2.apellidomaterno as apellidomaterno2, 
        sercab.fechaservicio, sercab.montototal, sercab.cantidadservicios, 
        sercab.iddestino, des.descripcion as descdestino, sercab.descripciondestino,
-       sercab.idmediopago, maemp.nombre as nommediopago, maemp.descripcion as descmediopago,
+       sercab.idformapago, maemp.nombre as nommediopago, maemp.descripcion as descmediopago,
        sercab.idestadopago, maeep.nombre as nomestpago, maeep.descripcion as descestpago,
        sercab.nrocuotas, sercab.tea, sercab.valorcuota, sercab.fechaprimercuota, sercab.fechaultcuota,
-       sercab.usuariocreacion, sercab.fechacreacion, sercab.ipcreacion, sercab.usuariomodificacion, sercab.fechamodificacion, sercab.ipmodificacion
-  from negocio."ServicioCabecera" sercab,
-       negocio.vw_clientesnova cli,
-       soporte.destino des,
-       soporte."Tablamaestra" maemp,
-       soporte."Tablamaestra" maeep
+       sercab.usuariocreacion, sercab.fechacreacion, sercab.ipcreacion, 
+       sercab.usuariomodificacion, sercab.fechamodificacion, sercab.ipmodificacion
+  from negocio."ServicioCabecera" sercab 
+ inner join negocio.vw_clientesnova cli1 on sercab.idcliente1 = cli1.id
+ inner join soporte.destino des on sercab.iddestino = des.id
+ inner join soporte."Tablamaestra" maemp on maemp.estado = 'A' and maemp.idmaestro = 13 and maemp.id = sercab.idformapago
+ inner join soporte."Tablamaestra" maeep on maeep.estado = 'A' and maeep.idmaestro = 14 and maeep.id = sercab.idestadopago
+  left join negocio.vw_clientesnova cli2 on sercab.idcliente2 = cli2.id
  where sercab.idestadoregistro = 1
-   and sercab.idcliente        = cli.id
-   and sercab.iddestino        = des.id
-   and maemp.estado            = 'A'
-   and maemp.idmaestro         = 13
-   and maemp.id                = sercab.idmediopago
-   and maeep.estado            = 'A'
-   and maeep.idmaestro         = 14
-   and maeep.id                = sercab.idestadopago
-   and cli.idtipodocumento     = COALESCE(p_tipodocumento,cli.idtipodocumento)
-   and cli.numerodocumento     = COALESCE(p_numerodocumento,cli.numerodocumento)
-   and CONCAT(replace(cli.nombres,' ',''),trim(cli.apellidopaterno),trim(cli.apellidomaterno)) like '%'||COALESCE(p_nombres,CONCAT(replace(cli.nombres,' ',''),trim(cli.apellidopaterno),trim(cli.apellidomaterno)))||'%';
+   and cli1.idtipodocumento    = COALESCE(p_tipodocumento,cli1.idtipodocumento)
+   and cli1.numerodocumento    = COALESCE(p_numerodocumento,cli1.numerodocumento)
+   and CONCAT(replace(cli1.nombres,' ',''),trim(cli1.apellidopaterno),trim(cli1.apellidomaterno)) like '%'||COALESCE(p_nombres,CONCAT(replace(cli1.nombres,' ',''),trim(cli1.apellidopaterno),trim(cli1.apellidomaterno)))||'%';
 
 return micursor;
 
@@ -666,7 +836,33 @@ $$;
 ALTER FUNCTION negocio.fn_consultarservicioventa(p_tipodocumento integer, p_numerodocumento character varying, p_nombres character varying) OWNER TO postgres;
 
 --
--- TOC entry 251 (class 1255 OID 117003)
+-- TOC entry 304 (class 1255 OID 117512)
+-- Name: fn_consultarservicioventadetalle(integer); Type: FUNCTION; Schema: negocio; Owner: postgres
+--
+
+CREATE FUNCTION fn_consultarservicioventadetalle(p_idservicio integer) RETURNS refcursor
+    LANGUAGE plpgsql
+    AS $$
+declare micursor refcursor;
+
+begin
+open micursor for
+SELECT id, idtiposervicio, descripcionservicio, iddestino, 
+       descripciondestino, dias, noches, fechaida, fecharegreso, cantidad, 
+       preciobase, porcencomision, montocomision, montototal
+  FROM negocio."ServicioDetalle"
+ WHERE idservicio = p_idservicio;
+
+return micursor;
+
+end;
+$$;
+
+
+ALTER FUNCTION negocio.fn_consultarservicioventadetalle(p_idservicio integer) OWNER TO postgres;
+
+--
+-- TOC entry 250 (class 1255 OID 117003)
 -- Name: fn_correosxpersona(integer); Type: FUNCTION; Schema: negocio; Owner: postgres
 --
 
@@ -693,7 +889,7 @@ $$;
 ALTER FUNCTION negocio.fn_correosxpersona(p_idpersona integer) OWNER TO postgres;
 
 --
--- TOC entry 252 (class 1255 OID 117004)
+-- TOC entry 251 (class 1255 OID 117004)
 -- Name: fn_direccionesxpersona(integer); Type: FUNCTION; Schema: negocio; Owner: postgres
 --
 
@@ -739,7 +935,7 @@ $$;
 ALTER FUNCTION negocio.fn_direccionesxpersona(p_idpersona integer) OWNER TO postgres;
 
 --
--- TOC entry 253 (class 1255 OID 117005)
+-- TOC entry 252 (class 1255 OID 117005)
 -- Name: fn_eliminarcontactoproveedor(integer, character varying, character varying); Type: FUNCTION; Schema: negocio; Owner: postgres
 --
 
@@ -772,7 +968,7 @@ $$;
 ALTER FUNCTION negocio.fn_eliminarcontactoproveedor(p_idpersona integer, p_usuariomodificacion character varying, p_ipmodificacion character varying) OWNER TO postgres;
 
 --
--- TOC entry 254 (class 1255 OID 117006)
+-- TOC entry 253 (class 1255 OID 117006)
 -- Name: fn_eliminarcorreoscontacto(integer, character varying, character varying); Type: FUNCTION; Schema: negocio; Owner: postgres
 --
 
@@ -803,7 +999,7 @@ $$;
 ALTER FUNCTION negocio.fn_eliminarcorreoscontacto(p_idpersona integer, p_usuariomodificacion character varying, p_ipmodificacion character varying) OWNER TO postgres;
 
 --
--- TOC entry 255 (class 1255 OID 117007)
+-- TOC entry 254 (class 1255 OID 117007)
 -- Name: fn_eliminardirecciones(integer, character varying, character varying); Type: FUNCTION; Schema: negocio; Owner: postgres
 --
 
@@ -869,7 +1065,7 @@ $$;
 ALTER FUNCTION negocio.fn_eliminarpersona(p_idpersona integer, p_idtipopersona integer, p_usuariomodificacion character varying, p_ipmodificacion character varying) OWNER TO postgres;
 
 --
--- TOC entry 256 (class 1255 OID 117009)
+-- TOC entry 255 (class 1255 OID 117009)
 -- Name: fn_eliminartelefonoscontacto(integer, character varying, character varying); Type: FUNCTION; Schema: negocio; Owner: postgres
 --
 
@@ -904,7 +1100,7 @@ $$;
 ALTER FUNCTION negocio.fn_eliminartelefonoscontacto(p_idcontacto integer, p_usuariomodificacion character varying, p_ipmodificacion character varying) OWNER TO postgres;
 
 --
--- TOC entry 257 (class 1255 OID 117010)
+-- TOC entry 256 (class 1255 OID 117010)
 -- Name: fn_eliminartelefonosdireccion(integer, character varying, character varying); Type: FUNCTION; Schema: negocio; Owner: postgres
 --
 
@@ -939,7 +1135,7 @@ $$;
 ALTER FUNCTION negocio.fn_eliminartelefonosdireccion(p_iddireccion integer, p_usuariomodificacion character varying, p_ipmodificacion character varying) OWNER TO postgres;
 
 --
--- TOC entry 258 (class 1255 OID 117011)
+-- TOC entry 257 (class 1255 OID 117011)
 -- Name: fn_generarcodigonovio(integer, character varying); Type: FUNCTION; Schema: negocio; Owner: postgres
 --
 
@@ -969,7 +1165,7 @@ $$;
 ALTER FUNCTION negocio.fn_generarcodigonovio(p_codigosnovios integer, p_usuario character varying) OWNER TO postgres;
 
 --
--- TOC entry 259 (class 1255 OID 117012)
+-- TOC entry 258 (class 1255 OID 117012)
 -- Name: fn_generarcronogramapago(integer, date, numeric, numeric, numeric, character varying, character varying); Type: FUNCTION; Schema: negocio; Owner: postgres
 --
 
@@ -1023,7 +1219,7 @@ $$;
 ALTER FUNCTION negocio.fn_generarcronogramapago(p_idservicio integer, p_fechaprimervencimiento date, p_montototal numeric, p_tea numeric, p_nrocuotas numeric, p_usuariocrecion character varying, p_ipcreacion character varying) OWNER TO postgres;
 
 --
--- TOC entry 260 (class 1255 OID 117013)
+-- TOC entry 259 (class 1255 OID 117013)
 -- Name: fn_ingresainvitado(character varying, character varying, character varying, date, character varying, character varying, integer, character varying, character varying); Type: FUNCTION; Schema: negocio; Owner: postgres
 --
 
@@ -1059,7 +1255,7 @@ $$;
 ALTER FUNCTION negocio.fn_ingresainvitado(p_nombres character varying, p_apellidopaterno character varying, p_apellidomaterno character varying, p_fecnacimiento date, p_telefono character varying, p_correoelectronico character varying, p_idnovios integer, p_usuariocreacion character varying, p_ipcreacion character varying) OWNER TO postgres;
 
 --
--- TOC entry 261 (class 1255 OID 117014)
+-- TOC entry 260 (class 1255 OID 117014)
 -- Name: fn_ingresarcontactoproveedor(integer, integer, integer, character varying); Type: FUNCTION; Schema: negocio; Owner: postgres
 --
 
@@ -1082,7 +1278,7 @@ $$;
 ALTER FUNCTION negocio.fn_ingresarcontactoproveedor(p_idproveedor integer, p_idcontacto integer, p_idarea integer, p_anexo character varying) OWNER TO postgres;
 
 --
--- TOC entry 262 (class 1255 OID 117015)
+-- TOC entry 261 (class 1255 OID 117015)
 -- Name: fn_ingresarcorreoelectronico(character varying, integer, character varying, character varying); Type: FUNCTION; Schema: negocio; Owner: postgres
 --
 
@@ -1114,7 +1310,7 @@ $$;
 ALTER FUNCTION negocio.fn_ingresarcorreoelectronico(p_correo character varying, p_idpersona integer, p_usuariocreacion character varying, p_ipcreacion character varying) OWNER TO postgres;
 
 --
--- TOC entry 263 (class 1255 OID 117016)
+-- TOC entry 262 (class 1255 OID 117016)
 -- Name: fn_ingresarcuotacronograma(integer, integer, date, double precision, double precision, double precision, integer, character varying, character varying); Type: FUNCTION; Schema: negocio; Owner: postgres
 --
 
@@ -1145,7 +1341,7 @@ $$;
 ALTER FUNCTION negocio.fn_ingresarcuotacronograma(p_nrocuota integer, p_idservicio integer, p_fechavencimiento date, p_capital double precision, p_interes double precision, p_totalcuota double precision, p_idestadocuota integer, p_usuariocrecion character varying, p_ipcreacion character varying) OWNER TO postgres;
 
 --
--- TOC entry 264 (class 1255 OID 117017)
+-- TOC entry 263 (class 1255 OID 117017)
 -- Name: fn_ingresardireccion(integer, character varying, character varying, character varying, character varying, character varying, character varying, character, character varying, character varying, character varying, character varying); Type: FUNCTION; Schema: negocio; Owner: postgres
 --
 
@@ -1181,7 +1377,7 @@ $$;
 ALTER FUNCTION negocio.fn_ingresardireccion(p_idvia integer, p_nombrevia character varying, p_numero character varying, p_interior character varying, p_manzana character varying, p_lote character varying, p_principal character varying, p_idubigeo character, p_usuariocreacion character varying, p_ipcreacion character varying, p_observacion character varying, p_referencia character varying) OWNER TO postgres;
 
 --
--- TOC entry 265 (class 1255 OID 117018)
+-- TOC entry 264 (class 1255 OID 117018)
 -- Name: fn_ingresarpais(character varying, integer, character varying, character varying, date); Type: FUNCTION; Schema: negocio; Owner: postgres
 --
 
@@ -1213,7 +1409,7 @@ $$;
 ALTER FUNCTION negocio.fn_ingresarpais(p_descripcion character varying, p_idcontinente integer, p_usuariocreacion character varying, p_ipcreacion character varying, p_fecnacimiento date) OWNER TO postgres;
 
 --
--- TOC entry 266 (class 1255 OID 117019)
+-- TOC entry 265 (class 1255 OID 117019)
 -- Name: fn_ingresarpais(integer, integer, character varying, character varying, character varying, character varying, character varying, date); Type: FUNCTION; Schema: negocio; Owner: postgres
 --
 
@@ -1245,7 +1441,7 @@ $$;
 ALTER FUNCTION negocio.fn_ingresarpais(p_idcontinente integer, p_idpais integer, p_codigoiata character varying, p_idtipodestino character varying, p_descripcion character varying, p_usuariocreacion character varying, p_ipcreacion character varying, p_fecnacimiento date) OWNER TO postgres;
 
 --
--- TOC entry 267 (class 1255 OID 117020)
+-- TOC entry 266 (class 1255 OID 117020)
 -- Name: fn_ingresarpersona(integer, character varying, character varying, character varying, character varying, integer, integer, character varying, character varying, character varying, date); Type: FUNCTION; Schema: negocio; Owner: postgres
 --
 
@@ -1277,7 +1473,7 @@ $$;
 ALTER FUNCTION negocio.fn_ingresarpersona(p_idtipopersona integer, p_nombres character varying, p_apepaterno character varying, p_apematerno character varying, p_idgenero character varying, p_idestadocivil integer, p_idtipodocumento integer, p_numerodocumento character varying, p_usuariocreacion character varying, p_ipcreacion character varying, p_fecnacimiento date) OWNER TO postgres;
 
 --
--- TOC entry 294 (class 1255 OID 117336)
+-- TOC entry 292 (class 1255 OID 117336)
 -- Name: fn_ingresarpersona(integer, character varying, character varying, character varying, character varying, integer, integer, character varying, character varying, character varying, date, character varying, date); Type: FUNCTION; Schema: negocio; Owner: postgres
 --
 
@@ -1309,7 +1505,7 @@ $$;
 ALTER FUNCTION negocio.fn_ingresarpersona(p_idtipopersona integer, p_nombres character varying, p_apepaterno character varying, p_apematerno character varying, p_idgenero character varying, p_idestadocivil integer, p_idtipodocumento integer, p_numerodocumento character varying, p_usuariocreacion character varying, p_ipcreacion character varying, p_fecnacimiento date, p_nropasaporte character varying, p_fecvctopasaporte date) OWNER TO postgres;
 
 --
--- TOC entry 268 (class 1255 OID 117021)
+-- TOC entry 267 (class 1255 OID 117021)
 -- Name: fn_ingresarpersonadireccion(integer, integer, integer); Type: FUNCTION; Schema: negocio; Owner: postgres
 --
 
@@ -1332,7 +1528,7 @@ $$;
 ALTER FUNCTION negocio.fn_ingresarpersonadireccion(p_idpersona integer, p_idtipopersona integer, p_iddireccion integer) OWNER TO postgres;
 
 --
--- TOC entry 269 (class 1255 OID 117022)
+-- TOC entry 268 (class 1255 OID 117022)
 -- Name: fn_ingresarpersonaproveedor(integer, integer); Type: FUNCTION; Schema: negocio; Owner: postgres
 --
 
@@ -1354,7 +1550,7 @@ $$;
 ALTER FUNCTION negocio.fn_ingresarpersonaproveedor(p_idpersona integer, p_idrubro integer) OWNER TO postgres;
 
 --
--- TOC entry 270 (class 1255 OID 117023)
+-- TOC entry 269 (class 1255 OID 117023)
 -- Name: fn_ingresarprogramanovios(integer, integer, integer, date, date, integer, numeric, integer, integer, date, text, numeric, character varying, character varying); Type: FUNCTION; Schema: negocio; Owner: postgres
 --
 
@@ -1391,41 +1587,7 @@ $$;
 ALTER FUNCTION negocio.fn_ingresarprogramanovios(p_idnovia integer, p_idnovio integer, p_iddestino integer, p_fechaboda date, p_fechaviaje date, p_idmoneda integer, p_cuotainicial numeric, p_dias integer, p_noches integer, p_fechashower date, p_observaciones text, p_montototal numeric, p_usuariocreacion character varying, p_ipcreacion character varying) OWNER TO postgres;
 
 --
--- TOC entry 271 (class 1255 OID 117024)
--- Name: fn_ingresarserviciocabecera(integer, date, numeric, integer, integer, character varying, integer, character varying, character varying); Type: FUNCTION; Schema: negocio; Owner: postgres
---
-
-CREATE FUNCTION fn_ingresarserviciocabecera(p_idcliente integer, p_fechaservicio date, p_montotoal numeric, p_cantidadservicios integer, p_iddestino integer, p_descdestino character varying, p_idmediopago integer, p_usuariocreacion character varying, p_ipcreacion character varying) RETURNS integer
-    LANGUAGE plpgsql
-    AS $$
-
-declare maxid integer;
-declare fechahoy timestamp with time zone;
-
-Begin
-
-maxid = nextval('negocio.seq_serviciocabecera');
-select current_timestamp into fechahoy;
-
-INSERT INTO negocio."ServicioCabecera"(
-            id, idcliente, fechaservicio, montototal, cantidadservicios, 
-            iddestino, descripciondestino, idmediopago, idestadopago, usuariocreacion, fechacreacion, 
-            ipcreacion, usuariomodificacion, fechamodificacion, ipmodificacion)
-    VALUES (maxid, p_idcliente, p_fechaservicio, p_montotoal, p_cantidadservicios, 
-            p_iddestino, p_descdestino, p_idmediopago, 1, p_usuariocreacion, fechahoy, 
-            p_ipcreacion, p_usuariocreacion, fechahoy, 
-            p_ipcreacion);
-
-return maxid;
-
-end;
-$$;
-
-
-ALTER FUNCTION negocio.fn_ingresarserviciocabecera(p_idcliente integer, p_fechaservicio date, p_montotoal numeric, p_cantidadservicios integer, p_iddestino integer, p_descdestino character varying, p_idmediopago integer, p_usuariocreacion character varying, p_ipcreacion character varying) OWNER TO postgres;
-
---
--- TOC entry 296 (class 1255 OID 117393)
+-- TOC entry 295 (class 1255 OID 117393)
 -- Name: fn_ingresarserviciocabecera(integer, integer, date, integer, numeric, numeric, numeric, integer, character varying, integer, integer, integer, numeric, numeric, date, date, integer, character varying, character varying); Type: FUNCTION; Schema: negocio; Owner: postgres
 --
 
@@ -1461,11 +1623,11 @@ $$;
 ALTER FUNCTION negocio.fn_ingresarserviciocabecera(p_idcliente1 integer, p_idcliente2 integer, p_fechaservicio date, p_cantidadservicios integer, p_montototal numeric, p_montototalfee numeric, p_montototalcomision numeric, p_iddestino integer, p_descdestino character varying, p_idmediopago integer, p_idestadopago integer, p_nrocuotas integer, p_tea numeric, p_valorcuota numeric, p_fechaprimercuota date, p_fechaultcuota date, p_idvendedor integer, p_usuariocreacion character varying, p_ipcreacion character varying) OWNER TO postgres;
 
 --
--- TOC entry 272 (class 1255 OID 117026)
--- Name: fn_ingresarserviciodetalle(integer, integer, character varying, integer, character varying, integer, integer, date, date, integer, numeric, character varying, character varying); Type: FUNCTION; Schema: negocio; Owner: postgres
+-- TOC entry 294 (class 1255 OID 117499)
+-- Name: fn_ingresarserviciodetalle(integer, integer, character varying, integer, character varying, integer, integer, date, date, integer, numeric, numeric, numeric, numeric, character varying, character varying); Type: FUNCTION; Schema: negocio; Owner: postgres
 --
 
-CREATE FUNCTION fn_ingresarserviciodetalle(p_idtiposervicio integer, p_idservicio integer, p_descripcionservicio character varying, p_iddestino integer, p_descdestino character varying, p_dias integer, p_noches integer, p_fechaida date, p_fecharegreso date, p_cantidad integer, p_preciounitario numeric, p_usuariocreacion character varying, p_ipcreacion character varying) RETURNS boolean
+CREATE FUNCTION fn_ingresarserviciodetalle(p_idtiposervicio integer, p_idservicio integer, p_descripcionservicio character varying, p_iddestino integer, p_descdestino character varying, p_dias integer, p_noches integer, p_fechaida date, p_fecharegreso date, p_cantidad integer, p_preciounitario numeric, p_porcencomision numeric, p_montocomision numeric, p_montototal numeric, p_usuariocreacion character varying, p_ipcreacion character varying) RETURNS boolean
     LANGUAGE plpgsql
     AS $$
 
@@ -1480,11 +1642,13 @@ select current_timestamp into fechahoy;
 INSERT INTO negocio."ServicioDetalle"(
             id, idtiposervicio, descripcionservicio, idservicio, iddestino, 
             descripciondestino, dias, noches, fechaida, fecharegreso, cantidad, 
-            preciounitario, usuariocreacion, fechacreacion, ipcreacion, usuariomodificacion, 
+            preciobase, porcencomision, montocomision, montototal, 
+            usuariocreacion, fechacreacion, ipcreacion, usuariomodificacion, 
             fechamodificacion, ipmodificacion)
     VALUES (maxid, p_idtiposervicio, p_descripcionservicio, p_idservicio, p_iddestino, 
             p_descdestino, p_dias, p_noches, p_fechaida, p_fecharegreso, p_cantidad, 
-            p_preciounitario, p_usuariocreacion, fechahoy, p_ipcreacion, p_usuariocreacion, fechahoy, p_ipcreacion);
+            p_preciounitario, p_porcencomision, p_montocomision, p_montototal, 
+            p_usuariocreacion, fechahoy, p_ipcreacion, p_usuariocreacion, fechahoy, p_ipcreacion);
 
 return true;
 
@@ -1492,14 +1656,14 @@ end;
 $$;
 
 
-ALTER FUNCTION negocio.fn_ingresarserviciodetalle(p_idtiposervicio integer, p_idservicio integer, p_descripcionservicio character varying, p_iddestino integer, p_descdestino character varying, p_dias integer, p_noches integer, p_fechaida date, p_fecharegreso date, p_cantidad integer, p_preciounitario numeric, p_usuariocreacion character varying, p_ipcreacion character varying) OWNER TO postgres;
+ALTER FUNCTION negocio.fn_ingresarserviciodetalle(p_idtiposervicio integer, p_idservicio integer, p_descripcionservicio character varying, p_iddestino integer, p_descdestino character varying, p_dias integer, p_noches integer, p_fechaida date, p_fecharegreso date, p_cantidad integer, p_preciounitario numeric, p_porcencomision numeric, p_montocomision numeric, p_montototal numeric, p_usuariocreacion character varying, p_ipcreacion character varying) OWNER TO postgres;
 
 --
--- TOC entry 300 (class 1255 OID 117424)
--- Name: fn_ingresarservicioproveedor(integer, integer, numeric, numeric, character varying, character varying); Type: FUNCTION; Schema: negocio; Owner: postgres
+-- TOC entry 300 (class 1255 OID 117464)
+-- Name: fn_ingresarservicioproveedor(integer, integer, numeric, character varying, character varying); Type: FUNCTION; Schema: negocio; Owner: postgres
 --
 
-CREATE FUNCTION fn_ingresarservicioproveedor(p_idproveedor integer, p_idservicio integer, p_porcencomision numeric, p_porcenfee numeric, p_usuariocreacion character varying, p_ipcreacion character varying) RETURNS boolean
+CREATE FUNCTION fn_ingresarservicioproveedor(p_idproveedor integer, p_idservicio integer, p_porcencomision numeric, p_usuariocreacion character varying, p_ipcreacion character varying) RETURNS boolean
     LANGUAGE plpgsql
     AS $$
 
@@ -1510,10 +1674,10 @@ begin
 select current_timestamp into fechahoy;
 
 INSERT INTO negocio."ProveedorTipoServicio"(
-            idproveedor, idservicio, porcencomision, porcenfee, usuariocreacion, 
+            idproveedor, idservicio, porcencomision, usuariocreacion, 
             fechacreacion, ipcreacion, usuariomodificacion, fechamodificacion, 
             ipmodificacion)
-    VALUES (p_idproveedor, p_idservicio, p_porcencomision, p_porcenfee, p_usuariocreacion, 
+    VALUES (p_idproveedor, p_idservicio, p_porcencomision, p_usuariocreacion, 
             fechahoy, p_ipcreacion, p_usuariocreacion, fechahoy, p_ipcreacion);
 
 return true;
@@ -1522,10 +1686,10 @@ end;
 $$;
 
 
-ALTER FUNCTION negocio.fn_ingresarservicioproveedor(p_idproveedor integer, p_idservicio integer, p_porcencomision numeric, p_porcenfee numeric, p_usuariocreacion character varying, p_ipcreacion character varying) OWNER TO postgres;
+ALTER FUNCTION negocio.fn_ingresarservicioproveedor(p_idproveedor integer, p_idservicio integer, p_porcencomision numeric, p_usuariocreacion character varying, p_ipcreacion character varying) OWNER TO postgres;
 
 --
--- TOC entry 273 (class 1255 OID 117028)
+-- TOC entry 270 (class 1255 OID 117028)
 -- Name: fn_ingresartelefono(character varying, integer, character varying, character varying); Type: FUNCTION; Schema: negocio; Owner: postgres
 --
 
@@ -1560,7 +1724,7 @@ $$;
 ALTER FUNCTION negocio.fn_ingresartelefono(p_numero character varying, p_idempresaproveedor integer, p_usuariocreacion character varying, p_ipcreacion character varying) OWNER TO postgres;
 
 --
--- TOC entry 274 (class 1255 OID 117029)
+-- TOC entry 271 (class 1255 OID 117029)
 -- Name: fn_ingresartelefonodireccion(integer, integer); Type: FUNCTION; Schema: negocio; Owner: postgres
 --
 
@@ -1583,7 +1747,7 @@ $$;
 ALTER FUNCTION negocio.fn_ingresartelefonodireccion(p_idtelefono integer, p_iddireccion integer) OWNER TO postgres;
 
 --
--- TOC entry 275 (class 1255 OID 117030)
+-- TOC entry 272 (class 1255 OID 117030)
 -- Name: fn_ingresartelefonopersona(integer, integer); Type: FUNCTION; Schema: negocio; Owner: postgres
 --
 
@@ -1606,7 +1770,7 @@ $$;
 ALTER FUNCTION negocio.fn_ingresartelefonopersona(p_idtelefono integer, p_idpersona integer) OWNER TO postgres;
 
 --
--- TOC entry 299 (class 1255 OID 117436)
+-- TOC entry 301 (class 1255 OID 117436)
 -- Name: fn_proveedorxservicio(integer); Type: FUNCTION; Schema: negocio; Owner: postgres
 --
 
@@ -1618,7 +1782,7 @@ declare micursor refcursor;
 begin
 
 open micursor for
-SELECT per.id, per.nombres, proser.porcencomision, proser.porcenfee
+SELECT per.id, per.nombres, proser.porcencomision
   FROM negocio."Persona" per,
        negocio."ProveedorTipoServicio" proser
  WHERE per.idestadoregistro    = 1 
@@ -1636,7 +1800,7 @@ $$;
 ALTER FUNCTION negocio.fn_proveedorxservicio(p_idservicio integer) OWNER TO postgres;
 
 --
--- TOC entry 276 (class 1255 OID 117031)
+-- TOC entry 273 (class 1255 OID 117031)
 -- Name: fn_telefonosxdireccion(integer); Type: FUNCTION; Schema: negocio; Owner: postgres
 --
 
@@ -1666,7 +1830,7 @@ $$;
 ALTER FUNCTION negocio.fn_telefonosxdireccion(p_iddireccion integer) OWNER TO postgres;
 
 --
--- TOC entry 292 (class 1255 OID 117032)
+-- TOC entry 290 (class 1255 OID 117032)
 -- Name: fn_telefonosxpersona(integer); Type: FUNCTION; Schema: negocio; Owner: postgres
 --
 
@@ -1698,7 +1862,7 @@ ALTER FUNCTION negocio.fn_telefonosxpersona(p_idpersona integer) OWNER TO postgr
 SET search_path = seguridad, pg_catalog;
 
 --
--- TOC entry 297 (class 1255 OID 117416)
+-- TOC entry 296 (class 1255 OID 117416)
 -- Name: fn_actualizarclaveusuario(integer, character varying); Type: FUNCTION; Schema: seguridad; Owner: postgres
 --
 
@@ -1725,7 +1889,7 @@ $$;
 ALTER FUNCTION seguridad.fn_actualizarclaveusuario(p_idusuario integer, p_credencialnueva character varying) OWNER TO postgres;
 
 --
--- TOC entry 277 (class 1255 OID 117033)
+-- TOC entry 274 (class 1255 OID 117033)
 -- Name: fn_actualizarusuario(integer, integer, character varying, character varying, character varying); Type: FUNCTION; Schema: seguridad; Owner: postgres
 --
 
@@ -1751,7 +1915,7 @@ $$;
 ALTER FUNCTION seguridad.fn_actualizarusuario(p_id integer, p_rol integer, p_nombres character varying, p_apepaterno character varying, p_apematerno character varying) OWNER TO postgres;
 
 --
--- TOC entry 278 (class 1255 OID 117034)
+-- TOC entry 275 (class 1255 OID 117034)
 -- Name: fn_cambiarclaveusuario(character varying, character varying, character varying); Type: FUNCTION; Schema: seguridad; Owner: postgres
 --
 
@@ -1786,7 +1950,7 @@ $$;
 ALTER FUNCTION seguridad.fn_cambiarclaveusuario(p_usuario character varying, p_credencialactual character varying, p_credencialnueva character varying) OWNER TO postgres;
 
 --
--- TOC entry 298 (class 1255 OID 117442)
+-- TOC entry 297 (class 1255 OID 117442)
 -- Name: fn_ingresarusuario(character varying, character varying, integer, character varying, character varying, character varying, date, boolean); Type: FUNCTION; Schema: seguridad; Owner: postgres
 --
 
@@ -1822,7 +1986,7 @@ $$;
 ALTER FUNCTION seguridad.fn_ingresarusuario(p_usuario character varying, p_credencial character varying, p_rol integer, p_nombres character varying, p_apepaterno character varying, p_apematerno character varying, p_fecnacimiento date, p_vendedor boolean) OWNER TO postgres;
 
 --
--- TOC entry 279 (class 1255 OID 117036)
+-- TOC entry 276 (class 1255 OID 117036)
 -- Name: fn_iniciosesion(character varying, character varying); Type: FUNCTION; Schema: seguridad; Owner: postgres
 --
 
@@ -1859,7 +2023,7 @@ $$;
 ALTER FUNCTION seguridad.fn_iniciosesion(p_usuario character varying, p_credencial character varying) OWNER TO postgres;
 
 --
--- TOC entry 291 (class 1255 OID 117452)
+-- TOC entry 288 (class 1255 OID 117452)
 -- Name: fn_listarusuarios(); Type: FUNCTION; Schema: seguridad; Owner: postgres
 --
 
@@ -1880,7 +2044,7 @@ end;$$;
 ALTER FUNCTION seguridad.fn_listarusuarios() OWNER TO postgres;
 
 --
--- TOC entry 301 (class 1255 OID 117450)
+-- TOC entry 299 (class 1255 OID 117450)
 -- Name: fn_listarvendedores(); Type: FUNCTION; Schema: seguridad; Owner: postgres
 --
 
@@ -1905,7 +2069,7 @@ ALTER FUNCTION seguridad.fn_listarvendedores() OWNER TO postgres;
 SET search_path = soporte, pg_catalog;
 
 --
--- TOC entry 280 (class 1255 OID 117038)
+-- TOC entry 277 (class 1255 OID 117038)
 -- Name: fn_actualizardestino(integer, integer, integer, integer, character varying, character varying, character varying, character varying); Type: FUNCTION; Schema: soporte; Owner: postgres
 --
 
@@ -1939,7 +2103,7 @@ $$;
 ALTER FUNCTION soporte.fn_actualizardestino(p_id integer, p_idcontinente integer, p_idpais integer, p_idtipodestino integer, p_codigoiata character varying, p_descripcion character varying, p_usuariomodificacion character varying, p_ipmodificacion character varying) OWNER TO postgres;
 
 --
--- TOC entry 281 (class 1255 OID 117039)
+-- TOC entry 278 (class 1255 OID 117039)
 -- Name: fn_actualizarmaestro(integer, integer, character varying, character varying, character varying, integer, character varying); Type: FUNCTION; Schema: soporte; Owner: postgres
 --
 
@@ -1967,7 +2131,7 @@ $$;
 ALTER FUNCTION soporte.fn_actualizarmaestro(p_id integer, p_idtipo integer, p_nombre character varying, p_descripcion character varying, p_estado character varying, p_orden integer, p_abreviatura character varying) OWNER TO postgres;
 
 --
--- TOC entry 282 (class 1255 OID 117040)
+-- TOC entry 279 (class 1255 OID 117040)
 -- Name: fn_actualizarparametro(integer, character varying, character varying, character varying, character varying, boolean); Type: FUNCTION; Schema: soporte; Owner: postgres
 --
 
@@ -1999,7 +2163,7 @@ $$;
 ALTER FUNCTION soporte.fn_actualizarparametro(p_id integer, p_nombre character varying, p_descripcion character varying, p_valor character varying, p_estado character varying, p_editable boolean) OWNER TO postgres;
 
 --
--- TOC entry 283 (class 1255 OID 117041)
+-- TOC entry 280 (class 1255 OID 117041)
 -- Name: fn_ingresardestino(integer, integer, integer, character varying, character varying, character varying, character varying); Type: FUNCTION; Schema: soporte; Owner: postgres
 --
 
@@ -2033,7 +2197,7 @@ $$;
 ALTER FUNCTION soporte.fn_ingresardestino(p_idcontinente integer, p_idpais integer, p_idtipodestino integer, p_codigoiata character varying, p_descripcion character varying, p_usuariocreacion character varying, p_ipcreacion character varying) OWNER TO postgres;
 
 --
--- TOC entry 284 (class 1255 OID 117042)
+-- TOC entry 281 (class 1255 OID 117042)
 -- Name: fn_ingresarhijomaestro(integer, character varying, character varying, character varying); Type: FUNCTION; Schema: soporte; Owner: postgres
 --
 
@@ -2068,7 +2232,7 @@ $$;
 ALTER FUNCTION soporte.fn_ingresarhijomaestro(p_idmaestro integer, p_nombre character varying, p_descripcion character varying, p_abreviatura character varying) OWNER TO postgres;
 
 --
--- TOC entry 285 (class 1255 OID 117043)
+-- TOC entry 282 (class 1255 OID 117043)
 -- Name: fn_ingresarmaestro(character varying, character varying); Type: FUNCTION; Schema: soporte; Owner: postgres
 --
 
@@ -2106,7 +2270,7 @@ $$;
 ALTER FUNCTION soporte.fn_ingresarmaestro(p_nombre character varying, p_descripcion character varying) OWNER TO postgres;
 
 --
--- TOC entry 286 (class 1255 OID 117044)
+-- TOC entry 283 (class 1255 OID 117044)
 -- Name: fn_ingresarpais(character varying, integer, character varying, character varying); Type: FUNCTION; Schema: soporte; Owner: postgres
 --
 
@@ -2140,7 +2304,7 @@ $$;
 ALTER FUNCTION soporte.fn_ingresarpais(p_descripcion character varying, p_idcontinente integer, p_usuariocreacion character varying, p_ipcreacion character varying) OWNER TO postgres;
 
 --
--- TOC entry 287 (class 1255 OID 117045)
+-- TOC entry 284 (class 1255 OID 117045)
 -- Name: fn_ingresarparametro(character varying, character varying, character varying); Type: FUNCTION; Schema: soporte; Owner: postgres
 --
 
@@ -2177,7 +2341,7 @@ $$;
 ALTER FUNCTION soporte.fn_ingresarparametro(p_nombre character varying, p_descripcion character varying, p_valor character varying) OWNER TO postgres;
 
 --
--- TOC entry 288 (class 1255 OID 117046)
+-- TOC entry 285 (class 1255 OID 117046)
 -- Name: fn_listardestinos(); Type: FUNCTION; Schema: soporte; Owner: postgres
 --
 
@@ -2215,7 +2379,7 @@ $$;
 ALTER FUNCTION soporte.fn_listardestinos() OWNER TO postgres;
 
 --
--- TOC entry 289 (class 1255 OID 117047)
+-- TOC entry 286 (class 1255 OID 117047)
 -- Name: fn_listarpaises(integer); Type: FUNCTION; Schema: soporte; Owner: postgres
 --
 
@@ -2457,7 +2621,7 @@ CREATE TABLE "ProgramaNovios" (
 ALTER TABLE negocio."ProgramaNovios" OWNER TO postgres;
 
 --
--- TOC entry 222 (class 1259 OID 117417)
+-- TOC entry 221 (class 1259 OID 117454)
 -- Name: ProveedorTipoServicio; Type: TABLE; Schema: negocio; Owner: postgres; Tablespace: 
 --
 
@@ -2465,7 +2629,6 @@ CREATE TABLE "ProveedorTipoServicio" (
     idproveedor integer NOT NULL,
     idservicio integer NOT NULL,
     porcencomision numeric NOT NULL,
-    porcenfee numeric NOT NULL,
     usuariocreacion character varying(15) NOT NULL,
     fechacreacion timestamp with time zone NOT NULL,
     ipcreacion character varying(15) NOT NULL,
@@ -2479,7 +2642,7 @@ CREATE TABLE "ProveedorTipoServicio" (
 ALTER TABLE negocio."ProveedorTipoServicio" OWNER TO postgres;
 
 --
--- TOC entry 221 (class 1259 OID 117394)
+-- TOC entry 222 (class 1259 OID 117468)
 -- Name: ServicioCabecera; Type: TABLE; Schema: negocio; Owner: postgres; Tablespace: 
 --
 
@@ -2501,7 +2664,7 @@ CREATE TABLE "ServicioCabecera" (
     montocomisiontotal numeric NOT NULL,
     montototal numeric NOT NULL,
     montototalfee numeric NOT NULL,
-    idvendedor integer,
+    idvendedor integer NOT NULL,
     usuariocreacion character varying(20) NOT NULL,
     fechacreacion timestamp with time zone NOT NULL,
     ipcreacion character(15) NOT NULL,
@@ -2515,7 +2678,7 @@ CREATE TABLE "ServicioCabecera" (
 ALTER TABLE negocio."ServicioCabecera" OWNER TO postgres;
 
 --
--- TOC entry 220 (class 1259 OID 117364)
+-- TOC entry 223 (class 1259 OID 117492)
 -- Name: ServicioDetalle; Type: TABLE; Schema: negocio; Owner: postgres; Tablespace: 
 --
 
@@ -2532,10 +2695,7 @@ CREATE TABLE "ServicioDetalle" (
     fecharegreso date,
     cantidad integer,
     preciobase numeric NOT NULL,
-    impto numeric NOT NULL,
-    porcenfee numeric,
     porcencomision numeric,
-    montofee numeric,
     montocomision numeric,
     montototal numeric,
     usuariocreacion character varying(20) NOT NULL,
@@ -2757,7 +2917,7 @@ CREATE VIEW vw_consultacontacto AS
 ALTER TABLE negocio.vw_consultacontacto OWNER TO postgres;
 
 --
--- TOC entry 223 (class 1259 OID 117430)
+-- TOC entry 220 (class 1259 OID 117430)
 -- Name: vw_consultacorreocontacto; Type: VIEW; Schema: negocio; Owner: postgres
 --
 
@@ -2922,7 +3082,7 @@ CREATE TABLE usuario (
 ALTER TABLE seguridad.usuario OWNER TO postgres;
 
 --
--- TOC entry 2304 (class 0 OID 0)
+-- TOC entry 2310 (class 0 OID 0)
 -- Dependencies: 204
 -- Name: COLUMN usuario.id; Type: COMMENT; Schema: seguridad; Owner: postgres
 --
@@ -2931,7 +3091,7 @@ COMMENT ON COLUMN usuario.id IS 'identificador de usuario';
 
 
 --
--- TOC entry 2305 (class 0 OID 0)
+-- TOC entry 2311 (class 0 OID 0)
 -- Dependencies: 204
 -- Name: COLUMN usuario.usuario; Type: COMMENT; Schema: seguridad; Owner: postgres
 --
@@ -3135,7 +3295,7 @@ ALTER TABLE soporte.vw_ubigeo OWNER TO postgres;
 SET search_path = negocio, pg_catalog;
 
 --
--- TOC entry 2263 (class 0 OID 117048)
+-- TOC entry 2269 (class 0 OID 117048)
 -- Dependencies: 172
 -- Data for Name: CorreoElectronico; Type: TABLE DATA; Schema: negocio; Owner: postgres
 --
@@ -3165,7 +3325,7 @@ INSERT INTO "CorreoElectronico" VALUES (22, 'ALEJA.MALDONADO@COLOMBIA.COM.C', 73
 
 
 --
--- TOC entry 2264 (class 0 OID 117052)
+-- TOC entry 2270 (class 0 OID 117052)
 -- Dependencies: 173
 -- Data for Name: CronogramaPago; Type: TABLE DATA; Schema: negocio; Owner: postgres
 --
@@ -3216,10 +3376,22 @@ INSERT INTO "CronogramaPago" VALUES (2, 11, '2014-09-18', 153.808811185906, 0.76
 INSERT INTO "CronogramaPago" VALUES (3, 11, '2014-10-18', 153.999762935675, 0.574278812432372, 154.574041748108, 1, 'admin', '2014-07-03 20:57:42.925+02', '127.0.0.1      ', 'admin', '2014-07-03 20:57:42.925+02', '127.0.0.1      ', 1);
 INSERT INTO "CronogramaPago" VALUES (4, 11, '2014-11-18', 154.190951749696, 0.383089998411625, 154.574041748108, 1, 'admin', '2014-07-03 20:57:42.925+02', '127.0.0.1      ', 'admin', '2014-07-03 20:57:42.925+02', '127.0.0.1      ', 1);
 INSERT INTO "CronogramaPago" VALUES (5, 11, '2014-12-18', 154.382377922281, 0.191663825826748, 154.574041748108, 1, 'admin', '2014-07-03 20:57:42.925+02', '127.0.0.1      ', 'admin', '2014-07-03 20:57:42.925+02', '127.0.0.1      ', 1);
+INSERT INTO "CronogramaPago" VALUES (1, 50, '2014-08-11', 1457.09274987268, 21.8563912480902, 1478.94914112077, 1, 'admin', '2014-08-03 08:12:10.402+02', '127.0.0.1      ', 'admin', '2014-08-03 08:12:10.402+02', '127.0.0.1      ', 1);
+INSERT INTO "CronogramaPago" VALUES (2, 50, '2014-09-11', 1458.90171262337, 20.0474284973959, 1478.94914112077, 1, 'admin', '2014-08-03 08:12:10.402+02', '127.0.0.1      ', 'admin', '2014-08-03 08:12:10.402+02', '127.0.0.1      ', 1);
+INSERT INTO "CronogramaPago" VALUES (3, 50, '2014-10-11', 1460.7129211791, 18.2362199416671, 1478.94914112077, 1, 'admin', '2014-08-03 08:12:10.402+02', '127.0.0.1      ', 'admin', '2014-08-03 08:12:10.402+02', '127.0.0.1      ', 1);
+INSERT INTO "CronogramaPago" VALUES (4, 50, '2014-11-11', 1462.52637832801, 16.4227627927645, 1478.94914112077, 1, 'admin', '2014-08-03 08:12:10.402+02', '127.0.0.1      ', 'admin', '2014-08-03 08:12:10.402+02', '127.0.0.1      ', 1);
+INSERT INTO "CronogramaPago" VALUES (5, 50, '2014-12-11', 1464.34208686168, 14.6070542590872, 1478.94914112077, 1, 'admin', '2014-08-03 08:12:10.402+02', '127.0.0.1      ', 'admin', '2014-08-03 08:12:10.402+02', '127.0.0.1      ', 1);
+INSERT INTO "CronogramaPago" VALUES (6, 50, '2015-01-11', 1466.1600495752, 12.7890915455686, 1478.94914112077, 1, 'admin', '2014-08-03 08:12:10.402+02', '127.0.0.1      ', 'admin', '2014-08-03 08:12:10.402+02', '127.0.0.1      ', 1);
+INSERT INTO "CronogramaPago" VALUES (7, 50, '2015-02-11', 1467.9802692671, 10.9688718536723, 1478.94914112077, 1, 'admin', '2014-08-03 08:12:10.402+02', '127.0.0.1      ', 'admin', '2014-08-03 08:12:10.402+02', '127.0.0.1      ', 1);
+INSERT INTO "CronogramaPago" VALUES (8, 50, '2015-03-11', 1469.80274873938, 9.14639238138722, 1478.94914112077, 1, 'admin', '2014-08-03 08:12:10.402+02', '127.0.0.1      ', 'admin', '2014-08-03 08:12:10.402+02', '127.0.0.1      ', 1);
+INSERT INTO "CronogramaPago" VALUES (9, 50, '2015-04-11', 1471.62749079755, 7.32165032322383, 1478.94914112077, 1, 'admin', '2014-08-03 08:12:10.402+02', '127.0.0.1      ', 'admin', '2014-08-03 08:12:10.402+02', '127.0.0.1      ', 1);
+INSERT INTO "CronogramaPago" VALUES (10, 50, '2015-05-11', 1473.45449825056, 5.49464287020955, 1478.94914112077, 1, 'admin', '2014-08-03 08:12:10.402+02', '127.0.0.1      ', 'admin', '2014-08-03 08:12:10.402+02', '127.0.0.1      ', 1);
+INSERT INTO "CronogramaPago" VALUES (11, 50, '2015-06-11', 1475.28377391089, 3.66536720988449, 1478.94914112077, 1, 'admin', '2014-08-03 08:12:10.402+02', '127.0.0.1      ', 'admin', '2014-08-03 08:12:10.402+02', '127.0.0.1      ', 1);
+INSERT INTO "CronogramaPago" VALUES (12, 50, '2015-07-11', 1477.11532059447, 1.83382052629713, 1478.94914112077, 1, 'admin', '2014-08-03 08:12:10.402+02', '127.0.0.1      ', 'admin', '2014-08-03 08:12:10.402+02', '127.0.0.1      ', 1);
 
 
 --
--- TOC entry 2265 (class 0 OID 117059)
+-- TOC entry 2271 (class 0 OID 117059)
 -- Dependencies: 174
 -- Data for Name: Direccion; Type: TABLE DATA; Schema: negocio; Owner: postgres
 --
@@ -3280,11 +3452,13 @@ INSERT INTO "Direccion" VALUES (60, 1, 'LOS CALVOS', '155', NULL, NULL, NULL, 'N
 INSERT INTO "Direccion" VALUES (61, 3, 'ASDASD', '232', NULL, NULL, NULL, 'S', '090404', NULL, '2014-07-25 08:04:00.59+02', NULL, NULL, '2014-07-25 08:04:00.59+02', NULL, 1, 'DASDASD', 'ADDAS');
 INSERT INTO "Direccion" VALUES (64, 3, 'EWWQ', '232', NULL, NULL, NULL, 'S', '050303', NULL, '2014-07-25 08:23:25.007+02', NULL, NULL, '2014-07-25 08:23:25.007+02', NULL, 1, 'ASDDAS', 'ASD');
 INSERT INTO "Direccion" VALUES (65, 3, 'ZFDSFD', '232', NULL, NULL, NULL, 'S', '080703', NULL, '2014-07-29 18:55:10.795+02', NULL, NULL, '2014-07-29 18:55:10.795+02', NULL, 1, NULL, NULL);
-INSERT INTO "Direccion" VALUES (66, 1, 'JOSE PARDO', '232', NULL, NULL, NULL, 'S', '100402', NULL, '2014-07-30 00:44:12.274+02', NULL, NULL, '2014-07-30 00:44:12.274+02', NULL, 1, NULL, NULL);
+INSERT INTO "Direccion" VALUES (66, 1, 'JOSE PARDO', '232', NULL, NULL, NULL, 'S', '100402', NULL, '2014-07-30 00:44:12.274+02', NULL, 'ADMIN', '2014-08-02 02:57:58.726+02', '127.0.0.1', 0, NULL, NULL);
+INSERT INTO "Direccion" VALUES (67, 1, 'JOSE PARDO', '232', NULL, NULL, NULL, 'S', '100402', NULL, '2014-08-02 02:57:58.726+02', NULL, 'ADMIN', '2014-08-02 08:37:30.345+02', '127.0.0.1', 0, NULL, NULL);
+INSERT INTO "Direccion" VALUES (69, 1, 'JOSE PARDO', '232', NULL, NULL, NULL, 'S', '100402', NULL, '2014-08-02 08:37:30.345+02', NULL, NULL, '2014-08-02 08:37:30.345+02', NULL, 1, NULL, NULL);
 
 
 --
--- TOC entry 2266 (class 0 OID 117066)
+-- TOC entry 2272 (class 0 OID 117066)
 -- Dependencies: 175
 -- Data for Name: Persona; Type: TABLE DATA; Schema: negocio; Owner: postgres
 --
@@ -3354,12 +3528,14 @@ INSERT INTO "Persona" VALUES (80, 2, 'SD ASDSAD', NULL, NULL, NULL, NULL, 3, '20
 INSERT INTO "Persona" VALUES (81, 3, 'ASDSAD A', 'QWDSA', 'ASDASD', NULL, NULL, 1, '12457892', 'ADMIN', '2014-07-25 08:23:25.007+02', '127.0.0.1      ', 'ADMIN', '2014-07-25 08:23:25.007+02', '127.0.0.1      ', 1, NULL, NULL, NULL);
 INSERT INTO "Persona" VALUES (82, 2, 'MUNDO TOTAL SAC', NULL, NULL, NULL, NULL, 3, '20465465465', 'ADMIN', '2014-07-29 18:55:10.795+02', '127.0.0.1      ', 'ADMIN', '2014-07-29 18:55:10.795+02', '127.0.0.1      ', 1, NULL, NULL, NULL);
 INSERT INTO "Persona" VALUES (83, 3, 'CESAR ', 'DURAND', 'DFDSFSD', NULL, NULL, 1, '40245645', 'ADMIN', '2014-07-29 18:55:10.795+02', '127.0.0.1      ', 'ADMIN', '2014-07-29 18:55:10.795+02', '127.0.0.1      ', 1, NULL, NULL, NULL);
-INSERT INTO "Persona" VALUES (84, 2, 'LAN SA', NULL, NULL, NULL, NULL, 3, '20546766546', 'ADMIN', '2014-07-30 00:44:12.274+02', '127.0.0.1      ', 'ADMIN', '2014-07-30 00:44:12.274+02', '127.0.0.1      ', 1, NULL, NULL, NULL);
-INSERT INTO "Persona" VALUES (85, 3, 'ANGELA', 'CHAVEZ', 'ERERW', NULL, NULL, 1, '40154564', 'ADMIN', '2014-07-30 00:44:12.274+02', '127.0.0.1      ', 'ADMIN', '2014-07-30 00:44:12.274+02', '127.0.0.1      ', 1, NULL, NULL, NULL);
+INSERT INTO "Persona" VALUES (85, 3, 'ANGELA', 'CHAVEZ', 'ERERW', NULL, NULL, 1, '40154564', 'ADMIN', '2014-07-30 00:44:12.274+02', '127.0.0.1      ', 'ADMIN', '2014-08-02 02:57:58.726+02', '127.0.0.1      ', 0, NULL, NULL, NULL);
+INSERT INTO "Persona" VALUES (84, 2, 'LAN SA', NULL, NULL, NULL, NULL, 3, '20546766546', 'ADMIN', '2014-07-30 00:44:12.274+02', '127.0.0.1      ', 'ADMIN', '2014-08-02 08:37:30.345+02', '127.0.0.1      ', 1, NULL, NULL, NULL);
+INSERT INTO "Persona" VALUES (86, 3, 'ANGELA', 'CHAVEZ', 'ERERW', NULL, NULL, 1, '40154564', 'ADMIN', '2014-08-02 02:57:58.726+02', '127.0.0.1      ', 'ADMIN', '2014-08-02 08:37:30.345+02', '127.0.0.1      ', 0, NULL, NULL, NULL);
+INSERT INTO "Persona" VALUES (88, 3, 'ANGELA', 'CHAVEZ', 'ERERW', NULL, NULL, 1, '40154564', 'ADMIN', '2014-08-02 08:37:30.345+02', '127.0.0.1      ', 'ADMIN', '2014-08-02 08:37:30.345+02', '127.0.0.1      ', 1, NULL, NULL, NULL);
 
 
 --
--- TOC entry 2267 (class 0 OID 117070)
+-- TOC entry 2273 (class 0 OID 117070)
 -- Dependencies: 176
 -- Data for Name: PersonaAdicional; Type: TABLE DATA; Schema: negocio; Owner: postgres
 --
@@ -3387,7 +3563,7 @@ INSERT INTO "PersonaAdicional" VALUES (84, 9, 1);
 
 
 --
--- TOC entry 2268 (class 0 OID 117074)
+-- TOC entry 2274 (class 0 OID 117074)
 -- Dependencies: 177
 -- Data for Name: PersonaContactoProveedor; Type: TABLE DATA; Schema: negocio; Owner: postgres
 --
@@ -3438,10 +3614,12 @@ INSERT INTO "PersonaContactoProveedor" VALUES (74, 75, 2, '2321', 1);
 INSERT INTO "PersonaContactoProveedor" VALUES (80, 81, 1, '232', 1);
 INSERT INTO "PersonaContactoProveedor" VALUES (82, 83, 2, '475', 1);
 INSERT INTO "PersonaContactoProveedor" VALUES (84, 85, 2, '545', 1);
+INSERT INTO "PersonaContactoProveedor" VALUES (84, 86, 2, '545', 1);
+INSERT INTO "PersonaContactoProveedor" VALUES (84, 88, 2, '545', 1);
 
 
 --
--- TOC entry 2269 (class 0 OID 117078)
+-- TOC entry 2275 (class 0 OID 117078)
 -- Dependencies: 178
 -- Data for Name: PersonaDireccion; Type: TABLE DATA; Schema: negocio; Owner: postgres
 --
@@ -3500,10 +3678,12 @@ INSERT INTO "PersonaDireccion" VALUES (74, 61, 2, 1);
 INSERT INTO "PersonaDireccion" VALUES (80, 64, 2, 1);
 INSERT INTO "PersonaDireccion" VALUES (82, 65, 2, 1);
 INSERT INTO "PersonaDireccion" VALUES (84, 66, 2, 1);
+INSERT INTO "PersonaDireccion" VALUES (84, 67, 2, 1);
+INSERT INTO "PersonaDireccion" VALUES (84, 69, 2, 1);
 
 
 --
--- TOC entry 2270 (class 0 OID 117082)
+-- TOC entry 2276 (class 0 OID 117082)
 -- Dependencies: 179
 -- Data for Name: Personapotencial; Type: TABLE DATA; Schema: negocio; Owner: postgres
 --
@@ -3514,7 +3694,7 @@ INSERT INTO "Personapotencial" VALUES (7, 'asdasd', 'sadasd', 'dsadasd', '232323
 
 
 --
--- TOC entry 2292 (class 0 OID 117346)
+-- TOC entry 2298 (class 0 OID 117346)
 -- Dependencies: 219
 -- Data for Name: ProgramaNovios; Type: TABLE DATA; Schema: negocio; Owner: postgres
 --
@@ -3522,38 +3702,41 @@ INSERT INTO "Personapotencial" VALUES (7, 'asdasd', 'sadasd', 'dsadasd', '232323
 
 
 --
--- TOC entry 2295 (class 0 OID 117417)
--- Dependencies: 222
+-- TOC entry 2299 (class 0 OID 117454)
+-- Dependencies: 221
 -- Data for Name: ProveedorTipoServicio; Type: TABLE DATA; Schema: negocio; Owner: postgres
 --
 
-INSERT INTO "ProveedorTipoServicio" VALUES (80, 2, 12, 12, 'admin', '2014-07-25 08:23:25.007+02', '127.0.0.1', 'admin', '2014-07-25 08:23:25.007+02', '127.0.0.1', 1);
-INSERT INTO "ProveedorTipoServicio" VALUES (82, 2, 25, 25, 'admin', '2014-07-29 18:55:10.795+02', '127.0.0.1', 'admin', '2014-07-29 18:55:10.795+02', '127.0.0.1', 1);
-INSERT INTO "ProveedorTipoServicio" VALUES (82, 3, 20, 12, 'admin', '2014-07-29 18:55:10.795+02', '127.0.0.1', 'admin', '2014-07-29 18:55:10.795+02', '127.0.0.1', 1);
-INSERT INTO "ProveedorTipoServicio" VALUES (84, 1, 10, 14, 'admin', '2014-07-30 00:44:12.274+02', '127.0.0.1', 'admin', '2014-07-30 00:44:12.274+02', '127.0.0.1', 1);
+INSERT INTO "ProveedorTipoServicio" VALUES (84, 1, 22, 'admin', '2014-08-02 08:37:30.345+02', '127.0.0.1', 'admin', '2014-08-02 08:37:30.345+02', '127.0.0.1', 1);
 
 
 --
--- TOC entry 2294 (class 0 OID 117394)
--- Dependencies: 221
+-- TOC entry 2300 (class 0 OID 117468)
+-- Dependencies: 222
 -- Data for Name: ServicioCabecera; Type: TABLE DATA; Schema: negocio; Owner: postgres
 --
 
-INSERT INTO "ServicioCabecera" VALUES (35, 1, NULL, '2014-07-22', 14, 1, 'trujillo', 1, 1, NULL, NULL, NULL, NULL, NULL, 10, 1000, 10, 12, 'usuario', '2014-07-23 07:35:17.078+02', '172.1.1.1      ', 'usuario', '2014-07-23 07:35:17.078+02', '172.1.1.1      ', 1);
-INSERT INTO "ServicioCabecera" VALUES (36, 1, NULL, '2014-07-22', 14, 1, 'trujillo', 1, 1, NULL, NULL, NULL, NULL, NULL, 10, 1000, 10, 12, 'usuario', '2014-07-23 07:35:17.782+02', '172.1.1.1      ', 'usuario', '2014-07-23 07:35:17.782+02', '172.1.1.1      ', 1);
-INSERT INTO "ServicioCabecera" VALUES (37, 1, NULL, '2014-07-22', 14, 1, 'trujillo', 1, 1, NULL, NULL, NULL, NULL, NULL, 10, 1000, 10, 12, 'usuario', '2014-07-23 07:35:18.094+02', '172.1.1.1      ', 'usuario', '2014-07-23 07:35:18.094+02', '172.1.1.1      ', 1);
+INSERT INTO "ServicioCabecera" VALUES (50, 44, NULL, '2014-08-04', NULL, 2, 'TRUJILLO', 2, 1, 12, NULL, NULL, '2014-08-11', NULL, 17605, 17605, 17605, 0, 'admin', '2014-08-03 08:12:10.402+02', '127.0.0.1      ', 'admin', '2014-08-03 08:12:10.402+02', '127.0.0.1      ', 1);
+INSERT INTO "ServicioCabecera" VALUES (51, 50, NULL, '2014-08-11', NULL, 2, 'TUMBES', 3, 1, NULL, NULL, NULL, NULL, NULL, 6150, 6150, 6150, 4, 'admin', '2014-08-03 23:33:59.233+02', '127.0.0.1      ', 'admin', '2014-08-03 23:33:59.233+02', '127.0.0.1      ', 1);
+INSERT INTO "ServicioCabecera" VALUES (52, 55, NULL, '2014-08-04', NULL, 2, 'TRUJILLO', 1, 1, NULL, NULL, NULL, NULL, NULL, 1526, 1526, 1526, 4, 'admin', '2014-08-04 01:05:52.528+02', '127.0.0.1      ', 'admin', '2014-08-04 01:05:52.528+02', '127.0.0.1      ', 1);
 
 
 --
--- TOC entry 2293 (class 0 OID 117364)
--- Dependencies: 220
+-- TOC entry 2301 (class 0 OID 117492)
+-- Dependencies: 223
 -- Data for Name: ServicioDetalle; Type: TABLE DATA; Schema: negocio; Owner: postgres
 --
 
+INSERT INTO "ServicioDetalle" VALUES (6, 1, 'lima - roma', 50, NULL, NULL, NULL, NULL, '2014-08-11', '2014-08-22', 12, 1455, 22, 3841.2, 17460, 'admin', '2014-08-03 08:12:10.402+02', '127.0.0.1      ', 'admin', '2014-08-03 08:12:10.402+02', '127.0.0.1      ', 1);
+INSERT INTO "ServicioDetalle" VALUES (7, 6, 'FEE DE EMISION', 50, NULL, NULL, NULL, NULL, '2014-08-11', NULL, 1, 145, NULL, 0, 145, 'admin', '2014-08-03 08:12:10.402+02', '127.0.0.1      ', 'admin', '2014-08-03 08:12:10.402+02', '127.0.0.1      ', 1);
+INSERT INTO "ServicioDetalle" VALUES (8, 1, 'lima - sudafrica', 51, NULL, NULL, NULL, NULL, '2014-08-11', '2014-08-22', 4, 1500, 22, 1320, 6000, 'admin', '2014-08-03 23:33:59.233+02', '127.0.0.1      ', 'admin', '2014-08-03 23:33:59.233+02', '127.0.0.1      ', 1);
+INSERT INTO "ServicioDetalle" VALUES (9, 6, 'FEE DE EMISION', 51, NULL, NULL, NULL, NULL, '2014-08-11', NULL, 1, 150, NULL, 0, 150, 'admin', '2014-08-03 23:33:59.233+02', '127.0.0.1      ', 'admin', '2014-08-03 23:33:59.233+02', '127.0.0.1      ', 1);
+INSERT INTO "ServicioDetalle" VALUES (10, 6, 'FEE DE EMISION', 52, NULL, NULL, NULL, NULL, '2014-08-11', NULL, 1, 26, NULL, 0, 26, 'admin', '2014-08-04 01:05:52.528+02', '127.0.0.1      ', 'admin', '2014-08-04 01:05:52.528+02', '127.0.0.1      ', 1);
+INSERT INTO "ServicioDetalle" VALUES (11, 1, 'lima - londres', 52, NULL, NULL, NULL, NULL, '2014-08-13', '2014-08-21', 1, 1500, 22, 330, 1500, 'admin', '2014-08-04 01:05:52.528+02', '127.0.0.1      ', 'admin', '2014-08-04 01:05:52.528+02', '127.0.0.1      ', 1);
 
 
 --
--- TOC entry 2271 (class 0 OID 117114)
+-- TOC entry 2277 (class 0 OID 117114)
 -- Dependencies: 180
 -- Data for Name: Telefono; Type: TABLE DATA; Schema: negocio; Owner: postgres
 --
@@ -3637,11 +3820,13 @@ INSERT INTO "Telefono" VALUES (102, '32123223', 0, NULL, '2014-07-25 08:23:25.00
 INSERT INTO "Telefono" VALUES (103, '975643423', 2, NULL, '2014-07-25 08:23:25.007+02', NULL, NULL, '2014-07-25 08:23:25.007+02', NULL, 1);
 INSERT INTO "Telefono" VALUES (104, '2342323', 0, NULL, '2014-07-29 18:55:10.795+02', NULL, NULL, '2014-07-29 18:55:10.795+02', NULL, 1);
 INSERT INTO "Telefono" VALUES (105, '986565656', 2, NULL, '2014-07-29 18:55:10.795+02', NULL, NULL, '2014-07-29 18:55:10.795+02', NULL, 1);
-INSERT INTO "Telefono" VALUES (106, '1213232', 0, NULL, '2014-07-30 00:44:12.274+02', NULL, NULL, '2014-07-30 00:44:12.274+02', NULL, 1);
+INSERT INTO "Telefono" VALUES (106, '1213232', 0, NULL, '2014-07-30 00:44:12.274+02', NULL, '', '2014-08-02 02:57:58.726+02', NULL, 0);
+INSERT INTO "Telefono" VALUES (107, '1213232', 0, NULL, '2014-08-02 02:57:58.726+02', NULL, '', '2014-08-02 08:37:30.345+02', NULL, 0);
+INSERT INTO "Telefono" VALUES (109, '1213232', 0, NULL, '2014-08-02 08:37:30.345+02', NULL, NULL, '2014-08-02 08:37:30.345+02', NULL, 1);
 
 
 --
--- TOC entry 2272 (class 0 OID 117118)
+-- TOC entry 2278 (class 0 OID 117118)
 -- Dependencies: 181
 -- Data for Name: TelefonoDireccion; Type: TABLE DATA; Schema: negocio; Owner: postgres
 --
@@ -3690,10 +3875,12 @@ INSERT INTO "TelefonoDireccion" VALUES (97, 61, 1);
 INSERT INTO "TelefonoDireccion" VALUES (102, 64, 1);
 INSERT INTO "TelefonoDireccion" VALUES (104, 65, 1);
 INSERT INTO "TelefonoDireccion" VALUES (106, 66, 1);
+INSERT INTO "TelefonoDireccion" VALUES (107, 67, 1);
+INSERT INTO "TelefonoDireccion" VALUES (109, 69, 1);
 
 
 --
--- TOC entry 2273 (class 0 OID 117122)
+-- TOC entry 2279 (class 0 OID 117122)
 -- Dependencies: 182
 -- Data for Name: TelefonoPersona; Type: TABLE DATA; Schema: negocio; Owner: postgres
 --
@@ -3737,7 +3924,7 @@ INSERT INTO "TelefonoPersona" VALUES (105, 83, 1);
 
 
 --
--- TOC entry 2306 (class 0 OID 0)
+-- TOC entry 2312 (class 0 OID 0)
 -- Dependencies: 183
 -- Name: seq_correoelectronico; Type: SEQUENCE SET; Schema: negocio; Owner: postgres
 --
@@ -3746,16 +3933,16 @@ SELECT pg_catalog.setval('seq_correoelectronico', 24, true);
 
 
 --
--- TOC entry 2307 (class 0 OID 0)
+-- TOC entry 2313 (class 0 OID 0)
 -- Dependencies: 184
 -- Name: seq_direccion; Type: SEQUENCE SET; Schema: negocio; Owner: postgres
 --
 
-SELECT pg_catalog.setval('seq_direccion', 66, true);
+SELECT pg_catalog.setval('seq_direccion', 69, true);
 
 
 --
--- TOC entry 2308 (class 0 OID 0)
+-- TOC entry 2314 (class 0 OID 0)
 -- Dependencies: 185
 -- Name: seq_novios; Type: SEQUENCE SET; Schema: negocio; Owner: postgres
 --
@@ -3764,16 +3951,16 @@ SELECT pg_catalog.setval('seq_novios', 21, true);
 
 
 --
--- TOC entry 2309 (class 0 OID 0)
+-- TOC entry 2315 (class 0 OID 0)
 -- Dependencies: 186
 -- Name: seq_persona; Type: SEQUENCE SET; Schema: negocio; Owner: postgres
 --
 
-SELECT pg_catalog.setval('seq_persona', 85, true);
+SELECT pg_catalog.setval('seq_persona', 88, true);
 
 
 --
--- TOC entry 2310 (class 0 OID 0)
+-- TOC entry 2316 (class 0 OID 0)
 -- Dependencies: 187
 -- Name: seq_personapotencial; Type: SEQUENCE SET; Schema: negocio; Owner: postgres
 --
@@ -3782,25 +3969,25 @@ SELECT pg_catalog.setval('seq_personapotencial', 7, true);
 
 
 --
--- TOC entry 2311 (class 0 OID 0)
+-- TOC entry 2317 (class 0 OID 0)
 -- Dependencies: 188
 -- Name: seq_serviciocabecera; Type: SEQUENCE SET; Schema: negocio; Owner: postgres
 --
 
-SELECT pg_catalog.setval('seq_serviciocabecera', 37, true);
+SELECT pg_catalog.setval('seq_serviciocabecera', 52, true);
 
 
 --
--- TOC entry 2312 (class 0 OID 0)
+-- TOC entry 2318 (class 0 OID 0)
 -- Dependencies: 189
 -- Name: seq_serviciodetalle; Type: SEQUENCE SET; Schema: negocio; Owner: postgres
 --
 
-SELECT pg_catalog.setval('seq_serviciodetalle', 2, true);
+SELECT pg_catalog.setval('seq_serviciodetalle', 11, true);
 
 
 --
--- TOC entry 2313 (class 0 OID 0)
+-- TOC entry 2319 (class 0 OID 0)
 -- Dependencies: 190
 -- Name: seq_serviciosnovios; Type: SEQUENCE SET; Schema: negocio; Owner: postgres
 --
@@ -3809,18 +3996,18 @@ SELECT pg_catalog.setval('seq_serviciosnovios', 5, true);
 
 
 --
--- TOC entry 2314 (class 0 OID 0)
+-- TOC entry 2320 (class 0 OID 0)
 -- Dependencies: 191
 -- Name: seq_telefono; Type: SEQUENCE SET; Schema: negocio; Owner: postgres
 --
 
-SELECT pg_catalog.setval('seq_telefono', 106, true);
+SELECT pg_catalog.setval('seq_telefono', 109, true);
 
 
 SET search_path = seguridad, pg_catalog;
 
 --
--- TOC entry 2285 (class 0 OID 117194)
+-- TOC entry 2291 (class 0 OID 117194)
 -- Dependencies: 203
 -- Data for Name: rol; Type: TABLE DATA; Schema: seguridad; Owner: postgres
 --
@@ -3829,7 +4016,7 @@ INSERT INTO rol VALUES (1, 'admin');
 
 
 --
--- TOC entry 2286 (class 0 OID 117197)
+-- TOC entry 2292 (class 0 OID 117197)
 -- Dependencies: 204
 -- Data for Name: usuario; Type: TABLE DATA; Schema: seguridad; Owner: postgres
 --
@@ -3843,7 +4030,7 @@ INSERT INTO usuario VALUES (4, 'alejandra', 'p7MHr6Sj5eqWUUSOMOylTw==', 1, 'ALEJ
 SET search_path = soporte, pg_catalog;
 
 --
--- TOC entry 2287 (class 0 OID 117205)
+-- TOC entry 2293 (class 0 OID 117205)
 -- Dependencies: 206
 -- Data for Name: Parametro; Type: TABLE DATA; Schema: soporte; Owner: postgres
 --
@@ -3851,14 +4038,16 @@ SET search_path = soporte, pg_catalog;
 INSERT INTO "Parametro" VALUES (1, 'IGV', 'IMPUSTO GENERAL A LAS VENTAS', '0.18', 'A', true);
 INSERT INTO "Parametro" VALUES (2, 'TIPO DE CAMBIO', 'TIPO DE CAMBIO', '2.8', 'A', true);
 INSERT INTO "Parametro" VALUES (3, 'TASA PRE CREDITO', 'TASA PREDETERMINADA DE CREDITO', '0.015', 'A', true);
+INSERT INTO "Parametro" VALUES (4, 'CODIGO FEE', 'CODIGO DE SERVICIO FEE', '6', 'A', true);
 
 
 --
--- TOC entry 2284 (class 0 OID 117168)
+-- TOC entry 2290 (class 0 OID 117168)
 -- Dependencies: 197
 -- Data for Name: Tablamaestra; Type: TABLE DATA; Schema: soporte; Owner: postgres
 --
 
+INSERT INTO "Tablamaestra" VALUES (6, 12, 'FEE', 'FEE DE EMISION', 6, 'A', 'FEE');
 INSERT INTO "Tablamaestra" VALUES (1, 0, 'MAESTRO DE TIPO DE DOCUMENTO', 'MAESTRO DE TIPO DE DOCUMENTO', 1, 'A', NULL);
 INSERT INTO "Tablamaestra" VALUES (2, 0, 'MAESTRO DE VIAS', 'MAESTRO DE VIAS', 2, 'A', NULL);
 INSERT INTO "Tablamaestra" VALUES (3, 0, 'MAESTRO DE RUBRO', 'MAESTRO DE RUBRO', 3, 'A', NULL);
@@ -3937,7 +4126,7 @@ INSERT INTO "Tablamaestra" VALUES (3, 14, 'PENDIENTE CON MORA', 'PENDIENTE CON M
 
 
 --
--- TOC entry 2288 (class 0 OID 117208)
+-- TOC entry 2294 (class 0 OID 117208)
 -- Dependencies: 207
 -- Data for Name: destino; Type: TABLE DATA; Schema: soporte; Owner: postgres
 --
@@ -3949,7 +4138,7 @@ INSERT INTO destino VALUES (6, 1, 9, 'TUM', 1, 'TUMBES', 'ADMIN', '2014-06-24 17
 
 
 --
--- TOC entry 2289 (class 0 OID 117212)
+-- TOC entry 2295 (class 0 OID 117212)
 -- Dependencies: 208
 -- Data for Name: pais; Type: TABLE DATA; Schema: soporte; Owner: postgres
 --
@@ -3963,7 +4152,7 @@ INSERT INTO pais VALUES (14, 'ARGENTINA', 1, 'admin', '2014-06-18 07:54:07.654+0
 
 
 --
--- TOC entry 2315 (class 0 OID 0)
+-- TOC entry 2321 (class 0 OID 0)
 -- Dependencies: 209
 -- Name: seq_destino; Type: SEQUENCE SET; Schema: soporte; Owner: postgres
 --
@@ -3972,7 +4161,7 @@ SELECT pg_catalog.setval('seq_destino', 6, true);
 
 
 --
--- TOC entry 2316 (class 0 OID 0)
+-- TOC entry 2322 (class 0 OID 0)
 -- Dependencies: 210
 -- Name: seq_pais; Type: SEQUENCE SET; Schema: soporte; Owner: postgres
 --
@@ -3981,7 +4170,7 @@ SELECT pg_catalog.setval('seq_pais', 14, true);
 
 
 --
--- TOC entry 2283 (class 0 OID 117156)
+-- TOC entry 2289 (class 0 OID 117156)
 -- Dependencies: 194
 -- Data for Name: ubigeo; Type: TABLE DATA; Schema: soporte; Owner: postgres
 --
@@ -6048,7 +6237,7 @@ INSERT INTO ubigeo VALUES ('250401', '25', '04', '01', 'PURUS');
 SET search_path = negocio, pg_catalog;
 
 --
--- TOC entry 2217 (class 2606 OID 117253)
+-- TOC entry 2221 (class 2606 OID 117253)
 -- Name: cons_uniq_idpersona; Type: CONSTRAINT; Schema: negocio; Owner: postgres; Tablespace: 
 --
 
@@ -6057,7 +6246,7 @@ ALTER TABLE ONLY "Persona"
 
 
 --
--- TOC entry 2211 (class 2606 OID 117255)
+-- TOC entry 2215 (class 2606 OID 117255)
 -- Name: pk_correoelectronico; Type: CONSTRAINT; Schema: negocio; Owner: postgres; Tablespace: 
 --
 
@@ -6066,7 +6255,7 @@ ALTER TABLE ONLY "CorreoElectronico"
 
 
 --
--- TOC entry 2213 (class 2606 OID 117257)
+-- TOC entry 2217 (class 2606 OID 117257)
 -- Name: pk_cronogramapago; Type: CONSTRAINT; Schema: negocio; Owner: postgres; Tablespace: 
 --
 
@@ -6075,7 +6264,7 @@ ALTER TABLE ONLY "CronogramaPago"
 
 
 --
--- TOC entry 2215 (class 2606 OID 117259)
+-- TOC entry 2219 (class 2606 OID 117259)
 -- Name: pk_direccion; Type: CONSTRAINT; Schema: negocio; Owner: postgres; Tablespace: 
 --
 
@@ -6084,7 +6273,7 @@ ALTER TABLE ONLY "Direccion"
 
 
 --
--- TOC entry 2219 (class 2606 OID 117261)
+-- TOC entry 2223 (class 2606 OID 117261)
 -- Name: pk_persona; Type: CONSTRAINT; Schema: negocio; Owner: postgres; Tablespace: 
 --
 
@@ -6093,7 +6282,7 @@ ALTER TABLE ONLY "Persona"
 
 
 --
--- TOC entry 2223 (class 2606 OID 117263)
+-- TOC entry 2227 (class 2606 OID 117263)
 -- Name: pk_personacontactoproveedor; Type: CONSTRAINT; Schema: negocio; Owner: postgres; Tablespace: 
 --
 
@@ -6102,7 +6291,7 @@ ALTER TABLE ONLY "PersonaContactoProveedor"
 
 
 --
--- TOC entry 2225 (class 2606 OID 117265)
+-- TOC entry 2229 (class 2606 OID 117265)
 -- Name: pk_personadireccion; Type: CONSTRAINT; Schema: negocio; Owner: postgres; Tablespace: 
 --
 
@@ -6111,7 +6300,7 @@ ALTER TABLE ONLY "PersonaDireccion"
 
 
 --
--- TOC entry 2221 (class 2606 OID 117267)
+-- TOC entry 2225 (class 2606 OID 117267)
 -- Name: pk_personaproveedor; Type: CONSTRAINT; Schema: negocio; Owner: postgres; Tablespace: 
 --
 
@@ -6120,7 +6309,7 @@ ALTER TABLE ONLY "PersonaAdicional"
 
 
 --
--- TOC entry 2249 (class 2606 OID 117354)
+-- TOC entry 2253 (class 2606 OID 117354)
 -- Name: pk_programanovios; Type: CONSTRAINT; Schema: negocio; Owner: postgres; Tablespace: 
 --
 
@@ -6129,7 +6318,7 @@ ALTER TABLE ONLY "ProgramaNovios"
 
 
 --
--- TOC entry 2255 (class 2606 OID 117435)
+-- TOC entry 2255 (class 2606 OID 117462)
 -- Name: pk_proveedortiposervicio; Type: CONSTRAINT; Schema: negocio; Owner: postgres; Tablespace: 
 --
 
@@ -6138,7 +6327,7 @@ ALTER TABLE ONLY "ProveedorTipoServicio"
 
 
 --
--- TOC entry 2253 (class 2606 OID 117402)
+-- TOC entry 2257 (class 2606 OID 117476)
 -- Name: pk_serviciocabecera; Type: CONSTRAINT; Schema: negocio; Owner: postgres; Tablespace: 
 --
 
@@ -6147,7 +6336,7 @@ ALTER TABLE ONLY "ServicioCabecera"
 
 
 --
--- TOC entry 2251 (class 2606 OID 117372)
+-- TOC entry 2259 (class 2606 OID 117501)
 -- Name: pk_serviciodetalle; Type: CONSTRAINT; Schema: negocio; Owner: postgres; Tablespace: 
 --
 
@@ -6156,7 +6345,7 @@ ALTER TABLE ONLY "ServicioDetalle"
 
 
 --
--- TOC entry 2227 (class 2606 OID 117277)
+-- TOC entry 2231 (class 2606 OID 117277)
 -- Name: pk_telefono; Type: CONSTRAINT; Schema: negocio; Owner: postgres; Tablespace: 
 --
 
@@ -6165,7 +6354,7 @@ ALTER TABLE ONLY "Telefono"
 
 
 --
--- TOC entry 2229 (class 2606 OID 117279)
+-- TOC entry 2233 (class 2606 OID 117279)
 -- Name: pk_telefonodireccion; Type: CONSTRAINT; Schema: negocio; Owner: postgres; Tablespace: 
 --
 
@@ -6174,7 +6363,7 @@ ALTER TABLE ONLY "TelefonoDireccion"
 
 
 --
--- TOC entry 2231 (class 2606 OID 117281)
+-- TOC entry 2235 (class 2606 OID 117281)
 -- Name: pk_telefonopersona; Type: CONSTRAINT; Schema: negocio; Owner: postgres; Tablespace: 
 --
 
@@ -6185,7 +6374,7 @@ ALTER TABLE ONLY "TelefonoPersona"
 SET search_path = seguridad, pg_catalog;
 
 --
--- TOC entry 2237 (class 2606 OID 117283)
+-- TOC entry 2241 (class 2606 OID 117283)
 -- Name: pk_rol; Type: CONSTRAINT; Schema: seguridad; Owner: postgres; Tablespace: 
 --
 
@@ -6194,7 +6383,7 @@ ALTER TABLE ONLY rol
 
 
 --
--- TOC entry 2239 (class 2606 OID 117285)
+-- TOC entry 2243 (class 2606 OID 117285)
 -- Name: pk_usuario; Type: CONSTRAINT; Schema: seguridad; Owner: postgres; Tablespace: 
 --
 
@@ -6203,7 +6392,7 @@ ALTER TABLE ONLY usuario
 
 
 --
--- TOC entry 2241 (class 2606 OID 117287)
+-- TOC entry 2245 (class 2606 OID 117287)
 -- Name: uq_usuario; Type: CONSTRAINT; Schema: seguridad; Owner: postgres; Tablespace: 
 --
 
@@ -6214,7 +6403,7 @@ ALTER TABLE ONLY usuario
 SET search_path = soporte, pg_catalog;
 
 --
--- TOC entry 2245 (class 2606 OID 117289)
+-- TOC entry 2249 (class 2606 OID 117289)
 -- Name: pk_destino; Type: CONSTRAINT; Schema: soporte; Owner: postgres; Tablespace: 
 --
 
@@ -6223,7 +6412,7 @@ ALTER TABLE ONLY destino
 
 
 --
--- TOC entry 2247 (class 2606 OID 117291)
+-- TOC entry 2251 (class 2606 OID 117291)
 -- Name: pk_pais; Type: CONSTRAINT; Schema: soporte; Owner: postgres; Tablespace: 
 --
 
@@ -6232,7 +6421,7 @@ ALTER TABLE ONLY pais
 
 
 --
--- TOC entry 2243 (class 2606 OID 117293)
+-- TOC entry 2247 (class 2606 OID 117293)
 -- Name: pk_parametro; Type: CONSTRAINT; Schema: soporte; Owner: postgres; Tablespace: 
 --
 
@@ -6241,7 +6430,7 @@ ALTER TABLE ONLY "Parametro"
 
 
 --
--- TOC entry 2235 (class 2606 OID 117295)
+-- TOC entry 2239 (class 2606 OID 117295)
 -- Name: pk_tablamaestra; Type: CONSTRAINT; Schema: soporte; Owner: postgres; Tablespace: 
 --
 
@@ -6250,7 +6439,7 @@ ALTER TABLE ONLY "Tablamaestra"
 
 
 --
--- TOC entry 2233 (class 2606 OID 117297)
+-- TOC entry 2237 (class 2606 OID 117297)
 -- Name: pk_ubigeo; Type: CONSTRAINT; Schema: soporte; Owner: postgres; Tablespace: 
 --
 
@@ -6261,7 +6450,25 @@ ALTER TABLE ONLY ubigeo
 SET search_path = negocio, pg_catalog;
 
 --
--- TOC entry 2258 (class 2606 OID 117298)
+-- TOC entry 2267 (class 2606 OID 117502)
+-- Name: fk_cliente1; Type: FK CONSTRAINT; Schema: negocio; Owner: postgres
+--
+
+ALTER TABLE ONLY "ServicioCabecera"
+    ADD CONSTRAINT fk_cliente1 FOREIGN KEY (idcliente1) REFERENCES "Persona"(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- TOC entry 2268 (class 2606 OID 117507)
+-- Name: fk_cliente2; Type: FK CONSTRAINT; Schema: negocio; Owner: postgres
+--
+
+ALTER TABLE ONLY "ServicioCabecera"
+    ADD CONSTRAINT fk_cliente2 FOREIGN KEY (idcliente2) REFERENCES "Persona"(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- TOC entry 2262 (class 2606 OID 117298)
 -- Name: fk_contacto; Type: FK CONSTRAINT; Schema: negocio; Owner: postgres
 --
 
@@ -6270,7 +6477,7 @@ ALTER TABLE ONLY "PersonaContactoProveedor"
 
 
 --
--- TOC entry 2256 (class 2606 OID 117425)
+-- TOC entry 2260 (class 2606 OID 117425)
 -- Name: fk_correopersona; Type: FK CONSTRAINT; Schema: negocio; Owner: postgres
 --
 
@@ -6279,7 +6486,7 @@ ALTER TABLE ONLY "CorreoElectronico"
 
 
 --
--- TOC entry 2260 (class 2606 OID 117308)
+-- TOC entry 2264 (class 2606 OID 117308)
 -- Name: fk_direccion; Type: FK CONSTRAINT; Schema: negocio; Owner: postgres
 --
 
@@ -6288,7 +6495,7 @@ ALTER TABLE ONLY "PersonaDireccion"
 
 
 --
--- TOC entry 2261 (class 2606 OID 117313)
+-- TOC entry 2265 (class 2606 OID 117313)
 -- Name: fk_persona; Type: FK CONSTRAINT; Schema: negocio; Owner: postgres
 --
 
@@ -6297,7 +6504,7 @@ ALTER TABLE ONLY "PersonaDireccion"
 
 
 --
--- TOC entry 2257 (class 2606 OID 117318)
+-- TOC entry 2261 (class 2606 OID 117318)
 -- Name: fk_personaproveedorpersona; Type: FK CONSTRAINT; Schema: negocio; Owner: postgres
 --
 
@@ -6306,7 +6513,7 @@ ALTER TABLE ONLY "PersonaAdicional"
 
 
 --
--- TOC entry 2259 (class 2606 OID 117323)
+-- TOC entry 2263 (class 2606 OID 117323)
 -- Name: fk_proveedor; Type: FK CONSTRAINT; Schema: negocio; Owner: postgres
 --
 
@@ -6317,7 +6524,7 @@ ALTER TABLE ONLY "PersonaContactoProveedor"
 SET search_path = seguridad, pg_catalog;
 
 --
--- TOC entry 2262 (class 2606 OID 117444)
+-- TOC entry 2266 (class 2606 OID 117444)
 -- Name: fk_usuario_rol; Type: FK CONSTRAINT; Schema: seguridad; Owner: postgres
 --
 
@@ -6326,7 +6533,7 @@ ALTER TABLE ONLY usuario
 
 
 --
--- TOC entry 2302 (class 0 OID 0)
+-- TOC entry 2308 (class 0 OID 0)
 -- Dependencies: 10
 -- Name: public; Type: ACL; Schema: -; Owner: postgres
 --
@@ -6337,7 +6544,7 @@ GRANT ALL ON SCHEMA public TO postgres;
 GRANT ALL ON SCHEMA public TO PUBLIC;
 
 
--- Completed on 2014-07-30 01:12:39
+-- Completed on 2014-08-04 00:36:12
 
 --
 -- PostgreSQL database dump complete
