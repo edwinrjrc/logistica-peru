@@ -127,6 +127,13 @@
 									<h:graphicImage height="25" width="20"
 										url="/resources/img/editar2.png" style="border:0" />
 								</a4j:commandLink>
+								<a4j:commandLink
+									action="#{servicioAgenteMBean.consultarServicioRegistrado(row.codigoEntero)}"
+									render="idGrVentaServicio"
+									oncomplete="#{rich:component('idModalventaservicio')}.show();">
+									<h:graphicImage
+										url="/resources/img/vericono.gif" style="border:0" />
+								</a4j:commandLink>
 							</rich:column>
 
 						</rich:dataTable>
@@ -163,6 +170,8 @@
 		<ui:include src="/resources/includes/includemensajenovios.xhtml">
 			<ui:param name="backBean" value="#{servicioAgenteMBean}" />
 		</ui:include>
+		<ui:include
+			src="/paginas/negocio/servicios/ventaserviciovista.xhtml"></ui:include>
 		<script type="text/javascript">
 		mostrarModal('idformadmservicios');
 		</script>
