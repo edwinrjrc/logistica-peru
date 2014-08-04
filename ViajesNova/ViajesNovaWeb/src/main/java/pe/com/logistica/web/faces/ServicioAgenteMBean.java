@@ -128,8 +128,15 @@ public class ServicioAgenteMBean extends BaseMBean{
 		
 	}
 	
-	public void consultarServicioRegistrado(ServicioAgencia servicioAgencia){
-		
+	public void consultarServicioRegistrado(int idServicio){
+		try {
+			this.setServicioAgencia(this.negocioServicio.consultarVentaServicio(idServicio));
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public void registrarNuevaVenta(){
@@ -458,7 +465,7 @@ public class ServicioAgenteMBean extends BaseMBean{
 	 */
 	public List<ServicioAgencia> getListadoServicioAgencia() {
 		try {
-			listadoServicioAgencia = this.negocioServicio.consultarVentaServicio(getServicioAgenciaBusqueda());
+			listadoServicioAgencia = this.negocioServicio.listarVentaServicio(getServicioAgenciaBusqueda());
 			
 			this.setShowModal(false);
 		} catch (SQLException e) {
