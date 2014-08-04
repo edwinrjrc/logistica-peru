@@ -905,7 +905,34 @@ public class NegocioSession implements NegocioSessionRemote,
 	}
 	
 	@Override
-	public List<ServicioAgencia> consultarServicioVenta(ServicioAgencia servicioAgencia) throws SQLException, Exception{
+	public ServicioAgencia consultarServicioVenta(int idServicio) throws SQLException, Exception{
+		ServicioNovaViajesDao servicioNovaViajesDao = new ServicioNovaViajesDaoImpl();
+		
+		Connection conn = null;
+		
+		ServicioAgencia servicioAgencia;
+		try {
+			conn = UtilConexion.obtenerConexion();
+			
+			servicioAgencia = servicioNovaViajesDao.consultarServiciosVenta2(idServicio,conn);
+			
+			servicioAgencia.setListaDetalleServicio(servicioNovaViajesDao.consultaServicioDetalle(servicioAgencia.getCodigoEntero(), conn));
+			
+		} catch (SQLException e) {
+			throw new SQLException(e);
+		} catch (Exception e) {
+			throw new Exception(e);
+		} finally {
+			if (conn != null) {
+				conn.close();
+			}
+		}
+		
+		return servicioAgencia;
+	}
+	
+	@Override
+	public List<ServicioAgencia> listarServicioVenta(ServicioAgencia servicioAgencia) throws SQLException, Exception{
 		ServicioNovaViajesDao servicioNovaViajesDao = new ServicioNovaViajesDaoImpl();
 		return servicioNovaViajesDao.consultarServiciosVenta(servicioAgencia);
 	}
@@ -994,4 +1021,5 @@ public class NegocioSession implements NegocioSessionRemote,
 		
 		return servicioNegocioDao.proveedoresXServicio(servicio);
 	}
+
 }

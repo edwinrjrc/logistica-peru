@@ -37,9 +37,20 @@ public interface ServicioNovaViajesDao {
 	List<CronogramaPago> consultarCronogramaPago(ServicioAgencia servicioAgencia)
 			throws SQLException;
 
+	Integer ingresarCabeceraServicio2(ServicioAgencia servicioAgencia,
+			Connection conn) throws SQLException;
+	
+	public ServicioAgencia consultarServiciosVenta2(int idServicio)
+			throws SQLException;
+	
+	public List<DetalleServicioAgencia> consultaServicioDetalle(int idServicio) throws SQLException;
+
 	List<ServicioAgencia> consultarServiciosVenta(
 			ServicioAgencia servicioAgencia) throws SQLException;
 
-	Integer ingresarCabeceraServicio2(ServicioAgencia servicioAgencia,
+	List<DetalleServicioAgencia> consultaServicioDetalle(int idServicio,
 			Connection conn) throws SQLException;
+
+	ServicioAgencia consultarServiciosVenta2(int idServicio, Connection conn)
+			throws SQLException;
 }

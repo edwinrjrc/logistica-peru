@@ -179,8 +179,13 @@ public class NegocioServicioImpl implements NegocioServicio {
 	}
 	
 	@Override
-	public List<ServicioAgencia> consultarVentaServicio(ServicioAgencia servicioAgencia) throws SQLException, Exception{
-		return ejbSession.consultarServicioVenta(servicioAgencia);
+	public ServicioAgencia consultarVentaServicio(int idServicio) throws SQLException, Exception{
+		return ejbSession.consultarServicioVenta(idServicio);
+	}
+	
+	@Override
+	public List<ServicioAgencia> listarVentaServicio(ServicioAgencia servicioAgencia) throws SQLException, Exception{
+		return ejbSession.listarServicioVenta(servicioAgencia);
 	}
 
 	@Override
