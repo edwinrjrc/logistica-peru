@@ -9,7 +9,7 @@ import javax.ejb.Local;
 import pe.com.logistica.bean.base.BaseVO;
 import pe.com.logistica.bean.negocio.Cliente;
 import pe.com.logistica.bean.negocio.Contacto;
-import pe.com.logistica.bean.negocio.CronogramaPago;
+import pe.com.logistica.bean.negocio.CuotaPago;
 import pe.com.logistica.bean.negocio.DetalleServicioAgencia;
 import pe.com.logistica.bean.negocio.Direccion;
 import pe.com.logistica.bean.negocio.ProgramaNovios;
@@ -68,7 +68,7 @@ public interface NegocioSessionLocal {
 	
 	public Integer registrarVentaServicio(ServicioAgencia servicioAgencia) throws ErrorRegistroDataException, SQLException, Exception;
 	
-	public List<CronogramaPago> consultarCronograma(ServicioAgencia servicioAgencia) throws SQLException, Exception;
+	public List<CuotaPago> consultarCronograma(ServicioAgencia servicioAgencia) throws SQLException, Exception;
 	
 	public List<ServicioAgencia> listarServicioVenta(ServicioAgencia servicioAgencia) throws SQLException, Exception;
 	
