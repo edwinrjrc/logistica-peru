@@ -16,7 +16,7 @@ import javax.servlet.ServletContext;
 import pe.com.logistica.bean.base.BaseVO;
 import pe.com.logistica.bean.negocio.Cliente;
 import pe.com.logistica.bean.negocio.Contacto;
-import pe.com.logistica.bean.negocio.CronogramaPago;
+import pe.com.logistica.bean.negocio.CuotaPago;
 import pe.com.logistica.bean.negocio.DetalleServicioAgencia;
 import pe.com.logistica.bean.negocio.Direccion;
 import pe.com.logistica.bean.negocio.ProgramaNovios;
@@ -169,7 +169,7 @@ public class NegocioServicioImpl implements NegocioServicio {
 	}
 
 	@Override
-	public List<CronogramaPago> consultarCronogramaPago(ServicioAgencia servicioAgencia) throws SQLException, Exception {
+	public List<CuotaPago> consultarCronogramaPago(ServicioAgencia servicioAgencia) throws SQLException, Exception {
 		return ejbSession.consultarCronograma(servicioAgencia);
 	}
 	
