@@ -13,7 +13,7 @@ import pe.com.logistica.bean.base.BaseVO;
  * @author edwreb
  *
  */
-public class CronogramaPago extends BaseNegocio {
+public class CuotaPago extends BaseNegocio {
 
 	private int nroCuota;
 	private Date fechaVencimiento;
@@ -29,7 +29,7 @@ public class CronogramaPago extends BaseNegocio {
 	/**
 	 * 
 	 */
-	public CronogramaPago() {
+	public CuotaPago() {
 		// TODO Auto-generated constructor stub
 	}
 
