@@ -80,7 +80,9 @@
 							<h:outputText value="Tasa Interes (TEA)"
 								rendered="#{servicioAgenteMBean.servicioAgencia.formaPago.codigoEntero == 2}" />
 							<h:outputText value="#{servicioAgenteMBean.servicioAgencia.tea}"
-								rendered="#{servicioAgenteMBean.servicioAgencia.formaPago.codigoEntero == 2}" />
+								rendered="#{servicioAgenteMBean.servicioAgencia.formaPago.codigoEntero == 2}" >
+								<f:convertNumber pattern="###,##0.00" />
+							</h:outputText>
 
 							<h:outputText
 								rendered="#{servicioAgenteMBean.servicioAgencia.formaPago.codigoEntero == 2}"
@@ -205,7 +207,7 @@
 					</h:panelGrid>
 				</rich:tab>
 				<rich:tab
-					rendered="#{servicioAgenteMBean.servicioAgencia.formaPago.codigoEntero == 2 and servicioAgenteMBean.transaccionExito}">
+					rendered="#{servicioAgenteMBean.servicioAgencia.formaPago.codigoEntero == 2}">
 					<f:facet name="header">
 						<h:outputText value="Cronograma" />
 					</f:facet>
