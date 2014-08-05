@@ -9,7 +9,7 @@ import java.util.List;
 
 import pe.com.logistica.bean.negocio.Cliente;
 import pe.com.logistica.bean.negocio.Contacto;
-import pe.com.logistica.bean.negocio.CronogramaPago;
+import pe.com.logistica.bean.negocio.CuotaPago;
 import pe.com.logistica.bean.negocio.DetalleServicioAgencia;
 import pe.com.logistica.bean.negocio.Direccion;
 import pe.com.logistica.bean.negocio.ProgramaNovios;
@@ -74,7 +74,7 @@ public interface NegocioServicio {
 
 	public BigDecimal calcularValorCuota(ServicioAgencia servicioAgencia) throws SQLException, Exception;
 
-	List<CronogramaPago> consultarCronogramaPago(ServicioAgencia servicioAgencia)
+	List<CuotaPago> consultarCronogramaPago(ServicioAgencia servicioAgencia)
 			throws SQLException, Exception;
 
 	Integer registrarVentaServicio(ServicioAgencia servicioAgencia)
