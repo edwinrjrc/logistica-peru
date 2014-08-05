@@ -39,7 +39,7 @@ public class ServicioAgencia extends BaseNegocio{
 	private BigDecimal montoTotalComision;
 	
 	private List<DetalleServicioAgencia> listaDetalleServicio;
-	private List<CronogramaPago> cronogramaPago;
+	private List<CuotaPago> cronogramaPago;
 	
 	private BaseVO vendedor;
 
@@ -320,9 +320,9 @@ public class ServicioAgencia extends BaseNegocio{
 	/**
 	 * @return the cronogramaPago
 	 */
-	public List<CronogramaPago> getCronogramaPago() {
+	public List<CuotaPago> getCronogramaPago() {
 		if (cronogramaPago == null){
-			cronogramaPago = new ArrayList<CronogramaPago>();
+			cronogramaPago = new ArrayList<CuotaPago>();
 		}
 		return cronogramaPago;
 	}
@@ -332,7 +332,7 @@ public class ServicioAgencia extends BaseNegocio{
 	/**
 	 * @param cronogramaPago the cronogramaPago to set
 	 */
-	public void setCronogramaPago(List<CronogramaPago> cronogramaPago) {
+	public void setCronogramaPago(List<CuotaPago> cronogramaPago) {
 		this.cronogramaPago = cronogramaPago;
 	}
 
