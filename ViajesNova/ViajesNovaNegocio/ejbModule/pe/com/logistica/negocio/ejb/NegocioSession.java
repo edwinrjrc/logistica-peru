@@ -18,7 +18,7 @@ import pe.com.logistica.bean.base.CorreoElectronico;
 import pe.com.logistica.bean.negocio.Cliente;
 import pe.com.logistica.bean.negocio.Contacto;
 import pe.com.logistica.bean.negocio.CorreoMasivo;
-import pe.com.logistica.bean.negocio.CronogramaPago;
+import pe.com.logistica.bean.negocio.CuotaPago;
 import pe.com.logistica.bean.negocio.DetalleServicioAgencia;
 import pe.com.logistica.bean.negocio.Direccion;
 import pe.com.logistica.bean.negocio.Maestro;
@@ -898,7 +898,7 @@ public class NegocioSession implements NegocioSessionRemote,
 	}
 
 	@Override
-	public List<CronogramaPago> consultarCronograma(
+	public List<CuotaPago> consultarCronograma(
 			ServicioAgencia servicioAgencia) throws SQLException, Exception {
 		ServicioNovaViajesDao servicioNovaViajesDao = new ServicioNovaViajesDaoImpl();
 		return servicioNovaViajesDao.consultarCronogramaPago(servicioAgencia);
@@ -917,6 +917,11 @@ public class NegocioSession implements NegocioSessionRemote,
 			servicioAgencia = servicioNovaViajesDao.consultarServiciosVenta2(idServicio,conn);
 			
 			servicioAgencia.setListaDetalleServicio(servicioNovaViajesDao.consultaServicioDetalle(servicioAgencia.getCodigoEntero(), conn));
+			
+			if (servicioAgencia.getFormaPago().getCodigoEntero().intValue() == 2) {
+				servicioAgencia.setCronogramaPago(servicioNovaViajesDao.consultarCronogramaPago(servicioAgencia));
+				
+			}
 			
 		} catch (SQLException e) {
 			throw new SQLException(e);

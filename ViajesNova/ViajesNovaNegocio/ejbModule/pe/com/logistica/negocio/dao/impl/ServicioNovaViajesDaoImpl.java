@@ -15,7 +15,7 @@ import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 
 import pe.com.logistica.bean.Util.UtilParse;
-import pe.com.logistica.bean.negocio.CronogramaPago;
+import pe.com.logistica.bean.negocio.CuotaPago;
 import pe.com.logistica.bean.negocio.DetalleServicioAgencia;
 import pe.com.logistica.bean.negocio.ServicioAgencia;
 import pe.com.logistica.negocio.dao.ServicioNovaViajesDao;
@@ -121,13 +121,13 @@ public class ServicioNovaViajesDaoImpl implements ServicioNovaViajesDao {
 				cs.setNull(i++, Types.DECIMAL);
 			}
 			if (servicioAgencia.getMontoTotalFee() != null && !servicioAgencia.getMontoTotalFee().equals(BigDecimal.ZERO)){
-				cs.setBigDecimal(i++, servicioAgencia.getMontoTotal());
+				cs.setBigDecimal(i++, servicioAgencia.getMontoTotalFee());
 			}
 			else{
 				cs.setNull(i++, Types.DECIMAL);
 			}
 			if (servicioAgencia.getMontoTotalComision() != null && !servicioAgencia.getMontoTotalComision().equals(BigDecimal.ZERO)){
-				cs.setBigDecimal(i++, servicioAgencia.getMontoTotal());
+				cs.setBigDecimal(i++, servicioAgencia.getMontoTotalComision());
 			}
 			else{
 				cs.setNull(i++, Types.DECIMAL);
@@ -157,13 +157,13 @@ public class ServicioNovaViajesDaoImpl implements ServicioNovaViajesDao {
 			else{
 				cs.setNull(i++, Types.INTEGER);
 			}
-			if (servicioAgencia.getTea()!=null && servicioAgencia.getTea().equals(BigDecimal.ZERO)){
+			if (servicioAgencia.getTea()!=null && !servicioAgencia.getTea().equals(BigDecimal.ZERO)){
 				cs.setBigDecimal(i++, servicioAgencia.getTea());
 			}
 			else{
 				cs.setNull(i++, Types.DECIMAL);
 			}
-			if (servicioAgencia.getValorCuota()!=null && servicioAgencia.getValorCuota().equals(BigDecimal.ZERO)){
+			if (servicioAgencia.getValorCuota()!=null && !servicioAgencia.getValorCuota().equals(BigDecimal.ZERO)){
 				cs.setBigDecimal(i++, servicioAgencia.getValorCuota());
 			}
 			else{
@@ -581,13 +581,13 @@ public class ServicioNovaViajesDaoImpl implements ServicioNovaViajesDao {
 	}
 	
 	@Override
-	public List<CronogramaPago> consultarCronogramaPago(ServicioAgencia servicioAgencia)
+	public List<CuotaPago> consultarCronogramaPago(ServicioAgencia servicioAgencia)
 			throws SQLException {
 		Connection conn = null;
 		CallableStatement cs = null;
 		ResultSet rs = null;
 		String sql = "{ ? = call negocio.fn_consultarcronogramapago(?)}";
-		List<CronogramaPago> cronograma = null;
+		List<CuotaPago> cronograma = null;
 		try {
 			conn = UtilConexion.obtenerConexion();
 			cs = conn.prepareCall(sql);
@@ -597,10 +597,10 @@ public class ServicioNovaViajesDaoImpl implements ServicioNovaViajesDao {
 			cs.execute();
 			
 			rs = (ResultSet)cs.getObject(1);
-			CronogramaPago cuota = null;
-			cronograma = new ArrayList<CronogramaPago>();
+			CuotaPago cuota = null;
+			cronograma = new ArrayList<CuotaPago>();
 			while (rs.next()){
-				cuota = new CronogramaPago();
+				cuota = new CuotaPago();
 				cuota.setNroCuota(UtilJdbc.obtenerNumero(rs, "nrocuota"));
 				cuota.setFechaVencimiento(UtilJdbc.obtenerFecha(rs, "fechavencimiento"));
 				cuota.setCapital(UtilJdbc.obtenerBigDecimal(rs, "capital"));
@@ -742,6 +742,15 @@ public class ServicioNovaViajesDaoImpl implements ServicioNovaViajesDao {
 				servicioAgencia2.getFormaPago().setNombre(UtilJdbc.obtenerCadena(rs, "nommediopago"));
 				servicioAgencia2.getEstadoPago().setCodigoEntero(UtilJdbc.obtenerNumero(rs, "idestadopago"));
 				servicioAgencia2.getEstadoPago().setNombre(UtilJdbc.obtenerCadena(rs, "nomestpago"));
+				servicioAgencia2.setNroCuotas(UtilJdbc.obtenerNumero(rs, "nrocuotas"));
+				servicioAgencia2.setTea(UtilJdbc.obtenerBigDecimal(rs, "tea"));
+				servicioAgencia2.setValorCuota(UtilJdbc.obtenerBigDecimal(rs, "valorcuota"));
+				servicioAgencia2.setFechaPrimerCuota(UtilJdbc.obtenerFecha(rs, "fechaprimercuota"));
+				servicioAgencia2.setFechaUltimaCuota(UtilJdbc.obtenerFecha(rs, "fechaultcuota"));
+				servicioAgencia2.setMontoTotalComision(UtilJdbc.obtenerBigDecimal(rs, "montocomisiontotal"));
+				String nombreVendedor = UtilJdbc.obtenerCadena(rs, "nombresvendedor")+" "+UtilJdbc.obtenerCadena(rs, "apepaterno")+" "+UtilJdbc.obtenerCadena(rs, "apematerno");
+				nombreVendedor = StringUtils.normalizeSpace(nombreVendedor);
+				servicioAgencia2.getVendedor().setNombre(nombreVendedor);
 			}
 		} catch (SQLException e) {
 			throw new SQLException(e);
