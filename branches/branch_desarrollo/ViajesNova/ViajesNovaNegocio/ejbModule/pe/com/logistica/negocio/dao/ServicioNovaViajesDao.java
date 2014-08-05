@@ -7,7 +7,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 
-import pe.com.logistica.bean.negocio.CronogramaPago;
+import pe.com.logistica.bean.negocio.CuotaPago;
 import pe.com.logistica.bean.negocio.DetalleServicioAgencia;
 import pe.com.logistica.bean.negocio.ServicioAgencia;
 
@@ -34,7 +34,7 @@ public interface ServicioNovaViajesDao {
 	boolean generarCronogramaPago(ServicioAgencia servicioAgencia,
 			Connection conn) throws SQLException;
 
-	List<CronogramaPago> consultarCronogramaPago(ServicioAgencia servicioAgencia)
+	List<CuotaPago> consultarCronogramaPago(ServicioAgencia servicioAgencia)
 			throws SQLException;
 
 	Integer ingresarCabeceraServicio2(ServicioAgencia servicioAgencia,
@@ -53,4 +53,5 @@ public interface ServicioNovaViajesDao {
 
 	ServicioAgencia consultarServiciosVenta2(int idServicio, Connection conn)
 			throws SQLException;
+	
 }
