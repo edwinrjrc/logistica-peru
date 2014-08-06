@@ -861,7 +861,7 @@ public class NegocioSession implements NegocioSessionRemote,
 				servicioAgencia.setFechaServicio(fechaSer);
 			}
 			
-			if (servicioAgencia.getValorCuota() == null){
+			if (servicioAgencia.getValorCuota() == null && servicioAgencia.getFormaPago().getCodigoEntero().intValue() == 2){
 				ServicioNegocioDao servicioNegocioDao = new ServicioNegocioDaoImpl();
 				servicioAgencia.setValorCuota(servicioNegocioDao.calcularCuota(servicioAgencia));
 			}
