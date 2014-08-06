@@ -244,10 +244,13 @@ public class ServicioAgenteMBean extends BaseMBean{
 						"codigoParametroFee", "aplicacionDatos"));
 				boolean servicioFee = false;
 				for (DetalleServicioAgencia detalleServicio : this.getServicioAgencia().getListaDetalleServicio()){
-					servicioFee = (detalleServicio.getTipoServicio().getCodigoEntero().toString().equals(param.getValor()));
+					if (detalleServicio.getTipoServicio().getCodigoEntero().toString().equals(param.getValor())){
+						servicioFee = true;
+						break;
+					}
 				}
 				
-				if (servicioFee){
+				if (!servicioFee){
 					throw new ErrorRegistroDataException("No se agrego el Fee de Venta");
 				}
 			}
@@ -418,6 +421,9 @@ public class ServicioAgenteMBean extends BaseMBean{
 	public void cargarProveedores(ValueChangeEvent e){
 		Object oe = e.getNewValue();
 		try {
+			setListadoEmpresas(null);
+			this.getDetalleServicio().getServicioProveedor().setProveedor(null);
+			
 			if (oe != null){
 				String valor = oe.toString();
 				
