@@ -81,7 +81,7 @@
 								rendered="#{servicioAgenteMBean.servicioAgencia.formaPago.codigoEntero == 2}" />
 							<h:outputText value="#{servicioAgenteMBean.servicioAgencia.tea}"
 								rendered="#{servicioAgenteMBean.servicioAgencia.formaPago.codigoEntero == 2}" >
-								<f:convertNumber pattern="###,##0.00" />
+								<f:convertNumber pattern="###,##0.00" locale="en_US" />
 							</h:outputText>
 
 							<h:outputText
@@ -96,7 +96,7 @@
 							<h:outputText
 								value="#{servicioAgenteMBean.servicioAgencia.valorCuota}"
 								rendered="#{servicioAgenteMBean.servicioAgencia.formaPago.codigoEntero == 2}">
-								<f:convertNumber pattern="###,##0.00" />
+								<f:convertNumber pattern="###,##0.00" locale="en_US" />
 							</h:outputText>
 
 							<h:outputText value="Fecha Primer Vencimiento"
@@ -237,7 +237,7 @@
 								<h:outputText value="Capital" />
 							</f:facet>
 							<h:outputText value="#{cuota.capital}">
-								<f:convertNumber pattern="###,##0.00" />
+								<f:convertNumber pattern="###,##0.00" locale="en_US" />
 							</h:outputText>
 						</rich:column>
 						<rich:column style="text-align:right;">
@@ -245,7 +245,7 @@
 								<h:outputText value="Interes" />
 							</f:facet>
 							<h:outputText value="#{cuota.interes}">
-								<f:convertNumber pattern="###,##0.00" />
+								<f:convertNumber pattern="###,##0.00" locale="en_US" />
 							</h:outputText>
 						</rich:column>
 						<rich:column style="text-align:right;">

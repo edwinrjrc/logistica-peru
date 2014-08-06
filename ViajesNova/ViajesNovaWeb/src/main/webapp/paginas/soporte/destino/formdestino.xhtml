@@ -40,7 +40,8 @@
 				<h:panelGrid border="0" cellpadding="0" cellspacing="0" columns="1">
 					<h:selectOneMenu id="idSelContinente"
 						value="#{destinoMBean.destino.pais.continente.codigoEntero}"
-						required="true" requiredMessage="Seleccione Continente">
+						required="true" requiredMessage="Seleccione Continente"
+						valueChangeListener="#{destinoMBean.cambiarPais}">
 						<f:selectItem itemLabel="-Seleccione-" />
 						<f:selectItems value="#{catalogoMBean.catalogoContinente}" />
 						<a4j:ajax event="valueChange" render="idGrdSelPais, idSelPais"
