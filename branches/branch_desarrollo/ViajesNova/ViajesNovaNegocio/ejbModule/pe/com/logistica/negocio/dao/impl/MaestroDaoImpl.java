@@ -494,7 +494,6 @@ public class MaestroDaoImpl implements MaestroDao {
 		String sql = "{ ? = call soporte.fn_ingresarpais(?,?,?,?) }";
 		try {
 			conn = UtilConexion.obtenerConexion();
-			conn.setAutoCommit(false);
 			cs = conn.prepareCall(sql);
 			int i=1;
 			cs.registerOutParameter(i++, Types.BOOLEAN);

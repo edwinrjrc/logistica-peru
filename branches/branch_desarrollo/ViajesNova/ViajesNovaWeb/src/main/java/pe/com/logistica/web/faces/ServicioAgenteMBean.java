@@ -188,7 +188,7 @@ public class ServicioAgenteMBean extends BaseMBean{
 		}
 	}
 	
-	private boolean validarRegistroServicioVenta() {
+	private boolean validarRegistroServicioVenta() throws ErrorRegistroDataException, SQLException {
 		boolean resultado = true;
 		String idFormulario = "idFormVentaServi";
 		if (this.getServicioAgencia().getCliente() == null || this.getServicioAgencia().getCliente().getCodigoEntero() == null || this.getServicioAgencia().getCliente().getCodigoEntero().intValue()==0){
@@ -202,8 +202,8 @@ public class ServicioAgenteMBean extends BaseMBean{
 			resultado = false;
 		}
 		if (this.getServicioAgencia().getFormaPago().getCodigoEntero() == null || this.getServicioAgencia().getFormaPago().getCodigoEntero().intValue() == 0){
-			this.agregarMensaje(idFormulario + ":idSelDestino",
-					"Seleccione el destino global del servicio", "", FacesMessage.SEVERITY_ERROR);
+			this.agregarMensaje(idFormulario + ":idSelForPago",
+					"Seleccione el forma de Pago", "", FacesMessage.SEVERITY_ERROR);
 			resultado = false;
 		}
 		else {
@@ -225,6 +225,34 @@ public class ServicioAgenteMBean extends BaseMBean{
 				}
 			}
 		}
+		if (this.getServicioAgencia().getVendedor().getCodigoEntero() == null || this.getServicioAgencia().getVendedor().getCodigoEntero().intValue() == 0){
+			this.agregarMensaje(idFormulario + ":idSelVende",
+					"Seleccione el Agente de Viajes", "", FacesMessage.SEVERITY_ERROR);
+			resultado = false;
+		}
+		if (this.getServicioAgencia().getFechaServicio() == null){
+			this.agregarMensaje(idFormulario + ":idSelFecSer",
+					"Ingrese la Fecha de Servicio", "", FacesMessage.SEVERITY_ERROR);
+			resultado = false;
+		}
+		if (resultado){
+			if (this.getServicioAgencia().getListaDetalleServicio().isEmpty()){
+				throw new ErrorRegistroDataException("No se agregaron servicios a la venta");
+			}
+			else{
+				Parametro param = this.parametroServicio.consultarParametro(UtilWeb.obtenerEnteroPropertieMaestro(
+						"codigoParametroFee", "aplicacionDatos"));
+				boolean servicioFee = false;
+				for (DetalleServicioAgencia detalleServicio : this.getServicioAgencia().getListaDetalleServicio()){
+					servicioFee = (detalleServicio.getTipoServicio().getCodigoEntero().toString().equals(param.getValor()));
+				}
+				
+				if (servicioFee){
+					throw new ErrorRegistroDataException("No se agrego el Fee de Venta");
+				}
+			}
+		}
+		
 		return resultado;
 	}
 
@@ -329,17 +357,14 @@ public class ServicioAgenteMBean extends BaseMBean{
 			}
 			
 		} catch (ErrorRegistroDataException e) {
-			e.printStackTrace();
 			this.setShowModal(true);
 			this.setMensajeModal(e.getMessage());
 			this.setTipoModal(TIPO_MODAL_ERROR);
 		} catch (SQLException e) {
-			e.printStackTrace();
 			this.setShowModal(true);
 			this.setMensajeModal(e.getMessage());
 			this.setTipoModal(TIPO_MODAL_ERROR);
 		} catch (Exception e) {
-			e.printStackTrace();
 			this.setShowModal(true);
 			this.setMensajeModal(e.getMessage());
 			this.setTipoModal(TIPO_MODAL_ERROR);

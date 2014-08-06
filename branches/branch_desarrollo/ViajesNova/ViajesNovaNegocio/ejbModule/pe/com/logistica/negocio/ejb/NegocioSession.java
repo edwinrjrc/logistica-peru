@@ -848,6 +848,7 @@ public class NegocioSession implements NegocioSessionRemote,
 	public Integer registrarVentaServicio(ServicioAgencia servicioAgencia)
 			throws ErrorRegistroDataException, SQLException, Exception {
 		ServicioNovaViajesDao servicioNovaViajesDao = new ServicioNovaViajesDaoImpl();
+		
 
 		Connection conexion = null;
 		Integer idServicio = 0;
@@ -858,6 +859,15 @@ public class NegocioSession implements NegocioSessionRemote,
 			if (servicioAgencia.getFechaServicio() == null){
 				Date fechaSer = servicioAgencia.getListaDetalleServicio().get(0).getFechaIda();
 				servicioAgencia.setFechaServicio(fechaSer);
+			}
+			
+			if (servicioAgencia.getValorCuota() == null){
+				ServicioNegocioDao servicioNegocioDao = new ServicioNegocioDaoImpl();
+				servicioAgencia.setValorCuota(servicioNegocioDao.calcularCuota(servicioAgencia));
+			}
+			
+			if (servicioAgencia.getListaDetalleServicio().isEmpty()){
+				servicioAgencia.setCantidadServicios(servicioAgencia.getListaDetalleServicio().size());
 			}
 
 			idServicio = servicioNovaViajesDao.ingresarCabeceraServicio(
