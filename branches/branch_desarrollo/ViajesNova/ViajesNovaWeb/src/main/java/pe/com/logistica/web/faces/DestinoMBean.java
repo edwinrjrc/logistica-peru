@@ -10,6 +10,7 @@ import java.util.List;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
+import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.SelectItem;
 import javax.naming.NamingException;
 import javax.servlet.ServletContext;
@@ -62,6 +63,8 @@ public class DestinoMBean extends BaseMBean {
 		this.setNuevoDestino(true);
 		this.setEditarDestino(false);
 		this.setDestino(null);
+		this.setListaDestino(null);
+		this.setListaPais(null);
 		this.setNombreFormulario("Nuevo Destino");
 	}
 
@@ -94,6 +97,10 @@ public class DestinoMBean extends BaseMBean {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public void cambiarPais(ValueChangeEvent e){
+		this.setListaPais(null);
 	}
 
 	/**
