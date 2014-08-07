@@ -159,7 +159,7 @@
 								<h:outputText
 									value="#{servicioAgenteMBean.servicioAgencia.valorCuota}"
 									rendered="#{servicioAgenteMBean.servicioAgencia.formaPago.codigoEntero == 2}">
-									<f:convertNumber pattern="###,##0.00" />
+									<f:convertNumber pattern="###,##0.00" locale="en_US" />
 								</h:outputText>
 
 								<h:outputText value="Fecha Primer Vencimiento"
@@ -250,7 +250,7 @@
 										border="0">
 										<h:inputText id="idCantidad"
 											value="#{servicioAgenteMBean.detalleServicio.cantidad}"
-											size="5" maxlength="2" />
+											size="5" maxlength="2" onkeypress="return js_soloEntero(event)" />
 										<rich:message for="idCantidad" showDetail="false"
 											showSummary="true" ajaxRendered="true" />
 									</h:panelGrid>
@@ -259,7 +259,7 @@
 									<h:panelGrid columns="1" cellpadding="0" cellspacing="0"
 										border="0">
 										<h:inputText id="idPrecUnitario"
-											onkeypress="return js_soloDecimal();"
+											onkeypress="return js_soloDecimal(event)"
 											value="#{servicioAgenteMBean.detalleServicio.precioUnitario}"
 											size="10" maxlength="8" />
 										<rich:message for="idPrecUnitario" showDetail="false"
@@ -332,7 +332,7 @@
 									<h:panelGrid columns="1" cellpadding="0" cellspacing="0"
 										border="0">
 										<h:inputText id="idMonFee"
-											onkeypress="return js_soloDecimal();"
+											onkeypress="return js_soloDecimal(event);"
 											value="#{servicioAgenteMBean.detalleServicio.precioUnitario}"
 											size="10" maxlength="8" />
 										<rich:message for="idMonFee" showDetail="false"

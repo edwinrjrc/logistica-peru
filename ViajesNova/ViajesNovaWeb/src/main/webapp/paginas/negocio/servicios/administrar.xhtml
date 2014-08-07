@@ -48,6 +48,7 @@
 								</h:selectOneMenu>
 								<h:outputText value="Numero documento" />
 								<h:inputText maxlength="11"
+									onkeypress="return js_soloEntero(event);"
 									value="#{servicioAgenteMBean.servicioAgencia.cliente.documentoIdentidad.numeroDocumento}" />
 							</h:panelGrid>
 							<h:panelGrid columns="2" border="0" cellpadding="0"
