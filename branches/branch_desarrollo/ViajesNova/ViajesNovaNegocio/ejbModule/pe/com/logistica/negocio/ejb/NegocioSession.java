@@ -866,7 +866,7 @@ public class NegocioSession implements NegocioSessionRemote,
 				servicioAgencia.setValorCuota(servicioNegocioDao.calcularCuota(servicioAgencia));
 			}
 			
-			if (servicioAgencia.getListaDetalleServicio().isEmpty()){
+			if (!servicioAgencia.getListaDetalleServicio().isEmpty()){
 				servicioAgencia.setCantidadServicios(servicioAgencia.getListaDetalleServicio().size());
 			}
 
