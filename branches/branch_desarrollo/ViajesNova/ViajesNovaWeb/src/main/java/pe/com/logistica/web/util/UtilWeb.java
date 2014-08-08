@@ -89,4 +89,11 @@ public class UtilWeb {
 		}
 		return "";
 	}
+	
+	public static int obtenerLongitud(String cadena){
+		if (StringUtils.isNotBlank(cadena)){
+			return cadena.length();
+		}
+		return 0;
+	}
 }
