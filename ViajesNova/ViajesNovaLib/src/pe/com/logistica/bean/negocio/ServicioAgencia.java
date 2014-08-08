@@ -25,7 +25,7 @@ public class ServicioAgencia extends BaseNegocio{
 	private Cliente cliente2;
 	private Date fechaServicio;
 	private int cantidadServicios;
-	private BaseVO destino;
+	private Destino destino;
 	private BaseVO formaPago;
 	private BaseVO estadoPago;
 	private int nroCuotas;
@@ -42,6 +42,7 @@ public class ServicioAgencia extends BaseNegocio{
 	private List<CuotaPago> cronogramaPago;
 	
 	private BaseVO vendedor;
+	private String observaciones;
 
 	/**
 	 * 
@@ -112,9 +113,9 @@ public class ServicioAgencia extends BaseNegocio{
 	/**
 	 * @return the destino
 	 */
-	public BaseVO getDestino() {
+	public Destino getDestino() {
 		if (destino == null){
-			destino = new BaseVO();
+			destino = new Destino();
 		}
 		return destino;
 	}
@@ -124,7 +125,7 @@ public class ServicioAgencia extends BaseNegocio{
 	/**
 	 * @param destino the destino to set
 	 */
-	public void setDestino(BaseVO destino) {
+	public void setDestino(Destino destino) {
 		this.destino = destino;
 	}
 
@@ -412,5 +413,23 @@ public class ServicioAgencia extends BaseNegocio{
 	 */
 	public void setVendedor(BaseVO vendedor) {
 		this.vendedor = vendedor;
+	}
+
+
+
+	/**
+	 * @return the observaciones
+	 */
+	public String getObservaciones() {
+		return observaciones;
+	}
+
+
+
+	/**
+	 * @param observaciones the observaciones to set
+	 */
+	public void setObservaciones(String observaciones) {
+		this.observaciones = observaciones;
 	}
 }

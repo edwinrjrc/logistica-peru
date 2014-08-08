@@ -31,6 +31,7 @@ import pe.com.logistica.bean.negocio.Telefono;
 import pe.com.logistica.bean.negocio.Ubigeo;
 import pe.com.logistica.negocio.dao.ClienteDao;
 import pe.com.logistica.negocio.dao.ContactoDao;
+import pe.com.logistica.negocio.dao.DestinoDao;
 import pe.com.logistica.negocio.dao.DireccionDao;
 import pe.com.logistica.negocio.dao.MaestroDao;
 import pe.com.logistica.negocio.dao.PersonaDao;
@@ -42,6 +43,7 @@ import pe.com.logistica.negocio.dao.TelefonoDao;
 import pe.com.logistica.negocio.dao.UbigeoDao;
 import pe.com.logistica.negocio.dao.impl.ClienteDaoImpl;
 import pe.com.logistica.negocio.dao.impl.ContactoDaoImpl;
+import pe.com.logistica.negocio.dao.impl.DestinoDaoImpl;
 import pe.com.logistica.negocio.dao.impl.DireccionDaoImpl;
 import pe.com.logistica.negocio.dao.impl.MaestroDaoImpl;
 import pe.com.logistica.negocio.dao.impl.PersonaDaoImpl;
@@ -689,6 +691,7 @@ public class NegocioSession implements NegocioSessionRemote,
 			throws ErrorRegistroDataException, SQLException, Exception {
 		ServicioNoviosDao servicioNoviosDao = new ServicioNoviosDaoImpl();
 		ServicioNovaViajesDao servicioNovaViajesDao = new ServicioNovaViajesDaoImpl();
+		DestinoDao destinoDao = new DestinoDaoImpl();
 
 		Connection conexion = null;
 		try {
@@ -710,6 +713,23 @@ public class NegocioSession implements NegocioSessionRemote,
 			}
 			
 			int idServicio = 0;
+			
+			ServicioAgencia servicioAgencia = new ServicioAgencia();
+			servicioAgencia.setCliente(programaNovios.getNovia());
+			servicioAgencia.setCliente2(programaNovios.getNovio());
+			servicioAgencia.setFechaServicio(new Date());
+			servicioAgencia.setCantidadServicios(0);
+			if (programaNovios.getListaServicios() != null
+					&& !programaNovios.getListaServicios().isEmpty()){
+				servicioAgencia.setCantidadServicios(programaNovios.getListaServicios().size());
+			}
+						
+			servicioAgencia.setDestino(destinoDao.consultarDestino(programaNovios.getDestino().getCodigoEntero()));
+			servicioAgencia.getFormaPago().setCodigoEntero(2);
+			servicioAgencia.getEstadoPago().setCodigoEntero(1);
+			servicioAgencia.setMontoTotalComision(programaNovios.getMontoTotalComision());
+			servicioAgencia.setMontoTotalServicios(programaNovios.getMontoTotalServiciosPrograma());
+			servicioAgencia.setMontoTotalFee(programaNovios.getMontoTotalFee());
 
 			if (programaNovios.getListaServicios() != null
 					&& !programaNovios.getListaServicios().isEmpty()) {
