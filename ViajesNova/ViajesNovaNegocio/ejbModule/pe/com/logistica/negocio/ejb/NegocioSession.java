@@ -688,6 +688,7 @@ public class NegocioSession implements NegocioSessionRemote,
 	public Integer registrarNovios(ProgramaNovios programaNovios)
 			throws ErrorRegistroDataException, SQLException, Exception {
 		ServicioNoviosDao servicioNoviosDao = new ServicioNoviosDaoImpl();
+		ServicioNovaViajesDao servicioNovaViajesDao = new ServicioNovaViajesDaoImpl();
 
 		Connection conexion = null;
 		try {
@@ -707,14 +708,16 @@ public class NegocioSession implements NegocioSessionRemote,
 					}
 				}
 			}
+			
+			int idServicio = 0;
 
 			if (programaNovios.getListaServicios() != null
 					&& !programaNovios.getListaServicios().isEmpty()) {
-				for (ServicioNovios servicioNovios : programaNovios
+				for (DetalleServicioAgencia servicioNovios : programaNovios
 						.getListaServicios()) {
-					boolean exitoRegistro = servicioNoviosDao
-							.ingresarServicioNovios(servicioNovios, idnovios,
-									conexion);
+					boolean exitoRegistro = servicioNovaViajesDao
+							.ingresarDetalleServicio(servicioNovios,
+									idServicio, conexion);;
 					if (!exitoRegistro) {
 						throw new ErrorRegistroDataException(
 								"No se pudo registrar los servicios de los novios");
@@ -757,8 +760,38 @@ public class NegocioSession implements NegocioSessionRemote,
 		Maestro hijoMaestro = new Maestro();
 		hijoMaestro.setCodigoMaestro(12);
 		hijoMaestro.setCodigoEntero(idTipoServicio);
-		servicioNovios.setTipoServicio((BaseVO) maestroDao
-				.consultarHijoMaestro(hijoMaestro));
+		
+		Maestro consultaMaestro = maestroDao
+				.consultarHijoMaestro(hijoMaestro);
+		
+		servicioNovios.setTipoServicio((BaseVO) consultaMaestro);
+		BigDecimal comision = BigDecimal.ZERO;
+		BigDecimal totalVenta = BigDecimal.ZERO;
+		
+		if (StringUtils.isBlank(servicioNovios.getDescripcionServicio())){
+			servicioNovios.setDescripcionServicio(consultaMaestro.getDescripcion());
+		}
+		
+		if (servicioNovios.getCantidad() == 0){
+			servicioNovios.setCantidad(1);
+		}
+		
+		if (servicioNovios.getPrecioUnitario()!= null){
+			BigDecimal total = servicioNovios.getPrecioUnitario().multiply(UtilParse.parseIntABigDecimal(servicioNovios.getCantidad())); 
+			totalVenta = totalVenta.add(total);
+		}
+		
+		if (servicioNovios.getServicioProveedor().getPorcentajeComision()!=null){
+			comision = servicioNovios.getServicioProveedor().getPorcentajeComision().multiply(totalVenta);
+			comision = comision.divide(BigDecimal.valueOf(100.0));
+		}
+				
+		if (servicioNovios.getServicioProveedor().getProveedor().getCodigoEntero() != null ){
+			Proveedor proveedor = consultarProveedor(servicioNovios.getServicioProveedor().getProveedor().getCodigoEntero().intValue());
+			servicioNovios.getServicioProveedor().setProveedor(proveedor);
+		}
+		
+		servicioNovios.setMontoComision(comision);
 
 		return servicioNovios;
 	}
