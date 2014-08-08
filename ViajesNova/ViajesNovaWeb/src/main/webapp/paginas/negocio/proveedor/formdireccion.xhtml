@@ -136,16 +136,18 @@
 							<h:panelGrid columns="1" style="width:100%;" cellpadding="0"
 								cellspacing="0" border="0">
 								<h:outputText value="Referencia" />
-								<h:inputTextarea value="#{proveedorMBean.direccion.referencia}"
+								<h:inputTextarea id="idTARefere" value="#{proveedorMBean.direccion.referencia}"
 									cols="120" rows="5" styleClass="estilocampo1" />
+								<rich:message for="idTARefere" showDetail="false" showSummary="true" />
 							</h:panelGrid>
 
 							<h:panelGrid columns="1" style="width:100%;" cellpadding="0"
 								cellspacing="0" border="0">
 								<h:outputText value="Observaciones" />
-								<h:inputTextarea
+								<h:inputTextarea id="idTAObser"
 									value="#{proveedorMBean.direccion.observaciones}" cols="120"
 									rows="5" styleClass="estilocampo1" />
+								<rich:message for="idTAObser" showDetail="false" showSummary="true" />
 							</h:panelGrid>
 
 						</h:panelGrid>

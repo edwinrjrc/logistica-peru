@@ -7,8 +7,8 @@
 	xmlns:a4j="http://richfaces.org/a4j"
 	xmlns:rich="http://richfaces.org/rich">
 
-	<rich:popupPanel id="idModalformnovios" modal="true" width="800"
-		height="500" style="background-color: #FFFFFF">
+	<rich:popupPanel id="idModalformnovios" modal="true" width="900"
+		height="600" style="background-color: #FFFFFF">
 
 		<f:facet name="header">
 			<h:outputText id="idNomModal" value="Registro de Novios" />
@@ -461,6 +461,12 @@
 									border="0" style="width:100%;" id="idTotalesServicios"
 									columnClasses="col1RSPN,col2RSPN">
 									
+									<h:outputText value="Total Comision" />
+									<h:outputText
+										value="#{noviosMBean.programaNovios.montoTotalComision}">
+										<f:convertNumber pattern="###,##0.00" locale="en_US" />
+									</h:outputText>
+
 									<h:outputText value="Total Servicios" />
 									<h:outputText
 										value="#{noviosMBean.programaNovios.montoTotalServiciosPrograma}">

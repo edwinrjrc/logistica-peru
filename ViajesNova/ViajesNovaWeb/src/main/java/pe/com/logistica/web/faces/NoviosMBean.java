@@ -31,6 +31,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 
 import pe.com.logistica.bean.negocio.Cliente;
+import pe.com.logistica.bean.negocio.Destino;
 import pe.com.logistica.bean.negocio.DetalleServicioAgencia;
 import pe.com.logistica.bean.negocio.Parametro;
 import pe.com.logistica.bean.negocio.ProgramaNovios;
@@ -155,7 +156,7 @@ public class NoviosMBean extends BaseMBean {
 						cliente.setUsuarioCreacion(usuario.getUsuario());
 						cliente.setIpCreacion(obtenerRequest().getRemoteAddr());
 					}
-
+					
 					Integer idnovios = negocioServicio
 							.registrarNovios(getProgramaNovios());
 					this.setRegistroExito(idnovios != null
@@ -497,38 +498,30 @@ public class NoviosMBean extends BaseMBean {
 	}
 
 	private void calcularTotales() {
-		BigDecimal montoSubtotal = BigDecimal.ZERO;
-		BigDecimal montoIgv = BigDecimal.ZERO;
-		BigDecimal porcenIgv = BigDecimal.ZERO;
 		BigDecimal montoTotal = BigDecimal.ZERO;
+		BigDecimal montoComision = BigDecimal.ZERO;
+		BigDecimal montoFee = BigDecimal.ZERO;
 		try {
-			String valorIGV = "0";
-			try {
-				Parametro paramIGV = parametroServicio.consultarParametro(1);
-				valorIGV = paramIGV.getValor();
-			} catch (SQLException e) {
-				valorIGV = "0";
-				e.printStackTrace();
+			
+			Parametro param = this.parametroServicio.consultarParametro(UtilWeb.obtenerEnteroPropertieMaestro(
+					"codigoParametroFee", "aplicacionDatos"));
+			
+			for (DetalleServicioAgencia detalleServicio : this.getListadoServicios()){
+				montoTotal = montoTotal.add(detalleServicio.getTotalServicio());
+				montoComision = montoComision.add(detalleServicio.getMontoComision());
+				
+				if (detalleServicio.getTipoServicio().getCodigoEntero().toString().equals(param.getValor())){
+					montoFee = montoFee.add(detalleServicio.getTotalServicio());
+				}
 			}
-			for (DetalleServicioAgencia servicioNovios : this.getListadoServicios()){
-				montoTotal = montoTotal.add(servicioNovios.getTotalServicio());
-			}
-			porcenIgv = BigDecimal.valueOf(Double.valueOf(valorIGV));
-			BigDecimal decimalIGVmas1 = porcenIgv.add(BigDecimal.ONE);
-			montoSubtotal = montoTotal.divide(decimalIGVmas1, 2, RoundingMode.DOWN);
-			montoIgv = montoSubtotal.multiply(porcenIgv);
-		} catch (NumberFormatException e) {
-			logger.error(e.getMessage(), e);
+
 		} catch (Exception e){
 			logger.error(e.getMessage(), e);
-			montoSubtotal = BigDecimal.ZERO;
-			montoIgv = BigDecimal.ZERO;
 			montoTotal = BigDecimal.ZERO;
 		}
-		this.getProgramaNovios().setMontoSinIgvServiciosPrograma(montoSubtotal);
-		this.getProgramaNovios().setMontoIgvServiciosPrograma(montoIgv);
-		this.getProgramaNovios().setPorcentajeIgv(porcenIgv);
 		this.getProgramaNovios().setMontoTotalServiciosPrograma(montoTotal);
+		this.getProgramaNovios().setMontoTotalComision(montoComision);
+		this.getProgramaNovios().setMontoTotalFee(montoFee);
 	}
 
 	private boolean validarServicioAgregar() {
