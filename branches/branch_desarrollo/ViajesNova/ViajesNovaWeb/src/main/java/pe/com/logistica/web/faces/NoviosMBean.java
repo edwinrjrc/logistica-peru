@@ -31,6 +31,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 
 import pe.com.logistica.bean.negocio.Cliente;
+import pe.com.logistica.bean.negocio.DetalleServicioAgencia;
 import pe.com.logistica.bean.negocio.Parametro;
 import pe.com.logistica.bean.negocio.ProgramaNovios;
 import pe.com.logistica.bean.negocio.ServicioNovios;
@@ -70,7 +71,7 @@ public class NoviosMBean extends BaseMBean {
 	private boolean servicioFee;
 
 	private List<ProgramaNovios> listadoNovios;
-	private List<ServicioNovios> listadoServicios;
+	private List<DetalleServicioAgencia> listadoServicios;
 	private List<Cliente> listadoClientes;
 	private List<Cliente> listadoInvitados;
 	private List<SelectItem> listadoEmpresas;
@@ -461,9 +462,13 @@ public class NoviosMBean extends BaseMBean {
 						obtenerRequest().getRemoteAddr());
 				
 				this.getListadoServicios().add(this.negocioServicio.agregarServicioNovios(getServicioNovios()));
+				this.setListadoServicios(negocioServicio.ordenarServiciosVenta(getListadoServicios()));
 				this.setServicioNovios(null);
 				
 				calcularTotales();
+				
+				this.setServicioFee(false);
+				this.setListadoEmpresas(null);
 			}
 		} catch (SQLException e) {
 			this.setShowModal(true);
@@ -505,7 +510,7 @@ public class NoviosMBean extends BaseMBean {
 				valorIGV = "0";
 				e.printStackTrace();
 			}
-			for (ServicioNovios servicioNovios : this.getListadoServicios()){
+			for (DetalleServicioAgencia servicioNovios : this.getListadoServicios()){
 				montoTotal = montoTotal.add(servicioNovios.getTotalServicio());
 			}
 			porcenIgv = BigDecimal.valueOf(Double.valueOf(valorIGV));
@@ -529,25 +534,44 @@ public class NoviosMBean extends BaseMBean {
 	private boolean validarServicioAgregar() {
 		boolean resultado = true;
 		String idFormulario = "idFormNovios";
-		if (this.getServicioNovios().getTipoServicio().getCodigoEntero() == null || this.getServicioNovios().getTipoServicio().getCodigoEntero().intValue() == 0){
-			this.agregarMensaje(idFormulario + ":idSelTipoServicio",
-					"Seleccione el tipo de servicio", "", FacesMessage.SEVERITY_ERROR);
-			resultado = false;
+		if (!this.isServicioFee()){
+			if (this.getServicioNovios().getTipoServicio().getCodigoEntero() == null || this.getServicioNovios().getTipoServicio().getCodigoEntero().intValue() == 0){
+				this.agregarMensaje(idFormulario + ":idSelTipoServicio",
+						"Seleccione el tipo de servicio", "", FacesMessage.SEVERITY_ERROR);
+				resultado = false;
+			}
+			if (StringUtils.isBlank(this.getServicioNovios().getDescripcionServicio())){
+				this.agregarMensaje(idFormulario + ":idDescServicio",
+						"Ingrese la descripcion del servicio", "", FacesMessage.SEVERITY_ERROR);
+				resultado = false;
+			}
+			if (this.getServicioNovios().getCantidad() == 0){
+				this.agregarMensaje(idFormulario + ":idCantidad",
+						"Ingrese la cantidad", "", FacesMessage.SEVERITY_ERROR);
+				resultado = false;
+			}
+			if (this.getServicioNovios().getPrecioUnitario() == null || this.getServicioNovios().getPrecioUnitario().doubleValue() == 0.0){
+				this.agregarMensaje(idFormulario + ":idPrecUnitario",
+						"Ingrese el precio base del servicio", "", FacesMessage.SEVERITY_ERROR);
+				resultado = false;
+			}
+			if (this.getServicioNovios().getFechaIda() == null){
+				this.agregarMensaje(idFormulario + ":idFecServicio",
+						"Ingrese la fecha del servicio", "", FacesMessage.SEVERITY_ERROR);
+				resultado = false;
+			}
 		}
-		if (StringUtils.isBlank(this.getServicioNovios().getDescripcionServicio())){
-			this.agregarMensaje(idFormulario + ":idDescServicio",
-					"Ingrese la descripcion del servicio", "", FacesMessage.SEVERITY_ERROR);
-			resultado = false;
-		}
-		if (this.getServicioNovios().getCantidad() == 0){
-			this.agregarMensaje(idFormulario + ":idCantidad",
-					"Ingrese la cantidad", "", FacesMessage.SEVERITY_ERROR);
-			resultado = false;
-		}
-		if (this.getServicioNovios().getPrecioUnitario() == null || this.getServicioNovios().getPrecioUnitario().doubleValue() == 0.0){
-			this.agregarMensaje(idFormulario + ":idPrecUnitario",
-					"Ingrese el precio unitario del servicio", "", FacesMessage.SEVERITY_ERROR);
-			resultado = false;
+		else{
+			if (this.getServicioNovios().getPrecioUnitario() == null || this.getServicioNovios().getPrecioUnitario().doubleValue() == 0.0){
+				this.agregarMensaje(idFormulario + ":idMonFee",
+						"Ingrese el Monto Fee", "", FacesMessage.SEVERITY_ERROR);
+				resultado = false;
+			}
+			if (this.getServicioNovios().getFechaIda() == null){
+				this.agregarMensaje(idFormulario + ":idFecServicioFee",
+						"Ingrese la fecha del servicio", "", FacesMessage.SEVERITY_ERROR);
+				resultado = false;
+			}
 		}
 		return resultado;
 	}
@@ -728,9 +752,9 @@ public class NoviosMBean extends BaseMBean {
 	/**
 	 * @return the listadoServicios
 	 */
-	public List<ServicioNovios> getListadoServicios() {
+	public List<DetalleServicioAgencia> getListadoServicios() {
 		if (listadoServicios == null){
-			listadoServicios = new ArrayList<ServicioNovios>();
+			listadoServicios = new ArrayList<DetalleServicioAgencia>();
 		}
 		
 		return listadoServicios;
@@ -739,7 +763,7 @@ public class NoviosMBean extends BaseMBean {
 	/**
 	 * @param listadoServicios the listadoServicios to set
 	 */
-	public void setListadoServicios(List<ServicioNovios> listadoServicios) {
+	public void setListadoServicios(List<DetalleServicioAgencia> listadoServicios) {
 		this.listadoServicios = listadoServicios;
 	}
 
