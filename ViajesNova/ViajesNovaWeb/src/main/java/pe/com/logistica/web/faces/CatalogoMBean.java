@@ -15,6 +15,8 @@ import javax.faces.model.SelectItem;
 import javax.naming.NamingException;
 import javax.servlet.ServletContext;
 
+import org.apache.log4j.Logger;
+
 import pe.com.logistica.bean.base.BaseVO;
 import pe.com.logistica.bean.negocio.Destino;
 import pe.com.logistica.bean.negocio.Usuario;
@@ -31,6 +33,8 @@ import pe.com.logistica.web.util.UtilWeb;
 @ManagedBean(name = "catalogoMBean")
 @SessionScoped()
 public class CatalogoMBean implements Serializable{
+	
+	private final static Logger logger = Logger.getLogger(CatalogoMBean.class);
 
 	/**
 	 * 
@@ -64,7 +68,7 @@ public class CatalogoMBean implements Serializable{
 			soporteServicio = new SoporteServicioImpl(servletContext);
 
 		} catch (NamingException e) {
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 		}
 	}
 
@@ -97,7 +101,7 @@ public class CatalogoMBean implements Serializable{
 					.listarCatalogoMaestro(idmaestro);
 			catalogoTipoDocumento = UtilWeb.convertirSelectItem(lista);
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 		}
 		return catalogoTipoDocumento;
 	}
@@ -121,7 +125,7 @@ public class CatalogoMBean implements Serializable{
 					.listarCatalogoMaestro(idmaestro);
 			catalogoRubro = UtilWeb.convertirSelectItem(lista);
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 		}
 		return catalogoRubro;
 	}
@@ -142,7 +146,7 @@ public class CatalogoMBean implements Serializable{
 			List<BaseVO> lista = soporteServicio.listarCatalogoDepartamento();
 			catalogoDepartamento = UtilWeb.convertirSelectItem(lista);
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 		}
 		return catalogoDepartamento;
 	}
@@ -167,10 +171,10 @@ public class CatalogoMBean implements Serializable{
 			catalogoVias = UtilWeb.convertirSelectItem(lista);
 		} catch (SQLException e) {
 			catalogoVias = new ArrayList<SelectItem>();
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 		} catch (Exception e) {
 			catalogoVias = new ArrayList<SelectItem>();
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 		}
 		return catalogoVias;
 	}
@@ -195,10 +199,10 @@ public class CatalogoMBean implements Serializable{
 			catalogoArea = UtilWeb.convertirSelectItem(lista);
 		} catch (SQLException e) {
 			catalogoArea = new ArrayList<SelectItem>();
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 		} catch (Exception e) {
 			catalogoArea = new ArrayList<SelectItem>();
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 		}
 		return catalogoArea;
 	}
@@ -223,10 +227,10 @@ public class CatalogoMBean implements Serializable{
 			catalogoOperadoraMovil = UtilWeb.convertirSelectItem(lista);
 		} catch (SQLException e) {
 			catalogoOperadoraMovil = new ArrayList<SelectItem>();
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 		} catch (Exception e) {
 			catalogoOperadoraMovil = new ArrayList<SelectItem>();
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 		}
 		return catalogoOperadoraMovil;
 	}
@@ -252,10 +256,10 @@ public class CatalogoMBean implements Serializable{
 			catalogoEstadoCivil = UtilWeb.convertirSelectItem(lista);
 		} catch (SQLException e) {
 			catalogoEstadoCivil = new ArrayList<SelectItem>();
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 		} catch (Exception e) {
 			catalogoEstadoCivil = new ArrayList<SelectItem>();
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 		}
 		return catalogoEstadoCivil;
 	}
@@ -280,7 +284,7 @@ public class CatalogoMBean implements Serializable{
 					.listarCatalogoMaestro(idmaestro);
 			catalogoContinente = UtilWeb.convertirSelectItem(lista);
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 		}
 		return catalogoContinente;
 	}
@@ -305,7 +309,7 @@ public class CatalogoMBean implements Serializable{
 					.listarCatalogoMaestro(idmaestro);
 			catalogoTipoDestino = UtilWeb.convertirSelectItem(lista);
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 		}
 		return catalogoTipoDestino;
 	}
@@ -336,10 +340,10 @@ public class CatalogoMBean implements Serializable{
 
 		} catch (SQLException e) {
 			catalogoDestino = new ArrayList<SelectItem>();
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 		} catch (Exception e) {
 			catalogoDestino = new ArrayList<SelectItem>();
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 		}
 		return catalogoDestino;
 	}
@@ -363,7 +367,7 @@ public class CatalogoMBean implements Serializable{
 					.listarCatalogoMaestro(idmaestro);
 			catalogoTipoServicio = UtilWeb.convertirSelectItem(lista);
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 		}
 		return catalogoTipoServicio;
 	}
@@ -387,7 +391,7 @@ public class CatalogoMBean implements Serializable{
 					.listarCatalogoMaestro(idmaestro);
 			catalogoFormaPago = UtilWeb.convertirSelectItem(lista);
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 		}
 		return catalogoFormaPago;
 	}
@@ -417,10 +421,10 @@ public class CatalogoMBean implements Serializable{
 
 		} catch (SQLException e) {
 			catalogoVendedores = new ArrayList<SelectItem>();
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 		} catch (Exception e) {
 			catalogoVendedores = new ArrayList<SelectItem>();
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 		}
 		return catalogoVendedores;
 	}

@@ -19,6 +19,7 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.log4j.Logger;
 
 import pe.com.logistica.bean.Util.UtilParse;
 import pe.com.logistica.bean.negocio.Cliente;
@@ -44,6 +45,8 @@ import pe.com.logistica.web.util.UtilWeb;
 @ManagedBean(name = "servicioAgenteMBean")
 @SessionScoped()
 public class ServicioAgenteMBean extends BaseMBean{
+	
+	private final static Logger logger = Logger.getLogger(ServicioAgenteMBean.class);
 	/**
 	 * 
 	 */
@@ -78,7 +81,7 @@ public class ServicioAgenteMBean extends BaseMBean{
 			soporteServicio = new SoporteServicioImpl(servletContext);
 			
 		} catch (NamingException e) {
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 		}
 		
 		consultarTasaPredeterminada();
@@ -90,9 +93,9 @@ public class ServicioAgenteMBean extends BaseMBean{
 
 			this.setListadoClientes(this.negocioServicio.listarCliente());
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 		}
 	}
 	
@@ -100,7 +103,7 @@ public class ServicioAgenteMBean extends BaseMBean{
 		try {
 			this.setListadoClientes(this.negocioServicio.buscarCliente(getClienteBusqueda()));
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 		}
 
 	}
@@ -118,7 +121,7 @@ public class ServicioAgenteMBean extends BaseMBean{
 				}
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 		}
 
 		return null;
@@ -133,9 +136,9 @@ public class ServicioAgenteMBean extends BaseMBean{
 			this.setServicioAgencia(this.negocioServicio.consultarVentaServicio(idServicio));
 			
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 		}
 	}
 	
@@ -176,12 +179,12 @@ public class ServicioAgenteMBean extends BaseMBean{
 			}
 			
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 			this.setShowModal(true);
 			this.setMensajeModal(e.getMessage());
 			this.setTipoModal(TIPO_MODAL_ERROR);
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 			this.setShowModal(true);
 			this.setMensajeModal(e.getMessage());
 			this.setTipoModal(TIPO_MODAL_ERROR);
@@ -324,7 +327,7 @@ public class ServicioAgenteMBean extends BaseMBean{
 			}
 
 		} catch (Exception e){
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 			montoTotal = BigDecimal.ZERO;
 		}
 		this.getServicioAgencia().setMontoTotalServicios(montoTotal);
@@ -367,10 +370,12 @@ public class ServicioAgenteMBean extends BaseMBean{
 			this.setShowModal(true);
 			this.setMensajeModal(e.getMessage());
 			this.setTipoModal(TIPO_MODAL_ERROR);
+			logger.error(e.getMessage(), e);
 		} catch (Exception e) {
 			this.setShowModal(true);
 			this.setMensajeModal(e.getMessage());
 			this.setTipoModal(TIPO_MODAL_ERROR);
+			logger.error(e.getMessage(), e);
 		}
 	}
 	
@@ -379,9 +384,9 @@ public class ServicioAgenteMBean extends BaseMBean{
 		try {
 			valorCuota = this.negocioServicio.calcularValorCuota(this.getServicioAgencia());
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 		}
 		this.getServicioAgencia().setValorCuota(valorCuota);
 	}
@@ -392,7 +397,7 @@ public class ServicioAgenteMBean extends BaseMBean{
 			BigDecimal ttea = UtilParse.parseStringABigDecimal(parametroServicio.consultarParametro(idtasatea).getValor()); 
 			this.getServicioAgencia().setTea(ttea);
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 		}
 	}
 	
@@ -411,10 +416,10 @@ public class ServicioAgenteMBean extends BaseMBean{
 					}
 				}
 			}
-		} catch (SQLException e1) {
-			e1.printStackTrace();
-		} catch (Exception e1) {
-			e1.printStackTrace();
+		} catch (SQLException ex) {
+			logger.error(ex.getMessage(), ex);
+		} catch (Exception ex) {
+			logger.error(ex.getMessage(), ex);
 		}
 	}
 	
@@ -443,10 +448,10 @@ public class ServicioAgenteMBean extends BaseMBean{
 					}
 				}
 			}
-		} catch (SQLException e1) {
-			e1.printStackTrace();
-		} catch (Exception e1) {
-			e1.printStackTrace();
+		} catch (SQLException ex) {
+			logger.error(ex.getMessage(), ex);
+		} catch (Exception ex) {
+			logger.error(ex.getMessage(), ex);
 		}
 	}
 	
@@ -463,8 +468,9 @@ public class ServicioAgenteMBean extends BaseMBean{
 					}
 				}
 			}
-		} catch (Exception e1) {
+		} catch (Exception ex) {
 			this.getDetalleServicio().getServicioProveedor().setPorcentajeComision(BigDecimal.ZERO);
+			logger.error(ex.getMessage(), ex);
 		}
 	}
 	
@@ -499,10 +505,10 @@ public class ServicioAgenteMBean extends BaseMBean{
 			listadoServicioAgencia = this.negocioServicio.listarVentaServicio(getServicioAgenciaBusqueda());
 			
 			this.setShowModal(false);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} catch (Exception e) {
-			e.printStackTrace();
+		} catch (SQLException ex) {
+			logger.error(ex.getMessage(), ex);
+		} catch (Exception ex) {
+			logger.error(ex.getMessage(), ex);
 		}
 		return listadoServicioAgencia;
 	}

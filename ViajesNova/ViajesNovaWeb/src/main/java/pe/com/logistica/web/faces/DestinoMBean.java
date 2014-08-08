@@ -16,6 +16,8 @@ import javax.naming.NamingException;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpSession;
 
+import org.apache.log4j.Logger;
+
 import pe.com.logistica.bean.base.BaseVO;
 import pe.com.logistica.bean.negocio.Destino;
 import pe.com.logistica.bean.negocio.Usuario;
@@ -31,6 +33,7 @@ import pe.com.logistica.web.util.UtilWeb;
 @SessionScoped()
 public class DestinoMBean extends BaseMBean {
 
+	private final static Logger logger = Logger.getLogger(DestinoMBean.class);
 	/**
 	 * 
 	 */
@@ -55,7 +58,7 @@ public class DestinoMBean extends BaseMBean {
 					.getCurrentInstance().getExternalContext().getContext();
 			soporteServicio = new SoporteServicioImpl(servletContext);
 		} catch (NamingException e) {
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 		}
 	}
 
@@ -93,9 +96,9 @@ public class DestinoMBean extends BaseMBean {
 			}
 
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 		}
 	}
 	
@@ -168,10 +171,10 @@ public class DestinoMBean extends BaseMBean {
 
 		} catch (SQLException e) {
 			listaPais = new ArrayList<SelectItem>();
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 		} catch (Exception e) {
 			listaPais = new ArrayList<SelectItem>();
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 		}
 		return listaPais;
 	}
@@ -193,9 +196,9 @@ public class DestinoMBean extends BaseMBean {
 
 			this.setShowModal(false);
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 		}
 		return listaDestino;
 	}

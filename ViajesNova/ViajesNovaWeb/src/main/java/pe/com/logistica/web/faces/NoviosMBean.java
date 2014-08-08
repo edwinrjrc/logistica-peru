@@ -34,6 +34,7 @@ import net.sf.jasperreports.export.SimpleOutputStreamExporterOutput;
 import net.sf.jasperreports.export.SimplePdfExporterConfiguration;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.log4j.Logger;
 
 import pe.com.logistica.bean.negocio.Cliente;
 import pe.com.logistica.bean.negocio.Parametro;
@@ -54,6 +55,8 @@ import pe.com.logistica.web.servicio.impl.ParametroServicioImpl;
 @SessionScoped()
 public class NoviosMBean extends BaseMBean {
 
+	private final static Logger logger = Logger.getLogger(NoviosMBean.class);
+	
 	/**
 	 * 
 	 */
@@ -91,7 +94,7 @@ public class NoviosMBean extends BaseMBean {
 			negocioServicio = new NegocioServicioImpl(servletContext);
 			parametroServicio = new ParametroServicioImpl(servletContext);
 		} catch (NamingException e) {
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 		}
 	}
 
@@ -115,9 +118,9 @@ public class NoviosMBean extends BaseMBean {
 			this.setListadoClientes(this.negocioServicio
 					.listarClientesNovios(genero));
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 		}
 	}
 
@@ -171,15 +174,16 @@ public class NoviosMBean extends BaseMBean {
 					this.setTipoModal(TIPO_MODAL_EXITO);
 				}
 			}
-		} catch (ValidacionException e1){
+		} catch (ValidacionException ex){
 			this.setShowModal(true);
-			this.setMensajeModal(e1.getMessage());
+			this.setMensajeModal(ex.getMessage());
 			this.setTipoModal(TIPO_MODAL_ERROR);
-		} catch (Exception e1) {
+			logger.error(ex.getMessage(), ex);
+		} catch (Exception ex) {
 			this.setShowModal(true);
-			this.setMensajeModal(e1.getMessage());
+			this.setMensajeModal(ex.getMessage());
 			this.setTipoModal(TIPO_MODAL_ERROR);
-			e1.printStackTrace();
+			logger.error(ex.getMessage(), ex);
 		}
 
 	}
@@ -304,9 +308,9 @@ public class NoviosMBean extends BaseMBean {
 			facesContext.responseComplete();
 
 		} catch (IOException e) {
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 		}
 	}
 
@@ -347,6 +351,7 @@ public class NoviosMBean extends BaseMBean {
 			parametros.put("P_FECHAINSCRIPCION", "");
 			parametros.put("P_CUOTAINICIAL", "");
 			parametros.put("P_NROINVITADOS", "");
+			logger.error(e.getMessage(), e);
 		}
 
 		return parametros;
@@ -369,7 +374,7 @@ public class NoviosMBean extends BaseMBean {
 				}
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 		}
 
 		return null;
@@ -414,12 +419,12 @@ public class NoviosMBean extends BaseMBean {
 			this.setShowModal(true);
 			this.setMensajeModal(e.getMessage());
 			this.setTipoModal(TIPO_MODAL_ERROR);
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 		} catch (Exception e) {
 			this.setShowModal(true);
 			this.setMensajeModal(e.getMessage());
 			this.setTipoModal(TIPO_MODAL_ERROR);
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 		}
 	}
 	
@@ -432,7 +437,7 @@ public class NoviosMBean extends BaseMBean {
 			this.setShowModal(true);
 			this.setMensajeModal(e.getMessage());
 			this.setTipoModal(TIPO_MODAL_ERROR);
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 		}
 	}
 
@@ -458,9 +463,9 @@ public class NoviosMBean extends BaseMBean {
 			montoSubtotal = montoTotal.divide(decimalIGVmas1, 2, RoundingMode.DOWN);
 			montoIgv = montoSubtotal.multiply(porcenIgv);
 		} catch (NumberFormatException e) {
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 		} catch (Exception e){
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 			montoSubtotal = BigDecimal.ZERO;
 			montoIgv = BigDecimal.ZERO;
 			montoTotal = BigDecimal.ZERO;
@@ -523,9 +528,9 @@ public class NoviosMBean extends BaseMBean {
 			listadoNovios = this.negocioServicio
 			.consultarNovios(getProgramaNoviosBusqueda());
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 		}
 		return listadoNovios;
 	}

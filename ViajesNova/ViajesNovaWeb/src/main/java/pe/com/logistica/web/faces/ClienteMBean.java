@@ -18,6 +18,7 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.log4j.Logger;
 
 import pe.com.logistica.bean.base.BaseVO;
 import pe.com.logistica.bean.base.CorreoElectronico;
@@ -42,6 +43,8 @@ import pe.com.logistica.web.util.UtilWeb;
 @ManagedBean(name = "clienteMBean")
 @SessionScoped()
 public class ClienteMBean extends BaseMBean {
+	
+	private final static Logger logger = Logger.getLogger(ClienteMBean.class);
 	
 	/**
 	 * 
@@ -86,7 +89,7 @@ public class ClienteMBean extends BaseMBean {
 			soporteServicio = new SoporteServicioImpl(servletContext);
 			negocioServicio = new NegocioServicioImpl(servletContext);
 		} catch (NamingException e) {
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 		}
 	}
 	
@@ -103,9 +106,9 @@ public class ClienteMBean extends BaseMBean {
 			this.setListaClientes(this.negocioServicio.consultarCliente2(getClienteBusqueda()));
 			this.setBusquedaRealizada(true);
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 		}
 	}
 	
@@ -178,11 +181,13 @@ public class ClienteMBean extends BaseMBean {
 			this.setShowModal(true);
 			this.setTipoModal("2");
 			this.setMensajeModal(ex.getMessage());
+			logger.error(ex.getMessage(), ex);
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			this.setShowModal(true);
 			this.setTipoModal("2");
 			this.setMensajeModal(ex.getMessage());
+			logger.error(ex.getMessage(), ex);
 		}
 	}
 	
@@ -350,9 +355,9 @@ public class ClienteMBean extends BaseMBean {
 				}
 			}
 		} catch (SQLException ex) {
-			ex.printStackTrace();
+			logger.error(ex.getMessage(), ex);
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			logger.error(ex.getMessage(), ex);
 		}
 	}
 	private boolean validarDireccion(ActionEvent e) {
@@ -476,9 +481,9 @@ public class ClienteMBean extends BaseMBean {
 				this.setContactoAgregada(true);
 			}
 		} catch (SQLException ex) {
-			ex.printStackTrace();
+			logger.error(ex.getMessage(), ex);
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			logger.error(ex.getMessage(), ex);
 		}
 	}
 
@@ -840,12 +845,12 @@ public class ClienteMBean extends BaseMBean {
 								.getCodigoCadena());
 				listaProvincia = UtilWeb.convertirSelectItem(lista);
 			}
-		} catch (SQLException e) {
+		} catch (SQLException ex) {
 			listaProvincia = new ArrayList<SelectItem>();
-			e.printStackTrace();
-		} catch (Exception e) {
+			logger.error(ex.getMessage(), ex);
+		} catch (Exception ex) {
 			listaProvincia = new ArrayList<SelectItem>();
-			e.printStackTrace();
+			logger.error(ex.getMessage(), ex);
 		}
 		return listaProvincia;
 	}
@@ -870,12 +875,12 @@ public class ClienteMBean extends BaseMBean {
 				listaDistrito = UtilWeb.convertirSelectItem(lista);
 			}
 
-		} catch (SQLException e) {
+		} catch (SQLException ex) {
 			listaDistrito = new ArrayList<SelectItem>();
-			e.printStackTrace();
-		} catch (Exception e) {
+			logger.error(ex.getMessage(), ex);
+		} catch (Exception ex) {
 			listaDistrito = new ArrayList<SelectItem>();
-			e.printStackTrace();
+			logger.error(ex.getMessage(), ex);
 		}
 		return listaDistrito;
 	}
@@ -896,10 +901,10 @@ public class ClienteMBean extends BaseMBean {
 			if (!this.isBusquedaRealizada()){
 				this.setListaClientes(this.negocioServicio.consultarCliente2(getClienteBusqueda()));
 			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} catch (Exception e) {
-			e.printStackTrace();
+		} catch (SQLException ex) {
+			logger.error(ex.getMessage(), ex);
+		} catch (Exception ex) {
+			logger.error(ex.getMessage(), ex);
 		}
 
 		return listaClientes;

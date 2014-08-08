@@ -19,6 +19,7 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.log4j.Logger;
 
 import pe.com.logistica.bean.base.BaseVO;
 import pe.com.logistica.bean.base.CorreoElectronico;
@@ -45,6 +46,7 @@ import pe.com.logistica.web.util.UtilWeb;
 @SessionScoped()
 public class ProveedorMBean extends BaseMBean {
 
+	private final static Logger logger = Logger.getLogger(ProveedorMBean.class);
 	/**
 	 * 
 	 */
@@ -86,7 +88,7 @@ public class ProveedorMBean extends BaseMBean {
 			soporteServicio = new SoporteServicioImpl(servletContext);
 			negocioServicio = new NegocioServicioImpl(servletContext);
 		} catch (NamingException e) {
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 		}
 	}
 
@@ -133,9 +135,9 @@ public class ProveedorMBean extends BaseMBean {
 				this.setContactoAgregada(true);
 			}
 		} catch (SQLException ex) {
-			ex.printStackTrace();
+			logger.error(ex.getMessage(), ex);
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			logger.error(ex.getMessage(), ex);
 		}
 	}
 
@@ -153,8 +155,8 @@ public class ProveedorMBean extends BaseMBean {
 	public void buscarProveedor() {
 		try {
 			this.setListaProveedores(this.negocioServicio.buscarProveedor(getProveedor()));
-		} catch (Exception e) {
-			e.printStackTrace();
+		} catch (Exception ex) {
+			logger.error(ex.getMessage(), ex);
 		}
 	}
 
@@ -236,6 +238,7 @@ public class ProveedorMBean extends BaseMBean {
 			this.setShowModal(true);
 			this.setTipoModal("2");
 			this.setMensajeModal(ex.getMessage());
+			logger.error(ex.getMessage(), ex);
 		}
 	}
 
@@ -358,8 +361,8 @@ public class ProveedorMBean extends BaseMBean {
 			this.setNuevoProveedor(false);
 			this.setEditarProveedor(true);
 			this.setNombreFormulario("Editar Proveedor");
-		} catch (Exception e) {
-			e.printStackTrace();
+		} catch (Exception ex) {
+			logger.error(ex.getMessage(), ex);
 		}
 	}
 
@@ -380,9 +383,9 @@ public class ProveedorMBean extends BaseMBean {
 				}
 			}
 		} catch (SQLException ex) {
-			ex.printStackTrace();
+			logger.error(ex.getMessage(), ex);
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			logger.error(ex.getMessage(), ex);
 		}
 	}
 
@@ -631,8 +634,8 @@ public class ProveedorMBean extends BaseMBean {
 						.listarProveedor(getProveedor());
 			}
 			
-		} catch (Exception e) {
-			e.printStackTrace();
+		} catch (Exception ex) {
+			logger.error(ex.getMessage(), ex);
 		}
 		return listaProveedores;
 	}
@@ -783,12 +786,12 @@ public class ProveedorMBean extends BaseMBean {
 								.getCodigoCadena());
 				listaProvincia = UtilWeb.convertirSelectItem(lista);
 			}
-		} catch (SQLException e) {
+		} catch (SQLException ex) {
 			listaProvincia = new ArrayList<SelectItem>();
-			e.printStackTrace();
-		} catch (Exception e) {
+			logger.error(ex.getMessage(), ex);
+		} catch (Exception ex) {
 			listaProvincia = new ArrayList<SelectItem>();
-			e.printStackTrace();
+			logger.error(ex.getMessage(), ex);
 		}
 		return listaProvincia;
 	}
@@ -814,12 +817,12 @@ public class ProveedorMBean extends BaseMBean {
 				listaDistrito = UtilWeb.convertirSelectItem(lista);
 			}
 
-		} catch (SQLException e) {
+		} catch (SQLException ex) {
 			listaDistrito = new ArrayList<SelectItem>();
-			e.printStackTrace();
-		} catch (Exception e) {
+			logger.error(ex.getMessage(), ex);
+		} catch (Exception ex) {
 			listaDistrito = new ArrayList<SelectItem>();
-			e.printStackTrace();
+			logger.error(ex.getMessage(), ex);
 		}
 		return listaDistrito;
 	}
