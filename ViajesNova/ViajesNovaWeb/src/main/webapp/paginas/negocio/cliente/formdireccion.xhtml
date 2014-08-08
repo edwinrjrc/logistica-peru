@@ -69,10 +69,10 @@
 								columnClasses="col1fil1proveedor,col2fil1proveedor,col3fil1proveedor,col4fil1proveedor">
 								<h:outputText value="Manzana" style="width:100px;" />
 								<h:inputText value="#{clienteMBean.direccion.manzana}"
-									styleClass="estilocampo1" />
+									styleClass="estilocampo1" maxlength="5" size="10" />
 								<h:outputText value="Lote" style="width:100px;" />
 								<h:inputText value="#{clienteMBean.direccion.lote}"
-									styleClass="estilocampo1" />
+									styleClass="estilocampo1" maxlength="5" size="10" />
 							</h:panelGrid>
 
 							<h:panelGrid columns="4" style="width:100%;" cellpadding="0"
@@ -172,7 +172,7 @@
 								</rich:column>
 								<f:facet name="header">
 									<h:panelGrid columns="1" border="0" cellpadding="0"
-										cellspacing="0">
+										cellspacing="0" style="width:100%;text-align:right;">
 										<a4j:commandButton render="idTablaTelDir" value="Agregar"
 											action="#{clienteMBean.agregarTelefonoDireccion}" />
 									</h:panelGrid>
