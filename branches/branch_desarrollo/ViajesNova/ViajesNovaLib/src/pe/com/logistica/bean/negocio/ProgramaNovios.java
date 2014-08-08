@@ -36,7 +36,7 @@ public class ProgramaNovios extends BaseNegocio {
 	private String observaciones;
 	
 	private List<Cliente> listaInvitados;
-	private List<ServicioNovios> listaServicios;
+	private List<DetalleServicioAgencia> listaServicios;
 	private int cantidadInvitados;
 	
 	private BigDecimal montoTotalServiciosPrograma;
@@ -276,14 +276,14 @@ public class ProgramaNovios extends BaseNegocio {
 	/**
 	 * @return the listaServicios
 	 */
-	public List<ServicioNovios> getListaServicios() {
+	public List<DetalleServicioAgencia> getListaServicios() {
 		return listaServicios;
 	}
 
 	/**
 	 * @param listaServicios the listaServicios to set
 	 */
-	public void setListaServicios(List<ServicioNovios> listaServicios) {
+	public void setListaServicios(List<DetalleServicioAgencia> listaServicios) {
 		this.listaServicios = listaServicios;
 	}
 
