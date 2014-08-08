@@ -411,7 +411,7 @@ public class ServicioAgenteMBean extends BaseMBean{
 				
 				for(Destino destino : listaDestino){
 					if (destino.getCodigoEntero().equals(Integer.valueOf(valor))){
-						this.getServicioAgencia().getDestino().setNombre(destino.getDescripcion());
+						this.getServicioAgencia().getDestino().setDescripcion(destino.getDescripcion());
 						break;
 					}
 				}

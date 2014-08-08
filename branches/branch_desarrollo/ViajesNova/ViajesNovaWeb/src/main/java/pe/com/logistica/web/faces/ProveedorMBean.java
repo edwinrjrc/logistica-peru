@@ -585,6 +585,18 @@ public class ProveedorMBean extends BaseMBean {
 			resultado = false;
 			this.setPestanaActiva("idFD01");
 		}
+		if (StringUtils.isNotBlank(getDireccion().getReferencia()) && UtilWeb.obtenerLongitud(getDireccion().getReferencia())>300){
+			this.agregarMensaje(idFormulario + ":idTARefere",
+					"El tamaño de referencia supera al permitido, maximo 300 caracteres", "", FacesMessage.SEVERITY_ERROR);
+			resultado = false;
+			this.setPestanaActiva("idFD01");
+		}
+		if (StringUtils.isNotBlank(getDireccion().getObservaciones()) && UtilWeb.obtenerLongitud(getDireccion().getObservaciones())>300){
+			this.agregarMensaje(idFormulario + ":idTAObser",
+					"El tamaño de observaciones supera al permitido, maximo 300 caracteres", "", FacesMessage.SEVERITY_ERROR);
+			resultado = false;
+			this.setPestanaActiva("idFD01");
+		}
 		if (resultado){
 			List<Telefono> listTelefonos = getDireccion().getTelefonos();
 			if (!listTelefonos.isEmpty()){
