@@ -56,7 +56,7 @@ public class ServicioNovaViajesDaoImpl implements ServicioNovaViajesDao {
 			cs.setBigDecimal(i++, servicioAgencia.getMontoTotal());
 			cs.setInt(i++, servicioAgencia.getCantidadServicios());
 			cs.setInt(i++, servicioAgencia.getDestino().getCodigoEntero().intValue());
-			cs.setString(i++, servicioAgencia.getDestino().getNombre());
+			cs.setString(i++, servicioAgencia.getDestino().getDescripcion());
 			cs.setInt(i++, servicioAgencia.getFormaPago().getCodigoEntero().intValue());
 			cs.setString(i++, servicioAgencia.getUsuarioCreacion());
 			cs.setString(i++, servicioAgencia.getIpCreacion());
@@ -138,8 +138,8 @@ public class ServicioNovaViajesDaoImpl implements ServicioNovaViajesDao {
 			else{
 				cs.setNull(i++, Types.INTEGER);
 			}
-			if (StringUtils.isNotBlank(servicioAgencia.getDestino().getNombre())){
-				cs.setString(i++, servicioAgencia.getDestino().getNombre());
+			if (StringUtils.isNotBlank(servicioAgencia.getDestino().getDescripcion())){
+				cs.setString(i++, servicioAgencia.getDestino().getDescripcion());
 			}
 			else{
 				cs.setNull(i++, Types.VARCHAR);
@@ -222,7 +222,7 @@ public class ServicioNovaViajesDaoImpl implements ServicioNovaViajesDao {
 			cs.setBigDecimal(i++, servicioAgencia.getMontoTotal());
 			cs.setInt(i++, servicioAgencia.getCantidadServicios());
 			cs.setInt(i++, servicioAgencia.getDestino().getCodigoEntero().intValue());
-			cs.setString(i++, servicioAgencia.getDestino().getNombre());
+			cs.setString(i++, servicioAgencia.getDestino().getDescripcion());
 			cs.setInt(i++, servicioAgencia.getFormaPago().getCodigoEntero().intValue());
 			cs.setInt(i++, servicioAgencia.getEstadoPago().getCodigoEntero().intValue());
 			cs.setInt(i++, servicioAgencia.getNroCuotas());
@@ -316,8 +316,8 @@ public class ServicioNovaViajesDaoImpl implements ServicioNovaViajesDao {
 			else{
 				cs.setNull(i++, Types.INTEGER);
 			}
-			if (StringUtils.isNotBlank(servicioAgencia.getDestino().getNombre())){
-				cs.setString(i++, servicioAgencia.getDestino().getNombre());
+			if (StringUtils.isNotBlank(servicioAgencia.getDestino().getDescripcion())){
+				cs.setString(i++, servicioAgencia.getDestino().getDescripcion());
 			}
 			else{
 				cs.setNull(i++, Types.VARCHAR);
@@ -712,7 +712,7 @@ public class ServicioNovaViajesDaoImpl implements ServicioNovaViajesDao {
 				servicioAgencia2.setMontoTotalServicios(UtilJdbc.obtenerBigDecimal(rs, "montototal"));
 				servicioAgencia2.setCantidadServicios(UtilJdbc.obtenerNumero(rs, "cantidadservicios"));
 				servicioAgencia2.getDestino().setCodigoEntero(UtilJdbc.obtenerNumero(rs, "iddestino"));
-				servicioAgencia2.getDestino().setNombre(UtilJdbc.obtenerCadena(rs, "descdestino"));
+				servicioAgencia2.getDestino().setDescripcion(UtilJdbc.obtenerCadena(rs, "descdestino"));
 				servicioAgencia2.getFormaPago().setCodigoEntero(UtilJdbc.obtenerNumero(rs, "idformapago"));
 				servicioAgencia2.getFormaPago().setNombre(UtilJdbc.obtenerCadena(rs, "nommediopago"));
 				servicioAgencia2.getEstadoPago().setCodigoEntero(UtilJdbc.obtenerNumero(rs, "idestadopago"));
@@ -776,7 +776,7 @@ public class ServicioNovaViajesDaoImpl implements ServicioNovaViajesDao {
 				servicioAgencia2.setMontoTotalServicios(UtilJdbc.obtenerBigDecimal(rs, "montototal"));
 				servicioAgencia2.setCantidadServicios(UtilJdbc.obtenerNumero(rs, "cantidadservicios"));
 				servicioAgencia2.getDestino().setCodigoEntero(UtilJdbc.obtenerNumero(rs, "iddestino"));
-				servicioAgencia2.getDestino().setNombre(UtilJdbc.obtenerCadena(rs, "descdestino"));
+				servicioAgencia2.getDestino().setDescripcion(UtilJdbc.obtenerCadena(rs, "descdestino"));
 				servicioAgencia2.getFormaPago().setCodigoEntero(UtilJdbc.obtenerNumero(rs, "idformapago"));
 				servicioAgencia2.getFormaPago().setNombre(UtilJdbc.obtenerCadena(rs, "nommediopago"));
 				servicioAgencia2.getEstadoPago().setCodigoEntero(UtilJdbc.obtenerNumero(rs, "idestadopago"));
@@ -994,7 +994,7 @@ public class ServicioNovaViajesDaoImpl implements ServicioNovaViajesDao {
 				servicioAgencia2.setMontoTotalServicios(UtilJdbc.obtenerBigDecimal(rs, "montototal"));
 				servicioAgencia2.setCantidadServicios(UtilJdbc.obtenerNumero(rs, "cantidadservicios"));
 				servicioAgencia2.getDestino().setCodigoEntero(UtilJdbc.obtenerNumero(rs, "iddestino"));
-				servicioAgencia2.getDestino().setNombre(UtilJdbc.obtenerCadena(rs, "descdestino"));
+				servicioAgencia2.getDestino().setDescripcion(UtilJdbc.obtenerCadena(rs, "descdestino"));
 				servicioAgencia2.getFormaPago().setCodigoEntero(UtilJdbc.obtenerNumero(rs, "idformapago"));
 				servicioAgencia2.getFormaPago().setNombre(UtilJdbc.obtenerCadena(rs, "nommediopago"));
 				servicioAgencia2.getEstadoPago().setCodigoEntero(UtilJdbc.obtenerNumero(rs, "idestadopago"));

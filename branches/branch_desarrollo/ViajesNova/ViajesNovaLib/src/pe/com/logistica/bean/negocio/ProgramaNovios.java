@@ -40,9 +40,8 @@ public class ProgramaNovios extends BaseNegocio {
 	private int cantidadInvitados;
 	
 	private BigDecimal montoTotalServiciosPrograma;
-	private BigDecimal montoIgvServiciosPrograma;
-	private BigDecimal porcentajeIgv;
-	private BigDecimal montoSinIgvServiciosPrograma;
+	private BigDecimal montoTotalComision;
+	private BigDecimal montoTotalFee;
 
 	/**
 	 * 
@@ -277,6 +276,9 @@ public class ProgramaNovios extends BaseNegocio {
 	 * @return the listaServicios
 	 */
 	public List<DetalleServicioAgencia> getListaServicios() {
+		if (listaServicios == null){
+			listaServicios = new ArrayList<DetalleServicioAgencia>();
+		}
 		return listaServicios;
 	}
 
@@ -303,46 +305,31 @@ public class ProgramaNovios extends BaseNegocio {
 	}
 
 	/**
-	 * @return the montoIgvServiciosPrograma
+	 * @return the montoTotalComision
 	 */
-	public BigDecimal getMontoIgvServiciosPrograma() {
-		return montoIgvServiciosPrograma;
+	public BigDecimal getMontoTotalComision() {
+		return montoTotalComision;
 	}
 
 	/**
-	 * @param montoIgvServiciosPrograma the montoIgvServiciosPrograma to set
+	 * @param montoTotalComision the montoTotalComision to set
 	 */
-	public void setMontoIgvServiciosPrograma(BigDecimal montoIgvServiciosPrograma) {
-		this.montoIgvServiciosPrograma = montoIgvServiciosPrograma;
+	public void setMontoTotalComision(BigDecimal montoTotalComision) {
+		this.montoTotalComision = montoTotalComision;
 	}
 
 	/**
-	 * @return the montoSinIgvServiciosPrograma
+	 * @return the montoTotalFee
 	 */
-	public BigDecimal getMontoSinIgvServiciosPrograma() {
-		return montoSinIgvServiciosPrograma;
+	public BigDecimal getMontoTotalFee() {
+		return montoTotalFee;
 	}
 
 	/**
-	 * @param montoSinIgvServiciosPrograma the montoSinIgvServiciosPrograma to set
+	 * @param montoTotalFee the montoTotalFee to set
 	 */
-	public void setMontoSinIgvServiciosPrograma(
-			BigDecimal montoSinIgvServiciosPrograma) {
-		this.montoSinIgvServiciosPrograma = montoSinIgvServiciosPrograma;
-	}
-
-	/**
-	 * @return the porcentajeIgv
-	 */
-	public BigDecimal getPorcentajeIgv() {
-		return porcentajeIgv;
-	}
-
-	/**
-	 * @param porcentajeIgv the porcentajeIgv to set
-	 */
-	public void setPorcentajeIgv(BigDecimal porcentajeIgv) {
-		this.porcentajeIgv = porcentajeIgv;
+	public void setMontoTotalFee(BigDecimal montoTotalFee) {
+		this.montoTotalFee = montoTotalFee;
 	}
 
 }
