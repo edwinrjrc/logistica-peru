@@ -16,6 +16,8 @@ import javax.naming.NamingException;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpSession;
 
+import org.apache.log4j.Logger;
+
 import pe.com.logistica.bean.negocio.Usuario;
 import pe.com.logistica.negocio.exception.ValidacionException;
 import pe.com.logistica.web.servicio.SeguridadServicio;
@@ -30,6 +32,7 @@ import pe.com.logistica.web.servicio.impl.SeguridadServicioImpl;
 @SessionScoped()
 public class UsuarioMBean extends BaseMBean {
 	
+	private final static Logger logger = Logger.getLogger(UsuarioMBean.class);
 	/**
 	 * 
 	 */
@@ -59,7 +62,7 @@ public class UsuarioMBean extends BaseMBean {
 			ServletContext servletContext = (ServletContext)FacesContext.getCurrentInstance().getExternalContext().getContext();
 			seguridadServicio = new SeguridadServicioImpl(servletContext);
 		} catch (NamingException e) {
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 		}
 		usuario = new Usuario();
 	}
@@ -81,7 +84,7 @@ public class UsuarioMBean extends BaseMBean {
 			this.setUsuario(this.seguridadServicio.consultarUsuario(id));
 			this.setReCredencial(this.getUsuario().getCredencial());
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 		}
 	}
 	
@@ -89,8 +92,7 @@ public class UsuarioMBean extends BaseMBean {
 		try {
 			seguridadServicio.registrarUsuario(getUsuario());
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 		}
 	}
 	
@@ -111,9 +113,8 @@ public class UsuarioMBean extends BaseMBean {
 				}
 			}
 			
-		} catch (SQLException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+		} catch (SQLException ex) {
+			logger.error(ex.getMessage(), ex);
 		}
 	}
 	
@@ -146,12 +147,14 @@ public class UsuarioMBean extends BaseMBean {
 			this.setMensajeModal(e.getMessage());
 			String msje = "No se pudo iniciar sesion";
 			obtenerRequest().setAttribute("msjeError", msje);
+			logger.error(e.getMessage(), e);
 		} catch (Exception e) {
 			this.setTipoModal("2");
 			this.setShowModal(true);
 			this.setMensajeModal(e.getMessage());
 			String msje = "No se pudo iniciar sesion";
 			obtenerRequest().setAttribute("msjeError", msje);
+			logger.error(e.getMessage(), e);
 		}
 		
 		return "";
@@ -171,12 +174,12 @@ public class UsuarioMBean extends BaseMBean {
 			this.setTipoModal("2");
 			this.setShowModal(true);
 			this.setMensajeModal(e.getMessage());
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 		} catch (Exception e) {
 			this.setTipoModal("2");
 			this.setShowModal(true);
 			this.setMensajeModal(e.getMessage());
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 		}
 	}
 	
@@ -198,12 +201,12 @@ public class UsuarioMBean extends BaseMBean {
 			this.setTipoModal("2");
 			this.setShowModal(true);
 			this.setMensajeModal(e.getMessage());
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 		} catch (Exception e) {
 			this.setTipoModal("2");
 			this.setShowModal(true);
 			this.setMensajeModal(e.getMessage());
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 		}
 	}
 		
@@ -224,8 +227,8 @@ public class UsuarioMBean extends BaseMBean {
 			}
 			session.invalidate();
 		} catch (Exception e) {
-			System.out.println("Error saliendo de sesion");
-			e.printStackTrace();
+			logger.error("Error cerrando sesion");
+			logger.error(e.getMessage(), e);
 		}
 		
 		return "irSalirSistema";
@@ -243,7 +246,7 @@ public class UsuarioMBean extends BaseMBean {
 			listaUsuarios = seguridadServicio.listarUsuarios();
 			
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 		}
 		return listaUsuarios;
 	}

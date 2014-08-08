@@ -13,6 +13,8 @@ import javax.naming.NamingException;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpSession;
 
+import org.apache.log4j.Logger;
+
 import pe.com.logistica.bean.base.BaseVO;
 import pe.com.logistica.bean.negocio.Maestro;
 import pe.com.logistica.bean.negocio.Pais;
@@ -27,6 +29,13 @@ import pe.com.logistica.web.servicio.impl.SoporteServicioImpl;
 @ManagedBean(name = "paisMBean")
 @SessionScoped()
 public class PaisMBean extends BaseMBean {
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -980891844670492853L;
+
+	private final static Logger logger = Logger.getLogger(PaisMBean.class);
 
 	private BaseVO continente;
 	private Pais pais;
@@ -46,7 +55,7 @@ public class PaisMBean extends BaseMBean {
 			ServletContext servletContext = (ServletContext)FacesContext.getCurrentInstance().getExternalContext().getContext();
 			soporteServicio = new SoporteServicioImpl(servletContext);
 		} catch (NamingException e) {
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 		}
 	}
 	
@@ -59,9 +68,9 @@ public class PaisMBean extends BaseMBean {
 			this.setContinente(this.soporteServicio.consultarHijoMaestro(hijo));
 			this.setListaPaisContinente(this.soporteServicio.consultarPaises(idcontinente));
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 		}
 		
 		return "irPaises";
@@ -94,9 +103,9 @@ public class PaisMBean extends BaseMBean {
 				
 			}
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 		}
 	}
 	
@@ -107,7 +116,7 @@ public class PaisMBean extends BaseMBean {
 		try {
 			listaContinente = this.soporteServicio.listarContinentes();
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 		}
 		return listaContinente;
 	}

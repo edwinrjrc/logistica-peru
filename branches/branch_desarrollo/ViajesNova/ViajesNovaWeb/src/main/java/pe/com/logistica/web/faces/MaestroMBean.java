@@ -12,6 +12,8 @@ import javax.faces.context.FacesContext;
 import javax.naming.NamingException;
 import javax.servlet.ServletContext;
 
+import org.apache.log4j.Logger;
+
 import pe.com.logistica.bean.negocio.Maestro;
 import pe.com.logistica.web.servicio.SoporteServicio;
 import pe.com.logistica.web.servicio.impl.SoporteServicioImpl;
@@ -24,6 +26,7 @@ import pe.com.logistica.web.servicio.impl.SoporteServicioImpl;
 @SessionScoped()
 public class MaestroMBean extends BaseMBean {
 
+	private final static Logger logger = Logger.getLogger(MaestroMBean.class);
 	/**
 	 * 
 	 */
@@ -47,7 +50,7 @@ public class MaestroMBean extends BaseMBean {
 			ServletContext servletContext = (ServletContext)FacesContext.getCurrentInstance().getExternalContext().getContext();
 			soporteServicio = new SoporteServicioImpl(servletContext);
 		} catch (NamingException e) {
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 		}
 	}
 	
@@ -58,7 +61,7 @@ public class MaestroMBean extends BaseMBean {
 			this.setNuevoMaestro(false);
 			this.setMaestro(soporteServicio.consultarMaestro(id));
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 			this.setShowModal(true);
 			this.setTipoModal("2");
 			this.setMensajeModal(e.getMessage());
@@ -72,7 +75,7 @@ public class MaestroMBean extends BaseMBean {
 			
 			return "irHijoMaestro";
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 		}
 		
 		return "";
@@ -90,7 +93,7 @@ public class MaestroMBean extends BaseMBean {
 			this.setNuevoMaestro(false);
 			
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 		}
 		
 		return "";
@@ -127,6 +130,7 @@ public class MaestroMBean extends BaseMBean {
 			this.setShowModal(true);
 			this.setTipoModal("2");
 			this.setMensajeModal(e.getMessage());
+			logger.error(e.getMessage(), e);
 		}
 	}
 	
@@ -147,6 +151,7 @@ public class MaestroMBean extends BaseMBean {
 			this.setShowModal(true);
 			this.setTipoModal("2");
 			this.setMensajeModal(e.getMessage());
+			logger.error(e.getMessage(), e);
 		}
 	}
 
@@ -159,7 +164,7 @@ public class MaestroMBean extends BaseMBean {
 			listaMaestros = soporteServicio.listarMaestros();
 			this.setShowModal(false);
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 			this.setShowModal(true);
 			this.setTipoModal("2");
 			this.setMensajeModal(e.getMessage());
@@ -228,7 +233,7 @@ public class MaestroMBean extends BaseMBean {
 			this.setListaHijosMaestro(soporteServicio.listarHijosMaestro(this.getMaestro().getCodigoEntero()));
 			this.setShowModal(false);
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 			this.setShowModal(true);
 			this.setTipoModal("2");
 			this.setMensajeModal(e.getMessage());
