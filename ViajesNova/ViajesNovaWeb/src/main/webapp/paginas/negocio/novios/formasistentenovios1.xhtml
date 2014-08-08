@@ -239,9 +239,11 @@
 									<h:panelGrid columns="1" cellpadding="0" cellspacing="0"
 										border="0">
 										<h:selectOneMenu id="idSelTipoServicio"
-											value="#{noviosMBean.servicioNovios.tipoServicio.codigoEntero}">
+											value="#{noviosMBean.servicioNovios.tipoServicio.codigoEntero}"
+											valueChangeListener="#{noviosMBean.cargarProveedores}">
 											<f:selectItem itemLabel="-Seleccione-" />
 											<f:selectItems value="#{catalogoMBean.catalogoTipoServicio}" />
+											<a4j:ajax event="valueChange" render="idFrNuevServicio,idGrComiPro" />
 										</h:selectOneMenu>
 										<rich:message for="idSelTipoServicio" showDetail="false"
 											showSummary="true" ajaxRendered="true" />
@@ -261,11 +263,16 @@
 										<rich:message for="idSelEmpServicio" showDetail="false"
 											showSummary="true" ajaxRendered="true" />
 									</h:panelGrid>
+									<h:outputText value=""
+										rendered="#{servicioAgenteMBean.servicioFee}" />
+									<h:outputText value=""
+										rendered="#{servicioAgenteMBean.servicioFee}" />
 
 								</h:panelGrid>
 								<h:panelGrid columns="2" cellpadding="0" cellspacing="0"
 									border="0" style="width:100%;"
-									columnClasses="col1fil2formulario,col2fil2formulario">
+									columnClasses="col1fil2formulario,col2fil2formulario"
+									rendered="#{!noviosMBean.servicioFee}">
 									<h:outputText value="Descripcion Servicio" />
 									<h:panelGrid columns="1" cellpadding="0" cellspacing="0"
 										border="0">
@@ -278,7 +285,8 @@
 								</h:panelGrid>
 								<h:panelGrid columns="4" cellpadding="0" cellspacing="0"
 									border="0" style="width:100%;"
-									columnClasses="col1fil1formulario,col2fil1formulario,col3fil1formulario,col4fil1formulario">
+									columnClasses="col1fil1formulario,col2fil1formulario,col3fil1formulario,col4fil1formulario"
+									rendered="#{!noviosMBean.servicioFee}">
 									<h:outputText value="Cantidad" />
 									<h:panelGrid columns="1" cellpadding="0" cellspacing="0"
 										border="0">
@@ -321,42 +329,42 @@
 								<h:panelGrid columns="4" cellpadding="0" cellspacing="0"
 									border="0" style="width:100%;"
 									columnClasses="col1fil1formulario,col2fil1formulario,col3fil1formulario,col4fil1formulario"
-									rendered="#{noviosMBean.servicioNovios.tipoServicio.codigoEntero == 5 and !servicioAgenteMBean.servicioFee}">
+									rendered="#{noviosMBean.servicioNovios.tipoServicio.codigoEntero == 5 and !noviosMBean.servicioFee}">
 
 									<h:outputText value="Dias" />
 									<h:inputText onkeypress="return js_soloEntero(event)" maxlength="2" 
-										value="#{servicioAgenteMBean.detalleServicio.dias}" />
+										value="#{noviosMBean.servicioNovios.dias}" />
 									<h:outputText value="Noches" />
 									<h:inputText onkeypress="return js_soloEntero(event)" maxlength="2" 
-										value="#{servicioAgenteMBean.detalleServicio.noches}" />
+										value="#{noviosMBean.servicioNovios.noches}" />
 
 								</h:panelGrid>
 
 								<h:panelGrid columns="4" cellpadding="0" cellspacing="0"
 									border="0" style="width:100%;" id="idGrComiPro"
 									columnClasses="col1fil1formulario,col2fil1formulario,col3fil1formulario,col4fil1formulario"
-									rendered="#{servicioAgenteMBean.detalleServicio.servicioProveedor.proveedor.codigoEntero != null and
-									            servicioAgenteMBean.detalleServicio.servicioProveedor.proveedor.codigoEntero != 0 and 
-									           !servicioAgenteMBean.servicioFee}">
+									rendered="#{noviosMBean.servicioNovios.servicioProveedor.proveedor.codigoEntero != null and
+									            noviosMBean.servicioNovios.servicioProveedor.proveedor.codigoEntero != 0 and 
+									           !noviosMBean.servicioFee}">
 
 									<h:outputText value="Comision" />
 									<h:inputText onkeypress="return js_soloDecimal(event)" maxlength="2" 
-										value="#{servicioAgenteMBean.detalleServicio.servicioProveedor.porcentajeComision}" />
+										value="#{noviosMBean.servicioNovios.servicioProveedor.porcentajeComision}" />
 									<h:outputText value="" />
-									<h:outputText value="#{servicioAgenteMBean.detalleServicio.servicioProveedor.proveedor.codigoEntero}" />
+									<h:outputText value="" />
 
 								</h:panelGrid>
 
 								<h:panelGrid columns="4" cellpadding="0" cellspacing="0"
 									border="0" style="width:100%;"
 									columnClasses="col1fil1formulario,col2fil1formulario,col3fil1formulario,col4fil1formulario"
-									rendered="#{servicioAgenteMBean.servicioFee}">
+									rendered="#{noviosMBean.servicioFee}">
 
 									<h:outputText value="Fecha Servicio" />
 									<h:panelGrid columns="1" cellpadding="0" cellspacing="0"
 										border="0">
 										<rich:calendar datePattern="dd/MM/yyyy" id="idFecServicioFee"
-											value="#{servicioAgenteMBean.detalleServicio.fechaIda}"></rich:calendar>
+											value="#{noviosMBean.servicioNovios.fechaIda}"></rich:calendar>
 										<rich:message for="idFecServicioFee" showDetail="false"
 											showSummary="true" ajaxRendered="true"></rich:message>
 									</h:panelGrid>
@@ -366,7 +374,7 @@
 										border="0">
 										<h:inputText id="idMonFee"
 											onkeypress="return js_soloDecimal(event);"
-											value="#{servicioAgenteMBean.detalleServicio.precioUnitario}"
+											value="#{noviosMBean.servicioNovios.precioUnitario}"
 											size="10" maxlength="8" />
 										<rich:message for="idMonFee" showDetail="false"
 											showSummary="true" ajaxRendered="true" />
@@ -405,6 +413,16 @@
 										</f:facet>
 										<h:outputText
 											value="#{row.tipoServicio.nombre} - #{row.descripcionServicio}" />
+									</rich:column>
+									<rich:column style="text-align:left;width: 75%;">
+										<f:facet name="header">
+											<h:panelGrid cellpadding="0" cellspacing="0" border="0"
+												style="width:100%; text-align:center;">
+												<h:outputText value="Proveedor" />
+											</h:panelGrid>
+										</f:facet>
+										<h:outputText
+											value="#{row.servicioProveedor.proveedor.nombres}" />
 									</rich:column>
 									<rich:column style="text-align:right;width: 10%;">
 										<f:facet name="header">
