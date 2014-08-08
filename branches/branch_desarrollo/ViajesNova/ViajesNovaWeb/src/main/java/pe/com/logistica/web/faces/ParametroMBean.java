@@ -12,6 +12,8 @@ import javax.faces.context.FacesContext;
 import javax.naming.NamingException;
 import javax.servlet.ServletContext;
 
+import org.apache.log4j.Logger;
+
 import pe.com.logistica.bean.negocio.Parametro;
 import pe.com.logistica.web.servicio.ParametroServicio;
 import pe.com.logistica.web.servicio.impl.ParametroServicioImpl;
@@ -23,6 +25,8 @@ import pe.com.logistica.web.servicio.impl.ParametroServicioImpl;
 @ManagedBean(name="parametroMBean")
 @SessionScoped()
 public class ParametroMBean extends BaseMBean {
+	
+	private final static Logger logger = Logger.getLogger(ParametroMBean.class);
 
 	/**
 	 * 
@@ -46,7 +50,7 @@ public class ParametroMBean extends BaseMBean {
 			ServletContext servletContext = (ServletContext)FacesContext.getCurrentInstance().getExternalContext().getContext();
 			parametroServicio = new ParametroServicioImpl(servletContext);
 		} catch (NamingException e) {
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 		}
 	}
 	
@@ -75,6 +79,7 @@ public class ParametroMBean extends BaseMBean {
 			this.setShowModal(true);
 			this.setTipoModal("2");
 			this.setMensajeModal(e.getMessage());
+			logger.error(e.getMessage(), e);
 		}
 	}
 	
@@ -85,7 +90,7 @@ public class ParametroMBean extends BaseMBean {
 			this.setNuevoParametro(false);
 			this.setParametro(parametroServicio.consultarParametro(id));
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 			this.setShowModal(true);
 			this.setTipoModal("2");
 			this.setMensajeModal(e.getMessage());
@@ -99,7 +104,7 @@ public class ParametroMBean extends BaseMBean {
 			listaParametros = parametroServicio.listarParametros();
 			this.setShowModal(false);
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 			this.setShowModal(true);
 			this.setTipoModal("2");
 			this.setMensajeModal(e.getMessage());
