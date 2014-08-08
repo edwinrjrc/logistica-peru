@@ -20,18 +20,12 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
+import javax.faces.event.ValueChangeEvent;
+import javax.faces.model.SelectItem;
 import javax.naming.NamingException;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-
-import net.sf.jasperreports.engine.JRException;
-import net.sf.jasperreports.engine.JasperFillManager;
-import net.sf.jasperreports.engine.JasperPrint;
-import net.sf.jasperreports.engine.export.JRPdfExporter;
-import net.sf.jasperreports.export.SimpleExporterInput;
-import net.sf.jasperreports.export.SimpleOutputStreamExporterOutput;
-import net.sf.jasperreports.export.SimplePdfExporterConfiguration;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
@@ -40,12 +34,14 @@ import pe.com.logistica.bean.negocio.Cliente;
 import pe.com.logistica.bean.negocio.Parametro;
 import pe.com.logistica.bean.negocio.ProgramaNovios;
 import pe.com.logistica.bean.negocio.ServicioNovios;
+import pe.com.logistica.bean.negocio.ServicioProveedor;
 import pe.com.logistica.bean.negocio.Usuario;
 import pe.com.logistica.negocio.exception.ValidacionException;
 import pe.com.logistica.web.servicio.NegocioServicio;
 import pe.com.logistica.web.servicio.ParametroServicio;
 import pe.com.logistica.web.servicio.impl.NegocioServicioImpl;
 import pe.com.logistica.web.servicio.impl.ParametroServicioImpl;
+import pe.com.logistica.web.util.UtilWeb;
 
 /**
  * @author edwreb
@@ -71,11 +67,14 @@ public class NoviosMBean extends BaseMBean {
 
 	private boolean nuevoNovios;
 	private boolean registroExito;
+	private boolean servicioFee;
 
 	private List<ProgramaNovios> listadoNovios;
 	private List<ServicioNovios> listadoServicios;
 	private List<Cliente> listadoClientes;
 	private List<Cliente> listadoInvitados;
+	private List<SelectItem> listadoEmpresas;
+	private List<ServicioProveedor> listaProveedores;
 
 	private String generoCliente;
 
@@ -186,6 +185,57 @@ public class NoviosMBean extends BaseMBean {
 			logger.error(ex.getMessage(), ex);
 		}
 
+	}
+	
+	public void cargarProveedores(ValueChangeEvent e){
+		Object oe = e.getNewValue();
+		try {
+			setListadoEmpresas(null);
+			this.getServicioNovios().getServicioProveedor().setProveedor(null);
+			
+			if (oe != null){
+				String valor = oe.toString();
+				
+				Parametro param = this.parametroServicio.consultarParametro(UtilWeb.obtenerEnteroPropertieMaestro(
+						"codigoParametroFee", "aplicacionDatos"));
+				this.setServicioFee(valor.equals(param.getValor()));
+				if (!this.isServicioFee()){
+					listaProveedores = this.negocioServicio.proveedoresXServicio(UtilWeb.convertirCadenaEntero(valor));
+					setListadoEmpresas(null);
+					
+					SelectItem si = null;
+					for(ServicioProveedor servicioProveedor : listaProveedores){
+						si = new SelectItem();
+						si.setValue(servicioProveedor.getCodigoEntero());
+						si.setLabel(servicioProveedor.getNombreProveedor());
+						getListadoEmpresas().add(si);
+					}
+				}
+			}
+		} catch (SQLException ex) {
+			logger.error(ex.getMessage(), ex);
+		} catch (Exception ex) {
+			logger.error(ex.getMessage(), ex);
+		}
+	}
+	
+	public void seleccionarEmpresa(ValueChangeEvent e){
+		Object oe = e.getNewValue();
+		try {
+			if (oe != null){
+				String valor = oe.toString();
+				
+				for (ServicioProveedor servicioProveedor: this.listaProveedores){
+					if (servicioProveedor.getCodigoEntero().intValue() == UtilWeb.convertirCadenaEntero(valor)){
+						this.getServicioNovios().getServicioProveedor().setPorcentajeComision(servicioProveedor.getPorcentajeComision());
+						break;
+					}
+				}
+			}
+		} catch (Exception ex) {
+			this.getServicioNovios().getServicioProveedor().setPorcentajeComision(BigDecimal.ZERO);
+			logger.error(ex.getMessage(), ex);
+		}
 	}
 
 	private boolean validarNuevoNovios() throws ValidacionException {
@@ -456,7 +506,7 @@ public class NoviosMBean extends BaseMBean {
 				e.printStackTrace();
 			}
 			for (ServicioNovios servicioNovios : this.getListadoServicios()){
-				montoTotal = montoTotal.add(servicioNovios.getMontoTotalTipoServicio());
+				montoTotal = montoTotal.add(servicioNovios.getTotalServicio());
 			}
 			porcenIgv = BigDecimal.valueOf(Double.valueOf(valorIGV));
 			BigDecimal decimalIGVmas1 = porcenIgv.add(BigDecimal.ONE);
@@ -708,6 +758,54 @@ public class NoviosMBean extends BaseMBean {
 	 */
 	public void setServicioNovios(ServicioNovios servicioNovios) {
 		this.servicioNovios = servicioNovios;
+	}
+
+	/**
+	 * @return the servicioFee
+	 */
+	public boolean isServicioFee() {
+		return servicioFee;
+	}
+
+	/**
+	 * @param servicioFee the servicioFee to set
+	 */
+	public void setServicioFee(boolean servicioFee) {
+		this.servicioFee = servicioFee;
+	}
+
+	/**
+	 * @return the listadoEmpresas
+	 */
+	public List<SelectItem> getListadoEmpresas() {
+		if (listadoEmpresas == null){
+			listadoEmpresas = new ArrayList<SelectItem>();
+		}
+		return listadoEmpresas;
+	}
+
+	/**
+	 * @param listadoEmpresas the listadoEmpresas to set
+	 */
+	public void setListadoEmpresas(List<SelectItem> listadoEmpresas) {
+		this.listadoEmpresas = listadoEmpresas;
+	}
+
+	/**
+	 * @return the listaProveedores
+	 */
+	public List<ServicioProveedor> getListaProveedores() {
+		if (listaProveedores == null){
+			listaProveedores = new ArrayList<ServicioProveedor>();
+		}
+		return listaProveedores;
+	}
+
+	/**
+	 * @param listaProveedores the listaProveedores to set
+	 */
+	public void setListaProveedores(List<ServicioProveedor> listaProveedores) {
+		this.listaProveedores = listaProveedores;
 	}
 
 }

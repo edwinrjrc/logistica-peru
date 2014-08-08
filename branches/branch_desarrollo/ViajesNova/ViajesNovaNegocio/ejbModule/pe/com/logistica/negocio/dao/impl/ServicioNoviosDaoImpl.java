@@ -307,7 +307,7 @@ public class ServicioNoviosDaoImpl implements ServicioNoviosDao {
 			cs.setString(i++, servicioNovios.getDescripcionServicio());
 			cs.setInt(i++, servicioNovios.getCantidad());
 			cs.setBigDecimal(i++, servicioNovios.getPrecioUnitario());
-			cs.setBigDecimal(i++, servicioNovios.getMontoTotalTipoServicio());
+			cs.setBigDecimal(i++, servicioNovios.getTotalServicio());
 			cs.setString(i++, servicioNovios.getUsuarioCreacion());
 			cs.setString(i++, servicioNovios.getIpCreacion());
 			cs.execute();
