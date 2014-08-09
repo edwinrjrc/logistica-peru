@@ -16,17 +16,14 @@ import pe.com.logistica.bean.negocio.ServicioAgencia;
  *
  */
 public interface ServicioNovaViajesDao {
-
-	public Integer ingresarCabeceraServicio(ServicioAgencia servicioAgencia) throws SQLException;
-
-	Integer ingresarCabeceraServicio2(ServicioAgencia servicioAgencia)
-			throws SQLException;
+	
+	Integer ingresarCabeceraServicio(ServicioAgencia servicioAgencia) throws SQLException;
+	
+	Integer ingresarCabeceraServicio(ServicioAgencia servicioAgencia,
+			Connection conn) throws SQLException;
 
 	boolean ingresarDetalleServicio(DetalleServicioAgencia detalleServicio,
 			int idServicio) throws SQLException;
-
-	Integer ingresarCabeceraServicio(ServicioAgencia servicioAgencia,
-			Connection conn) throws SQLException;
 
 	boolean ingresarDetalleServicio(DetalleServicioAgencia detalleServicio,
 			int idServicio, Connection conn) throws SQLException;
@@ -37,9 +34,6 @@ public interface ServicioNovaViajesDao {
 	List<CuotaPago> consultarCronogramaPago(ServicioAgencia servicioAgencia)
 			throws SQLException;
 
-	Integer ingresarCabeceraServicio2(ServicioAgencia servicioAgencia,
-			Connection conn) throws SQLException;
-	
 	public ServicioAgencia consultarServiciosVenta2(int idServicio)
 			throws SQLException;
 	

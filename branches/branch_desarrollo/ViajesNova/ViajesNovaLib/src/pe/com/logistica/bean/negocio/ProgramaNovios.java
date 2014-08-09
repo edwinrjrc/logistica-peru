@@ -44,6 +44,8 @@ public class ProgramaNovios extends BaseNegocio {
 	private BigDecimal montoTotalFee;
 	
 	private BaseVO vendedor;
+	
+	private Integer idServicio;
 
 	/**
 	 * 
@@ -338,6 +340,9 @@ public class ProgramaNovios extends BaseNegocio {
 	 * @return the vendedor
 	 */
 	public BaseVO getVendedor() {
+		if (vendedor == null){
+			vendedor = new BaseVO();
+		}
 		return vendedor;
 	}
 
@@ -346,6 +351,20 @@ public class ProgramaNovios extends BaseNegocio {
 	 */
 	public void setVendedor(BaseVO vendedor) {
 		this.vendedor = vendedor;
+	}
+
+	/**
+	 * @return the idServicio
+	 */
+	public Integer getIdServicio() {
+		return idServicio;
+	}
+
+	/**
+	 * @param idServicio the idServicio to set
+	 */
+	public void setIdServicio(Integer idServicio) {
+		this.idServicio = idServicio;
 	}
 
 }
