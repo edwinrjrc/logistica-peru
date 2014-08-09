@@ -42,17 +42,17 @@ public class ServicioNoviosDaoImpl implements ServicioNoviosDao {
 		Integer codigoNovios = 0;
 		Connection conn = null;
 		CallableStatement cs = null;
-		String sql = "{ ? = call soporte.fn_ingresarservicionovios(?,?,?,?,?,?,?,?,?,?,?,?,?) }";
+		String sql = "{ ? = call negocio.fn_ingresarprogramanovios(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) }";
 		try {
 			conn = UtilConexion.obtenerConexion();
 			cs = conn.prepareCall(sql);
 			int i=1;
 			cs.registerOutParameter(i++, Types.INTEGER);
-			cs.setString(i++, programaNovios.getCodigoNovios());
 			cs.setInt(i++, programaNovios.getNovia().getCodigoEntero());
 			cs.setInt(i++, programaNovios.getNovio().getCodigoEntero());
 			cs.setInt(i++, programaNovios.getDestino().getCodigoEntero());
 			cs.setDate(i++, UtilJdbc.convertirUtilDateSQLDate(programaNovios.getFechaBoda()));
+			cs.setDate(i++, UtilJdbc.convertirUtilDateSQLDate(programaNovios.getFechaViaje()));
 			cs.setInt(i++, programaNovios.getMoneda().getCodigoEntero());
 			cs.setBigDecimal(i++, programaNovios.getCuotaInicial());
 			cs.setInt(i++, programaNovios.getNroDias());
@@ -64,6 +64,8 @@ public class ServicioNoviosDaoImpl implements ServicioNoviosDao {
 			else {
 				cs.setNull(i++, Types.VARCHAR);
 			}
+			cs.setBigDecimal(i++, programaNovios.getMontoTotalServiciosPrograma());
+			cs.setInt(i++, programaNovios.getIdServicio());
 			cs.setString(i++, programaNovios.getUsuarioCreacion());
 			cs.setString(i++, programaNovios.getIpCreacion());
 			cs.execute();
@@ -77,7 +79,7 @@ public class ServicioNoviosDaoImpl implements ServicioNoviosDao {
 				if (cs != null) {
 					cs.close();
 				}
-				if (conn != null) {
+				if (conn != null){
 					conn.close();
 				}
 			} catch (SQLException e) {
@@ -100,7 +102,7 @@ public class ServicioNoviosDaoImpl implements ServicioNoviosDao {
 			throws SQLException, Exception {
 		Integer codigoNovios = 0;
 		CallableStatement cs = null;
-		String sql = "{ ? = call negocio.fn_ingresarprogramanovios(?,?,?,?,?,?,?,?,?,?,?,?,?,?) }";
+		String sql = "{ ? = call negocio.fn_ingresarprogramanovios(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) }";
 		try {
 			cs = conn.prepareCall(sql);
 			int i=1;
@@ -122,6 +124,7 @@ public class ServicioNoviosDaoImpl implements ServicioNoviosDao {
 				cs.setNull(i++, Types.VARCHAR);
 			}
 			cs.setBigDecimal(i++, programaNovios.getMontoTotalServiciosPrograma());
+			cs.setInt(i++, programaNovios.getIdServicio());
 			cs.setString(i++, programaNovios.getUsuarioCreacion());
 			cs.setString(i++, programaNovios.getIpCreacion());
 			cs.execute();
