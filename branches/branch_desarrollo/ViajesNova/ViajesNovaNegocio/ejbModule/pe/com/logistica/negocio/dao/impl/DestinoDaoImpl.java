@@ -199,16 +199,15 @@ public class DestinoDaoImpl implements DestinoDao {
 			conn = UtilConexion.obtenerConexion();
 			cs = conn.prepareCall(sql);
 			cs.registerOutParameter(1, Types.OTHER);
+			cs.setInt(2, idDestino);
 			cs.execute();
+			
+			
 			rs = (ResultSet)cs.getObject(1);
 
 			if (rs.next()) {
 				destino = new Destino();
 				destino.setCodigoEntero(UtilJdbc.obtenerNumero(rs, "id"));
-				destino.getPais().getContinente().setCodigoEntero(UtilJdbc.obtenerNumero(rs, "idcontinente"));
-				destino.getPais().getContinente().setNombre(UtilJdbc.obtenerCadena(rs, "nombrecontinente"));
-				destino.getPais().setCodigoEntero(UtilJdbc.obtenerNumero(rs, "idpais"));
-				destino.getPais().setDescripcion(UtilJdbc.obtenerCadena(rs, "nombrepais"));
 				destino.setCodigoIATA(UtilJdbc.obtenerCadena(rs, "codigoiata"));
 				destino.getTipoDestino().setCodigoEntero(UtilJdbc.obtenerNumero(rs, "idtipodestino"));
 				destino.getTipoDestino().setNombre(UtilJdbc.obtenerCadena(rs, "nombretipdestino"));
@@ -243,4 +242,45 @@ public class DestinoDaoImpl implements DestinoDao {
 		return destino;
 	}
 
+	@Override
+	public Destino consultarDestino(int idDestino, Connection conn) throws SQLException {
+		CallableStatement cs = null;
+		ResultSet rs = null;
+		String sql = "{ ? = call soporte.fn_consultardestino(?) }";
+		Destino destino = null;
+		try {
+			cs = conn.prepareCall(sql);
+			cs.registerOutParameter(1, Types.OTHER);
+			cs.setInt(2, idDestino);
+			cs.execute();
+			
+			
+			rs = (ResultSet)cs.getObject(1);
+
+			if (rs.next()) {
+				destino = new Destino();
+				destino.setCodigoEntero(UtilJdbc.obtenerNumero(rs, "id"));
+				destino.setCodigoIATA(UtilJdbc.obtenerCadena(rs, "codigoiata"));
+				destino.getTipoDestino().setCodigoEntero(UtilJdbc.obtenerNumero(rs, "idtipodestino"));
+				destino.setDescripcion(UtilJdbc.obtenerCadena(rs, "descripcion"));
+			}
+			
+		} catch (SQLException e) {
+			throw new SQLException(e);
+		} finally {
+			try {
+				if (rs != null){
+					rs.close();
+				}
+				if (cs != null) {
+					cs.close();
+				}
+				
+			} catch (SQLException e) {
+			    throw new SQLException(e);
+			}
+		}
+
+		return destino;
+	}
 }

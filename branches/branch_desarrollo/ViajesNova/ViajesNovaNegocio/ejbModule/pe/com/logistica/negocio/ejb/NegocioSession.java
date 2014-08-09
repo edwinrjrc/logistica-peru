@@ -724,13 +724,18 @@ public class NegocioSession implements NegocioSessionRemote,
 				servicioAgencia.setCantidadServicios(programaNovios.getListaServicios().size());
 			}
 						
-			servicioAgencia.setDestino(destinoDao.consultarDestino(programaNovios.getDestino().getCodigoEntero()));
+			servicioAgencia.setDestino(destinoDao.consultarDestino(programaNovios.getDestino().getCodigoEntero(),conexion));
 			servicioAgencia.getFormaPago().setCodigoEntero(2);
 			servicioAgencia.getEstadoPago().setCodigoEntero(1);
 			servicioAgencia.setMontoTotalComision(programaNovios.getMontoTotalComision());
 			servicioAgencia.setMontoTotalServicios(programaNovios.getMontoTotalServiciosPrograma());
 			servicioAgencia.setMontoTotalFee(programaNovios.getMontoTotalFee());
+			servicioAgencia.setUsuarioCreacion(programaNovios.getUsuarioCreacion());
+			servicioAgencia.setIpCreacion(programaNovios.getIpCreacion());
+			servicioAgencia.setUsuarioModificacion(programaNovios.getUsuarioModificacion());
+			servicioAgencia.setIpModificacion(programaNovios.getIpModificacion());
 
+			servicioNovaViajesDao.ingresarCabeceraServicio2(servicioAgencia, conexion);
 			if (programaNovios.getListaServicios() != null
 					&& !programaNovios.getListaServicios().isEmpty()) {
 				for (DetalleServicioAgencia servicioNovios : programaNovios
@@ -743,6 +748,10 @@ public class NegocioSession implements NegocioSessionRemote,
 								"No se pudo registrar los servicios de los novios");
 					}
 				}
+			}
+			else{
+				throw new ErrorRegistroDataException(
+						"No se enviaron los servicios de los novios");
 			}
 
 			return idnovios;

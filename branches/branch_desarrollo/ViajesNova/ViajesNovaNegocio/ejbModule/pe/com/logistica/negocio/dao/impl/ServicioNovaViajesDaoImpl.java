@@ -364,7 +364,7 @@ public class ServicioNovaViajesDaoImpl implements ServicioNovaViajesDao {
 			else{
 				cs.setNull(i++, Types.DATE);
 			}
-			if (servicioAgencia.getVendedor().getCodigoEntero()!=0){
+			if (servicioAgencia.getVendedor().getCodigoEntero()!= null && servicioAgencia.getVendedor().getCodigoEntero().intValue()!=0){
 				cs.setInt(i++, servicioAgencia.getVendedor().getCodigoEntero());
 			}
 			else{
@@ -393,18 +393,9 @@ public class ServicioNovaViajesDaoImpl implements ServicioNovaViajesDao {
 				if (cs != null) {
 					cs.close();
 				}
-				if (conn != null) {
-					conn.close();
-				}
+				
 			} catch (SQLException e) {
-				try {
-					if (conn != null) {
-						conn.close();
-					}
-					throw new SQLException(e);
-				} catch (SQLException e1) {
-					throw new SQLException(e);
-				}
+				throw new SQLException(e);
 			}
 		}
 

@@ -161,6 +161,24 @@
 										showDetail="false" ajaxRendered="true" />
 								</h:panelGrid>
 							</h:panelGrid>
+							<h:panelGrid columns="4" border="0" cellpadding="0"
+								cellspacing="0" style="width:100%;"
+								columnClasses="col1fil1formulario,col2fil1formulario,col3fil1formulario,col4fil1formulario">
+								<h:outputText value="Agente Viajes" />
+								<h:panelGrid columns="1" border="0" cellpadding="0"
+									cellspacing="0">
+									<h:selectOneMenu id="idSelVende"
+										value="#{noviosMBean.programaNovios.vendedor.codigoEntero}">
+										<f:selectItem itemLabel="-Seleccione el agente-" />
+										<f:selectItems value="#{catalogoMBean.catalogoVendedores}" />
+									</h:selectOneMenu>
+									<rich:message for="idSelVende" showDetail="false"
+										showSummary="true" ajaxRendered="true" />
+								</h:panelGrid>
+								<h:outputText value="" />
+								<h:outputText value="" />
+								
+							</h:panelGrid>
 							<h:panelGrid columns="1" border="0" cellpadding="0"
 								cellspacing="0" style="width:100%;">
 								<h:outputText value="Observaciones" />
