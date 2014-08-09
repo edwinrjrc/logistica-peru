@@ -28,6 +28,7 @@ public class ServicioAgencia extends BaseNegocio{
 	private Destino destino;
 	private BaseVO formaPago;
 	private BaseVO estadoPago;
+	private BaseVO estadoServicio;
 	private int nroCuotas;
 	private BigDecimal tea;
 	private BigDecimal valorCuota;
@@ -431,5 +432,26 @@ public class ServicioAgencia extends BaseNegocio{
 	 */
 	public void setObservaciones(String observaciones) {
 		this.observaciones = observaciones;
+	}
+
+
+
+	/**
+	 * @return the estadoServicio
+	 */
+	public BaseVO getEstadoServicio() {
+		if (estadoServicio == null){
+			estadoServicio = new BaseVO();
+		}
+		return estadoServicio;
+	}
+
+
+
+	/**
+	 * @param estadoServicio the estadoServicio to set
+	 */
+	public void setEstadoServicio(BaseVO estadoServicio) {
+		this.estadoServicio = estadoServicio;
 	}
 }

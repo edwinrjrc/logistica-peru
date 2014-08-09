@@ -41,7 +41,7 @@ public class ServicioNovaViajesDaoImpl implements ServicioNovaViajesDao {
 		Integer idservicio = 0;
 		Connection conn = null;
 		CallableStatement cs = null;
-		String sql = "{ ? = call negocio.fn_ingresarserviciocabecera(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}";
+		String sql = "{ ? = call negocio.fn_ingresarserviciocabecera(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}";
 		
 		try {
 			conn = UtilConexion.obtenerConexion();
@@ -99,6 +99,7 @@ public class ServicioNovaViajesDaoImpl implements ServicioNovaViajesDao {
 				cs.setNull(i++, Types.INTEGER);
 			}
 			cs.setInt(i++, 1);
+			cs.setInt(i++, servicioAgencia.getEstadoServicio().getCodigoEntero());
 			if (servicioAgencia.getNroCuotas()!=0){
 				cs.setInt(i++, servicioAgencia.getNroCuotas());
 			}
@@ -149,8 +150,18 @@ public class ServicioNovaViajesDaoImpl implements ServicioNovaViajesDao {
 				if (cs != null) {
 					cs.close();
 				}
+				if (conn != null){
+					conn.close();
+				}
 			} catch (SQLException e) {
-				throw new SQLException(e);
+				try {
+					if (conn != null) {
+						conn.close();
+					}
+					throw new SQLException(e);
+				} catch (SQLException e1) {
+					throw new SQLException(e);
+				}
 			}
 		}
 
@@ -163,7 +174,7 @@ public class ServicioNovaViajesDaoImpl implements ServicioNovaViajesDao {
 			throws SQLException {
 		Integer idservicio = 0;
 		CallableStatement cs = null;
-		String sql = "{ ? = call negocio.fn_ingresarserviciocabecera(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}";
+		String sql = "{ ? = call negocio.fn_ingresarserviciocabecera(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}";
 		
 		try {
 			cs = conn.prepareCall(sql);
@@ -220,6 +231,7 @@ public class ServicioNovaViajesDaoImpl implements ServicioNovaViajesDao {
 				cs.setNull(i++, Types.INTEGER);
 			}
 			cs.setInt(i++, 1);
+			cs.setInt(i++, servicioAgencia.getEstadoServicio().getCodigoEntero());
 			if (servicioAgencia.getNroCuotas()!=0){
 				cs.setInt(i++, servicioAgencia.getNroCuotas());
 			}
@@ -823,7 +835,7 @@ public class ServicioNovaViajesDaoImpl implements ServicioNovaViajesDao {
 		ResultSet rs = null;
 		String sql = "{ ? = call negocio.fn_consultarservicioventa(?,?,?)}";
 		List<ServicioAgencia> listaVentaServicios = null;
-		try {
+		try {	
 			conn = UtilConexion.obtenerConexion();
 			cs = conn.prepareCall(sql);
 			int i=1;
@@ -871,6 +883,8 @@ public class ServicioNovaViajesDaoImpl implements ServicioNovaViajesDao {
 				servicioAgencia2.getFormaPago().setNombre(UtilJdbc.obtenerCadena(rs, "nommediopago"));
 				servicioAgencia2.getEstadoPago().setCodigoEntero(UtilJdbc.obtenerNumero(rs, "idestadopago"));
 				servicioAgencia2.getEstadoPago().setNombre(UtilJdbc.obtenerCadena(rs, "nomestpago"));
+				servicioAgencia2.getEstadoServicio().setCodigoEntero(UtilJdbc.obtenerNumero(rs, "idestadoservicio"));
+				servicioAgencia2.getEstadoServicio().setNombre(UtilJdbc.obtenerCadena(rs, "nomestservicio"));
 				listaVentaServicios.add(servicioAgencia2);
 			}
 		} catch (SQLException e) {
