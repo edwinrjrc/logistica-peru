@@ -696,21 +696,6 @@ public class NegocioSession implements NegocioSessionRemote,
 		Connection conexion = null;
 		try {
 			conexion = UtilConexion.obtenerConexion();
-
-			Integer idnovios = servicioNoviosDao.registrarNovios(
-					programaNovios, conexion);
-
-			if (programaNovios.getListaInvitados() != null
-					&& !programaNovios.getListaInvitados().isEmpty()) {
-				for (Cliente invitado : programaNovios.getListaInvitados()) {
-					boolean exitoRegistro = servicioNoviosDao
-							.registrarInvitado(invitado, idnovios, conexion);
-					if (!exitoRegistro) {
-						throw new ErrorRegistroDataException(
-								"No se pudo registrar los invitados de los novios");
-					}
-				}
-			}
 			
 			int idServicio = 0;
 			
@@ -725,8 +710,9 @@ public class NegocioSession implements NegocioSessionRemote,
 			}
 						
 			servicioAgencia.setDestino(destinoDao.consultarDestino(programaNovios.getDestino().getCodigoEntero(),conexion));
-			servicioAgencia.getFormaPago().setCodigoEntero(2);
+			servicioAgencia.getFormaPago().setCodigoEntero(1);
 			servicioAgencia.getEstadoPago().setCodigoEntero(1);
+			servicioAgencia.setVendedor(programaNovios.getVendedor());
 			servicioAgencia.setMontoTotalComision(programaNovios.getMontoTotalComision());
 			servicioAgencia.setMontoTotalServicios(programaNovios.getMontoTotalServiciosPrograma());
 			servicioAgencia.setMontoTotalFee(programaNovios.getMontoTotalFee());
@@ -735,7 +721,11 @@ public class NegocioSession implements NegocioSessionRemote,
 			servicioAgencia.setUsuarioModificacion(programaNovios.getUsuarioModificacion());
 			servicioAgencia.setIpModificacion(programaNovios.getIpModificacion());
 
-			servicioNovaViajesDao.ingresarCabeceraServicio2(servicioAgencia, conexion);
+			idServicio = servicioNovaViajesDao.ingresarCabeceraServicio(servicioAgencia, conexion);
+			if (idServicio == 0){
+				throw new ErrorRegistroDataException(
+						"No se pudo registrar los servicios de los novios");
+			}
 			if (programaNovios.getListaServicios() != null
 					&& !programaNovios.getListaServicios().isEmpty()) {
 				for (DetalleServicioAgencia servicioNovios : programaNovios
@@ -752,6 +742,23 @@ public class NegocioSession implements NegocioSessionRemote,
 			else{
 				throw new ErrorRegistroDataException(
 						"No se enviaron los servicios de los novios");
+			}
+			
+			programaNovios.setIdServicio(idServicio);
+
+			Integer idnovios = servicioNoviosDao.registrarNovios(
+					programaNovios, conexion);
+
+			if (programaNovios.getListaInvitados() != null
+					&& !programaNovios.getListaInvitados().isEmpty()) {
+				for (Cliente invitado : programaNovios.getListaInvitados()) {
+					boolean exitoRegistro = servicioNoviosDao
+							.registrarInvitado(invitado, idnovios, conexion);
+					if (!exitoRegistro) {
+						throw new ErrorRegistroDataException(
+								"No se pudo registrar los invitados de los novios");
+					}
+				}
 			}
 
 			return idnovios;
@@ -798,7 +805,7 @@ public class NegocioSession implements NegocioSessionRemote,
 		BigDecimal totalVenta = BigDecimal.ZERO;
 		
 		if (StringUtils.isBlank(servicioNovios.getDescripcionServicio())){
-			servicioNovios.setDescripcionServicio(consultaMaestro.getDescripcion());
+			servicioNovios.setDescripcionServicio(StringUtils.upperCase(consultaMaestro.getDescripcion()));
 		}
 		
 		if (servicioNovios.getCantidad() == 0){
@@ -844,7 +851,7 @@ public class NegocioSession implements NegocioSessionRemote,
 		BigDecimal totalVenta = BigDecimal.ZERO;
 		
 		if (StringUtils.isBlank(detalleServicio.getDescripcionServicio())){
-			detalleServicio.setDescripcionServicio(consultaMaestro.getDescripcion());
+			detalleServicio.setDescripcionServicio(StringUtils.upperCase(consultaMaestro.getDescripcion()));
 		}
 		
 		if (detalleServicio.getCantidad() == 0){
@@ -910,7 +917,6 @@ public class NegocioSession implements NegocioSessionRemote,
 	public Integer registrarVentaServicio(ServicioAgencia servicioAgencia)
 			throws ErrorRegistroDataException, SQLException, Exception {
 		ServicioNovaViajesDao servicioNovaViajesDao = new ServicioNovaViajesDaoImpl();
-		
 
 		Connection conexion = null;
 		Integer idServicio = 0;
@@ -936,6 +942,11 @@ public class NegocioSession implements NegocioSessionRemote,
 					servicioAgencia, conexion);
 
 			servicioAgencia.setCodigoEntero(idServicio);
+			
+			if (idServicio == 0){
+				throw new ErrorRegistroDataException(
+						"No se pudo registrar los servicios de los novios");
+			}
 			if (servicioAgencia.getListaDetalleServicio() != null
 					&& !servicioAgencia.getListaDetalleServicio().isEmpty()) {
 				for (DetalleServicioAgencia detalleServicio : servicioAgencia
