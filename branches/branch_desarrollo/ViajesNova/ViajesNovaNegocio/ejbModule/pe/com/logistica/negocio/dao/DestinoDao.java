@@ -3,6 +3,7 @@
  */
 package pe.com.logistica.negocio.dao;
 
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -21,4 +22,7 @@ public interface DestinoDao {
 	List<Destino> listarDestinos() throws SQLException;
 	
 	public Destino consultarDestino (int idDestino) throws SQLException;
+
+	Destino consultarDestino(int idDestino, Connection conn)
+			throws SQLException;
 }
