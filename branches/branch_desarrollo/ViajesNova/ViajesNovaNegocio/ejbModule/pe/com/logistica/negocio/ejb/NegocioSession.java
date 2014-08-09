@@ -720,6 +720,7 @@ public class NegocioSession implements NegocioSessionRemote,
 			servicioAgencia.setIpCreacion(programaNovios.getIpCreacion());
 			servicioAgencia.setUsuarioModificacion(programaNovios.getUsuarioModificacion());
 			servicioAgencia.setIpModificacion(programaNovios.getIpModificacion());
+			servicioAgencia.getEstadoServicio().setCodigoEntero(1);
 
 			idServicio = servicioNovaViajesDao.ingresarCabeceraServicio(servicioAgencia, conexion);
 			if (idServicio == 0){
@@ -938,6 +939,7 @@ public class NegocioSession implements NegocioSessionRemote,
 				servicioAgencia.setCantidadServicios(servicioAgencia.getListaDetalleServicio().size());
 			}
 
+			servicioAgencia.getEstadoServicio().setCodigoEntero(2);
 			idServicio = servicioNovaViajesDao.ingresarCabeceraServicio(
 					servicioAgencia, conexion);
 
