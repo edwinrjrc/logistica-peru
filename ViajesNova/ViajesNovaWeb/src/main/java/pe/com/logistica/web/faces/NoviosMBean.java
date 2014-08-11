@@ -432,6 +432,10 @@ public class NoviosMBean extends BaseMBean {
 		try {
 			this.setNombreFormulario("Edicion de Novios");
 			this.setProgramaNovios(this.negocioServicio.consultarProgramaNovios(idProgramaNovios));
+			this.setListadoInvitados(this.getProgramaNovios().getListaInvitados());
+			this.setListadoServicios(this.getProgramaNovios().getListaServicios());
+			
+			this.calcularTotales();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} catch (Exception e) {

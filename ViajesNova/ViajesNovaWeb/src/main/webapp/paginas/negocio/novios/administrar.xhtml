@@ -141,7 +141,7 @@
 								</f:facet>
 								<a4j:commandLink
 									action="#{noviosMBean.consultarProgramaNovios(row.codigoEntero)}"
-									render="idGrProgrNovios, idNomModal"
+									render="idGrProgrNovios, idNomModal, idTablaInvitados, idServNovios"
 									oncomplete="#{rich:component('idModalformnovios')}.show();">
 									<h:graphicImage height="25" width="20"
 										url="/resources/img/editar2.png" style="border:0" />
@@ -159,7 +159,7 @@
 								<a4j:commandButton value="REGISTRO NOVIOS"
 									action="#{noviosMBean.registrarNovios()}"
 									style="height:20px; width:150px"
-									render="idTabPanelFormProveedor, idNomModal"
+									render="idGrProgrNovios, idNomModal"
 									oncomplete="#{rich:component('idModalformnovios')}.show();">
 								</a4j:commandButton>
 								<a4j:commandButton id="idBotonModalCorrecto"

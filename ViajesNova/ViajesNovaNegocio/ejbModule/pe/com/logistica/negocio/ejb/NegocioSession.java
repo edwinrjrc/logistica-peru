@@ -55,6 +55,7 @@ import pe.com.logistica.negocio.dao.impl.TelefonoDaoImpl;
 import pe.com.logistica.negocio.dao.impl.UbigeoDaoImpl;
 import pe.com.logistica.negocio.exception.ErrorRegistroDataException;
 import pe.com.logistica.negocio.exception.ResultadoCeroDaoException;
+import pe.com.logistica.negocio.exception.ValidacionException;
 import pe.com.logistica.negocio.util.UtilConexion;
 import pe.com.logistica.negocio.util.UtilCorreo;
 import pe.com.logistica.negocio.util.UtilDatos;
@@ -1121,10 +1122,44 @@ public class NegocioSession implements NegocioSessionRemote,
 
 	@Override
 	public ProgramaNovios consultarProgramaNovios(int idProgramaNovios)
-			throws SQLException, Exception {
+			throws ValidacionException, SQLException, Exception {
+		ServicioNoviosDao servicioNoviosDao = new ServicioNoviosDaoImpl();
+		ServicioNovaViajesDao servicioNovaViajesDao = new ServicioNovaViajesDaoImpl();
+		
+		ProgramaNovios programa = new ProgramaNovios();
+		programa.setCodigoEntero(idProgramaNovios);
+		
+		Connection conn = null;
+		
+		try {
+			conn = UtilConexion.obtenerConexion();
+			
+			List<ProgramaNovios> listaProgramaNovios = servicioNoviosDao.consultarNovios(programa, conn);
+			if (listaProgramaNovios!= null && !listaProgramaNovios.isEmpty()){
+				if (listaProgramaNovios.size()>1){
+					throw new ValidacionException("Se encontro mas de un Programa de novios");
+				}
+			}
+			programa = listaProgramaNovios.get(0);
+			
+			programa.setListaInvitados(servicioNoviosDao.consultarInvitasosNovios(idProgramaNovios, conn));
+			
+			List<DetalleServicioAgencia> listaServicios = servicioNovaViajesDao.consultaServicioDetalle(programa.getIdServicio(), conn);
+			
+			programa.setListaServicios(listaServicios);
+			
+		} catch (SQLException e) {
+			throw new SQLException(e);
+		} catch (Exception e) {
+			throw new Exception(e);
+		} finally {
+			if (conn != null) {
+				conn.close();
+			}
+		}
 		
 		
-		return null;
+		return programa;
 	}
 
 }
