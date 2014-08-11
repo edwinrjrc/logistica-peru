@@ -29,4 +29,10 @@ public interface ServicioNoviosDao {
 
 	boolean ingresarServicioNovios(ServicioNovios servicioNovios, int idnovios,
 			Connection conexion) throws SQLException;
+
+	List<Cliente> consultarInvitasosNovios(int idnovios, Connection conexion)
+			throws SQLException;
+
+	List<ProgramaNovios> consultarNovios(ProgramaNovios programaNovios,
+			Connection conn) throws SQLException;
 }
