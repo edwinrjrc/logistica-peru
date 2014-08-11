@@ -294,6 +294,99 @@ public class ServicioNoviosDaoImpl implements ServicioNoviosDao {
 
 		return resultado;
 	}
+	
+	@Override
+	public List<ProgramaNovios> consultarNovios(ProgramaNovios programaNovios, Connection conn) throws SQLException {
+		List<ProgramaNovios> resultado = null;
+		CallableStatement cs = null;
+		ResultSet rs = null;
+		String sql = "{ ? = call negocio.fn_consultarnovios(?,?,?,?)}";
+
+		try {
+			cs = conn.prepareCall(sql);
+			int i = 1;
+			cs.registerOutParameter(i++, Types.OTHER);
+			if (programaNovios.getCodigoEntero() != null && programaNovios.getCodigoEntero().intValue() != 0){
+				cs.setInt(i++, programaNovios.getCodigoEntero().intValue());
+			}
+			else{
+				cs.setNull(i++, Types.INTEGER);
+			}
+			if (StringUtils.isNotBlank(programaNovios.getCodigoNovios())){
+				cs.setString(i++, programaNovios.getCodigoNovios());
+			}
+			else{
+				cs.setNull(i++, Types.VARCHAR);
+			}
+			if (programaNovios.getNovia().getCodigoEntero()!=null && programaNovios.getNovia().getCodigoEntero().intValue()!= 0){
+				cs.setInt(i++, programaNovios.getNovia().getCodigoEntero().intValue());
+			}
+			else{
+				cs.setNull(i++, Types.INTEGER);
+			}
+			if (programaNovios.getNovio().getCodigoEntero()!=null && programaNovios.getNovio().getCodigoEntero().intValue()!= 0){
+				cs.setInt(i++, programaNovios.getNovio().getCodigoEntero().intValue());
+			}
+			else{
+				cs.setNull(i++, Types.INTEGER);
+			}
+			
+			cs.execute();
+			rs = (ResultSet)cs.getObject(1);
+
+			resultado = new ArrayList<ProgramaNovios>();
+			ProgramaNovios programaNovios2 = null;
+			while (rs.next()) {
+				programaNovios2 = new ProgramaNovios();
+				programaNovios2.setCodigoEntero(UtilJdbc.obtenerNumero(rs, "id"));
+				programaNovios2.setCodigoNovios(UtilJdbc.obtenerCadena(rs, "codigonovios"));
+				programaNovios2.getNovia().setCodigoEntero(UtilJdbc.obtenerNumero(rs, "idnovia"));
+				programaNovios2.getNovia().setNombres(UtilJdbc.obtenerCadena(rs, "nomnovia"));
+				programaNovios2.getNovia().setApellidoPaterno(UtilJdbc.obtenerCadena(rs, "apepatnovia"));
+				programaNovios2.getNovia().setApellidoMaterno(UtilJdbc.obtenerCadena(rs, "apematnovia"));
+				programaNovios2.getNovio().setCodigoEntero(UtilJdbc.obtenerNumero(rs, "idnovio"));
+				programaNovios2.getNovio().setNombres(UtilJdbc.obtenerCadena(rs, "nomnovio"));
+				programaNovios2.getNovio().setApellidoPaterno(UtilJdbc.obtenerCadena(rs, "apepatnovio"));
+				programaNovios2.getNovio().setApellidoMaterno(UtilJdbc.obtenerCadena(rs, "apematnovio"));
+				programaNovios2.getDestino().setCodigoEntero(UtilJdbc.obtenerNumero(rs, "iddestino"));
+				programaNovios2.getDestino().setDescripcion(UtilJdbc.obtenerCadena(rs, "descdestino"));
+				programaNovios2.getDestino().setCodigoIATA(UtilJdbc.obtenerCadena(rs, "codigoiata"));
+				programaNovios2.getDestino().getPais().setDescripcion(UtilJdbc.obtenerCadena(rs, "descpais"));
+				programaNovios2.setFechaBoda(UtilJdbc.obtenerFecha(rs, "fechaboda"));
+				programaNovios2.setFechaViaje(UtilJdbc.obtenerFecha(rs, "fechaviaje"));
+				programaNovios2.getMoneda().setCodigoEntero(UtilJdbc.obtenerNumero(rs, "idmoneda"));
+				programaNovios2.setCuotaInicial(UtilJdbc.obtenerBigDecimal(rs, "cuotainicial"));
+				programaNovios2.setNroDias(UtilJdbc.obtenerNumero(rs, "dias"));
+				programaNovios2.setNroNoches(UtilJdbc.obtenerNumero(rs, "noches"));
+				programaNovios2.setFechaShower(UtilJdbc.obtenerFecha(rs, "fechashower"));
+				programaNovios2.setObservaciones(UtilJdbc.obtenerCadena(rs, "observaciones"));
+				programaNovios2.setUsuarioCreacion(UtilJdbc.obtenerCadena(rs, "usuariocreacion"));
+				programaNovios2.setFechaCreacion(UtilJdbc.obtenerFecha(rs, "fechacreacion"));
+				programaNovios2.setIpCreacion(UtilJdbc.obtenerCadena(rs, "ipcreacion"));
+				programaNovios2.setCantidadInvitados(UtilJdbc.obtenerNumero(rs, "cantidadInvitados"));
+				programaNovios2.setIdServicio(UtilJdbc.obtenerNumero(rs, "idservicio"));
+				
+				resultado.add(programaNovios2);
+			}
+			
+		} catch (SQLException e) {
+			resultado = null;
+			throw new SQLException(e);
+		} finally {
+			try {
+				if (rs != null) {
+					rs.close();
+				}
+				if (cs != null) {
+					cs.close();
+				}
+			} catch (SQLException e) {
+				throw new SQLException(e);
+			}
+		}
+
+		return resultado;
+	}
 
 	@Override
 	public boolean ingresarServicioNovios(ServicioNovios servicioNovios, int idnovios, Connection conexion) throws SQLException{
@@ -321,6 +414,52 @@ public class ServicioNoviosDaoImpl implements ServicioNoviosDao {
 			throw new SQLException(e);
 		} finally{
 			try {
+				if (cs != null){
+					cs.close();
+				}
+			} catch (SQLException e) {
+				throw new SQLException(e);
+			}
+		}
+		
+		return resultado;
+	}
+	
+	@Override
+	public List<Cliente> consultarInvitasosNovios(int idnovios, Connection conexion) throws SQLException{
+		List<Cliente> resultado = null;
+		CallableStatement cs = null;
+		String sql = "{ ? = call negocio.fn_consultarinvitadosnovios(?) }";
+		ResultSet rs = null;
+		try {
+			cs = conexion.prepareCall(sql);
+			int i=1;
+			cs.registerOutParameter(i++, Types.OTHER);
+			cs.setInt(i++, idnovios);
+			cs.execute();
+			
+			rs = (ResultSet)cs.getObject(1);
+			resultado = new ArrayList<Cliente>();
+			Cliente invitado = null;
+			while (rs.next()){
+				invitado = new Cliente();
+				invitado.setCodigoEntero(UtilJdbc.obtenerNumero(rs, "id"));
+				invitado.setNombres(UtilJdbc.obtenerCadena(rs, "nombres"));
+				invitado.setApellidoPaterno(UtilJdbc.obtenerCadena(rs, "apellidopaterno"));
+				invitado.setApellidoMaterno(UtilJdbc.obtenerCadena(rs, "apellidomaterno"));
+				invitado.setTelefonoInvitadoNovios(UtilJdbc.obtenerCadena(rs, "telefono"));
+				invitado.setCorreoElectronico(UtilJdbc.obtenerCadena(rs, "correoelectronico"));
+				resultado.add(invitado);
+			}
+			
+		} catch (SQLException e) {
+			resultado = null;
+			throw new SQLException(e);
+		} finally{
+			try {
+				if (rs != null){
+					rs.close();
+				}
 				if (cs != null){
 					cs.close();
 				}
