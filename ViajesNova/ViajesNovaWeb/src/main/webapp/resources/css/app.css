@@ -130,3 +130,14 @@
 	width: 80%;
 	text-align: left;
 }
+.textNegrita{
+	width: 15%;
+	text-align: left;
+	font-weight: bold;
+	font-size: 15px;
+}
+.textSinNegrita{
+	text-align: left;
+	font-size: 15px;
+	color: blue;
+}

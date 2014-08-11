@@ -66,6 +66,7 @@ public class NoviosMBean extends BaseMBean {
 	private int tipoBusqueda;
 
 	private boolean nuevoNovios;
+	private boolean editarNovios;
 	private boolean registroExito;
 	private boolean servicioFee;
 
@@ -116,6 +117,7 @@ public class NoviosMBean extends BaseMBean {
 	public void registrarNovios() {
 		this.setProgramaNovios(null);
 		this.setNuevoNovios(true);
+		this.setEditarNovios(false);
 		this.setShowModal(false);
 		this.setRegistroExito(false);
 		this.setNombreFormulario("Registro de Novios");
@@ -430,7 +432,9 @@ public class NoviosMBean extends BaseMBean {
 	
 	public void consultarProgramaNovios(int idProgramaNovios){
 		try {
+			
 			this.setNombreFormulario("Edicion de Novios");
+			this.setEditarNovios(true);
 			this.setProgramaNovios(this.negocioServicio.consultarProgramaNovios(idProgramaNovios));
 			this.setListadoInvitados(this.getProgramaNovios().getListaInvitados());
 			this.setListadoServicios(this.getProgramaNovios().getListaServicios());
@@ -857,6 +861,20 @@ public class NoviosMBean extends BaseMBean {
 	 */
 	public void setListaProveedores(List<ServicioProveedor> listaProveedores) {
 		this.listaProveedores = listaProveedores;
+	}
+
+	/**
+	 * @return the editarNovios
+	 */
+	public boolean isEditarNovios() {
+		return editarNovios;
+	}
+
+	/**
+	 * @param editarNovios the editarNovios to set
+	 */
+	public void setEditarNovios(boolean editarNovios) {
+		this.editarNovios = editarNovios;
 	}
 
 }
