@@ -66,6 +66,7 @@ public class ServicioAgenteMBean extends BaseMBean{
 	public boolean nuevaVenta;
 	public boolean editarVenta;
 	private boolean servicioFee;
+	private boolean busquedaRealizada;
 
 	private ParametroServicio parametroServicio;
 	private NegocioServicio negocioServicio;
@@ -128,7 +129,15 @@ public class ServicioAgenteMBean extends BaseMBean{
 	}
 
 	public void buscarServicioRegistrado(){
-		
+		try {
+			listadoServicioAgencia = this.negocioServicio.listarVentaServicio(getServicioAgenciaBusqueda());
+			
+			this.setBusquedaRealizada(true);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public void consultarServicioRegistrado(int idServicio){
@@ -502,7 +511,9 @@ public class ServicioAgenteMBean extends BaseMBean{
 	 */
 	public List<ServicioAgencia> getListadoServicioAgencia() {
 		try {
-			listadoServicioAgencia = this.negocioServicio.listarVentaServicio(getServicioAgenciaBusqueda());
+			if (!busquedaRealizada){
+				listadoServicioAgencia = this.negocioServicio.listarVentaServicio(getServicioAgenciaBusqueda());
+			}
 			
 			this.setShowModal(false);
 		} catch (SQLException ex) {
@@ -673,6 +684,20 @@ public class ServicioAgenteMBean extends BaseMBean{
 	 */
 	public void setServicioFee(boolean servicioFee) {
 		this.servicioFee = servicioFee;
+	}
+
+	/**
+	 * @return the busquedaRealizada
+	 */
+	public boolean isBusquedaRealizada() {
+		return busquedaRealizada;
+	}
+
+	/**
+	 * @param busquedaRealizada the busquedaRealizada to set
+	 */
+	public void setBusquedaRealizada(boolean busquedaRealizada) {
+		this.busquedaRealizada = busquedaRealizada;
 	}
 
 

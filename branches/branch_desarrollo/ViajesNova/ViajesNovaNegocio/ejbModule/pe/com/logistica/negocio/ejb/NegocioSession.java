@@ -780,6 +780,13 @@ public class NegocioSession implements NegocioSessionRemote,
 		ClienteDao clienteDao = new ClienteDaoImpl();
 		return clienteDao.listarClientesNovios(genero);
 	}
+	
+	@Override
+	public List<Cliente> consultarClientesNovios(Cliente cliente)
+			throws SQLException, Exception {
+		ClienteDao clienteDao = new ClienteDaoImpl();
+		return clienteDao.consultarClientesNovios(cliente);
+	}
 
 	@Override
 	public List<ProgramaNovios> consultarNovios(ProgramaNovios programaNovios)
@@ -1110,6 +1117,14 @@ public class NegocioSession implements NegocioSessionRemote,
 		ServicioNegocioDao servicioNegocioDao = new ServicioNegocioDaoImpl();
 		
 		return servicioNegocioDao.proveedoresXServicio(servicio);
+	}
+
+	@Override
+	public ProgramaNovios consultarProgramaNovios(int idProgramaNovios)
+			throws SQLException, Exception {
+		
+		
+		return null;
 	}
 
 }

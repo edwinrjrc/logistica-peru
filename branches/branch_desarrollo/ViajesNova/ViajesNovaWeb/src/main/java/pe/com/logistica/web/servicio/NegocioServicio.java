@@ -94,4 +94,10 @@ public interface NegocioServicio {
 
 	ServicioAgencia consultarVentaServicio(int idServicio) throws SQLException,
 			Exception;
+
+	List<Cliente> buscarClientesNovios(Cliente cliente) throws SQLException,
+			Exception;
+
+	public ProgramaNovios consultarProgramaNovios(int idProgramaNovios) throws SQLException,
+	Exception;
 }

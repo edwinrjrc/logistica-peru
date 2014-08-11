@@ -140,6 +140,12 @@ public class NegocioServicioImpl implements NegocioServicio {
 	}
 	
 	@Override
+	public List<Cliente> buscarClientesNovios(Cliente cliente)
+			throws SQLException, Exception {
+		return ejbSession.consultarClientesNovios(cliente);
+	}
+	
+	@Override
 	public List<ProgramaNovios> consultarNovios(ProgramaNovios programaNovios)
 			throws SQLException, Exception {
 		return ejbSession.consultarNovios(programaNovios);
@@ -199,6 +205,12 @@ public class NegocioServicioImpl implements NegocioServicio {
 		BaseVO servicio = new BaseVO(idServicio);
 		
 		return ejbSession.proveedoresXServicio(servicio);
+	}
+
+	@Override
+	public ProgramaNovios consultarProgramaNovios(int idProgramaNovios)
+			throws SQLException, Exception {
+		return ejbSession.consultarProgramaNovios(idProgramaNovios);
 	}
 }
 	
