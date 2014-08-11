@@ -853,7 +853,7 @@ public class ServicioNovaViajesDaoImpl implements ServicioNovaViajesDao {
 				cs.setNull(i++, Types.VARCHAR);
 			}
 			if (StringUtils.isNotBlank(servicioAgencia.getCliente().getNombres())){
-				cs.setString(i++, servicioAgencia.getCliente().getNombres());
+				cs.setString(i++, UtilJdbc.borrarEspacioMayusculas(servicioAgencia.getCliente().getNombres()));
 			}
 			else{
 				cs.setNull(i++, Types.VARCHAR);

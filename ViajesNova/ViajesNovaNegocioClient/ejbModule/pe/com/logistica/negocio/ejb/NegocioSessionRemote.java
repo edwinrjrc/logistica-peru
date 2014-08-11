@@ -57,6 +57,9 @@ public interface NegocioSessionRemote {
 	
 	public List<Cliente> listarClientesNovios(String genero) throws SQLException, Exception;
 	
+	public List<Cliente> consultarClientesNovios(Cliente cliente)
+			throws SQLException, Exception;
+	
 	List<ProgramaNovios> consultarNovios(ProgramaNovios programaNovios)
 			throws SQLException, Exception;
 
@@ -83,4 +86,6 @@ public interface NegocioSessionRemote {
 	
 	List<ServicioProveedor> proveedoresXServicio(BaseVO servicio)
 			throws SQLException, Exception;
+
+	public ProgramaNovios consultarProgramaNovios(int idProgramaNovios) throws SQLException, Exception;
 }

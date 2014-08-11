@@ -42,21 +42,21 @@
 								columnClasses="col1fil1proveedor,col2fil1proveedor,col3fil1proveedor,col4fil1proveedor">
 								<h:outputText value="Tipo documento" />
 								<h:selectOneMenu
-									value="#{servicioAgenteMBean.servicioAgencia.cliente.documentoIdentidad.tipoDocumento.codigoEntero}">
+									value="#{servicioAgenteMBean.servicioAgenciaBusqueda.cliente.documentoIdentidad.tipoDocumento.codigoEntero}">
 									<f:selectItem itemLabel="-Seleccione-" />
 									<f:selectItems value="#{catalogoMBean.catalogoTipoDocumento}" />
 								</h:selectOneMenu>
 								<h:outputText value="Numero documento" />
 								<h:inputText maxlength="11"
 									onkeypress="return js_soloEntero(event);"
-									value="#{servicioAgenteMBean.servicioAgencia.cliente.documentoIdentidad.numeroDocumento}" />
+									value="#{servicioAgenteMBean.servicioAgenciaBusqueda.cliente.documentoIdentidad.numeroDocumento}" />
 							</h:panelGrid>
 							<h:panelGrid columns="2" border="0" cellpadding="0"
 								cellspacing="0" style="width:100%;text-align:left;"
 								columnClasses="col1fil2proveedor,col2fil2proveedor">
 								<h:outputText value="Nombres" />
 								<h:inputText
-									value="#{servicioAgenteMBean.servicioAgencia.cliente.nombres}"
+									value="#{servicioAgenteMBean.servicioAgenciaBusqueda.cliente.nombres}"
 									size="100" maxlength="100" styleClass="estilocampo1" />
 							</h:panelGrid>
 						</h:panelGrid>
@@ -64,7 +64,7 @@
 							<h:panelGrid columns="1" border="0" cellpadding="0"
 								cellspacing="0" style="width:100%;text-align:center;">
 								<a4j:commandButton value="Buscar" render="idTabla"
-									action="#{servicioAgenteMBean.buscarServicioRegistrado()}"
+									action="#{servicioAgenteMBean.buscarServicioRegistrado}"
 									style="height:20px; width:150px" />
 							</h:panelGrid>
 						</f:facet>

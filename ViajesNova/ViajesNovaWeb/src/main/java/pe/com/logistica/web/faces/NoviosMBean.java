@@ -96,9 +96,21 @@ public class NoviosMBean extends BaseMBean {
 			logger.error(e.getMessage(), e);
 		}
 	}
+	
+	public void inicio(){
+		this.setProgramaNoviosBusqueda(null);
+		this.setListadoNovios(null);
+	}
 
-	public void buscarNovios() {
-
+	public void buscarProgramaNovios() {
+		try {
+			listadoNovios = this.negocioServicio
+			.consultarNovios(getProgramaNoviosBusqueda());
+		} catch (SQLException e) {
+			logger.error(e.getMessage(), e);
+		} catch (Exception e) {
+			logger.error(e.getMessage(), e);
+		}
 	}
 
 	public void registrarNovios() {
@@ -106,6 +118,7 @@ public class NoviosMBean extends BaseMBean {
 		this.setNuevoNovios(true);
 		this.setShowModal(false);
 		this.setRegistroExito(false);
+		this.setNombreFormulario("Registro de Novios");
 	}
 
 	public void consultaClientes(String genero, long busqueda) {
@@ -128,7 +141,15 @@ public class NoviosMBean extends BaseMBean {
 	}
 
 	public void buscarClientes() {
-
+		try {
+			getClienteBusqueda().getGenero().setCodigoCadena(this.getGeneroCliente());
+			this.listadoClientes = this.negocioServicio.buscarClientesNovios(getClienteBusqueda());
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	public void ejecutarMetodo(ActionEvent e) {
@@ -405,6 +426,17 @@ public class NoviosMBean extends BaseMBean {
 		}
 
 		return parametros;
+	}
+	
+	public void consultarProgramaNovios(int idProgramaNovios){
+		try {
+			this.setNombreFormulario("Edicion de Novios");
+			this.setProgramaNovios(this.negocioServicio.consultarProgramaNovios(idProgramaNovios));
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	public void agregarInvitado() {
