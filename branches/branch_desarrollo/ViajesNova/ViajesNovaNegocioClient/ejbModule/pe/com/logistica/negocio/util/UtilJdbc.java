@@ -92,7 +92,7 @@ public class UtilJdbc {
 	
 	public static String borrarEspacioMayusculas(String cadena){
 		cadena = StringUtils.normalizeSpace(cadena);
-		cadena = cadena.replaceAll(" ", cadena);
+		cadena = cadena.replaceAll(" ", "");
 		cadena = StringUtils.upperCase(cadena);
 		
 		return cadena;

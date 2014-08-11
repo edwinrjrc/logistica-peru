@@ -48,7 +48,7 @@
 					<rich:menuItem action="#{clienteMBean.inicioAdministrador()}"
 						label="Administrar Clientes" style="text-align:left" />
 					<rich:menuItem action="irProgramaNovios" label="Programa Novios"
-						style="text-align:left">
+						style="text-align:left" actionListener="#{noviosMBean.inicio()}">
 						<f:facet name="icon">
 							<h:graphicImage
 								value="#{facesContext.externalContext.requestContextPath}/../resources/img/novioicon.gif" />
@@ -83,7 +83,7 @@
 					<rich:menuItem action="#{clienteMBean.inicioAdministrador()}"
 						label="Administrar Clientes" style="text-align:left" />
 					<rich:menuItem action="irProgramaNovios" label="Programa Novios"
-						style="text-align:left">
+						style="text-align:left" actionListener="#{noviosMBean.inicio()}">
 						<f:facet name="icon">
 							<h:graphicImage
 								value="#{facesContext.externalContext.requestContextPath}/../resources/img/novioicon.gif" />
