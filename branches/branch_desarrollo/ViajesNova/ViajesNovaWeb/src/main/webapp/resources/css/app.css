@@ -134,10 +134,11 @@
 	width: 15%;
 	text-align: left;
 	font-weight: bold;
-	font-size: 15px;
+	font-size: 12px;
 }
 .textSinNegrita{
 	text-align: left;
-	font-size: 15px;
+	font-size: 12px;
+	font-weight: bold;
 	color: blue;
 }
