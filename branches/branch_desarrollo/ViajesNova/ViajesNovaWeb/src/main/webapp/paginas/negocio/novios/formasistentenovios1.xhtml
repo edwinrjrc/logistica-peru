@@ -50,7 +50,8 @@
 								<h:outputText value="Novia" />
 								<h:panelGrid columns="2" border="0" cellpadding="0"
 									cellspacing="0" id="idGrnovia"
-									columnClasses="col1iconoformulario,col1iconoformulario">
+									columnClasses="col1iconoformulario,col1iconoformulario"
+									rendered="#{noviosMBean.nuevoNovios}">
 									<h:inputText readonly="true" size="100" id="idFrNovia"
 										value="#{noviosMBean.programaNovios.novia.nombreCompleto}" />
 									<a4j:commandLink
@@ -63,6 +64,7 @@
 									<rich:message for="idFrNovia" showSummary="true"
 										showDetail="false" ajaxRendered="true" />
 								</h:panelGrid>
+								<h:outputText rendered="#{noviosMBean.editarNovios}" value="#{noviosMBean.programaNovios.novia.nombreCompleto}" />
 							</h:panelGrid>
 							<h:panelGrid columns="3" border="0" cellpadding="0"
 								cellspacing="0" style="width:100%;"
@@ -70,7 +72,8 @@
 								<h:outputText value="Novio" />
 								<h:panelGrid columns="2" border="0" cellpadding="0"
 									cellspacing="0" id="idGrnovio"
-									columnClasses="col1iconoformulario,col1iconoformulario">
+									columnClasses="col1iconoformulario,col1iconoformulario"
+									rendered="#{noviosMBean.nuevoNovios}">
 									<h:inputText readonly="true" size="100" id="idFrNovio"
 										value="#{noviosMBean.programaNovios.novio.nombreCompleto}" />
 									<a4j:commandLink
@@ -83,6 +86,7 @@
 									<rich:message for="idFrNovio" showSummary="true"
 										showDetail="false" ajaxRendered="true" />
 								</h:panelGrid>
+								<h:outputText rendered="#{noviosMBean.editarNovios}" value="#{noviosMBean.programaNovios.novio.nombreCompleto}" />
 							</h:panelGrid>
 							<h:panelGrid columns="3" border="0" cellpadding="0"
 								cellspacing="0" style="width:100%;"
