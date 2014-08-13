@@ -121,6 +121,12 @@ public class NoviosMBean extends BaseMBean {
 		this.setShowModal(false);
 		this.setRegistroExito(false);
 		this.setNombreFormulario("Registro de Novios");
+		HttpSession session = obtenerSession(false);
+		Usuario usuario = (Usuario)session.getAttribute(USUARIO_SESSION);
+		if (!Integer.valueOf(1).equals(usuario.getRol().getCodigoEntero())){
+			this.getProgramaNovios().getVendedor().setCodigoEntero(usuario.getCodigoEntero());
+			this.getProgramaNovios().getVendedor().setNombre(usuario.getNombreCompleto());	
+		}
 	}
 
 	public void consultaClientes(String genero, long busqueda) {
@@ -165,7 +171,7 @@ public class NoviosMBean extends BaseMBean {
 					getProgramaNovios().setListaServicios(getListadoServicios());
 					HttpSession session = obtenerSession(false);
 					Usuario usuario = (Usuario) session
-							.getAttribute("usuarioSession");
+							.getAttribute(USUARIO_SESSION);
 					getProgramaNovios()
 							.setUsuarioCreacion(usuario.getUsuario());
 					getProgramaNovios().setIpCreacion(
@@ -326,15 +332,18 @@ public class NoviosMBean extends BaseMBean {
 					FacesMessage.SEVERITY_ERROR);
 			resultado = false;
 		}
-		if (this.getProgramaNovios().getFechaBoda().after(this.getProgramaNovios().getFechaViaje())){
-			throw new ValidacionException("La fecha de la boda no puede ser mayor a la fecha del viaje");
+		if (resultado){
+			if (this.getProgramaNovios().getFechaBoda().after(this.getProgramaNovios().getFechaViaje())){
+				throw new ValidacionException("La fecha de la boda no puede ser mayor a la fecha del viaje");
+			}
+			if (this.getProgramaNovios().getFechaViaje().before(this.getProgramaNovios().getFechaShower())){
+				throw new ValidacionException("La fecha del viaje no puede ser mayor a la fecha del Shower");
+			}
+			if (this.getProgramaNovios().getFechaShower().before(this.getProgramaNovios().getFechaBoda())){
+				throw new ValidacionException("La fecha del Shower no puede ser mayor a la fecha de la boda");
+			}
 		}
-		if (this.getProgramaNovios().getFechaViaje().before(this.getProgramaNovios().getFechaShower())){
-			throw new ValidacionException("La fecha del viaje no puede ser mayor a la fecha del Shower");
-		}
-		if (this.getProgramaNovios().getFechaShower().before(this.getProgramaNovios().getFechaBoda())){
-			throw new ValidacionException("La fecha del Shower no puede ser mayor a la fecha de la boda");
-		}
+		
 		return resultado;
 	}
 
@@ -434,6 +443,7 @@ public class NoviosMBean extends BaseMBean {
 		try {
 			
 			this.setNombreFormulario("Edicion de Novios");
+			this.setNuevoNovios(false);
 			this.setEditarNovios(true);
 			this.setProgramaNovios(this.negocioServicio.consultarProgramaNovios(idProgramaNovios));
 			this.setListadoInvitados(this.getProgramaNovios().getListaInvitados());
