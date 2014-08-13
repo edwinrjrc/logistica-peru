@@ -162,6 +162,13 @@ public class ServicioAgenteMBean extends BaseMBean{
 		consultarTasaPredeterminada();
 		this.setListadoEmpresas(null);
 		this.setListadoDetalleServicio(null);
+		
+		HttpSession session = obtenerSession(false);
+		Usuario usuario = (Usuario)session.getAttribute(USUARIO_SESSION);
+		if (!Integer.valueOf(1).equals(usuario.getRol().getCodigoEntero())){
+			this.getServicioAgencia().getVendedor().setCodigoEntero(usuario.getCodigoEntero());
+			this.getServicioAgencia().getVendedor().setNombre(usuario.getNombreCompleto());	
+		}
 	}
 	public void agregarServicio(){
 		try {

@@ -177,7 +177,8 @@
 							</h:panelGrid>
 							<h:panelGrid columns="4" border="0" cellpadding="0"
 								cellspacing="0" style="width:100%;"
-								columnClasses="col1fil1formulario,col2fil1formulario,col3fil1formulario,col4fil1formulario">
+								columnClasses="col1fil1formulario,col2fil1formulario,col3fil1formulario,col4fil1formulario"
+								rendered="#{sessionScope.usuarioSession.rol.codigoEntero == 1}">
 								<h:outputText value="Agente Viajes" />
 								<h:panelGrid columns="1" border="0" cellpadding="0"
 									cellspacing="0">
@@ -189,6 +190,17 @@
 									<rich:message for="idSelVende" showDetail="false"
 										showSummary="true" ajaxRendered="true" />
 								</h:panelGrid>
+								<h:outputText value="" />
+								<h:outputText value="" />
+								
+							</h:panelGrid>
+							<h:panelGrid columns="4" border="0" cellpadding="0"
+								cellspacing="0" style="width:100%;"
+								columnClasses="col1fil1formulario,col2fil1formulario,col3fil1formulario,col4fil1formulario"
+								rendered="#{sessionScope.usuarioSession.rol.codigoEntero != 1}">
+								<h:outputText value="Agente Viajes" />
+								<h:outputText value="#{noviosMBean.programaNovios.vendedor.nombre}" />
+								
 								<h:outputText value="" />
 								<h:outputText value="" />
 								
