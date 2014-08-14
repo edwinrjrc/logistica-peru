@@ -365,7 +365,9 @@ public class ServicioNoviosDaoImpl implements ServicioNoviosDao {
 				programaNovios2.setIpCreacion(UtilJdbc.obtenerCadena(rs, "ipcreacion"));
 				programaNovios2.setCantidadInvitados(UtilJdbc.obtenerNumero(rs, "cantidadInvitados"));
 				programaNovios2.setIdServicio(UtilJdbc.obtenerNumero(rs, "idservicio"));
-				
+				programaNovios2.getVendedor().setCodigoEntero(UtilJdbc.obtenerNumero(rs, "idvendedor"));
+				String nombre = UtilJdbc.obtenerCadena(rs, "nomvendedor")+" "+UtilJdbc.obtenerCadena(rs, "apepatvendedor")+" "+UtilJdbc.obtenerCadena(rs, "apematvendedor");
+				programaNovios2.getVendedor().setNombre(nombre);
 				resultado.add(programaNovios2);
 			}
 			

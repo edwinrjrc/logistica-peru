@@ -26,6 +26,14 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.export.JRPdfExporter;
+import net.sf.jasperreports.export.SimpleExporterInput;
+import net.sf.jasperreports.export.SimpleOutputStreamExporterOutput;
+import net.sf.jasperreports.export.SimplePdfExporterConfiguration;
+
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 
@@ -385,7 +393,7 @@ public class NoviosMBean extends BaseMBean {
 			jasperStream = facesContext.getExternalContext()
 					.getResourceAsStream(rutaJasper);
 
-			//imprimirPDF(enviarParametros(), stream, jasperStream);
+			imprimirPDF(enviarParametros(), stream, jasperStream);
 
 			facesContext.responseComplete();
 
@@ -480,7 +488,7 @@ public class NoviosMBean extends BaseMBean {
 		return null;
 	}
 
-	/*private void imprimirPDF(Map<String, Object> map,
+	private void imprimirPDF(Map<String, Object> map,
 			OutputStream outputStream, InputStream jasperStream)
 			throws JRException {
 
@@ -497,7 +505,7 @@ public class NoviosMBean extends BaseMBean {
 		configuration.setCreatingBatchModeBookmarks(true);
 		exporter.setConfiguration(configuration);
 		exporter.exportReport();
-	}*/
+	}
 	
 	public void agregarServicio(){
 		try {
