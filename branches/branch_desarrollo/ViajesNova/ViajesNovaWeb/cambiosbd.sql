@@ -1,7 +1,5 @@
 -- Table: negocio."MaestroServicios"
 
--- DROP TABLE negocio."MaestroServicios";
-
 CREATE TABLE negocio."MaestroServicios"
 (
   id integer NOT NULL,
@@ -10,6 +8,7 @@ CREATE TABLE negocio."MaestroServicios"
   requierefee boolean NOT NULL DEFAULT false,
   pagaimpto boolean NOT NULL DEFAULT false,
   cargacomision boolean NOT NULL DEFAULT false,
+  comisionporcen boolean NOT NULL DEFAULT false,
   valorporcomision numeric,
   usuariocreacion character varying(20) NOT NULL,
   fechacreacion timestamp with time zone NOT NULL,
@@ -19,9 +18,4 @@ CREATE TABLE negocio."MaestroServicios"
   ipmodificacion character(15) NOT NULL,
   idestadoregistro integer NOT NULL DEFAULT 1,
   CONSTRAINT pk_maestroservicios PRIMARY KEY (id)
-)
-WITH (
-  OIDS=FALSE
 );
-ALTER TABLE negocio."MaestroServicios"
-  OWNER TO postgres;
