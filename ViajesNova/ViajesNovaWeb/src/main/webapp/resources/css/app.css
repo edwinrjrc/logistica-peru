@@ -131,14 +131,30 @@
 	text-align: left;
 }
 .textNegrita{
-	width: 15%;
+	width: 20%;
 	text-align: left;
 	font-weight: bold;
 	font-size: 12px;
 }
 .textSinNegrita{
+	width: 30%;
 	text-align: left;
 	font-size: 12px;
 	font-weight: bold;
 	color: blue;
+}
+.colNov1{
+	width: 20%;
+}
+.colNov2{
+	width: 30%;
+}
+.colNov3{
+	width: 20%;
+}
+.colNov4{
+	width: 30%;
+}
+.colNov5{
+	width: 80%;
 }
