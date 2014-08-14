@@ -33,20 +33,21 @@
 						</f:facet>
 						<h:panelGrid id="idGridFormNovios" border="0" cellpadding="0"
 							cellspacing="0" style="width:100%;" columns="1">
-							
+
 							<h:panelGrid columns="4" border="0" cellpadding="0"
-								cellspacing="0" style="width:100%;" rendered="#{noviosMBean.editarNovios}"
-								columnClasses="textNegrita, textSinNegrita, col1form, col2form">
+								cellspacing="0" style="width:100%;"
+								rendered="#{noviosMBean.editarNovios}"
+								columnClasses="textNegrita, textSinNegrita, colNov3, colNov4">
 								<h:outputText value="Codigo Novios" />
 								<h:outputText value="#{noviosMBean.programaNovios.codigoNovios}" />
-								
+
 								<h:outputText value="" />
 								<h:outputText value="" />
 							</h:panelGrid>
 
 							<h:panelGrid columns="2" border="0" cellpadding="0"
 								cellspacing="0" style="width:100%;"
-								columnClasses="col1fil3formulario,col2fil3formulario">
+								columnClasses="colNov1, colNov5">
 								<h:outputText value="Novia" />
 								<h:panelGrid columns="2" border="0" cellpadding="0"
 									cellspacing="0" id="idGrnovia"
@@ -64,15 +65,16 @@
 									<rich:message for="idFrNovia" showSummary="true"
 										showDetail="false" ajaxRendered="true" />
 								</h:panelGrid>
-								<h:outputText rendered="#{noviosMBean.editarNovios}" value="#{noviosMBean.programaNovios.novia.nombreCompleto}" />
+								<h:outputText rendered="#{noviosMBean.editarNovios}"
+									value="#{noviosMBean.programaNovios.novia.nombreCompleto}" />
 							</h:panelGrid>
 							<h:panelGrid columns="3" border="0" cellpadding="0"
 								cellspacing="0" style="width:100%;"
-								columnClasses="col1fil3formulario,col2fil3formulario">
+								columnClasses="colNov1, colNov5">
 								<h:outputText value="Novio" />
 								<h:panelGrid columns="2" border="0" cellpadding="0"
 									cellspacing="0" id="idGrnovio"
-									columnClasses="col1iconoformulario,col1iconoformulario"
+									columnClasses="col1fil1formulario,col1iconoformulario"
 									rendered="#{noviosMBean.nuevoNovios}">
 									<h:inputText readonly="true" size="100" id="idFrNovio"
 										value="#{noviosMBean.programaNovios.novio.nombreCompleto}" />
@@ -86,11 +88,12 @@
 									<rich:message for="idFrNovio" showSummary="true"
 										showDetail="false" ajaxRendered="true" />
 								</h:panelGrid>
-								<h:outputText rendered="#{noviosMBean.editarNovios}" value="#{noviosMBean.programaNovios.novio.nombreCompleto}" />
+								<h:outputText rendered="#{noviosMBean.editarNovios}"
+									value="#{noviosMBean.programaNovios.novio.nombreCompleto}" />
 							</h:panelGrid>
 							<h:panelGrid columns="3" border="0" cellpadding="0"
 								cellspacing="0" style="width:100%;"
-								columnClasses="col1fil3formulario,col2fil3formulario">
+								columnClasses="colNov1, colNov5">
 								<h:outputText value="Destino" />
 								<h:panelGrid columns="1" border="0" cellpadding="0"
 									cellspacing="0"
@@ -107,12 +110,11 @@
 							</h:panelGrid>
 							<h:panelGrid columns="4" border="0" cellpadding="0"
 								cellspacing="0" style="width:100%;"
-								columnClasses="col1fil1formulario,col2fil1formulario,col3fil1formulario,col4fil1formulario">
+								columnClasses="colNov1, colNov2, colNov1, colNov2">
 								<h:outputText value="Fecha Boda" />
 								<h:panelGrid columns="1" border="0" cellpadding="0"
 									cellspacing="0">
-									<rich:calendar id="idFecBoda"
-									datePattern="dd/MM/yyyy"
+									<rich:calendar id="idFecBoda" datePattern="dd/MM/yyyy"
 										value="#{noviosMBean.programaNovios.fechaBoda}" />
 									<rich:message for="idFecBoda" showSummary="true"
 										showDetail="false" ajaxRendered="true" />
@@ -121,8 +123,7 @@
 								<h:outputText value="Fecha Viaje" />
 								<h:panelGrid columns="1" border="0" cellpadding="0"
 									cellspacing="0">
-									<rich:calendar id="idFecViaje"
-									datePattern="dd/MM/yyyy"
+									<rich:calendar id="idFecViaje" datePattern="dd/MM/yyyy"
 										value="#{noviosMBean.programaNovios.fechaViaje}" />
 									<rich:message for="idFecViaje" showSummary="true"
 										showDetail="false" ajaxRendered="true" />
@@ -130,12 +131,11 @@
 							</h:panelGrid>
 							<h:panelGrid columns="4" border="0" cellpadding="0"
 								cellspacing="0" style="width:100%;"
-								columnClasses="col1fil1formulario,col2fil1formulario,col3fil1formulario,col4fil1formulario">
+								columnClasses="colNov1, colNov2, colNov1, colNov2">
 								<h:outputText value="Fecha Shower" />
 								<h:panelGrid columns="1" border="0" cellpadding="0"
 									cellspacing="0">
-									<rich:calendar id="idFecShower"
-									datePattern="dd/MM/yyyy"
+									<rich:calendar id="idFecShower" datePattern="dd/MM/yyyy"
 										value="#{noviosMBean.programaNovios.fechaShower}" />
 									<rich:message for="idFecShower" showSummary="true"
 										showDetail="false" ajaxRendered="true" />
@@ -145,7 +145,7 @@
 							</h:panelGrid>
 							<h:panelGrid columns="4" border="0" cellpadding="0"
 								cellspacing="0" style="width:100%;"
-								columnClasses="col1fil1formulario,col2fil1formulario,col3fil1formulario,col4fil1formulario">
+								columnClasses="colNov1, colNov2, colNov1, colNov2">
 								<h:outputText value="Dias" />
 								<h:inputText value="#{noviosMBean.programaNovios.nroDias}" />
 								<h:outputText value="Noches" />
@@ -153,7 +153,7 @@
 							</h:panelGrid>
 							<h:panelGrid columns="4" border="0" cellpadding="0"
 								cellspacing="0" style="width:100%;"
-								columnClasses="col1fil1formulario,col2fil1formulario,col3fil1formulario,col4fil1formulario">
+								columnClasses="colNov1, colNov2, colNov1, colNov2">
 								<h:outputText value="Moneda" />
 								<h:panelGrid columns="1" border="0" cellpadding="0"
 									cellspacing="0">
@@ -177,7 +177,7 @@
 							</h:panelGrid>
 							<h:panelGrid columns="4" border="0" cellpadding="0"
 								cellspacing="0" style="width:100%;"
-								columnClasses="col1fil1formulario,col2fil1formulario,col3fil1formulario,col4fil1formulario"
+								columnClasses="colNov1, colNov2, colNov1, colNov2"
 								rendered="#{sessionScope.usuarioSession.rol.codigoEntero == 1}">
 								<h:outputText value="Agente Viajes" />
 								<h:panelGrid columns="1" border="0" cellpadding="0"
@@ -190,6 +190,17 @@
 									<rich:message for="idSelVende" showDetail="false"
 										showSummary="true" ajaxRendered="true" />
 								</h:panelGrid>
+								<h:outputText value="" />
+								<h:outputText value="" />
+
+							</h:panelGrid>
+							<h:panelGrid columns="4" border="0" cellpadding="0"
+								cellspacing="0" style="width:100%;"
+								columnClasses="col1fil1formulario,col2fil1formulario,col3fil1formulario,col4fil1formulario"
+								rendered="#{sessionScope.usuarioSession.rol.codigoEntero != 1}">
+								<h:outputText value="Agente Viajes" />
+								<h:outputText value="#{noviosMBean.programaNovios.vendedor.nombre}" />
+								
 								<h:outputText value="" />
 								<h:outputText value="" />
 								
@@ -287,7 +298,8 @@
 											valueChangeListener="#{noviosMBean.cargarProveedores}">
 											<f:selectItem itemLabel="-Seleccione-" />
 											<f:selectItems value="#{catalogoMBean.catalogoTipoServicio}" />
-											<a4j:ajax event="valueChange" render="idFrNuevServicio,idGrComiPro" />
+											<a4j:ajax event="valueChange"
+												render="idFrNuevServicio,idGrComiPro" />
 										</h:selectOneMenu>
 										<rich:message for="idSelTipoServicio" showDetail="false"
 											showSummary="true" ajaxRendered="true" />
@@ -307,10 +319,8 @@
 										<rich:message for="idSelEmpServicio" showDetail="false"
 											showSummary="true" ajaxRendered="true" />
 									</h:panelGrid>
-									<h:outputText value=""
-										rendered="#{noviosMBean.servicioFee}" />
-									<h:outputText value=""
-										rendered="#{noviosMBean.servicioFee}" />
+									<h:outputText value="" rendered="#{noviosMBean.servicioFee}" />
+									<h:outputText value="" rendered="#{noviosMBean.servicioFee}" />
 
 								</h:panelGrid>
 								<h:panelGrid columns="2" cellpadding="0" cellspacing="0"
@@ -351,7 +361,7 @@
 											showSummary="true" ajaxRendered="true" />
 									</h:panelGrid>
 								</h:panelGrid>
-								
+
 								<h:panelGrid columns="4" cellpadding="0" cellspacing="0"
 									border="0" style="width:100%;"
 									columnClasses="col1fil1formulario,col2fil1formulario,col3fil1formulario,col4fil1formulario"
@@ -376,11 +386,11 @@
 									rendered="#{noviosMBean.servicioNovios.tipoServicio.codigoEntero == 5 and !noviosMBean.servicioFee}">
 
 									<h:outputText value="Dias" />
-									<h:inputText onkeypress="return js_soloEntero(event)" maxlength="2" 
-										value="#{noviosMBean.servicioNovios.dias}" />
+									<h:inputText onkeypress="return js_soloEntero(event)"
+										maxlength="2" value="#{noviosMBean.servicioNovios.dias}" />
 									<h:outputText value="Noches" />
-									<h:inputText onkeypress="return js_soloEntero(event)" maxlength="2" 
-										value="#{noviosMBean.servicioNovios.noches}" />
+									<h:inputText onkeypress="return js_soloEntero(event)"
+										maxlength="2" value="#{noviosMBean.servicioNovios.noches}" />
 
 								</h:panelGrid>
 
@@ -392,7 +402,8 @@
 									           !noviosMBean.servicioFee}">
 
 									<h:outputText value="Comision" />
-									<h:inputText onkeypress="return js_soloDecimal(event)" maxlength="2" 
+									<h:inputText onkeypress="return js_soloDecimal(event)"
+										maxlength="2"
 										value="#{noviosMBean.servicioNovios.servicioProveedor.porcentajeComision}" />
 									<h:outputText value="" />
 									<h:outputText value="" />
@@ -504,7 +515,7 @@
 								<h:panelGrid columns="2" cellpadding="0" cellspacing="0"
 									border="0" style="width:100%;" id="idTotalesServicios"
 									columnClasses="col1RSPN,col2RSPN">
-									
+
 									<h:outputText value="Total Comision" />
 									<h:outputText
 										value="#{noviosMBean.programaNovios.montoTotalComision}">
@@ -523,22 +534,29 @@
 				</rich:tabPanel>
 
 				<f:facet name="footer">
-					<h:panelGrid border="0" cellpadding="0" cellspacing="0" columns="4"
-						style="heght:50px; width:100%;text-align:center;" id="idBotNovios">
-						<h:inputHidden id="idHidRegExito"
-							value="#{noviosMBean.registroExito}" />
-						<a4j:commandButton value="Grabar"
-							rendered="#{!noviosMBean.registroExito}"
-							actionListener="#{noviosMBean.ejecutarMetodo}"
-							render="idFormHidden,idPanelHidden,idPanelBotones,idModalcorrecto,idModalError,idBotNovios"
-							oncomplete="mostrarModal('idformadmnovios')" />
-						<a4j:commandButton value="Imprimir Registro Novios"
-							rendered="#{noviosMBean.registroExito}"
-							onclick="document.getElementById('idformadmnovios:idbtnImpNovios').click();" />
-						<a4j:commandButton value="Salir"
-							rendered="#{noviosMBean.registroExito}"
-							oncomplete="#{rich:component('idModalformnovios')}.hide(); return false;" />
-					</h:panelGrid>
+					<table border="0" cellpadding="0" cellspacing="0"
+						style="width: 100%;">
+						<tr>
+							<td align="center"><h:panelGrid border="0" cellpadding="0" cellspacing="0"
+									columns="4" id="idBotNovios">
+									<h:inputHidden id="idHidRegExito"
+										value="#{noviosMBean.registroExito}" />
+									<a4j:commandButton value="Grabar" style="width: 100px;"
+										rendered="#{!noviosMBean.registroExito}"
+										actionListener="#{noviosMBean.ejecutarMetodo}"
+										render="idFormHidden,idPanelHidden,idPanelBotones,idModalcorrecto,idModalError,idBotNovios"
+										oncomplete="mostrarModal('idformadmnovios')" />
+									<a4j:commandButton value="Imprimir Registro Novios"
+										style="width: 170px;"
+										rendered="#{noviosMBean.registroExito || noviosMBean.editarNovios}"
+										onclick="document.getElementById('idformadmnovios:idbtnImpNovios').click();" />
+									<a4j:commandButton value="Salir" style="width: 100px;"
+										rendered="#{noviosMBean.registroExito || noviosMBean.editarNovios}"
+										oncomplete="#{rich:component('idModalformnovios')}.hide(); return false;" />
+								</h:panelGrid></td>
+						</tr>
+
+					</table>
 				</f:facet>
 			</h:panelGrid>
 

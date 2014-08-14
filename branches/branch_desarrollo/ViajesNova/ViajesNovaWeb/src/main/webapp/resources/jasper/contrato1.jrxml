@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="contrato1" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="4dace80b-d95c-4592-9ede-a222efe24105">
+	<property name="ireport.zoom" value="1.2100000000000002"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="1"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="802" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="555" height="15" uuid="e9d5427f-0b88-4c1a-89ec-50b7bc5c73d0"/>
+				<textElement textAlignment="Center">
+					<font size="8" isBold="true" pdfFontName="Helvetica-Bold" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[CONTRATO DE AFILIACION – CLUB DE NOVIOS TERRANOVA 2014 – DESPACHO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="15" width="555" height="15" uuid="3e0bc5f3-deb4-496b-9049-7302cc889015"/>
+				<textElement>
+					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[1. ASPECTO GENERALES]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="36" y="35" width="519" height="34" uuid="0ed65d62-d276-402a-8efe-be4b783422d8"/>
+				<textElement textAlignment="Justified">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[El programa CLUB DE NOVIOS TERRANOVA (en adelante el  “PROGRAMA”) es un programa  promocional que otorga a las parejas de novios que se afilien (en adelante “NOVIOS”), acceso a servicios y beneficios bajo los términos y condiciones que se describen en este documento (en adelante “CONTRATO”).]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="13" y="35" width="23" height="15" uuid="359e8ae4-50f6-4e64-adb4-ede2ff8d2da2"/>
+				<textElement>
+					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[1.1.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="36" y="69" width="519" height="25" uuid="06f6429e-3b8f-4196-a674-80e783c31268"/>
+				<textElement textAlignment="Justified">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Para tener derecho a los servicios y beneficios del PROGRAMA,  la afiliación deberá realizarse con una anticipación no mayor a 12 meses de la fecha de matrimonio declarada en el momento de la inscripción.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="13" y="69" width="23" height="15" uuid="a37bf4f1-54ec-4aea-af72-54eb6a76e1ed"/>
+				<textElement>
+					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[1.2.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="36" y="94" width="519" height="39" uuid="b92d4873-aa95-46bb-8a46-e5371194a564"/>
+				<textElement textAlignment="Justified">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[El plazo de vigencia del CONTRATO se computa  a partir de la fecha de suscripción del presente documento hasta un plazo máximo de 90 días posteriores a la fecha de matrimonio declarada en el momento de inscripción. Una vez cumplido el mencionado plazo los beneficios y servicios caducarán automáticamente, de manera que GRUPO MARAL S.A. no tendrá ninguna obligación con los NOVIOS.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="13" y="94" width="23" height="15" uuid="adf75c14-7891-4bf6-98bb-92203522f419"/>
+				<textElement>
+					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[1.3.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="36" y="133" width="519" height="21" uuid="c7991901-0c83-46c7-90e2-5d33ca58117b"/>
+				<textElement textAlignment="Justified">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Los NOVIOS NO podrán tener vigente más de una membresía al PROGRAMA en simultáneo.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="13" y="133" width="23" height="15" uuid="4924ccb7-d94d-4342-a9fd-57dfb81d8ed4"/>
+				<textElement>
+					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[1.4.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="36" y="154" width="519" height="30" uuid="3846a5b1-1f78-4066-81d2-a8f39d9d122f"/>
+				<textElement textAlignment="Justified">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[GRUPO MARAL S.A. se reserva el derecho de cancelar o modificar, en cualquier momento y sin previo aviso, cualquier beneficio, servicio o promoción adicional a los mencionados en este documento que hubiese sido ofrecido a los NOVIOS.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="13" y="154" width="23" height="15" uuid="b8e3bf94-7de0-4bcf-b3ec-2660e8d0ea1a"/>
+				<textElement>
+					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[1.5.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="36" y="184" width="519" height="21" uuid="684d163d-0b95-423f-a600-eb737e07f311"/>
+				<textElement textAlignment="Justified">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Los beneficios otorgados a los NOVIOS son estrictamente personales e intransferibles.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="13" y="184" width="23" height="15" uuid="7ab7bd4b-8203-471f-b960-eed5eca30290"/>
+				<textElement>
+					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[1.6.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="36" y="205" width="519" height="20" uuid="fce79bb4-01fd-4976-af3c-4f6c6873c3f1"/>
+				<textElement textAlignment="Justified">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Los NOVIOS autorizan que sus nombres sean publicados en el “Listín de Bodas Mensual”, en caso que el PROGRAMA decida publicarlos.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="13" y="205" width="23" height="15" uuid="3ac057c9-a345-40a3-a2aa-efd1b23e1a93"/>
+				<textElement>
+					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[1.7.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="36" y="225" width="519" height="25" uuid="99c31016-047d-46ba-b12b-ca22c56f8683"/>
+				<textElement textAlignment="Justified">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Los NOVIOS autorizan el envío de publicidad y promociones a su dirección de domicilio y de correo electrónico registrados al nombre de la inscripción.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="13" y="225" width="23" height="15" uuid="e4130099-cb1d-4df0-ad50-4218bc2a212c"/>
+				<textElement>
+					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[1.8.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="250" width="555" height="15" uuid="7d38f824-a3aa-4622-b07a-acd5ac080850"/>
+				<textElement>
+					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[2. AFILIACIÓN]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="13" y="265" width="23" height="15" uuid="e4f2ca3e-c6e3-43bd-a37a-f6250ad8a7ef"/>
+				<textElement>
+					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[2.1.]]></text>
+			</staticText>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>
