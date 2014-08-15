@@ -22,6 +22,7 @@ import pe.com.logistica.bean.negocio.CuotaPago;
 import pe.com.logistica.bean.negocio.DetalleServicioAgencia;
 import pe.com.logistica.bean.negocio.Direccion;
 import pe.com.logistica.bean.negocio.Maestro;
+import pe.com.logistica.bean.negocio.MaestroServicio;
 import pe.com.logistica.bean.negocio.ProgramaNovios;
 import pe.com.logistica.bean.negocio.Proveedor;
 import pe.com.logistica.bean.negocio.ServicioAgencia;
@@ -34,6 +35,7 @@ import pe.com.logistica.negocio.dao.ContactoDao;
 import pe.com.logistica.negocio.dao.DestinoDao;
 import pe.com.logistica.negocio.dao.DireccionDao;
 import pe.com.logistica.negocio.dao.MaestroDao;
+import pe.com.logistica.negocio.dao.MaestroServicioDao;
 import pe.com.logistica.negocio.dao.PersonaDao;
 import pe.com.logistica.negocio.dao.ProveedorDao;
 import pe.com.logistica.negocio.dao.ServicioNegocioDao;
@@ -46,6 +48,7 @@ import pe.com.logistica.negocio.dao.impl.ContactoDaoImpl;
 import pe.com.logistica.negocio.dao.impl.DestinoDaoImpl;
 import pe.com.logistica.negocio.dao.impl.DireccionDaoImpl;
 import pe.com.logistica.negocio.dao.impl.MaestroDaoImpl;
+import pe.com.logistica.negocio.dao.impl.MaestroServicioDaoImpl;
 import pe.com.logistica.negocio.dao.impl.PersonaDaoImpl;
 import pe.com.logistica.negocio.dao.impl.ProveedorDaoImpl;
 import pe.com.logistica.negocio.dao.impl.ServicioNegocioDaoImpl;
@@ -1160,6 +1163,43 @@ public class NegocioSession implements NegocioSessionRemote,
 		
 		
 		return programa;
+	}
+	
+	@Override
+	public boolean ingresarMaestroServicio(MaestroServicio servicio) throws ErrorRegistroDataException, SQLException, Exception{
+		MaestroServicioDao maestroServicioDao = new MaestroServicioDaoImpl();
+		
+		Integer idMaestroServicio = maestroServicioDao.ingresarMaestroServicio(servicio);
+		
+		if (idMaestroServicio == null || idMaestroServicio.intValue()==0){
+			throw new ErrorRegistroDataException("No se pudo completar el registro de servicio");
+		}
+		
+		return true;
+	}
+	
+	@Override
+	public boolean actualizarMaestroServicio(MaestroServicio servicio) throws SQLException, Exception{
+		MaestroServicioDao maestroServicioDao = new MaestroServicioDaoImpl();
+		
+		if (!maestroServicioDao.actualizarMaestroServicio(servicio)){
+			throw new ErrorRegistroDataException("No se pudo completar la actualizacion de servicio");
+		}
+		return true;
+	}
+	
+	@Override
+	public List<MaestroServicio> listarMaestroServicio() throws SQLException, Exception{
+		MaestroServicioDao maestroServicioDao = new MaestroServicioDaoImpl();
+		
+		return maestroServicioDao.listarMaestroServicios();
+	}
+	
+	@Override
+	public MaestroServicio consultarMaestroServicio(int idMaestroServicio) throws SQLException, Exception{
+		MaestroServicioDao maestroServicioDao = new MaestroServicioDaoImpl();
+		
+		return maestroServicioDao.consultarMaestroServicio(idMaestroServicio);
 	}
 
 }
