@@ -12,6 +12,7 @@ import pe.com.logistica.bean.negocio.Contacto;
 import pe.com.logistica.bean.negocio.CuotaPago;
 import pe.com.logistica.bean.negocio.DetalleServicioAgencia;
 import pe.com.logistica.bean.negocio.Direccion;
+import pe.com.logistica.bean.negocio.MaestroServicio;
 import pe.com.logistica.bean.negocio.ProgramaNovios;
 import pe.com.logistica.bean.negocio.Proveedor;
 import pe.com.logistica.bean.negocio.ServicioAgencia;
@@ -83,4 +84,12 @@ public interface NegocioSessionLocal {
 			throws SQLException, Exception;
 	
 	public ProgramaNovios consultarProgramaNovios(int idProgramaNovios) throws SQLException, Exception;
+	
+	public boolean ingresarMaestroServicio(MaestroServicio servicio) throws ErrorRegistroDataException, SQLException, Exception;
+	
+	public boolean actualizarMaestroServicio(MaestroServicio servicio) throws SQLException, Exception;
+	
+	public List<MaestroServicio> listarMaestroServicio() throws SQLException, Exception;
+	
+	public MaestroServicio consultarMaestroServicio(int idMaestroServicio) throws SQLException, Exception;
 }
