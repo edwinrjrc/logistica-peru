@@ -136,3 +136,14 @@ end;
 $BODY$
   LANGUAGE plpgsql VOLATILE
   COST 100;
+  
+ALTER TABLE seguridad.usuario
+  ADD COLUMN cambiarclave boolean NOT NULL DEFAULT false;
+ALTER TABLE seguridad.usuario
+  ADD COLUMN feccaducacredencial date;
+ALTER TABLE seguridad.usuario
+  DROP CONSTRAINT fk_usuario_rol;
+ALTER TABLE seguridad.usuario
+  ADD CONSTRAINT fk_usuario_rol FOREIGN KEY (id_rol)
+      REFERENCES seguridad.rol (id) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION;
