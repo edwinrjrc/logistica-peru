@@ -20,7 +20,7 @@ public class DetalleServicioAgencia extends BaseNegocio {
 	 */
 	private static final long serialVersionUID = 5173839888704484950L;
 	
-	private BaseVO tipoServicio;
+	private MaestroServicio tipoServicio;
 	private String descripcionServicio;
 	private BaseVO destino;
 	private int dias;
@@ -43,9 +43,9 @@ public class DetalleServicioAgencia extends BaseNegocio {
 	/**
 	 * @return the tipoServicio
 	 */
-	public BaseVO getTipoServicio() {
+	public MaestroServicio getTipoServicio() {
 		if (tipoServicio == null){
-			tipoServicio = new BaseVO();
+			tipoServicio = new MaestroServicio();
 		}
 		return tipoServicio;
 	}
@@ -53,7 +53,7 @@ public class DetalleServicioAgencia extends BaseNegocio {
 	/**
 	 * @param tipoServicio the tipoServicio to set
 	 */
-	public void setTipoServicio(BaseVO tipoServicio) {
+	public void setTipoServicio(MaestroServicio tipoServicio) {
 		this.tipoServicio = tipoServicio;
 	}
 
