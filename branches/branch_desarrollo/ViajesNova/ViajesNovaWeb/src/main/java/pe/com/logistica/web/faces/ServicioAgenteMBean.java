@@ -25,6 +25,7 @@ import pe.com.logistica.bean.Util.UtilParse;
 import pe.com.logistica.bean.negocio.Cliente;
 import pe.com.logistica.bean.negocio.Destino;
 import pe.com.logistica.bean.negocio.DetalleServicioAgencia;
+import pe.com.logistica.bean.negocio.MaestroServicio;
 import pe.com.logistica.bean.negocio.Parametro;
 import pe.com.logistica.bean.negocio.ServicioAgencia;
 import pe.com.logistica.bean.negocio.ServicioProveedor;
@@ -184,8 +185,6 @@ public class ServicioAgenteMBean extends BaseMBean{
 				
 				this.setListadoDetalleServicio(negocioServicio.ordenarServiciosVenta(getListadoDetalleServicio()));
 				
-				this.getServicioAgencia().setListaDetalleServicio(getListadoDetalleServicio());
-				
 				this.setDetalleServicio(null);
 				
 				calcularTotales();
@@ -255,10 +254,13 @@ public class ServicioAgenteMBean extends BaseMBean{
 			resultado = false;
 		}
 		if (resultado){
-			if (this.getServicioAgencia().getListaDetalleServicio().isEmpty()){
+			if (this.getListadoDetalleServicio().isEmpty()){
 				throw new ErrorRegistroDataException("No se agregaron servicios a la venta");
 			}
 			else{
+				
+				validarServicios();
+				/*
 				Parametro param = this.parametroServicio.consultarParametro(UtilWeb.obtenerEnteroPropertieMaestro(
 						"codigoParametroFee", "aplicacionDatos"));
 				boolean servicioFee = false;
@@ -272,10 +274,55 @@ public class ServicioAgenteMBean extends BaseMBean{
 				if (!servicioFee){
 					throw new ErrorRegistroDataException("No se agrego el Fee de Venta");
 				}
+				*/
 			}
 		}
 		
 		return resultado;
+	}
+
+	private void validarServicios() throws ErrorRegistroDataException {
+		
+		for (DetalleServicioAgencia detalle : this.getListadoDetalleServicio()){
+			if (detalle.getTipoServicio().isRequiereFee()){
+				validarFee();
+			}
+			if (detalle.getTipoServicio().isPagaImpto()){
+				validarImpto();
+			}
+		}
+		
+	}
+
+	private void validarImpto() throws ErrorRegistroDataException {
+		boolean tieneImpto = false;
+		
+		for (DetalleServicioAgencia detalle : this.getListadoDetalleServicio()){
+			if (detalle.getTipoServicio().isEsImpuesto()){
+				tieneImpto = true;
+				break;
+			}
+		}
+		
+		if (!tieneImpto){
+			throw new ErrorRegistroDataException("No se agrego el Impuesto");
+		}
+		
+	}
+
+	private void validarFee() throws ErrorRegistroDataException {
+		boolean tieneFee = false;
+		
+		for (DetalleServicioAgencia detalle : this.getListadoDetalleServicio()){
+			if (detalle.getTipoServicio().isEsFee()){
+				tieneFee = true;
+				break;
+			}
+		}
+		
+		if (!tieneFee){
+			throw new ErrorRegistroDataException("No se agrego el Fee de Venta");
+		}
 	}
 
 	private boolean validarServicioVenta() {
@@ -364,6 +411,8 @@ public class ServicioAgenteMBean extends BaseMBean{
 					getServicioAgencia().setIpCreacion(
 							obtenerRequest().getRemoteAddr());
 					
+					this.getServicioAgencia().setListaDetalleServicio(getListadoDetalleServicio());
+					
 					Integer idServicio = this.negocioServicio.registrarVentaServicio(getServicioAgencia());
 					
 					if (idServicio != null && idServicio.intValue() != 0){
@@ -448,9 +497,14 @@ public class ServicioAgenteMBean extends BaseMBean{
 			if (oe != null){
 				String valor = oe.toString();
 				
-				Parametro param = this.parametroServicio.consultarParametro(UtilWeb.obtenerEnteroPropertieMaestro(
+				/*Parametro param = this.parametroServicio.consultarParametro(UtilWeb.obtenerEnteroPropertieMaestro(
 						"codigoParametroFee", "aplicacionDatos"));
-				this.setServicioFee(valor.equals(param.getValor()));
+				this.setServicioFee(valor.equals(param.getValor()));*/
+				
+				MaestroServicio maestroServicio = this.negocioServicio.consultarMaestroServicio(UtilWeb.convertirCadenaEntero(valor));
+				
+				this.setServicioFee(maestroServicio.isEsFee() || maestroServicio.isEsImpuesto());
+				
 				if (!this.isServicioFee()){
 					listaProveedores = this.negocioServicio.proveedoresXServicio(UtilWeb.convertirCadenaEntero(valor));
 					setListadoEmpresas(null);

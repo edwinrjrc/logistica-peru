@@ -161,7 +161,7 @@ public class MaestroServicioDaoImpl implements MaestroServicioDao {
 			throws SQLException {
 		Connection conn = null;
 		CallableStatement cs = null;
-		String sql = "{ ? = call negocio.fn_actualizarservicio(?,?,?,?,?,?,?,?,?) }";
+		String sql = "{ ? = call negocio.fn_actualizarservicio(?,?,?,?,?,?,?,?,?,?) }";
 		boolean resultado = false;
 
 		try {
@@ -170,9 +170,9 @@ public class MaestroServicioDaoImpl implements MaestroServicioDao {
 			int i = 1;
 			cs.registerOutParameter(i++, Types.BOOLEAN);
 			cs.setInt(i++, servicio.getCodigoEntero().intValue());
-			cs.setString(i++, servicio.getNombre());
+			cs.setString(i++, UtilJdbc.convertirMayuscula(servicio.getNombre()));
 			if (StringUtils.isNotBlank(servicio.getDescripcion())){
-				cs.setString(i++, servicio.getDescripcion());
+				cs.setString(i++, UtilJdbc.convertirMayuscula(servicio.getDescripcion()));
 			}
 			else{
 				cs.setNull(i++, Types.VARCHAR);
@@ -181,6 +181,7 @@ public class MaestroServicioDaoImpl implements MaestroServicioDao {
 			cs.setBoolean(i++, servicio.isPagaImpto());
 			cs.setBoolean(i++, servicio.isCargaComision());
 			cs.setBoolean(i++, servicio.isEsImpuesto());
+			cs.setBoolean(i++, servicio.isEsFee());
 			cs.setString(i++, servicio.getUsuarioCreacion());
 			cs.setString(i++, servicio.getIpCreacion());
 			cs.execute();
@@ -240,6 +241,8 @@ public class MaestroServicioDaoImpl implements MaestroServicioDao {
 				resultado.setRequiereFee(UtilJdbc.obtenerBoolean(rs, "requierefee"));
 				resultado.setPagaImpto(UtilJdbc.obtenerBoolean(rs, "pagaimpto"));
 				resultado.setCargaComision(UtilJdbc.obtenerBoolean(rs, "cargacomision"));
+				resultado.setEsImpuesto(UtilJdbc.obtenerBoolean(rs, "esimpuesto"));
+				resultado.setEsFee(UtilJdbc.obtenerBoolean(rs, "esfee"));
 				resultado.setUsuarioCreacion(UtilJdbc.obtenerCadena(rs, "usuariocreacion"));
 				resultado.setFechaCreacion(UtilJdbc.obtenerFecha(rs, "fechacreacion"));
 				resultado.setIpCreacion(UtilJdbc.obtenerCadena(rs, "ipcreacion"));
