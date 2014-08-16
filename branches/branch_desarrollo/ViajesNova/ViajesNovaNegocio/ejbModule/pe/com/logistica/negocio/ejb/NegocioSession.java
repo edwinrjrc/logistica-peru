@@ -802,22 +802,14 @@ public class NegocioSession implements NegocioSessionRemote,
 	@Override
 	public ServicioNovios agregarServicio(ServicioNovios servicioNovios)
 			throws SQLException, Exception {
-		Integer idTipoServicio = servicioNovios.getTipoServicio()
-				.getCodigoEntero();
-		MaestroDao maestroDao = new MaestroDaoImpl();
-		Maestro hijoMaestro = new Maestro();
-		hijoMaestro.setCodigoMaestro(12);
-		hijoMaestro.setCodigoEntero(idTipoServicio);
+		MaestroServicioDao maestroServicioDao = new MaestroServicioDaoImpl();
 		
-		Maestro consultaMaestro = maestroDao
-				.consultarHijoMaestro(hijoMaestro);
-		
-		servicioNovios.setTipoServicio((BaseVO) consultaMaestro);
+		servicioNovios.setTipoServicio(maestroServicioDao.consultarMaestroServicio(servicioNovios.getCodigoEntero()));
 		BigDecimal comision = BigDecimal.ZERO;
 		BigDecimal totalVenta = BigDecimal.ZERO;
 		
 		if (StringUtils.isBlank(servicioNovios.getDescripcionServicio())){
-			servicioNovios.setDescripcionServicio(StringUtils.upperCase(consultaMaestro.getDescripcion()));
+			servicioNovios.setDescripcionServicio(StringUtils.upperCase(servicioNovios.getTipoServicio().getNombre()));
 		}
 		
 		if (servicioNovios.getCantidad() == 0){
@@ -848,22 +840,15 @@ public class NegocioSession implements NegocioSessionRemote,
 	public DetalleServicioAgencia agregarServicioVenta(
 			DetalleServicioAgencia detalleServicio) throws SQLException,
 			Exception {
-		Integer idTipoServicio = detalleServicio.getTipoServicio()
-				.getCodigoEntero();
-		MaestroDao maestroDao = new MaestroDaoImpl();
-		Maestro hijoMaestro = new Maestro();
-		hijoMaestro.setCodigoMaestro(12);
-		hijoMaestro.setCodigoEntero(idTipoServicio);
+		MaestroServicioDao maestroServicioDao = new MaestroServicioDaoImpl();
 		
-		Maestro consultaMaestro = maestroDao
-				.consultarHijoMaestro(hijoMaestro);
+		detalleServicio.setTipoServicio(maestroServicioDao.consultarMaestroServicio(detalleServicio.getTipoServicio().getCodigoEntero()));
 		
-		detalleServicio.setTipoServicio((BaseVO) consultaMaestro);
 		BigDecimal comision = BigDecimal.ZERO;
 		BigDecimal totalVenta = BigDecimal.ZERO;
 		
 		if (StringUtils.isBlank(detalleServicio.getDescripcionServicio())){
-			detalleServicio.setDescripcionServicio(StringUtils.upperCase(consultaMaestro.getDescripcion()));
+			detalleServicio.setDescripcionServicio(StringUtils.upperCase(detalleServicio.getTipoServicio().getNombre()));
 		}
 		
 		if (detalleServicio.getCantidad() == 0){
