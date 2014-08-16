@@ -19,9 +19,12 @@ import org.apache.log4j.Logger;
 
 import pe.com.logistica.bean.base.BaseVO;
 import pe.com.logistica.bean.negocio.Destino;
+import pe.com.logistica.bean.negocio.MaestroServicio;
 import pe.com.logistica.bean.negocio.Usuario;
+import pe.com.logistica.web.servicio.NegocioServicio;
 import pe.com.logistica.web.servicio.SeguridadServicio;
 import pe.com.logistica.web.servicio.SoporteServicio;
+import pe.com.logistica.web.servicio.impl.NegocioServicioImpl;
 import pe.com.logistica.web.servicio.impl.SeguridadServicioImpl;
 import pe.com.logistica.web.servicio.impl.SoporteServicioImpl;
 import pe.com.logistica.web.util.UtilWeb;
@@ -59,6 +62,7 @@ public class CatalogoMBean implements Serializable{
 
 	private SeguridadServicio seguridadServicio;
 	private SoporteServicio soporteServicio;
+	private NegocioServicio negocioServicio;
 
 	public CatalogoMBean() {
 		try {
@@ -66,7 +70,7 @@ public class CatalogoMBean implements Serializable{
 					.getCurrentInstance().getExternalContext().getContext();
 			seguridadServicio = new SeguridadServicioImpl(servletContext);
 			soporteServicio = new SoporteServicioImpl(servletContext);
-
+			negocioServicio = new NegocioServicioImpl(servletContext);
 		} catch (NamingException e) {
 			logger.error(e.getMessage(), e);
 		}
@@ -359,13 +363,17 @@ public class CatalogoMBean implements Serializable{
 	 * @return the catalogoTipoServicio
 	 */
 	public List<SelectItem> getCatalogoTipoServicio() {
-		int idmaestro = UtilWeb.obtenerEnteroPropertieMaestro(
-				"maestroTipoServicios", "aplicacionDatos");
 
 		try {
-			List<BaseVO> lista = soporteServicio
-					.listarCatalogoMaestro(idmaestro);
-			catalogoTipoServicio = UtilWeb.convertirSelectItem(lista);
+			List<MaestroServicio> lista = negocioServicio.listarMaestroServicio();
+			SelectItem si = null;
+			catalogoTipoServicio = new ArrayList<SelectItem>();
+			for (MaestroServicio maestroServicio : lista) {
+				si = new SelectItem();
+				si.setLabel(maestroServicio.getNombre());
+				si.setValue(maestroServicio.getCodigoEntero());
+				catalogoTipoServicio.add(si);
+			}
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
 		}
