@@ -6,6 +6,7 @@ package pe.com.logistica.web.faces;
 import java.sql.SQLException;
 import java.util.List;
 
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
@@ -13,6 +14,7 @@ import javax.naming.NamingException;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 
 import pe.com.logistica.bean.negocio.MaestroServicio;
@@ -20,7 +22,7 @@ import pe.com.logistica.bean.negocio.Usuario;
 import pe.com.logistica.negocio.exception.ErrorRegistroDataException;
 import pe.com.logistica.web.servicio.NegocioServicio;
 import pe.com.logistica.web.servicio.impl.NegocioServicioImpl;
-import pe.com.logistica.web.servicio.impl.ParametroServicioImpl;
+import pe.com.logistica.web.util.UtilWeb;
 
 /**
  * @author edwreb
@@ -64,6 +66,7 @@ public class MaestroServiciosMBean extends BaseMBean {
 		this.setNombreFormulario("Nuevo Servicio");
 		this.setNuevoMaestroServicio(true);
 		this.setEditarMaestroServicio(false);
+		this.setMaestroServicio(null);
 	}
 	
 	public void ejecutarMetodo(){
@@ -106,20 +109,48 @@ public class MaestroServiciosMBean extends BaseMBean {
 	}
 	
 	private boolean validarMaestroDestino() {
-		// TODO Auto-generated method stub
-		return false;
+		boolean resultado = true;
+		String idFormulario = "idFrMaeServicio";
+		if (StringUtils.isBlank(this.getMaestroServicio().getNombre())) {
+			this.agregarMensaje(idFormulario + ":idNomServicio",
+					"Ingrese el nombre del servicio", "",
+					FacesMessage.SEVERITY_ERROR);
+			resultado = false;
+		}
+		if (StringUtils.isNotBlank(this.getMaestroServicio().getDescripcion())){
+			if (UtilWeb.obtenerLongitud(this.getMaestroServicio().getDescripcion()) > 300){
+				this.agregarMensaje(idFormulario + ":idDescServicio",
+						"El tamaño de la descripcion supera los 300 caracteres", "",
+						FacesMessage.SEVERITY_ERROR);
+				resultado = false;
+			}
+		}
+		
+		return resultado;
 	}
 
-	public void consultarMaestroServicio(){
-		this.setNombreFormulario("Editar Servicio");
-		this.setNuevoMaestroServicio(false);
-		this.setEditarMaestroServicio(true);
+	public void consultarMaestroServicio(int idServicio){
+		try {
+			this.setNombreFormulario("Editar Servicio");
+			this.setNuevoMaestroServicio(false);
+			this.setEditarMaestroServicio(true);
+			
+			this.setMaestroServicio(this.negocioServicio.consultarMaestroServicio(idServicio));
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	/**
 	 * @return the maestroServicio
 	 */
 	public MaestroServicio getMaestroServicio() {
+		if (maestroServicio == null){
+			maestroServicio = new MaestroServicio();
+		}
 		return maestroServicio;
 	}
 
@@ -162,6 +193,16 @@ public class MaestroServiciosMBean extends BaseMBean {
 	 * @return the listaMaeServicio
 	 */
 	public List<MaestroServicio> getListaMaeServicio() {
+		try {
+			
+			listaMaeServicio = negocioServicio.listarMaestroServicio();
+			this.setShowModal(false);
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		return listaMaeServicio;
 	}
 

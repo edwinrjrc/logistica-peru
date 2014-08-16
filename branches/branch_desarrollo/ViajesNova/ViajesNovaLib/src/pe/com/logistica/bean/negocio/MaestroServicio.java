@@ -25,6 +25,7 @@ public class MaestroServicio extends BaseNegocio {
 	private boolean comisionPorcentaje;
 	private BigDecimal valorComision;
 
+	private boolean esImpuesto;
 	/**
 	 * 
 	 */
@@ -128,6 +129,20 @@ public class MaestroServicio extends BaseNegocio {
 	 */
 	public void setValorComision(BigDecimal valorComision) {
 		this.valorComision = valorComision;
+	}
+
+	/**
+	 * @return the esImpuesto
+	 */
+	public boolean isEsImpuesto() {
+		return esImpuesto;
+	}
+
+	/**
+	 * @param esImpuesto the esImpuesto to set
+	 */
+	public void setEsImpuesto(boolean esImpuesto) {
+		this.esImpuesto = esImpuesto;
 	}
 
 }
