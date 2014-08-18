@@ -341,10 +341,14 @@ public class ServicioNoviosDaoImpl implements ServicioNoviosDao {
 				programaNovios2.setCodigoEntero(UtilJdbc.obtenerNumero(rs, "id"));
 				programaNovios2.setCodigoNovios(UtilJdbc.obtenerCadena(rs, "codigonovios"));
 				programaNovios2.getNovia().setCodigoEntero(UtilJdbc.obtenerNumero(rs, "idnovia"));
+				programaNovios2.getNovia().getDocumentoIdentidad().getTipoDocumento().setCodigoEntero(UtilJdbc.obtenerNumero(rs, "tipodocnovia"));
+				programaNovios2.getNovia().getDocumentoIdentidad().setNumeroDocumento(UtilJdbc.obtenerCadena(rs, "numdocnovia"));
 				programaNovios2.getNovia().setNombres(UtilJdbc.obtenerCadena(rs, "nomnovia"));
 				programaNovios2.getNovia().setApellidoPaterno(UtilJdbc.obtenerCadena(rs, "apepatnovia"));
 				programaNovios2.getNovia().setApellidoMaterno(UtilJdbc.obtenerCadena(rs, "apematnovia"));
 				programaNovios2.getNovio().setCodigoEntero(UtilJdbc.obtenerNumero(rs, "idnovio"));
+				programaNovios2.getNovio().getDocumentoIdentidad().getTipoDocumento().setCodigoEntero(UtilJdbc.obtenerNumero(rs, "tipodocnovio"));
+				programaNovios2.getNovio().getDocumentoIdentidad().setNumeroDocumento(UtilJdbc.obtenerCadena(rs, "numdocnovio"));
 				programaNovios2.getNovio().setNombres(UtilJdbc.obtenerCadena(rs, "nomnovio"));
 				programaNovios2.getNovio().setApellidoPaterno(UtilJdbc.obtenerCadena(rs, "apepatnovio"));
 				programaNovios2.getNovio().setApellidoMaterno(UtilJdbc.obtenerCadena(rs, "apematnovio"));
