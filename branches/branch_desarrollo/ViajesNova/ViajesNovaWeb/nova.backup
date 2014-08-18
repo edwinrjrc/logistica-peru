@@ -4,7 +4,7 @@
 
 -- Dumped from database version 9.2.3
 -- Dumped by pg_dump version 9.2.3
--- Started on 2014-08-18 00:04:34
+-- Started on 2014-08-18 00:39:28
 
 SET statement_timeout = 0;
 SET client_encoding = 'UTF8';
@@ -720,7 +720,7 @@ $$;
 ALTER FUNCTION negocio.fn_consultarinvitadosnovios(p_idnovios integer) OWNER TO postgres;
 
 --
--- TOC entry 313 (class 1255 OID 125678)
+-- TOC entry 315 (class 1255 OID 125678)
 -- Name: fn_consultarnovios(integer, character varying, integer, integer); Type: FUNCTION; Schema: negocio; Owner: postgres
 --
 
@@ -732,8 +732,9 @@ declare micursor refcursor;
 begin
 
 open micursor for
-SELECT snov.id, snov.codigonovios, 
+SELECT snov.id, snov.codigonovios, novia.idtipodocumento as tipodocnovia, novia.numerodocumento as numdocnovia, 
        snov.idnovia, novia.nombres as nomnovia, novia.apellidopaterno as apepatnovia, novia.apellidomaterno as apematnovia,
+       novio.idtipodocumento as tipodocnovio, novio.numerodocumento as numdocnovio, 
        snov.idnovio, novio.nombres as nomnovio, novio.apellidopaterno as apepatnovio, novio.apellidomaterno as apematnovio,
        snov.iddestino, dest.descripcion as descdestino, dest.codigoiata, pai.descripcion as descpais,
        snov.fechaboda, snov.fechaviaje, 
@@ -918,7 +919,7 @@ $$;
 ALTER FUNCTION negocio.fn_consultarproveedorservicio(p_idproveedor integer) OWNER TO postgres;
 
 --
--- TOC entry 315 (class 1255 OID 126073)
+-- TOC entry 314 (class 1255 OID 126073)
 -- Name: fn_consultarservicio(integer); Type: FUNCTION; Schema: negocio; Owner: postgres
 --
 
@@ -1786,7 +1787,7 @@ $$;
 ALTER FUNCTION negocio.fn_ingresarprogramanovios(p_idnovia integer, p_idnovio integer, p_iddestino integer, p_fechaboda date, p_fechaviaje date, p_idmoneda integer, p_cuotainicial numeric, p_dias integer, p_noches integer, p_fechashower date, p_observaciones text, p_montototal numeric, p_idservicio integer, p_usuariocreacion character varying, p_ipcreacion character varying) OWNER TO postgres;
 
 --
--- TOC entry 314 (class 1255 OID 126071)
+-- TOC entry 313 (class 1255 OID 126071)
 -- Name: fn_ingresarservicio(character varying, character varying, boolean, boolean, boolean, character varying, character varying); Type: FUNCTION; Schema: negocio; Owner: postgres
 --
 
@@ -7066,7 +7067,7 @@ GRANT ALL ON SCHEMA public TO postgres;
 GRANT ALL ON SCHEMA public TO PUBLIC;
 
 
--- Completed on 2014-08-18 00:04:35
+-- Completed on 2014-08-18 00:39:28
 
 --
 -- PostgreSQL database dump complete
