@@ -804,7 +804,7 @@ public class NegocioSession implements NegocioSessionRemote,
 			throws SQLException, Exception {
 		MaestroServicioDao maestroServicioDao = new MaestroServicioDaoImpl();
 		
-		servicioNovios.setTipoServicio(maestroServicioDao.consultarMaestroServicio(servicioNovios.getCodigoEntero()));
+		servicioNovios.setTipoServicio(maestroServicioDao.consultarMaestroServicio(servicioNovios.getTipoServicio().getCodigoEntero()));
 		BigDecimal comision = BigDecimal.ZERO;
 		BigDecimal totalVenta = BigDecimal.ZERO;
 		

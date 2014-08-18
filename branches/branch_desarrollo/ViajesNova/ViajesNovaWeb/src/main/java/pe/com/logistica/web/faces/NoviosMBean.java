@@ -26,16 +26,28 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import net.sf.jasperreports.engine.JRDataSource;
+import net.sf.jasperreports.engine.JREmptyDataSource;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.export.JRPdfExporter;
+import net.sf.jasperreports.export.SimpleExporterInput;
+import net.sf.jasperreports.export.SimpleOutputStreamExporterOutput;
+import net.sf.jasperreports.export.SimplePdfExporterConfiguration;
+
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 
 import pe.com.logistica.bean.negocio.Cliente;
 import pe.com.logistica.bean.negocio.DetalleServicioAgencia;
+import pe.com.logistica.bean.negocio.MaestroServicio;
 import pe.com.logistica.bean.negocio.Parametro;
 import pe.com.logistica.bean.negocio.ProgramaNovios;
 import pe.com.logistica.bean.negocio.ServicioNovios;
 import pe.com.logistica.bean.negocio.ServicioProveedor;
 import pe.com.logistica.bean.negocio.Usuario;
+import pe.com.logistica.negocio.exception.ErrorRegistroDataException;
 import pe.com.logistica.negocio.exception.ValidacionException;
 import pe.com.logistica.web.servicio.NegocioServicio;
 import pe.com.logistica.web.servicio.ParametroServicio;
@@ -225,9 +237,11 @@ public class NoviosMBean extends BaseMBean {
 			if (oe != null){
 				String valor = oe.toString();
 				
-				Parametro param = this.parametroServicio.consultarParametro(UtilWeb.obtenerEnteroPropertieMaestro(
-						"codigoParametroFee", "aplicacionDatos"));
-				this.setServicioFee(valor.equals(param.getValor()));
+				/*Parametro param = this.parametroServicio.consultarParametro(UtilWeb.obtenerEnteroPropertieMaestro(
+						"codigoParametroFee", "aplicacionDatos"));*/
+				MaestroServicio maestroServicio = this.negocioServicio.consultarMaestroServicio(UtilWeb.convertirCadenaEntero(valor));
+				
+				this.setServicioFee(maestroServicio.isEsFee() || maestroServicio.isEsImpuesto());
 				if (!this.isServicioFee()){
 					listaProveedores = this.negocioServicio.proveedoresXServicio(UtilWeb.convertirCadenaEntero(valor));
 					setListadoEmpresas(null);
@@ -267,7 +281,7 @@ public class NoviosMBean extends BaseMBean {
 		}
 	}
 
-	private boolean validarNuevoNovios() throws ValidacionException {
+	private boolean validarNuevoNovios() throws ValidacionException, ErrorRegistroDataException {
 		boolean resultado = true;
 		String idFormulario = "idFormNovios";
 		if (this.getProgramaNovios().getNovia() == null
@@ -344,7 +358,76 @@ public class NoviosMBean extends BaseMBean {
 			}
 		}
 		
+		if (resultado){
+			if (this.getListadoServicios().isEmpty()){
+				throw new ErrorRegistroDataException("No se agregaron servicios a la venta");
+			}
+			else{
+				
+				validarServicios();
+				/*
+				Parametro param = this.parametroServicio.consultarParametro(UtilWeb.obtenerEnteroPropertieMaestro(
+						"codigoParametroFee", "aplicacionDatos"));
+				boolean servicioFee = false;
+				for (DetalleServicioAgencia detalleServicio : this.getServicioAgencia().getListaDetalleServicio()){
+					if (detalleServicio.getTipoServicio().getCodigoEntero().toString().equals(param.getValor())){
+						servicioFee = true;
+						break;
+					}
+				}
+				
+				if (!servicioFee){
+					throw new ErrorRegistroDataException("No se agrego el Fee de Venta");
+				}
+				*/
+			}
+		}
+		
 		return resultado;
+	}
+	
+	private void validarServicios() throws ErrorRegistroDataException {
+		
+		for (DetalleServicioAgencia detalle : this.getListadoServicios()){
+			if (detalle.getTipoServicio().isRequiereFee()){
+				validarFee();
+			}
+			if (detalle.getTipoServicio().isPagaImpto()){
+				validarImpto();
+			}
+		}
+		
+	}
+
+	private void validarImpto() throws ErrorRegistroDataException {
+		boolean tieneImpto = false;
+		
+		for (DetalleServicioAgencia detalle : this.getListadoServicios()){
+			if (detalle.getTipoServicio().isEsImpuesto()){
+				tieneImpto = true;
+				break;
+			}
+		}
+		
+		if (!tieneImpto){
+			throw new ErrorRegistroDataException("No se agrego el Impuesto");
+		}
+		
+	}
+
+	private void validarFee() throws ErrorRegistroDataException {
+		boolean tieneFee = false;
+		
+		for (DetalleServicioAgencia detalle : this.getListadoServicios()){
+			if (detalle.getTipoServicio().isEsFee()){
+				tieneFee = true;
+				break;
+			}
+		}
+		
+		if (!tieneFee){
+			throw new ErrorRegistroDataException("No se agrego el Fee de Venta");
+		}
 	}
 
 	public void seleccionarNovio() {
@@ -366,7 +449,8 @@ public class NoviosMBean extends BaseMBean {
 	}
 
 	public void imprimirFormatoNovios() {
-		String rutaJasper = "/../resources/jasper/report2.jasper";
+		String rutaCarpeta = "/../resources/jasper/";
+		String[] rutaJasper = {"report2.jasper","contrato1.jasper","contrato2.jasper","contrato3.jasper"};
 
 		try {
 			HttpServletResponse response = obtenerResponse();
@@ -376,16 +460,14 @@ public class NoviosMBean extends BaseMBean {
 			response.setHeader("Content-Transfer-Encoding", "binary");
 
 			FacesContext facesContext = obtenerContexto();
-			rutaJasper = obtenerRequest().getContextPath() + rutaJasper;
-			InputStream jasperStream = facesContext.getExternalContext()
-					.getResourceAsStream(rutaJasper);
-
+			InputStream[] jasperStream = new InputStream[4];
 			OutputStream stream = response.getOutputStream();
-
-			jasperStream = facesContext.getExternalContext()
-					.getResourceAsStream(rutaJasper);
-
-			//imprimirPDF(enviarParametros(), stream, jasperStream);
+			for (int i=0; i<rutaJasper.length; i++){
+				rutaJasper[i] = obtenerRequest().getContextPath() + rutaCarpeta + rutaJasper[i];
+				jasperStream[i] = facesContext.getExternalContext()
+						.getResourceAsStream(rutaJasper[i]);
+			}
+			imprimirPDF(enviarParametros(), stream, jasperStream);
 
 			facesContext.responseComplete();
 
@@ -422,6 +504,18 @@ public class NoviosMBean extends BaseMBean {
 					.getCuotaInicial().toString());
 			parametros.put("P_NROINVITADOS", String.valueOf(getProgramaNovios()
 					.getCantidadInvitados()));
+			
+			parametros.put("nomNovia", String.valueOf(getProgramaNovios()
+					.getNovia().getNombreCompleto()));
+			parametros.put("nomNovio", String.valueOf(getProgramaNovios()
+					.getNovio().getNombreCompleto()));
+			parametros.put("dniNovia", String.valueOf(getProgramaNovios()
+					.getNovia().getDocumentoIdentidad().getNumeroDocumento()));
+			parametros.put("dniNovio", String.valueOf(getProgramaNovios()
+					.getNovio().getDocumentoIdentidad().getNumeroDocumento()));
+			parametros.put("nomAsesora", String.valueOf(getProgramaNovios()
+					.getVendedor().getNombre()));
+			parametros.put("dniAsesora", "41222245");
 		} catch (Exception e) {
 			parametros.put("P_CODIGONOVIOS", "");
 			parametros.put("P_NOVIA", "");
@@ -433,6 +527,12 @@ public class NoviosMBean extends BaseMBean {
 			parametros.put("P_FECHAINSCRIPCION", "");
 			parametros.put("P_CUOTAINICIAL", "");
 			parametros.put("P_NROINVITADOS", "");
+			parametros.put("nomNovia", "");
+			parametros.put("nomNovio", "");
+			parametros.put("dniNovia", "");
+			parametros.put("dniNovio", "");
+			parametros.put("nomAsesora", "");
+			parametros.put("dniAsesora", "");
 			logger.error(e.getMessage(), e);
 		}
 
@@ -480,14 +580,15 @@ public class NoviosMBean extends BaseMBean {
 		return null;
 	}
 
-	/*private void imprimirPDF(Map<String, Object> map,
-			OutputStream outputStream, InputStream jasperStream)
+	private void imprimirPDF(Map<String, Object> map,
+			OutputStream outputStream, InputStream[] jasperStream)
 			throws JRException {
-
-		JasperPrint print = JasperFillManager.fillReport(jasperStream, map);
-
+		
 		List<JasperPrint> printList = new ArrayList<JasperPrint>();
-		printList.add(print);
+		
+		for (int i=0; i<jasperStream.length; i++){
+			printList.add(JasperFillManager.fillReport(jasperStream[i], map, new JREmptyDataSource()));
+		}
 
 		JRPdfExporter exporter = new JRPdfExporter();
 		exporter.setExporterInput(SimpleExporterInput
@@ -497,7 +598,7 @@ public class NoviosMBean extends BaseMBean {
 		configuration.setCreatingBatchModeBookmarks(true);
 		exporter.setConfiguration(configuration);
 		exporter.exportReport();
-	}*/
+	}
 	
 	public void agregarServicio(){
 		try {
