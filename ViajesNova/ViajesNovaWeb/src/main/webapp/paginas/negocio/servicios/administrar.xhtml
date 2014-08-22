@@ -129,9 +129,9 @@
 									<h:outputText value="Opciones" />
 								</f:facet>
 								<a4j:commandLink
-									action="#{servicioAgenteMBean.consultarServicioRegistrado(row)}"
-									render="idTabPanelFormProveedor, idNomModal"
-									oncomplete="#{rich:component('idModalformproveedor')}.show();">
+									action="#{servicioAgenteMBean.consultarServicioRegistrado(row.codigoEntero)}"
+									render="idGrRegisVenServicio, idNomModal"
+									oncomplete="#{rich:component('idModalfrventaservicio')}.show();">
 									<h:graphicImage height="25" width="20"
 										url="/resources/img/editar2.png" style="border:0" />
 								</a4j:commandLink>
