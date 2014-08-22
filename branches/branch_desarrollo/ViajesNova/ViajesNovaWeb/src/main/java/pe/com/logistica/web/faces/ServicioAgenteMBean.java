@@ -425,6 +425,29 @@ public class ServicioAgenteMBean extends BaseMBean{
 					this.setMensajeModal("Servicio Venta registrado satisfactoriamente");
 					this.setTipoModal(TIPO_MODAL_EXITO);
 				}
+				else if (this.isEditarVenta()){
+					HttpSession session = obtenerSession(false);
+					Usuario usuario = (Usuario) session
+							.getAttribute("usuarioSession");
+					getServicioAgencia().setUsuarioModificacion(
+							usuario.getUsuario());
+					getServicioAgencia().setIpModificacion(
+							obtenerRequest().getRemoteAddr());
+					
+					this.getServicioAgencia().setListaDetalleServicio(getListadoDetalleServicio());
+					
+					Integer idServicio = this.negocioServicio.registrarVentaServicio(getServicioAgencia());
+					
+					if (idServicio != null && idServicio.intValue() != 0){
+						this.getServicioAgencia().setCodigoEntero(idServicio);
+						this.getServicioAgencia().setCronogramaPago(this.negocioServicio.consultarCronogramaPago(getServicioAgencia()));
+						this.setTransaccionExito(true);
+					}
+					
+					this.setShowModal(true);
+					this.setMensajeModal("Servicio Venta actualizado satisfactoriamente");
+					this.setTipoModal(TIPO_MODAL_EXITO);
+				}
 			}
 			
 		} catch (ErrorRegistroDataException e) {

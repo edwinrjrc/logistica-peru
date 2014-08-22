@@ -92,4 +92,9 @@ public interface NegocioSessionLocal {
 	public List<MaestroServicio> listarMaestroServicio() throws SQLException, Exception;
 	
 	public MaestroServicio consultarMaestroServicio(int idMaestroServicio) throws SQLException, Exception;
+	
+	public Integer actualizarNovios(ProgramaNovios programaNovios) throws SQLException, Exception;
+	
+	public Integer actualizarVentaServicio(ServicioAgencia servicioAgencia)
+			throws ErrorRegistroDataException, SQLException, Exception;
 }
