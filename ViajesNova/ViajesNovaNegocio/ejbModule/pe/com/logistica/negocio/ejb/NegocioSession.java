@@ -977,6 +977,78 @@ public class NegocioSession implements NegocioSessionRemote,
 			}
 		}
 	}
+	
+	@Override
+	public Integer actualizarVentaServicio(ServicioAgencia servicioAgencia)
+			throws ErrorRegistroDataException, SQLException, Exception {
+		ServicioNovaViajesDao servicioNovaViajesDao = new ServicioNovaViajesDaoImpl();
+
+		Connection conexion = null;
+		Integer idServicio = 0;
+
+		try {
+			conexion = UtilConexion.obtenerConexion();
+			
+			if (servicioAgencia.getFechaServicio() == null){
+				Date fechaSer = servicioAgencia.getListaDetalleServicio().get(0).getFechaIda();
+				servicioAgencia.setFechaServicio(fechaSer);
+			}
+			
+			if (servicioAgencia.getValorCuota() == null && servicioAgencia.getFormaPago().getCodigoEntero().intValue() == 2){
+				ServicioNegocioDao servicioNegocioDao = new ServicioNegocioDaoImpl();
+				servicioAgencia.setValorCuota(servicioNegocioDao.calcularCuota(servicioAgencia));
+			}
+			
+			if (!servicioAgencia.getListaDetalleServicio().isEmpty()){
+				servicioAgencia.setCantidadServicios(servicioAgencia.getListaDetalleServicio().size());
+			}
+
+			servicioAgencia.getEstadoServicio().setCodigoEntero(2);
+			idServicio = servicioNovaViajesDao.actualizarCabeceraServicio(
+					servicioAgencia, conexion);
+
+			servicioAgencia.setCodigoEntero(idServicio);
+			
+			if (idServicio == 0){
+				throw new ErrorRegistroDataException(
+						"No se pudo registrar los servicios de los novios");
+			}
+			if (servicioAgencia.getListaDetalleServicio() != null
+					&& !servicioAgencia.getListaDetalleServicio().isEmpty()) {
+				
+				servicioNovaViajesDao.eliminarDetalleServicio(servicioAgencia, conexion);
+				
+				for (DetalleServicioAgencia detalleServicio : servicioAgencia
+						.getListaDetalleServicio()) {
+					boolean resultado = servicioNovaViajesDao
+							.ingresarDetalleServicio(detalleServicio,
+									idServicio, conexion);
+					if (!resultado) {
+						throw new ErrorRegistroDataException(
+								"No se pudo registrar los servicios de la venta");
+					}
+				}
+			}
+
+			if (servicioAgencia.getFormaPago().getCodigoEntero().intValue() == 2) {
+				servicioNovaViajesDao.eliminarCronogramaServicio(servicioAgencia, conexion);
+				boolean resultado = servicioNovaViajesDao
+						.generarCronogramaPago(servicioAgencia, conexion);
+				if (!resultado) {
+					throw new ErrorRegistroDataException(
+							"No se pudo generar el cronograma de pagos");
+				}
+			}
+
+			return idServicio;
+		} catch (ErrorRegistroDataException e) {
+			throw new ErrorRegistroDataException(e.getMensajeError(), e);
+		} finally {
+			if (conexion != null) {
+				conexion.close();
+			}
+		}
+	}
 
 	@Override
 	public List<CuotaPago> consultarCronograma(
@@ -1187,4 +1259,93 @@ public class NegocioSession implements NegocioSessionRemote,
 		return maestroServicioDao.consultarMaestroServicio(idMaestroServicio);
 	}
 
+	@Override
+	public Integer actualizarNovios(ProgramaNovios programaNovios)
+			throws SQLException, Exception {
+		ServicioNoviosDao servicioNoviosDao = new ServicioNoviosDaoImpl();
+		ServicioNovaViajesDao servicioNovaViajesDao = new ServicioNovaViajesDaoImpl();
+		DestinoDao destinoDao = new DestinoDaoImpl();
+
+		Connection conexion = null;
+		try {
+			conexion = UtilConexion.obtenerConexion();
+			
+			int idServicio = 0;
+			
+			ServicioAgencia servicioAgencia = new ServicioAgencia();
+			servicioAgencia.setCliente(programaNovios.getNovia());
+			servicioAgencia.setCliente2(programaNovios.getNovio());
+			servicioAgencia.setFechaServicio(new Date());
+			servicioAgencia.setCantidadServicios(0);
+			if (programaNovios.getListaServicios() != null
+					&& !programaNovios.getListaServicios().isEmpty()){
+				servicioAgencia.setCantidadServicios(programaNovios.getListaServicios().size());
+			}
+						
+			servicioAgencia.setDestino(destinoDao.consultarDestino(programaNovios.getDestino().getCodigoEntero(),conexion));
+			servicioAgencia.getFormaPago().setCodigoEntero(1);
+			servicioAgencia.getEstadoPago().setCodigoEntero(1);
+			servicioAgencia.setVendedor(programaNovios.getVendedor());
+			servicioAgencia.setMontoTotalComision(programaNovios.getMontoTotalComision());
+			servicioAgencia.setMontoTotalServicios(programaNovios.getMontoTotalServiciosPrograma());
+			servicioAgencia.setMontoTotalFee(programaNovios.getMontoTotalFee());
+			servicioAgencia.setUsuarioCreacion(programaNovios.getUsuarioCreacion());
+			servicioAgencia.setIpCreacion(programaNovios.getIpCreacion());
+			servicioAgencia.setUsuarioModificacion(programaNovios.getUsuarioModificacion());
+			servicioAgencia.setIpModificacion(programaNovios.getIpModificacion());
+			servicioAgencia.getEstadoServicio().setCodigoEntero(1);
+
+			idServicio = servicioNovaViajesDao.actualizarCabeceraServicio(servicioAgencia, conexion);
+			if (idServicio == 0){
+				throw new ErrorRegistroDataException(
+						"No se pudo actualizar los servicios de los novios");
+			}
+			if (programaNovios.getListaServicios() != null
+					&& !programaNovios.getListaServicios().isEmpty()) {
+				servicioNovaViajesDao.eliminarDetalleServicio(servicioAgencia, conexion);
+				for (DetalleServicioAgencia servicioNovios : programaNovios
+						.getListaServicios()) {
+					boolean exitoRegistro = servicioNovaViajesDao
+							.ingresarDetalleServicio(servicioNovios,
+									idServicio, conexion);;
+					if (!exitoRegistro) {
+						throw new ErrorRegistroDataException(
+								"No se pudo actualizar los servicios de los novios");
+					}
+				}
+			}
+			else{
+				throw new ErrorRegistroDataException(
+						"No se enviaron los servicios de los novios");
+			}
+			
+			programaNovios.setIdServicio(idServicio);
+
+			Integer idnovios = servicioNoviosDao.registrarNovios(
+					programaNovios, conexion);
+
+			if (programaNovios.getListaInvitados() != null
+					&& !programaNovios.getListaInvitados().isEmpty()) {
+				for (Cliente invitado : programaNovios.getListaInvitados()) {
+					boolean exitoRegistro = servicioNoviosDao
+							.registrarInvitado(invitado, idnovios, conexion);
+					if (!exitoRegistro) {
+						throw new ErrorRegistroDataException(
+								"No se pudo registrar los invitados de los novios");
+					}
+				}
+			}
+
+			return idnovios;
+		} catch (ErrorRegistroDataException e) {
+			throw new ErrorRegistroDataException(e.getMensajeError(), e);
+		} catch (SQLException e) {
+			throw new SQLException(e);
+		} finally {
+			if (conexion != null) {
+				conexion.close();
+			}
+		}
+		
+	}
 }
