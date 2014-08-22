@@ -241,5 +241,10 @@ public class NegocioServicioImpl implements NegocioServicio {
 
 		return ejbSession.consultarMaestroServicio(idMaestroServicio);
 	}
+
+	@Override
+	public Integer actualizarNovios(ProgramaNovios programaNovios) throws SQLException, Exception {
+		return ejbSession.actualizarNovios(programaNovios);
+	}
 }
 	
