@@ -8,7 +8,7 @@
 	xmlns:rich="http://richfaces.org/rich">
 
 	<rich:popupPanel id="idModalfrventaservicio" modal="true" width="900"
-		height="600" style="background-color: #FFFFFF">
+		height="600">
 
 		<f:facet name="header">
 			<h:outputText id="idNomModal"
@@ -432,7 +432,7 @@
 										</h:outputText>
 									</rich:column>
 									<rich:column style="text-align:center;width: 1%;">
-										<a4j:commandLink action="#{noviosMBean.eliminarServicio(row)}"
+										<a4j:commandLink action="#{servicioAgenteMBean.eliminarServicio(row)}"
 											render="idServVenta,idFrNuevServicio,idTotalesServicios,idfrcred">
 											<h:graphicImage style="border:0px;"
 												value="#{facesContext.externalContext.requestContextPath}/../resources/img/tacho.gif" />
