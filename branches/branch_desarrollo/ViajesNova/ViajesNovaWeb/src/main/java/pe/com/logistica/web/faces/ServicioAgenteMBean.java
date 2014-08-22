@@ -145,6 +145,14 @@ public class ServicioAgenteMBean extends BaseMBean{
 		try {
 			this.setServicioAgencia(this.negocioServicio.consultarVentaServicio(idServicio));
 			
+			this.setNombreFormulario("Editar Registro Venta");
+			this.setNuevaVenta(false);
+			this.setEditarVenta(true);
+			this.setListadoDetalleServicio(this.getServicioAgencia().getListaDetalleServicio());
+			this.setDetalleServicio(null);
+			
+			calcularTotales();
+			
 		} catch (SQLException e) {
 			logger.error(e.getMessage(), e);
 		} catch (Exception e) {
