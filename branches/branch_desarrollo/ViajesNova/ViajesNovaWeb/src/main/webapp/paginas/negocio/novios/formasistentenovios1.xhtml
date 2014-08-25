@@ -111,27 +111,6 @@
 							<h:panelGrid columns="4" border="0" cellpadding="0"
 								cellspacing="0" style="width:100%;"
 								columnClasses="colNov1, colNov2, colNov1, colNov2">
-								<h:outputText value="Fecha Boda" />
-								<h:panelGrid columns="1" border="0" cellpadding="0"
-									cellspacing="0">
-									<rich:calendar id="idFecBoda" datePattern="dd/MM/yyyy"
-										value="#{noviosMBean.programaNovios.fechaBoda}" />
-									<rich:message for="idFecBoda" showSummary="true"
-										showDetail="false" ajaxRendered="true" />
-								</h:panelGrid>
-
-								<h:outputText value="Fecha Viaje" />
-								<h:panelGrid columns="1" border="0" cellpadding="0"
-									cellspacing="0">
-									<rich:calendar id="idFecViaje" datePattern="dd/MM/yyyy"
-										value="#{noviosMBean.programaNovios.fechaViaje}" />
-									<rich:message for="idFecViaje" showSummary="true"
-										showDetail="false" ajaxRendered="true" />
-								</h:panelGrid>
-							</h:panelGrid>
-							<h:panelGrid columns="4" border="0" cellpadding="0"
-								cellspacing="0" style="width:100%;"
-								columnClasses="colNov1, colNov2, colNov1, colNov2">
 								<h:outputText value="Fecha Shower" />
 								<h:panelGrid columns="1" border="0" cellpadding="0"
 									cellspacing="0">
@@ -140,6 +119,28 @@
 									<rich:message for="idFecShower" showSummary="true"
 										showDetail="false" ajaxRendered="true" />
 								</h:panelGrid>
+								
+								<h:outputText value="Fecha Boda" />
+								<h:panelGrid columns="1" border="0" cellpadding="0"
+									cellspacing="0">
+									<rich:calendar id="idFecBoda" datePattern="dd/MM/yyyy"
+										value="#{noviosMBean.programaNovios.fechaBoda}" />
+									<rich:message for="idFecBoda" showSummary="true"
+										showDetail="false" ajaxRendered="true" />
+								</h:panelGrid>
+							</h:panelGrid>
+							<h:panelGrid columns="4" border="0" cellpadding="0"
+								cellspacing="0" style="width:100%;"
+								columnClasses="colNov1, colNov2, colNov1, colNov2">
+								<h:outputText value="Fecha Viaje" />
+								<h:panelGrid columns="1" border="0" cellpadding="0"
+									cellspacing="0">
+									<rich:calendar id="idFecViaje" datePattern="dd/MM/yyyy"
+										value="#{noviosMBean.programaNovios.fechaViaje}" />
+									<rich:message for="idFecViaje" showSummary="true"
+										showDetail="false" ajaxRendered="true" />
+								</h:panelGrid>
+								
 								<h:outputText value="" />
 								<h:outputText value="" />
 							</h:panelGrid>
@@ -219,7 +220,7 @@
 							<h:panelGrid columns="1" border="0" cellpadding="0"
 								cellspacing="0" style="width:100%;">
 								<h:outputText value="Observaciones" />
-								<h:inputTextarea rows="10" cols="130"
+								<h:inputTextarea rows="10" cols="130" styleClass="estilocampo1"
 									value="#{noviosMBean.programaNovios.observaciones}" />
 							</h:panelGrid>
 						</h:panelGrid>
@@ -238,31 +239,31 @@
 								<f:facet name="header">
 									<h:outputText value="Nombres" />
 								</f:facet>
-								<h:inputText value="#{row.nombres}" />
+								<h:inputText value="#{row.nombres}" maxlength="20" styleClass="estilocampo1" />
 							</rich:column>
 							<rich:column>
 								<f:facet name="header">
 									<h:outputText value="Apellido Paterno" />
 								</f:facet>
-								<h:inputText value="#{row.apellidoPaterno}" />
+								<h:inputText value="#{row.apellidoPaterno}" maxlength="20" styleClass="estilocampo1" />
 							</rich:column>
 							<rich:column>
 								<f:facet name="header">
 									<h:outputText value="Apellido Materno" />
 								</f:facet>
-								<h:inputText value="#{row.apellidoMaterno}" />
+								<h:inputText value="#{row.apellidoMaterno}" maxlength="20" styleClass="estilocampo1" />
 							</rich:column>
 							<rich:column>
 								<f:facet name="header">
 									<h:outputText value="Telefono" />
 								</f:facet>
-								<h:inputText value="#{row.telefonoInvitadoNovios}" />
+								<h:inputText value="#{row.telefonoInvitadoNovios}" maxlength="9" />
 							</rich:column>
 							<rich:column>
 								<f:facet name="header">
 									<h:outputText value="Correo Electronico" />
 								</f:facet>
-								<h:inputText value="#{row.correoElectronico}" />
+								<h:inputText value="#{row.correoElectronico}" maxlength="100" styleClass="estilocampo1" />
 							</rich:column>
 							<rich:column>
 								<a4j:commandButton value="Eliminar" render="idTablaInvitados"
@@ -330,7 +331,7 @@
 									<h:outputText value="Descripcion Servicio" />
 									<h:panelGrid columns="1" cellpadding="0" cellspacing="0"
 										border="0">
-										<h:inputText id="idDescServicio"
+										<h:inputText id="idDescServicio" styleClass="estilocampo1"
 											value="#{noviosMBean.servicioNovios.descripcionServicio}"
 											size="100" maxlength="300" />
 										<rich:message for="idDescServicio" showDetail="false"

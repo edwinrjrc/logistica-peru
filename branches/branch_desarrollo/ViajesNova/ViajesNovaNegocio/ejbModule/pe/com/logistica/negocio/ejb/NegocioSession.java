@@ -812,6 +812,8 @@ public class NegocioSession implements NegocioSessionRemote,
 			servicioNovios.setDescripcionServicio(StringUtils.upperCase(servicioNovios.getTipoServicio().getNombre()));
 		}
 		
+		servicioNovios.setDescripcionServicio(StringUtils.upperCase(servicioNovios.getDescripcionServicio()));
+		
 		if (servicioNovios.getCantidad() == 0){
 			servicioNovios.setCantidad(1);
 		}
@@ -850,6 +852,8 @@ public class NegocioSession implements NegocioSessionRemote,
 		if (StringUtils.isBlank(detalleServicio.getDescripcionServicio())){
 			detalleServicio.setDescripcionServicio(StringUtils.upperCase(detalleServicio.getTipoServicio().getNombre()));
 		}
+		
+		detalleServicio.setDescripcionServicio(StringUtils.upperCase(detalleServicio.getDescripcionServicio()));
 		
 		if (detalleServicio.getCantidad() == 0){
 			detalleServicio.setCantidad(1);
@@ -1273,6 +1277,7 @@ public class NegocioSession implements NegocioSessionRemote,
 			int idServicio = 0;
 			
 			ServicioAgencia servicioAgencia = new ServicioAgencia();
+			servicioAgencia.setCodigoEntero(programaNovios.getIdServicio());
 			servicioAgencia.setCliente(programaNovios.getNovia());
 			servicioAgencia.setCliente2(programaNovios.getNovio());
 			servicioAgencia.setFechaServicio(new Date());
@@ -1294,6 +1299,7 @@ public class NegocioSession implements NegocioSessionRemote,
 			servicioAgencia.setUsuarioModificacion(programaNovios.getUsuarioModificacion());
 			servicioAgencia.setIpModificacion(programaNovios.getIpModificacion());
 			servicioAgencia.getEstadoServicio().setCodigoEntero(1);
+			servicioAgencia.setListaDetalleServicio(programaNovios.getListaServicios());
 
 			idServicio = servicioNovaViajesDao.actualizarCabeceraServicio(servicioAgencia, conexion);
 			if (idServicio == 0){
@@ -1321,8 +1327,13 @@ public class NegocioSession implements NegocioSessionRemote,
 			
 			programaNovios.setIdServicio(idServicio);
 
-			Integer idnovios = servicioNoviosDao.registrarNovios(
+			Integer idnovios = servicioNoviosDao.actualizarNovios(
 					programaNovios, conexion);
+			
+			if (!servicioNoviosDao.eliminarInvitadosNovios(programaNovios, conexion)){
+				throw new ErrorRegistroDataException(
+						"No se pudo eliminar los invitados de los novios");
+			}
 
 			if (programaNovios.getListaInvitados() != null
 					&& !programaNovios.getListaInvitados().isEmpty()) {
