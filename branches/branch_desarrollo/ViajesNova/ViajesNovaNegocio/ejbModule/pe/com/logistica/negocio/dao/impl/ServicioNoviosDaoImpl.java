@@ -372,6 +372,9 @@ public class ServicioNoviosDaoImpl implements ServicioNoviosDao {
 				programaNovios2.getVendedor().setCodigoEntero(UtilJdbc.obtenerNumero(rs, "idvendedor"));
 				String nombre = UtilJdbc.obtenerCadena(rs, "nomvendedor")+" "+UtilJdbc.obtenerCadena(rs, "apepatvendedor")+" "+UtilJdbc.obtenerCadena(rs, "apematvendedor");
 				programaNovios2.getVendedor().setNombre(nombre);
+				programaNovios2.setMontoTotalComision(UtilJdbc.obtenerBigDecimal(rs, "montocomisiontotal"));
+				programaNovios2.setMontoTotalComision(UtilJdbc.obtenerBigDecimal(rs, "montototal"));
+				programaNovios2.setMontoTotalFee(UtilJdbc.obtenerBigDecimal(rs, "montototalfee"));
 				resultado.add(programaNovios2);
 			}
 			
@@ -474,6 +477,90 @@ public class ServicioNoviosDaoImpl implements ServicioNoviosDao {
 			}
 		}
 		
+		return resultado;
+	}
+	
+	@Override
+	public Integer actualizarNovios(ProgramaNovios programaNovios, Connection conn)
+			throws SQLException, Exception {
+		Integer codigoNovios = 0;
+		CallableStatement cs = null;
+		String sql = "{ ? = call negocio.fn_actualizarprogramanovios(?,?,?,?,?,?,?,?,?,?,?,?,?,?) }";
+		try {
+			cs = conn.prepareCall(sql);
+			int i=1;
+			cs.registerOutParameter(i++, Types.INTEGER);
+			cs.setInt(i++, programaNovios.getCodigoEntero().intValue());
+			cs.setInt(i++, programaNovios.getDestino().getCodigoEntero());
+			cs.setDate(i++, UtilJdbc.convertirUtilDateSQLDate(programaNovios.getFechaBoda()));
+			cs.setDate(i++, UtilJdbc.convertirUtilDateSQLDate(programaNovios.getFechaViaje()));
+			cs.setInt(i++, programaNovios.getMoneda().getCodigoEntero());
+			cs.setBigDecimal(i++, programaNovios.getCuotaInicial());
+			cs.setInt(i++, programaNovios.getNroDias());
+			cs.setInt(i++, programaNovios.getNroNoches());
+			cs.setDate(i++, UtilJdbc.convertirUtilDateSQLDate(programaNovios.getFechaShower()));
+			if (StringUtils.isNotBlank(programaNovios.getObservaciones())){
+				cs.setString(i++, UtilJdbc.convertirMayuscula(programaNovios.getObservaciones()));
+			}
+			else {
+				cs.setNull(i++, Types.VARCHAR);
+			}
+			cs.setBigDecimal(i++, programaNovios.getMontoTotalServiciosPrograma());
+			cs.setInt(i++, programaNovios.getIdServicio());
+			cs.setString(i++, programaNovios.getUsuarioModificacion());
+			cs.setString(i++, programaNovios.getIpModificacion());
+			cs.execute();
+			
+			codigoNovios = cs.getInt(1);
+		} catch (SQLException e) {
+			codigoNovios = 0;
+			throw new SQLException(e);
+		} finally {
+			try {
+				if (cs != null) {
+					cs.close();
+				}
+				
+			} catch (SQLException e) {
+				throw new SQLException(e);
+				
+			}
+		}
+
+		return codigoNovios;
+	}
+	
+	@Override
+	public boolean eliminarInvitadosNovios(ProgramaNovios programaNovios, Connection conn)
+			throws SQLException, Exception {
+		boolean resultado = false;
+		CallableStatement cs = null;
+		String sql = "{ ? = call negocio.fn_eliminarinvitadosnovios(?,?,?) }";
+		try {
+			cs = conn.prepareCall(sql);
+			int i=1;
+			cs.registerOutParameter(i++, Types.BOOLEAN);
+			cs.setInt(i++, programaNovios.getCodigoEntero().intValue());
+			cs.setString(i++, programaNovios.getUsuarioModificacion());
+			cs.setString(i++, programaNovios.getIpModificacion());
+			cs.execute();
+			
+			resultado = cs.getBoolean(1);
+		} catch (SQLException e) {
+			resultado = false;
+			throw new SQLException(e);
+		} finally {
+			try {
+				if (cs != null) {
+					cs.close();
+				}
+				
+			} catch (SQLException e) {
+				throw new SQLException(e);
+				
+			}
+		}
+
 		return resultado;
 	}
 }

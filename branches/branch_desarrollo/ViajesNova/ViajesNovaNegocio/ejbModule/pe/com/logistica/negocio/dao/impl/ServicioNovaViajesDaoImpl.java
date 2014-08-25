@@ -719,6 +719,13 @@ public class ServicioNovaViajesDaoImpl implements ServicioNovaViajesDao {
 
 				detalleServicio.setCodigoEntero(UtilJdbc.obtenerNumero(rs, "id"));
 				detalleServicio.getTipoServicio().setCodigoEntero(UtilJdbc.obtenerNumero(rs, "idtiposervicio"));
+				detalleServicio.getTipoServicio().setNombre(UtilJdbc.obtenerCadena(rs, "nomtipservicio"));
+				detalleServicio.getTipoServicio().setDescripcion(UtilJdbc.obtenerCadena(rs, "descservicio"));
+				detalleServicio.getTipoServicio().setRequiereFee(UtilJdbc.obtenerBoolean(rs, "requierefee"));
+				detalleServicio.getTipoServicio().setPagaImpto(UtilJdbc.obtenerBoolean(rs, "pagaimpto"));
+				detalleServicio.getTipoServicio().setCargaComision(UtilJdbc.obtenerBoolean(rs, "cargacomision"));
+				detalleServicio.getTipoServicio().setEsImpuesto(UtilJdbc.obtenerBoolean(rs, "esimpuesto"));
+				detalleServicio.getTipoServicio().setEsFee(UtilJdbc.obtenerBoolean(rs, "esfee"));
 				detalleServicio.setDescripcionServicio(UtilJdbc.obtenerCadena(rs, "descripcionservicio"));
 				detalleServicio.getDestino().setCodigoEntero(UtilJdbc.obtenerNumero(rs, "iddestino"));
 				detalleServicio.getDestino().setNombre(UtilJdbc.obtenerCadena(rs, "descripciondestino"));
@@ -789,6 +796,12 @@ public class ServicioNovaViajesDaoImpl implements ServicioNovaViajesDao {
 				detalleServicio.setCodigoEntero(UtilJdbc.obtenerNumero(rs, "idSerdetalle"));
 				detalleServicio.getTipoServicio().setCodigoEntero(UtilJdbc.obtenerNumero(rs, "idtiposervicio"));
 				detalleServicio.getTipoServicio().setNombre(UtilJdbc.obtenerCadena(rs, "nomtipservicio"));
+				detalleServicio.getTipoServicio().setDescripcion(UtilJdbc.obtenerCadena(rs, "descservicio"));
+				detalleServicio.getTipoServicio().setRequiereFee(UtilJdbc.obtenerBoolean(rs, "requierefee"));
+				detalleServicio.getTipoServicio().setPagaImpto(UtilJdbc.obtenerBoolean(rs, "pagaimpto"));
+				detalleServicio.getTipoServicio().setCargaComision(UtilJdbc.obtenerBoolean(rs, "cargacomision"));
+				detalleServicio.getTipoServicio().setEsImpuesto(UtilJdbc.obtenerBoolean(rs, "esimpuesto"));
+				detalleServicio.getTipoServicio().setEsFee(UtilJdbc.obtenerBoolean(rs, "esfee"));
 				detalleServicio.setDescripcionServicio(UtilJdbc.obtenerCadena(rs, "descripcionservicio"));
 				detalleServicio.getDestino().setCodigoEntero(UtilJdbc.obtenerNumero(rs, "iddestino"));
 				detalleServicio.getDestino().setNombre(UtilJdbc.obtenerCadena(rs, "descripciondestino"));
@@ -944,8 +957,8 @@ public class ServicioNovaViajesDaoImpl implements ServicioNovaViajesDao {
 			else{
 				cs.setNull(i++, Types.INTEGER);
 			}
-			if (servicioAgencia.getMontoTotal() != null && !servicioAgencia.getMontoTotal().equals(BigDecimal.ZERO)){
-				cs.setBigDecimal(i++, servicioAgencia.getMontoTotal());
+			if (servicioAgencia.getMontoTotalServicios() != null && !servicioAgencia.getMontoTotalServicios().equals(BigDecimal.ZERO)){
+				cs.setBigDecimal(i++, servicioAgencia.getMontoTotalServicios());
 			}
 			else{
 				cs.setNull(i++, Types.DECIMAL);
@@ -1076,8 +1089,8 @@ public class ServicioNovaViajesDaoImpl implements ServicioNovaViajesDao {
 			else{
 				cs.setNull(i++, Types.INTEGER);
 			}
-			if (servicioAgencia.getMontoTotal() != null && !servicioAgencia.getMontoTotal().equals(BigDecimal.ZERO)){
-				cs.setBigDecimal(i++, servicioAgencia.getMontoTotal());
+			if (servicioAgencia.getMontoTotalServicios() != null && !servicioAgencia.getMontoTotalServicios().equals(BigDecimal.ZERO)){
+				cs.setBigDecimal(i++, servicioAgencia.getMontoTotalServicios());
 			}
 			else{
 				cs.setNull(i++, Types.DECIMAL);
@@ -1146,7 +1159,7 @@ public class ServicioNovaViajesDaoImpl implements ServicioNovaViajesDao {
 			}
 			cs.setInt(i++, servicioAgencia.getVendedor().getCodigoEntero());
 			if (StringUtils.isNotBlank(servicioAgencia.getObservaciones())){
-				cs.setString(i++, servicioAgencia.getObservaciones());
+				cs.setString(i++, UtilJdbc.convertirMayuscula( servicioAgencia.getObservaciones()));
 			}
 			else{
 				cs.setNull(i++, Types.VARCHAR);
@@ -1219,24 +1232,24 @@ public class ServicioNovaViajesDaoImpl implements ServicioNovaViajesDao {
 	}
 	
 	@Override
-	public Integer eliminarDetalleServicio(ServicioAgencia servicioAgencia, Connection conn)
+	public boolean eliminarDetalleServicio(ServicioAgencia servicioAgencia, Connection conn)
 			throws SQLException {
-		Integer idservicio = 0;
+		boolean resultado = false;
 		CallableStatement cs = null;
 		String sql = "{ ? = call negocio.fn_eliminardetalleservicio(?,?,?)}";
 		
 		try {
 			cs = conn.prepareCall(sql);
 			int i=1;
-			cs.registerOutParameter(i++, Types.INTEGER);
+			cs.registerOutParameter(i++, Types.BOOLEAN);
 			cs.setInt(i++, servicioAgencia.getCodigoEntero().intValue());
 			cs.setString(i++, servicioAgencia.getUsuarioModificacion());
 			cs.setString(i++, servicioAgencia.getIpModificacion());
 			cs.execute();
 			
-			idservicio = cs.getInt(1);
+			resultado = cs.getBoolean(1);
 		} catch (SQLException e) {
-			idservicio = 0;
+			resultado = false;
 			throw new SQLException(e);
 		} finally {
 			try {
@@ -1248,13 +1261,13 @@ public class ServicioNovaViajesDaoImpl implements ServicioNovaViajesDao {
 			}
 		}
 
-		return idservicio;
+		return resultado;
 	}
 	
 	@Override
-	public Integer eliminarCronogramaServicio(ServicioAgencia servicioAgencia)
+	public boolean eliminarCronogramaServicio(ServicioAgencia servicioAgencia)
 			throws SQLException {
-		Integer idservicio = 0;
+		boolean resultado = false;
 		Connection conn = null;
 		CallableStatement cs = null;
 		String sql = "{ ? = call negocio.fn_eliminarcronogramaservicio(?,?,?)}";
@@ -1263,15 +1276,15 @@ public class ServicioNovaViajesDaoImpl implements ServicioNovaViajesDao {
 			conn = UtilConexion.obtenerConexion();
 			cs = conn.prepareCall(sql);
 			int i=1;
-			cs.registerOutParameter(i++, Types.INTEGER);
+			cs.registerOutParameter(i++, Types.BOOLEAN);
 			cs.setInt(i++, servicioAgencia.getCodigoEntero().intValue());
 			cs.setString(i++, servicioAgencia.getUsuarioModificacion());
 			cs.setString(i++, servicioAgencia.getIpModificacion());
 			cs.execute();
 			
-			idservicio = cs.getInt(1);
+			resultado = cs.getBoolean(1);
 		} catch (SQLException e) {
-			idservicio = 0;
+			resultado = false;
 			throw new SQLException(e);
 		} finally {
 			try {
@@ -1293,28 +1306,28 @@ public class ServicioNovaViajesDaoImpl implements ServicioNovaViajesDao {
 			}
 		}
 
-		return idservicio;
+		return resultado;
 	}
 	
 	@Override
-	public Integer eliminarCronogramaServicio(ServicioAgencia servicioAgencia, Connection conn)
+	public boolean eliminarCronogramaServicio(ServicioAgencia servicioAgencia, Connection conn)
 			throws SQLException {
-		Integer idservicio = 0;
+		boolean resultado = false;
 		CallableStatement cs = null;
 		String sql = "{ ? = call negocio.fn_eliminarcronogramaservicio(?,?,?)}";
 		
 		try {
 			cs = conn.prepareCall(sql);
 			int i=1;
-			cs.registerOutParameter(i++, Types.INTEGER);
+			cs.registerOutParameter(i++, Types.BOOLEAN);
 			cs.setInt(i++, servicioAgencia.getCodigoEntero().intValue());
 			cs.setString(i++, servicioAgencia.getUsuarioModificacion());
 			cs.setString(i++, servicioAgencia.getIpModificacion());
 			cs.execute();
 			
-			idservicio = cs.getInt(1);
+			resultado = cs.getBoolean(1);
 		} catch (SQLException e) {
-			idservicio = 0;
+			resultado = false;
 			throw new SQLException(e);
 		} finally {
 			try {
@@ -1326,6 +1339,6 @@ public class ServicioNovaViajesDaoImpl implements ServicioNovaViajesDao {
 			}
 		}
 
-		return idservicio;
+		return resultado;
 	}
 }
