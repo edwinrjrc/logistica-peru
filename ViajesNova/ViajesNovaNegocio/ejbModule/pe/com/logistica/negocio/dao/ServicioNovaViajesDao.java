@@ -54,16 +54,16 @@ public interface ServicioNovaViajesDao {
 	Integer eliminarDetalleServicio(ServicioAgencia servicioAgencia)
 			throws SQLException;
 
-	Integer eliminarDetalleServicio(ServicioAgencia servicioAgencia,
+	boolean eliminarDetalleServicio(ServicioAgencia servicioAgencia,
 			Connection conn) throws SQLException;
 
 	Integer actualizarCabeceraServicio(ServicioAgencia servicioAgencia,
 			Connection conn) throws SQLException;
 
-	Integer eliminarCronogramaServicio(ServicioAgencia servicioAgencia)
+	boolean eliminarCronogramaServicio(ServicioAgencia servicioAgencia)
 			throws SQLException;
 
-	Integer eliminarCronogramaServicio(ServicioAgencia servicioAgencia,
+	boolean eliminarCronogramaServicio(ServicioAgencia servicioAgencia,
 			Connection conn) throws SQLException;
 	
 }

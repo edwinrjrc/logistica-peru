@@ -35,4 +35,10 @@ public interface ServicioNoviosDao {
 
 	List<ProgramaNovios> consultarNovios(ProgramaNovios programaNovios,
 			Connection conn) throws SQLException;
+
+	Integer actualizarNovios(ProgramaNovios programaNovios, Connection conn)
+			throws SQLException, Exception;
+
+	boolean eliminarInvitadosNovios(ProgramaNovios programaNovios,
+			Connection conn) throws SQLException, Exception;
 }
