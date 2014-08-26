@@ -44,6 +44,8 @@ public class ServicioAgencia extends BaseNegocio{
 	
 	private BaseVO vendedor;
 	private String observaciones;
+	
+	private boolean esProgramaNovios;
 
 	/**
 	 * 
@@ -453,5 +455,23 @@ public class ServicioAgencia extends BaseNegocio{
 	 */
 	public void setEstadoServicio(BaseVO estadoServicio) {
 		this.estadoServicio = estadoServicio;
+	}
+
+
+
+	/**
+	 * @return the esProgramaNovios
+	 */
+	public boolean isEsProgramaNovios() {
+		return esProgramaNovios;
+	}
+
+
+
+	/**
+	 * @param esProgramaNovios the esProgramaNovios to set
+	 */
+	public void setEsProgramaNovios(boolean esProgramaNovios) {
+		this.esProgramaNovios = esProgramaNovios;
 	}
 }
