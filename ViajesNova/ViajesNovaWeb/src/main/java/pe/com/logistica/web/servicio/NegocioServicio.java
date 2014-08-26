@@ -111,4 +111,7 @@ public interface NegocioServicio {
 	public MaestroServicio consultarMaestroServicio(int idMaestroServicio) throws SQLException, Exception;
 
 	public Integer actualizarNovios(ProgramaNovios programaNovios) throws SQLException, Exception;
+
+	Integer actualizarVentaServicio(ServicioAgencia servicioAgencia)
+			throws ErrorRegistroDataException, SQLException, Exception;
 }
