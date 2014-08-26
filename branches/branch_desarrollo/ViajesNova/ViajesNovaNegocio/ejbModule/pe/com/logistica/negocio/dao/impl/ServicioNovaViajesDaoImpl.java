@@ -898,6 +898,8 @@ public class ServicioNovaViajesDaoImpl implements ServicioNovaViajesDao {
 				servicioAgencia2.getEstadoPago().setNombre(UtilJdbc.obtenerCadena(rs, "nomestpago"));
 				servicioAgencia2.getEstadoServicio().setCodigoEntero(UtilJdbc.obtenerNumero(rs, "idestadoservicio"));
 				servicioAgencia2.getEstadoServicio().setNombre(UtilJdbc.obtenerCadena(rs, "nomestservicio"));
+				int novios = UtilJdbc.obtenerNumero(rs, "cantidadNovios");
+				servicioAgencia2.setEsProgramaNovios((novios>0));
 				listaVentaServicios.add(servicioAgencia2);
 			}
 		} catch (SQLException e) {
