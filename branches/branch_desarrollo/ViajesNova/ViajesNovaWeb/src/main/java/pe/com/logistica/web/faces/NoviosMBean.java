@@ -544,7 +544,7 @@ public class NoviosMBean extends BaseMBean {
 				jasperStream[i] = facesContext.getExternalContext()
 						.getResourceAsStream(rutaJasper[i]);
 			}
-			imprimirPDF(enviarParametros(), stream, jasperStream);
+			//imprimirPDF(enviarParametros(), stream, jasperStream);
 
 			facesContext.responseComplete();
 
@@ -664,7 +664,7 @@ public class NoviosMBean extends BaseMBean {
 		return null;
 	}
 
-	private void imprimirPDF(Map<String, Object> map,
+	/*private void imprimirPDF(Map<String, Object> map,
 			OutputStream outputStream, InputStream[] jasperStream)
 			throws JRException {
 
@@ -683,7 +683,7 @@ public class NoviosMBean extends BaseMBean {
 		configuration.setCreatingBatchModeBookmarks(true);
 		exporter.setConfiguration(configuration);
 		exporter.exportReport();
-	}
+	}*/
 
 	public void agregarServicio() {
 		try {
