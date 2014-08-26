@@ -437,14 +437,29 @@ public class ServicioAgenteMBean extends BaseMBean{
 					HttpSession session = obtenerSession(false);
 					Usuario usuario = (Usuario) session
 							.getAttribute("usuarioSession");
+					getServicioAgencia().setUsuarioCreacion(
+							usuario.getUsuario());
+					getServicioAgencia().setIpCreacion(
+							obtenerRequest().getRemoteAddr());
 					getServicioAgencia().setUsuarioModificacion(
 							usuario.getUsuario());
 					getServicioAgencia().setIpModificacion(
 							obtenerRequest().getRemoteAddr());
 					
+					for (DetalleServicioAgencia detalle :getListadoDetalleServicio()){
+						detalle.setUsuarioCreacion(
+								usuario.getUsuario());
+						detalle.setIpCreacion(
+								obtenerRequest().getRemoteAddr());
+						detalle.setUsuarioModificacion(
+								usuario.getUsuario());
+						detalle.setIpModificacion(
+								obtenerRequest().getRemoteAddr());
+					}
+					
 					this.getServicioAgencia().setListaDetalleServicio(getListadoDetalleServicio());
 					
-					Integer idServicio = this.negocioServicio.registrarVentaServicio(getServicioAgencia());
+					Integer idServicio = this.negocioServicio.actualizarVentaServicio(getServicioAgencia());
 					
 					if (idServicio != null && idServicio.intValue() != 0){
 						this.getServicioAgencia().setCodigoEntero(idServicio);
