@@ -131,7 +131,8 @@
 								<a4j:commandLink
 									action="#{servicioAgenteMBean.consultarServicioRegistrado(row.codigoEntero)}"
 									render="idGrRegisVenServicio, idNomModal"
-									oncomplete="#{rich:component('idModalfrventaservicio')}.show();">
+									oncomplete="#{rich:component('idModalfrventaservicio')}.show();"
+									rendered="#{!row.esProgramaNovios}">
 									<h:graphicImage height="25" width="20"
 										url="/resources/img/editar2.png" style="border:0" />
 								</a4j:commandLink>
