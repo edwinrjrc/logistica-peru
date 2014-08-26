@@ -186,6 +186,11 @@ public class NegocioServicioImpl implements NegocioServicio {
 	}
 	
 	@Override
+	public Integer actualizarVentaServicio(ServicioAgencia servicioAgencia) throws ErrorRegistroDataException, SQLException, Exception {
+		return ejbSession.actualizarVentaServicio(servicioAgencia);
+	}
+	
+	@Override
 	public ServicioAgencia consultarVentaServicio(int idServicio) throws SQLException, Exception{
 		return ejbSession.consultarServicioVenta(idServicio);
 	}
