@@ -21,6 +21,10 @@ public interface MaestroServicioDao {
 	public boolean actualizarMaestroServicio(MaestroServicio servicio) throws SQLException;
 	
 	public MaestroServicio consultarMaestroServicio(int idMaestroServicio) throws SQLException;
+
+	List<MaestroServicio> listarMaestroServiciosFee() throws SQLException;
+
+	List<MaestroServicio> listarMaestroServiciosImpto() throws SQLException;
 	
 
 }

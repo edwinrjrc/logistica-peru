@@ -1257,6 +1257,20 @@ public class NegocioSession implements NegocioSessionRemote,
 	}
 	
 	@Override
+	public List<MaestroServicio> listarMaestroServicioFee() throws SQLException, Exception{
+		MaestroServicioDao maestroServicioDao = new MaestroServicioDaoImpl();
+		
+		return maestroServicioDao.listarMaestroServiciosFee();
+	}
+	
+	@Override
+	public List<MaestroServicio> listarMaestroServicioImpto() throws SQLException, Exception{
+		MaestroServicioDao maestroServicioDao = new MaestroServicioDaoImpl();
+		
+		return maestroServicioDao.listarMaestroServiciosImpto();
+	}
+	
+	@Override
 	public MaestroServicio consultarMaestroServicio(int idMaestroServicio) throws SQLException, Exception{
 		MaestroServicioDao maestroServicioDao = new MaestroServicioDaoImpl();
 		
