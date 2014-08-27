@@ -4,7 +4,7 @@
 
 -- Dumped from database version 9.2.3
 -- Dumped by pg_dump version 9.2.3
--- Started on 2014-08-25 01:00:59
+-- Started on 2014-08-26 23:53:47
 
 SET statement_timeout = 0;
 SET client_encoding = 'UTF8';
@@ -61,7 +61,7 @@ CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
 
 
 --
--- TOC entry 2351 (class 0 OID 0)
+-- TOC entry 2352 (class 0 OID 0)
 -- Dependencies: 227
 -- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner: 
 --
@@ -426,7 +426,7 @@ $$;
 ALTER FUNCTION negocio.fn_actualizarproveedorservicio(p_idproveedor integer, p_idtiposervicio integer, p_porcencomision numeric, p_usuariomodificacion character varying, p_ipmodificacion character varying) OWNER TO postgres;
 
 --
--- TOC entry 315 (class 1255 OID 126100)
+-- TOC entry 314 (class 1255 OID 126100)
 -- Name: fn_actualizarservicio(integer, character varying, character varying, boolean, boolean, boolean, boolean, character varying, character varying); Type: FUNCTION; Schema: negocio; Owner: postgres
 --
 
@@ -460,7 +460,7 @@ $$;
 ALTER FUNCTION negocio.fn_actualizarservicio(p_id integer, p_nombreservicio character varying, p_descripcion character varying, p_requierefee boolean, p_pagaimpto boolean, p_cargacomision boolean, p_esimpuesto boolean, p_usuariomodificacion character varying, p_ipmodificacion character varying) OWNER TO postgres;
 
 --
--- TOC entry 316 (class 1255 OID 126116)
+-- TOC entry 315 (class 1255 OID 126116)
 -- Name: fn_actualizarservicio(integer, character varying, character varying, boolean, boolean, boolean, boolean, boolean, character varying, character varying); Type: FUNCTION; Schema: negocio; Owner: postgres
 --
 
@@ -969,7 +969,7 @@ $$;
 ALTER FUNCTION negocio.fn_consultarproveedorservicio(p_idproveedor integer) OWNER TO postgres;
 
 --
--- TOC entry 313 (class 1255 OID 126073)
+-- TOC entry 312 (class 1255 OID 126073)
 -- Name: fn_consultarservicio(integer); Type: FUNCTION; Schema: negocio; Owner: postgres
 --
 
@@ -1038,7 +1038,7 @@ $$;
 ALTER FUNCTION negocio.fn_consultarservicioventa(p_idservicio integer) OWNER TO postgres;
 
 --
--- TOC entry 261 (class 1255 OID 125684)
+-- TOC entry 265 (class 1255 OID 125684)
 -- Name: fn_consultarservicioventa(integer, character varying, character varying); Type: FUNCTION; Schema: negocio; Owner: postgres
 --
 
@@ -1058,7 +1058,8 @@ select sercab.id, sercab.idcliente1, cli1.nombres as nombres1, cli1.apellidopate
        sercab.idestadopago, maeep.nombre as nomestpago, maeep.descripcion as descestpago, sercab.idestadoservicio, maest.nombre as nomestservicio,
        sercab.nrocuotas, sercab.tea, sercab.valorcuota, sercab.fechaprimercuota, sercab.fechaultcuota,
        sercab.usuariocreacion, sercab.fechacreacion, sercab.ipcreacion, 
-       sercab.usuariomodificacion, sercab.fechamodificacion, sercab.ipmodificacion
+       sercab.usuariomodificacion, sercab.fechamodificacion, sercab.ipmodificacion,
+       (select count(1) from negocio."ProgramaNovios" where idservicio = sercab.id) as cantidadNovios
   from negocio."ServicioCabecera" sercab 
  inner join negocio.vw_clientesnova cli1 on sercab.idcliente1 = cli1.id
  inner join soporte.destino des on sercab.iddestino = des.id
@@ -1080,7 +1081,7 @@ $$;
 ALTER FUNCTION negocio.fn_consultarservicioventa(p_tipodocumento integer, p_numerodocumento character varying, p_nombres character varying) OWNER TO postgres;
 
 --
--- TOC entry 317 (class 1255 OID 125685)
+-- TOC entry 316 (class 1255 OID 125685)
 -- Name: fn_consultarservicioventadetalle(integer); Type: FUNCTION; Schema: negocio; Owner: postgres
 --
 
@@ -1113,7 +1114,7 @@ $$;
 ALTER FUNCTION negocio.fn_consultarservicioventadetalle(p_idservicio integer) OWNER TO postgres;
 
 --
--- TOC entry 262 (class 1255 OID 125686)
+-- TOC entry 261 (class 1255 OID 125686)
 -- Name: fn_correosxpersona(integer); Type: FUNCTION; Schema: negocio; Owner: postgres
 --
 
@@ -1140,7 +1141,7 @@ $$;
 ALTER FUNCTION negocio.fn_correosxpersona(p_idpersona integer) OWNER TO postgres;
 
 --
--- TOC entry 263 (class 1255 OID 125687)
+-- TOC entry 262 (class 1255 OID 125687)
 -- Name: fn_direccionesxpersona(integer); Type: FUNCTION; Schema: negocio; Owner: postgres
 --
 
@@ -1186,7 +1187,7 @@ $$;
 ALTER FUNCTION negocio.fn_direccionesxpersona(p_idpersona integer) OWNER TO postgres;
 
 --
--- TOC entry 264 (class 1255 OID 125688)
+-- TOC entry 263 (class 1255 OID 125688)
 -- Name: fn_eliminarcontactoproveedor(integer, character varying, character varying); Type: FUNCTION; Schema: negocio; Owner: postgres
 --
 
@@ -1219,7 +1220,7 @@ $$;
 ALTER FUNCTION negocio.fn_eliminarcontactoproveedor(p_idpersona integer, p_usuariomodificacion character varying, p_ipmodificacion character varying) OWNER TO postgres;
 
 --
--- TOC entry 265 (class 1255 OID 125689)
+-- TOC entry 264 (class 1255 OID 125689)
 -- Name: fn_eliminarcorreoscontacto(integer, character varying, character varying); Type: FUNCTION; Schema: negocio; Owner: postgres
 --
 
@@ -1930,11 +1931,11 @@ $$;
 ALTER FUNCTION negocio.fn_ingresarprogramanovios(p_idnovia integer, p_idnovio integer, p_iddestino integer, p_fechaboda date, p_fechaviaje date, p_idmoneda integer, p_cuotainicial numeric, p_dias integer, p_noches integer, p_fechashower date, p_observaciones text, p_montototal numeric, p_idservicio integer, p_usuariocreacion character varying, p_ipcreacion character varying) OWNER TO postgres;
 
 --
--- TOC entry 312 (class 1255 OID 126071)
--- Name: fn_ingresarservicio(character varying, character varying, boolean, boolean, boolean, character varying, character varying); Type: FUNCTION; Schema: negocio; Owner: postgres
+-- TOC entry 317 (class 1255 OID 126163)
+-- Name: fn_ingresarservicio(character varying, character varying, character varying, boolean, integer, boolean, integer, boolean, boolean, numeric, character varying, character varying); Type: FUNCTION; Schema: negocio; Owner: postgres
 --
 
-CREATE FUNCTION fn_ingresarservicio(p_nombreservicio character varying, p_descripcion character varying, p_requierefee boolean, p_pagaimpto boolean, p_cargacomision boolean, p_usuariocreacion character varying, p_ipcreacion character varying) RETURNS integer
+CREATE FUNCTION fn_ingresarservicio(p_nombreservicio character varying, p_desccorta character varying, p_desclarga character varying, p_requierefee boolean, p_idmaeserfee integer, p_pagaimpto boolean, p_idmaeserimpto integer, p_cargacomision boolean, p_cargaigv boolean, p_valorcomision numeric, p_usuariocreacion character varying, p_ipcreacion character varying) RETURNS integer
     LANGUAGE plpgsql
     AS $$
 
@@ -1948,18 +1949,19 @@ maxid = nextval('negocio.seq_maestroservicio');
 select current_timestamp into fechahoy;
 
 INSERT INTO negocio."MaestroServicios"(
-            id, nombre, descripcion, requierefee, pagaimpto, cargacomision, 
-            usuariocreacion, fechacreacion, ipcreacion, usuariomodificacion, 
-            fechamodificacion, ipmodificacion)
-    VALUES (maxid, p_nombreservicio, p_descripcion, p_requierefee, p_pagaimpto, p_cargacomision, 
-            p_usuariocreacion, fechahoy, p_ipcreacion, p_usuariocreacion, fechahoy, p_ipcreacion);
+            id, nombre, desccorta, desclarga, requierefee, idmaeserfee, pagaimpto, 
+            idmaeserimpto, cargacomision, cargaigv, valorporcomision, 
+            usuariocreacion, fechacreacion, ipcreacion, 
+            usuariomodificacion, fechamodificacion, ipmodificacion)
+    VALUES (maxid, p_nombreservicio, p_desccorta, p_desclarga, p_requierefee, p_idmaeserfee, p_pagaimpto, 
+            p_idmaeserimpto, p_cargacomision, p_cargaigv, p_valorcomision, p_usuariocreacion, fechahoy, p_ipcreacion, p_usuariocreacion, fechahoy, p_ipcreacion);
 
 return maxid;
 end;
 $$;
 
 
-ALTER FUNCTION negocio.fn_ingresarservicio(p_nombreservicio character varying, p_descripcion character varying, p_requierefee boolean, p_pagaimpto boolean, p_cargacomision boolean, p_usuariocreacion character varying, p_ipcreacion character varying) OWNER TO postgres;
+ALTER FUNCTION negocio.fn_ingresarservicio(p_nombreservicio character varying, p_desccorta character varying, p_desclarga character varying, p_requierefee boolean, p_idmaeserfee integer, p_pagaimpto boolean, p_idmaeserimpto integer, p_cargacomision boolean, p_cargaigv boolean, p_valorcomision numeric, p_usuariocreacion character varying, p_ipcreacion character varying) OWNER TO postgres;
 
 --
 -- TOC entry 283 (class 1255 OID 125708)
@@ -2146,7 +2148,7 @@ $$;
 ALTER FUNCTION negocio.fn_ingresartelefonopersona(p_idtelefono integer, p_idpersona integer) OWNER TO postgres;
 
 --
--- TOC entry 314 (class 1255 OID 126074)
+-- TOC entry 313 (class 1255 OID 126074)
 -- Name: fn_listarmaestroservicios(); Type: FUNCTION; Schema: negocio; Owner: postgres
 --
 
@@ -2953,17 +2955,21 @@ CREATE TABLE "Direccion" (
 ALTER TABLE negocio."Direccion" OWNER TO postgres;
 
 --
--- TOC entry 226 (class 1259 OID 126101)
+-- TOC entry 225 (class 1259 OID 126133)
 -- Name: MaestroServicios; Type: TABLE; Schema: negocio; Owner: postgres; Tablespace: 
 --
 
 CREATE TABLE "MaestroServicios" (
     id integer NOT NULL,
     nombre character varying(50) NOT NULL,
-    descripcion character varying(300),
+    desccorta character varying(100),
+    desclarga character varying(300),
     requierefee boolean DEFAULT false NOT NULL,
+    idmaeserfee integer,
     pagaimpto boolean DEFAULT false NOT NULL,
+    idmaeserimpto integer,
     cargacomision boolean DEFAULT false NOT NULL,
+    cargaigv boolean DEFAULT false NOT NULL,
     comisionporcen boolean DEFAULT false NOT NULL,
     valorporcomision numeric,
     esimpuesto boolean DEFAULT false NOT NULL,
@@ -3115,7 +3121,7 @@ CREATE TABLE "ProgramaNovios" (
 ALTER TABLE negocio."ProgramaNovios" OWNER TO postgres;
 
 --
--- TOC entry 181 (class 1259 OID 125781)
+-- TOC entry 226 (class 1259 OID 126149)
 -- Name: ProveedorTipoServicio; Type: TABLE; Schema: negocio; Owner: postgres; Tablespace: 
 --
 
@@ -3136,7 +3142,7 @@ CREATE TABLE "ProveedorTipoServicio" (
 ALTER TABLE negocio."ProveedorTipoServicio" OWNER TO postgres;
 
 --
--- TOC entry 182 (class 1259 OID 125788)
+-- TOC entry 181 (class 1259 OID 125788)
 -- Name: ServicioCabecera; Type: TABLE; Schema: negocio; Owner: postgres; Tablespace: 
 --
 
@@ -3174,7 +3180,7 @@ CREATE TABLE "ServicioCabecera" (
 ALTER TABLE negocio."ServicioCabecera" OWNER TO postgres;
 
 --
--- TOC entry 183 (class 1259 OID 125795)
+-- TOC entry 182 (class 1259 OID 125795)
 -- Name: ServicioDetalle; Type: TABLE; Schema: negocio; Owner: postgres; Tablespace: 
 --
 
@@ -3208,7 +3214,7 @@ CREATE TABLE "ServicioDetalle" (
 ALTER TABLE negocio."ServicioDetalle" OWNER TO postgres;
 
 --
--- TOC entry 184 (class 1259 OID 125802)
+-- TOC entry 183 (class 1259 OID 125802)
 -- Name: Telefono; Type: TABLE; Schema: negocio; Owner: postgres; Tablespace: 
 --
 
@@ -3229,7 +3235,7 @@ CREATE TABLE "Telefono" (
 ALTER TABLE negocio."Telefono" OWNER TO postgres;
 
 --
--- TOC entry 185 (class 1259 OID 125806)
+-- TOC entry 184 (class 1259 OID 125806)
 -- Name: TelefonoDireccion; Type: TABLE; Schema: negocio; Owner: postgres; Tablespace: 
 --
 
@@ -3243,7 +3249,7 @@ CREATE TABLE "TelefonoDireccion" (
 ALTER TABLE negocio."TelefonoDireccion" OWNER TO postgres;
 
 --
--- TOC entry 186 (class 1259 OID 125810)
+-- TOC entry 185 (class 1259 OID 125810)
 -- Name: TelefonoPersona; Type: TABLE; Schema: negocio; Owner: postgres; Tablespace: 
 --
 
@@ -3257,7 +3263,7 @@ CREATE TABLE "TelefonoPersona" (
 ALTER TABLE negocio."TelefonoPersona" OWNER TO postgres;
 
 --
--- TOC entry 187 (class 1259 OID 125814)
+-- TOC entry 186 (class 1259 OID 125814)
 -- Name: seq_correoelectronico; Type: SEQUENCE; Schema: negocio; Owner: postgres
 --
 
@@ -3272,7 +3278,7 @@ CREATE SEQUENCE seq_correoelectronico
 ALTER TABLE negocio.seq_correoelectronico OWNER TO postgres;
 
 --
--- TOC entry 188 (class 1259 OID 125816)
+-- TOC entry 187 (class 1259 OID 125816)
 -- Name: seq_direccion; Type: SEQUENCE; Schema: negocio; Owner: postgres
 --
 
@@ -3287,7 +3293,7 @@ CREATE SEQUENCE seq_direccion
 ALTER TABLE negocio.seq_direccion OWNER TO postgres;
 
 --
--- TOC entry 225 (class 1259 OID 126069)
+-- TOC entry 224 (class 1259 OID 126069)
 -- Name: seq_maestroservicio; Type: SEQUENCE; Schema: negocio; Owner: postgres
 --
 
@@ -3302,7 +3308,7 @@ CREATE SEQUENCE seq_maestroservicio
 ALTER TABLE negocio.seq_maestroservicio OWNER TO postgres;
 
 --
--- TOC entry 189 (class 1259 OID 125818)
+-- TOC entry 188 (class 1259 OID 125818)
 -- Name: seq_novios; Type: SEQUENCE; Schema: negocio; Owner: postgres
 --
 
@@ -3317,7 +3323,7 @@ CREATE SEQUENCE seq_novios
 ALTER TABLE negocio.seq_novios OWNER TO postgres;
 
 --
--- TOC entry 190 (class 1259 OID 125820)
+-- TOC entry 189 (class 1259 OID 125820)
 -- Name: seq_persona; Type: SEQUENCE; Schema: negocio; Owner: postgres
 --
 
@@ -3332,7 +3338,7 @@ CREATE SEQUENCE seq_persona
 ALTER TABLE negocio.seq_persona OWNER TO postgres;
 
 --
--- TOC entry 191 (class 1259 OID 125822)
+-- TOC entry 190 (class 1259 OID 125822)
 -- Name: seq_personapotencial; Type: SEQUENCE; Schema: negocio; Owner: postgres
 --
 
@@ -3347,7 +3353,7 @@ CREATE SEQUENCE seq_personapotencial
 ALTER TABLE negocio.seq_personapotencial OWNER TO postgres;
 
 --
--- TOC entry 192 (class 1259 OID 125824)
+-- TOC entry 191 (class 1259 OID 125824)
 -- Name: seq_serviciocabecera; Type: SEQUENCE; Schema: negocio; Owner: postgres
 --
 
@@ -3362,7 +3368,7 @@ CREATE SEQUENCE seq_serviciocabecera
 ALTER TABLE negocio.seq_serviciocabecera OWNER TO postgres;
 
 --
--- TOC entry 193 (class 1259 OID 125826)
+-- TOC entry 192 (class 1259 OID 125826)
 -- Name: seq_serviciodetalle; Type: SEQUENCE; Schema: negocio; Owner: postgres
 --
 
@@ -3377,7 +3383,7 @@ CREATE SEQUENCE seq_serviciodetalle
 ALTER TABLE negocio.seq_serviciodetalle OWNER TO postgres;
 
 --
--- TOC entry 194 (class 1259 OID 125828)
+-- TOC entry 193 (class 1259 OID 125828)
 -- Name: seq_serviciosnovios; Type: SEQUENCE; Schema: negocio; Owner: postgres
 --
 
@@ -3392,7 +3398,7 @@ CREATE SEQUENCE seq_serviciosnovios
 ALTER TABLE negocio.seq_serviciosnovios OWNER TO postgres;
 
 --
--- TOC entry 195 (class 1259 OID 125830)
+-- TOC entry 194 (class 1259 OID 125830)
 -- Name: seq_telefono; Type: SEQUENCE; Schema: negocio; Owner: postgres
 --
 
@@ -3407,7 +3413,7 @@ CREATE SEQUENCE seq_telefono
 ALTER TABLE negocio.seq_telefono OWNER TO postgres;
 
 --
--- TOC entry 196 (class 1259 OID 125832)
+-- TOC entry 195 (class 1259 OID 125832)
 -- Name: vw_clientesnova; Type: VIEW; Schema: negocio; Owner: postgres
 --
 
@@ -3418,7 +3424,7 @@ CREATE VIEW vw_clientesnova AS
 ALTER TABLE negocio.vw_clientesnova OWNER TO postgres;
 
 --
--- TOC entry 197 (class 1259 OID 125836)
+-- TOC entry 196 (class 1259 OID 125836)
 -- Name: vw_consultacontacto; Type: VIEW; Schema: negocio; Owner: postgres
 --
 
@@ -3429,7 +3435,7 @@ CREATE VIEW vw_consultacontacto AS
 ALTER TABLE negocio.vw_consultacontacto OWNER TO postgres;
 
 --
--- TOC entry 198 (class 1259 OID 125840)
+-- TOC entry 197 (class 1259 OID 125840)
 -- Name: vw_consultacorreocontacto; Type: VIEW; Schema: negocio; Owner: postgres
 --
 
@@ -3442,7 +3448,7 @@ ALTER TABLE negocio.vw_consultacorreocontacto OWNER TO postgres;
 SET search_path = soporte, pg_catalog;
 
 --
--- TOC entry 199 (class 1259 OID 125844)
+-- TOC entry 198 (class 1259 OID 125844)
 -- Name: ubigeo; Type: TABLE; Schema: soporte; Owner: postgres; Tablespace: 
 --
 
@@ -3460,7 +3466,7 @@ ALTER TABLE soporte.ubigeo OWNER TO postgres;
 SET search_path = negocio, pg_catalog;
 
 --
--- TOC entry 200 (class 1259 OID 125847)
+-- TOC entry 199 (class 1259 OID 125847)
 -- Name: vw_consultadireccionproveedor; Type: VIEW; Schema: negocio; Owner: postgres
 --
 
@@ -3471,7 +3477,7 @@ CREATE VIEW vw_consultadireccionproveedor AS
 ALTER TABLE negocio.vw_consultadireccionproveedor OWNER TO postgres;
 
 --
--- TOC entry 201 (class 1259 OID 125852)
+-- TOC entry 200 (class 1259 OID 125852)
 -- Name: vw_consultaproveedor; Type: VIEW; Schema: negocio; Owner: postgres
 --
 
@@ -3484,7 +3490,7 @@ ALTER TABLE negocio.vw_consultaproveedor OWNER TO postgres;
 SET search_path = soporte, pg_catalog;
 
 --
--- TOC entry 202 (class 1259 OID 125856)
+-- TOC entry 201 (class 1259 OID 125856)
 -- Name: Tablamaestra; Type: TABLE; Schema: soporte; Owner: postgres; Tablespace: 
 --
 
@@ -3504,7 +3510,7 @@ ALTER TABLE soporte."Tablamaestra" OWNER TO postgres;
 SET search_path = negocio, pg_catalog;
 
 --
--- TOC entry 203 (class 1259 OID 125860)
+-- TOC entry 202 (class 1259 OID 125860)
 -- Name: vw_contactoproveedor; Type: VIEW; Schema: negocio; Owner: postgres
 --
 
@@ -3515,7 +3521,7 @@ CREATE VIEW vw_contactoproveedor AS
 ALTER TABLE negocio.vw_contactoproveedor OWNER TO postgres;
 
 --
--- TOC entry 204 (class 1259 OID 125865)
+-- TOC entry 203 (class 1259 OID 125865)
 -- Name: vw_direccioncliente; Type: VIEW; Schema: negocio; Owner: postgres
 --
 
@@ -3526,7 +3532,7 @@ CREATE VIEW vw_direccioncliente AS
 ALTER TABLE negocio.vw_direccioncliente OWNER TO postgres;
 
 --
--- TOC entry 205 (class 1259 OID 125869)
+-- TOC entry 204 (class 1259 OID 125869)
 -- Name: vw_proveedor; Type: VIEW; Schema: negocio; Owner: postgres
 --
 
@@ -3537,7 +3543,7 @@ CREATE VIEW vw_proveedor AS
 ALTER TABLE negocio.vw_proveedor OWNER TO postgres;
 
 --
--- TOC entry 206 (class 1259 OID 125874)
+-- TOC entry 205 (class 1259 OID 125874)
 -- Name: vw_proveedoresnova; Type: VIEW; Schema: negocio; Owner: postgres
 --
 
@@ -3548,7 +3554,7 @@ CREATE VIEW vw_proveedoresnova AS
 ALTER TABLE negocio.vw_proveedoresnova OWNER TO postgres;
 
 --
--- TOC entry 207 (class 1259 OID 125878)
+-- TOC entry 206 (class 1259 OID 125878)
 -- Name: vw_telefonocontacto; Type: VIEW; Schema: negocio; Owner: postgres
 --
 
@@ -3559,7 +3565,7 @@ CREATE VIEW vw_telefonocontacto AS
 ALTER TABLE negocio.vw_telefonocontacto OWNER TO postgres;
 
 --
--- TOC entry 208 (class 1259 OID 125882)
+-- TOC entry 207 (class 1259 OID 125882)
 -- Name: vw_telefonodireccion; Type: VIEW; Schema: negocio; Owner: postgres
 --
 
@@ -3572,7 +3578,7 @@ ALTER TABLE negocio.vw_telefonodireccion OWNER TO postgres;
 SET search_path = seguridad, pg_catalog;
 
 --
--- TOC entry 209 (class 1259 OID 125886)
+-- TOC entry 208 (class 1259 OID 125886)
 -- Name: rol; Type: TABLE; Schema: seguridad; Owner: postgres; Tablespace: 
 --
 
@@ -3585,7 +3591,7 @@ CREATE TABLE rol (
 ALTER TABLE seguridad.rol OWNER TO postgres;
 
 --
--- TOC entry 210 (class 1259 OID 125889)
+-- TOC entry 209 (class 1259 OID 125889)
 -- Name: usuario; Type: TABLE; Schema: seguridad; Owner: postgres; Tablespace: 
 --
 
@@ -3607,8 +3613,8 @@ CREATE TABLE usuario (
 ALTER TABLE seguridad.usuario OWNER TO postgres;
 
 --
--- TOC entry 2352 (class 0 OID 0)
--- Dependencies: 210
+-- TOC entry 2353 (class 0 OID 0)
+-- Dependencies: 209
 -- Name: COLUMN usuario.id; Type: COMMENT; Schema: seguridad; Owner: postgres
 --
 
@@ -3616,8 +3622,8 @@ COMMENT ON COLUMN usuario.id IS 'identificador de usuario';
 
 
 --
--- TOC entry 2353 (class 0 OID 0)
--- Dependencies: 210
+-- TOC entry 2354 (class 0 OID 0)
+-- Dependencies: 209
 -- Name: COLUMN usuario.usuario; Type: COMMENT; Schema: seguridad; Owner: postgres
 --
 
@@ -3625,7 +3631,7 @@ COMMENT ON COLUMN usuario.usuario IS 'usuario de inicio de sesion';
 
 
 --
--- TOC entry 211 (class 1259 OID 125894)
+-- TOC entry 210 (class 1259 OID 125894)
 -- Name: vw_listarusuarios; Type: VIEW; Schema: seguridad; Owner: postgres
 --
 
@@ -3638,7 +3644,7 @@ ALTER TABLE seguridad.vw_listarusuarios OWNER TO postgres;
 SET search_path = soporte, pg_catalog;
 
 --
--- TOC entry 212 (class 1259 OID 125898)
+-- TOC entry 211 (class 1259 OID 125898)
 -- Name: Parametro; Type: TABLE; Schema: soporte; Owner: postgres; Tablespace: 
 --
 
@@ -3655,7 +3661,7 @@ CREATE TABLE "Parametro" (
 ALTER TABLE soporte."Parametro" OWNER TO postgres;
 
 --
--- TOC entry 213 (class 1259 OID 125901)
+-- TOC entry 212 (class 1259 OID 125901)
 -- Name: destino; Type: TABLE; Schema: soporte; Owner: postgres; Tablespace: 
 --
 
@@ -3679,7 +3685,7 @@ CREATE TABLE destino (
 ALTER TABLE soporte.destino OWNER TO postgres;
 
 --
--- TOC entry 214 (class 1259 OID 125905)
+-- TOC entry 213 (class 1259 OID 125905)
 -- Name: pais; Type: TABLE; Schema: soporte; Owner: postgres; Tablespace: 
 --
 
@@ -3700,7 +3706,7 @@ CREATE TABLE pais (
 ALTER TABLE soporte.pais OWNER TO postgres;
 
 --
--- TOC entry 215 (class 1259 OID 125909)
+-- TOC entry 214 (class 1259 OID 125909)
 -- Name: seq_destino; Type: SEQUENCE; Schema: soporte; Owner: postgres
 --
 
@@ -3715,7 +3721,7 @@ CREATE SEQUENCE seq_destino
 ALTER TABLE soporte.seq_destino OWNER TO postgres;
 
 --
--- TOC entry 216 (class 1259 OID 125911)
+-- TOC entry 215 (class 1259 OID 125911)
 -- Name: seq_pais; Type: SEQUENCE; Schema: soporte; Owner: postgres
 --
 
@@ -3730,7 +3736,7 @@ CREATE SEQUENCE seq_pais
 ALTER TABLE soporte.seq_pais OWNER TO postgres;
 
 --
--- TOC entry 217 (class 1259 OID 125913)
+-- TOC entry 216 (class 1259 OID 125913)
 -- Name: vw_catalogodepartamento; Type: VIEW; Schema: soporte; Owner: postgres
 --
 
@@ -3741,7 +3747,7 @@ CREATE VIEW vw_catalogodepartamento AS
 ALTER TABLE soporte.vw_catalogodepartamento OWNER TO postgres;
 
 --
--- TOC entry 218 (class 1259 OID 125917)
+-- TOC entry 217 (class 1259 OID 125917)
 -- Name: vw_catalogodistrito; Type: VIEW; Schema: soporte; Owner: postgres
 --
 
@@ -3752,7 +3758,7 @@ CREATE VIEW vw_catalogodistrito AS
 ALTER TABLE soporte.vw_catalogodistrito OWNER TO postgres;
 
 --
--- TOC entry 219 (class 1259 OID 125921)
+-- TOC entry 218 (class 1259 OID 125921)
 -- Name: vw_catalogomaestro; Type: VIEW; Schema: soporte; Owner: postgres
 --
 
@@ -3763,7 +3769,7 @@ CREATE VIEW vw_catalogomaestro AS
 ALTER TABLE soporte.vw_catalogomaestro OWNER TO postgres;
 
 --
--- TOC entry 220 (class 1259 OID 125925)
+-- TOC entry 219 (class 1259 OID 125925)
 -- Name: vw_catalogoprovincia; Type: VIEW; Schema: soporte; Owner: postgres
 --
 
@@ -3774,7 +3780,7 @@ CREATE VIEW vw_catalogoprovincia AS
 ALTER TABLE soporte.vw_catalogoprovincia OWNER TO postgres;
 
 --
--- TOC entry 221 (class 1259 OID 125929)
+-- TOC entry 220 (class 1259 OID 125929)
 -- Name: vw_listahijosmaestro; Type: VIEW; Schema: soporte; Owner: postgres
 --
 
@@ -3785,7 +3791,7 @@ CREATE VIEW vw_listahijosmaestro AS
 ALTER TABLE soporte.vw_listahijosmaestro OWNER TO postgres;
 
 --
--- TOC entry 222 (class 1259 OID 125933)
+-- TOC entry 221 (class 1259 OID 125933)
 -- Name: vw_listamaestros; Type: VIEW; Schema: soporte; Owner: postgres
 --
 
@@ -3796,7 +3802,7 @@ CREATE VIEW vw_listamaestros AS
 ALTER TABLE soporte.vw_listamaestros OWNER TO postgres;
 
 --
--- TOC entry 223 (class 1259 OID 125937)
+-- TOC entry 222 (class 1259 OID 125937)
 -- Name: vw_listaparametros; Type: VIEW; Schema: soporte; Owner: postgres
 --
 
@@ -3807,7 +3813,7 @@ CREATE VIEW vw_listaparametros AS
 ALTER TABLE soporte.vw_listaparametros OWNER TO postgres;
 
 --
--- TOC entry 224 (class 1259 OID 125941)
+-- TOC entry 223 (class 1259 OID 125941)
 -- Name: vw_ubigeo; Type: VIEW; Schema: soporte; Owner: postgres
 --
 
@@ -3820,7 +3826,7 @@ ALTER TABLE soporte.vw_ubigeo OWNER TO postgres;
 SET search_path = negocio, pg_catalog;
 
 --
--- TOC entry 2309 (class 0 OID 125736)
+-- TOC entry 2310 (class 0 OID 125736)
 -- Dependencies: 172
 -- Data for Name: CorreoElectronico; Type: TABLE DATA; Schema: negocio; Owner: postgres
 --
@@ -3851,7 +3857,7 @@ INSERT INTO "CorreoElectronico" VALUES (25, 'SDSADSADSADSADSADS@DSFSDFDSFDSFDSFD
 
 
 --
--- TOC entry 2310 (class 0 OID 125740)
+-- TOC entry 2311 (class 0 OID 125740)
 -- Dependencies: 173
 -- Data for Name: CronogramaPago; Type: TABLE DATA; Schema: negocio; Owner: postgres
 --
@@ -3977,7 +3983,7 @@ INSERT INTO "CronogramaPago" VALUES (12, 58, '2015-07-18', 180.727429739307, 0.2
 
 
 --
--- TOC entry 2311 (class 0 OID 125747)
+-- TOC entry 2312 (class 0 OID 125747)
 -- Dependencies: 174
 -- Data for Name: Direccion; Type: TABLE DATA; Schema: negocio; Owner: postgres
 --
@@ -3996,7 +4002,6 @@ INSERT INTO "Direccion" VALUES (16, 4, 'las aves', NULL, NULL, NULL, NULL, 'N', 
 INSERT INTO "Direccion" VALUES (15, 3, 'los callos', '485', NULL, NULL, NULL, 'S', '070103', NULL, '2014-05-05 06:47:38.932+02', NULL, 'admin', '2014-05-05 06:57:06.379+02', '127.0.0.1', 0, NULL, NULL);
 INSERT INTO "Direccion" VALUES (18, 2, 'las almas', '2323', NULL, NULL, NULL, 'N', '040402', NULL, '2014-05-05 06:57:06.379+02', NULL, NULL, '2014-05-05 06:57:06.379+02', NULL, 1, NULL, NULL);
 INSERT INTO "Direccion" VALUES (17, 3, 'los callos', '485', NULL, NULL, NULL, 'S', '070103', NULL, '2014-05-05 06:57:06.379+02', NULL, 'admin', '2014-05-05 07:00:22.184+02', '127.0.0.1', 0, NULL, NULL);
-INSERT INTO "Direccion" VALUES (23, 3, 'dfsdfd', '3434', NULL, NULL, NULL, 'S', '060505', NULL, '2014-05-17 04:36:10.523+02', NULL, NULL, '2014-05-17 04:36:10.523+02', NULL, 1, NULL, NULL);
 INSERT INTO "Direccion" VALUES (24, 3, 'los andes', '2321', NULL, NULL, NULL, 'S', '050704', NULL, '2014-05-17 23:24:44.088+02', NULL, 'admin', '2014-05-17 23:54:37.44+02', '127.0.0.1', 0, NULL, NULL);
 INSERT INTO "Direccion" VALUES (13, 3, 'los catas', '232', NULL, NULL, NULL, 'S', '080502', NULL, '2014-05-05 06:39:30.68+02', NULL, 'ADMIN', '2014-05-18 02:30:47.824+02', '127.0.0.1', 0, NULL, NULL);
 INSERT INTO "Direccion" VALUES (25, 3, 'los andes', '2321', NULL, NULL, NULL, 'S', '050704', NULL, '2014-05-17 23:54:37.44+02', NULL, 'ADMIN', '2014-05-18 02:31:03.257+02', '127.0.0.1', 0, NULL, NULL);
@@ -4040,27 +4045,24 @@ INSERT INTO "Direccion" VALUES (64, 3, 'EWWQ', '232', NULL, NULL, NULL, 'S', '05
 INSERT INTO "Direccion" VALUES (66, 1, 'JOSE PARDO', '232', NULL, NULL, NULL, 'S', '100402', NULL, '2014-07-30 00:44:12.274+02', NULL, 'ADMIN', '2014-08-02 02:57:58.726+02', '127.0.0.1', 0, NULL, NULL);
 INSERT INTO "Direccion" VALUES (67, 1, 'JOSE PARDO', '232', NULL, NULL, NULL, 'S', '100402', NULL, '2014-08-02 02:57:58.726+02', NULL, 'ADMIN', '2014-08-02 08:37:30.345+02', '127.0.0.1', 0, NULL, NULL);
 INSERT INTO "Direccion" VALUES (70, 1, 'SADSADDFSDV ERWEREWREWRC  EWREWREW EWREW', '21123', '33423', NULL, NULL, 'N', '040301', NULL, '2014-08-08 04:36:04.57+02', NULL, NULL, '2014-08-08 04:36:04.57+02', NULL, 1, 'SADSAD', 'SAD');
+INSERT INTO "Direccion" VALUES (74, 3, 'DFSDFD', '3434', NULL, NULL, NULL, 'S', '060505', NULL, '2014-08-27 03:10:24.48+02', NULL, NULL, '2014-08-27 03:10:24.48+02', NULL, 1, NULL, NULL);
 INSERT INTO "Direccion" VALUES (69, 1, 'JOSE PARDO', '232', NULL, NULL, NULL, 'S', '100402', NULL, '2014-08-02 08:37:30.345+02', NULL, 'ADMIN', '2014-08-17 00:16:44.344+02', '127.0.0.1', 0, NULL, NULL);
 INSERT INTO "Direccion" VALUES (72, 1, 'JOSE PARDO', '232', NULL, NULL, NULL, 'S', '100402', NULL, '2014-08-17 00:16:44.344+02', NULL, NULL, '2014-08-17 00:16:44.344+02', NULL, 1, NULL, NULL);
 INSERT INTO "Direccion" VALUES (65, 3, 'ZFDSFD', '232', NULL, NULL, NULL, 'S', '080703', NULL, '2014-07-29 18:55:10.795+02', NULL, 'ADMIN', '2014-08-17 00:17:01.257+02', '127.0.0.1', 0, NULL, NULL);
 INSERT INTO "Direccion" VALUES (73, 3, 'ZFDSFD', '232', NULL, NULL, NULL, 'S', '080703', NULL, '2014-08-17 00:17:01.257+02', NULL, NULL, '2014-08-17 00:17:01.257+02', NULL, 1, NULL, NULL);
+INSERT INTO "Direccion" VALUES (23, 3, 'dfsdfd', '3434', NULL, NULL, NULL, 'S', '060505', NULL, '2014-05-17 04:36:10.523+02', NULL, 'ADMIN', '2014-08-27 03:10:24.48+02', '127.0.0.1', 0, NULL, NULL);
 
 
 --
--- TOC entry 2343 (class 0 OID 126101)
--- Dependencies: 226
+-- TOC entry 2343 (class 0 OID 126133)
+-- Dependencies: 225
 -- Data for Name: MaestroServicios; Type: TABLE DATA; Schema: negocio; Owner: postgres
 --
 
-INSERT INTO "MaestroServicios" VALUES (6, 'BOLETO AEREO', 'BOLETO', true, true, true, false, NULL, false, false, 'admin', '2014-08-16 22:34:54.231+02', '127.0.0.1      ', 'admin', '2014-08-16 22:34:54.231+02', '127.0.0.1      ', 1);
-INSERT INTO "MaestroServicios" VALUES (7, 'FEE', 'FEE DE EMISION', false, false, false, false, NULL, false, true, 'admin', '2014-08-16 22:35:49.129+02', '127.0.0.1      ', 'admin', '2014-08-16 22:36:08.298+02', '127.0.0.1      ', 1);
-INSERT INTO "MaestroServicios" VALUES (9, 'SEGURO DE VIAJES', 'SEGURO DE VIAJES', true, false, false, false, NULL, false, false, 'admin', '2014-08-16 23:50:06.448+02', '127.0.0.1      ', 'admin', '2014-08-16 23:50:06.448+02', '127.0.0.1      ', 1);
-INSERT INTO "MaestroServicios" VALUES (10, 'HOTEL', 'HOTEL', true, false, false, false, NULL, false, false, 'admin', '2014-08-16 23:50:26.366+02', '127.0.0.1      ', 'admin', '2014-08-16 23:50:26.366+02', '127.0.0.1      ', 1);
-INSERT INTO "MaestroServicios" VALUES (8, 'IMPUESTO AEROPUERTO', 'IMPUESTO DE PAGO POR USO DE AEROPUERTO', false, false, false, false, NULL, true, false, 'admin', '2014-08-16 22:36:31.106+02', '127.0.0.1      ', 'admin', '2014-08-16 23:50:57.181+02', '127.0.0.1      ', 1);
 
 
 --
--- TOC entry 2312 (class 0 OID 125754)
+-- TOC entry 2313 (class 0 OID 125754)
 -- Dependencies: 175
 -- Data for Name: Persona; Type: TABLE DATA; Schema: negocio; Owner: postgres
 --
@@ -4074,8 +4076,6 @@ INSERT INTO "Persona" VALUES (27, 2, 'TIGO', NULL, NULL, NULL, NULL, 3, '2015454
 INSERT INTO "Persona" VALUES (36, 3, 'DSFDSFDSFDSF', 'SDFDSF', 'SDFDSFDSF', NULL, NULL, 2, '232132132', 'ADMIN', '2014-05-18 02:31:18.191+02', '127.0.0.1      ', 'ADMIN', '2014-05-18 05:34:48+02', '127.0.0.1      ', 0, NULL, NULL, NULL);
 INSERT INTO "Persona" VALUES (11, 3, 'carlos', 'caballeo', 'sdsd', NULL, NULL, 1, '21457878', 'admin', '2014-05-04 06:53:25.427+02', '127.0.0.1      ', 'admin', '2014-05-04 08:56:24.999+02', '127.0.0.1      ', 0, NULL, NULL, NULL);
 INSERT INTO "Persona" VALUES (17, 3, 'carlos alberto', 'caballeo', 'castro', NULL, NULL, 1, '21457878', 'admin', '2014-05-04 08:56:24.999+02', '127.0.0.1      ', 'admin', '2014-05-05 07:00:22.184+02', '127.0.0.1      ', 0, NULL, NULL, NULL);
-INSERT INTO "Persona" VALUES (29, 1, 'fsdfsd sdsdfds', NULL, NULL, NULL, NULL, 3, '20248498798', 'admin', '2014-05-17 04:36:10.523+02', '127.0.0.1      ', 'admin', '2014-05-17 04:36:10.523+02', '127.0.0.1      ', 1, NULL, NULL, NULL);
-INSERT INTO "Persona" VALUES (30, 3, 'asdasd sdasdsad', 'afas', 'sdasd', NULL, NULL, 1, '34343433', 'admin', '2014-05-17 04:36:10.523+02', '127.0.0.1      ', 'admin', '2014-05-17 04:36:10.523+02', '127.0.0.1      ', 1, NULL, NULL, NULL);
 INSERT INTO "Persona" VALUES (16, 3, 'kjklj kjlkj', 'sdfsdfsdf', 'kjkljklj', NULL, NULL, 1, '12345678', 'admin', '2014-05-04 08:10:04.292+02', '127.0.0.1      ', 'admin', '2014-05-05 01:26:56.602+02', '127.0.0.1      ', 0, NULL, NULL, NULL);
 INSERT INTO "Persona" VALUES (41, 3, 'DSFDSFDSFDSF', 'SDFDSF', 'SDFDSFDSF', NULL, NULL, 2, '232132132', 'ADMIN', '2014-05-18 05:34:48+02', '127.0.0.1      ', 'ADMIN', '2014-05-18 05:34:48+02', '127.0.0.1      ', 1, NULL, NULL, NULL);
 INSERT INTO "Persona" VALUES (20, 3, 'kjklj kjlkj', 'sdfsdfsdf', 'kjkljklj', NULL, NULL, 1, '12345678', 'admin', '2014-05-05 01:26:56.602+02', '127.0.0.1      ', 'admin', '2014-05-05 01:27:34.348+02', '127.0.0.1      ', 0, NULL, NULL, NULL);
@@ -4138,10 +4138,13 @@ INSERT INTO "Persona" VALUES (92, 3, 'ANGELA', 'CHAVEZ', 'ERERW', NULL, NULL, 1,
 INSERT INTO "Persona" VALUES (82, 2, 'MUNDO TOTAL SAC', NULL, NULL, NULL, NULL, 3, '20465465465', 'ADMIN', '2014-07-29 18:55:10.795+02', '127.0.0.1      ', 'ADMIN', '2014-08-17 00:17:01.257+02', '127.0.0.1      ', 1, NULL, NULL, NULL);
 INSERT INTO "Persona" VALUES (83, 3, 'CESAR ', 'DURAND', 'DFDSFSD', NULL, NULL, 1, '40245645', 'ADMIN', '2014-07-29 18:55:10.795+02', '127.0.0.1      ', 'ADMIN', '2014-08-17 00:17:01.257+02', '127.0.0.1      ', 0, NULL, NULL, NULL);
 INSERT INTO "Persona" VALUES (93, 3, 'CESAR ', 'DURAND', 'DFDSFSD', NULL, NULL, 1, '40245645', 'ADMIN', '2014-08-17 00:17:01.257+02', '127.0.0.1      ', 'ADMIN', '2014-08-17 00:17:01.257+02', '127.0.0.1      ', 1, NULL, NULL, NULL);
+INSERT INTO "Persona" VALUES (29, 1, 'QUIMICA SUIZA SAC', NULL, NULL, NULL, NULL, 3, '20248498798', 'admin', '2014-05-17 04:36:10.523+02', '127.0.0.1      ', 'ADMIN', '2014-08-27 03:10:24.48+02', '127.0.0.1      ', 1, NULL, NULL, NULL);
+INSERT INTO "Persona" VALUES (30, 3, 'asdasd sdasdsad', 'afas', 'sdasd', NULL, NULL, 1, '34343433', 'admin', '2014-05-17 04:36:10.523+02', '127.0.0.1      ', 'ADMIN', '2014-08-27 03:10:24.48+02', '127.0.0.1      ', 0, NULL, NULL, NULL);
+INSERT INTO "Persona" VALUES (94, 3, 'ASDASD SDASDSAD', 'AFAS', 'SDASD', NULL, NULL, 1, '34343433', 'ADMIN', '2014-08-27 03:10:24.48+02', '127.0.0.1      ', 'ADMIN', '2014-08-27 03:10:24.48+02', '127.0.0.1      ', 1, NULL, NULL, NULL);
 
 
 --
--- TOC entry 2313 (class 0 OID 125758)
+-- TOC entry 2314 (class 0 OID 125758)
 -- Dependencies: 176
 -- Data for Name: PersonaAdicional; Type: TABLE DATA; Schema: negocio; Owner: postgres
 --
@@ -4170,7 +4173,7 @@ INSERT INTO "PersonaAdicional" VALUES (82, 3, 1);
 
 
 --
--- TOC entry 2314 (class 0 OID 125762)
+-- TOC entry 2315 (class 0 OID 125762)
 -- Dependencies: 177
 -- Data for Name: PersonaContactoProveedor; Type: TABLE DATA; Schema: negocio; Owner: postgres
 --
@@ -4226,10 +4229,11 @@ INSERT INTO "PersonaContactoProveedor" VALUES (84, 88, 2, '545', 1);
 INSERT INTO "PersonaContactoProveedor" VALUES (89, 90, 1, '12312', 1);
 INSERT INTO "PersonaContactoProveedor" VALUES (84, 92, 2, '545', 1);
 INSERT INTO "PersonaContactoProveedor" VALUES (82, 93, 2, '475', 1);
+INSERT INTO "PersonaContactoProveedor" VALUES (29, 94, 0, NULL, 1);
 
 
 --
--- TOC entry 2315 (class 0 OID 125766)
+-- TOC entry 2316 (class 0 OID 125766)
 -- Dependencies: 178
 -- Data for Name: PersonaDireccion; Type: TABLE DATA; Schema: negocio; Owner: postgres
 --
@@ -4293,10 +4297,11 @@ INSERT INTO "PersonaDireccion" VALUES (84, 69, 2, 1);
 INSERT INTO "PersonaDireccion" VALUES (89, 70, 1, 1);
 INSERT INTO "PersonaDireccion" VALUES (84, 72, 2, 1);
 INSERT INTO "PersonaDireccion" VALUES (82, 73, 2, 1);
+INSERT INTO "PersonaDireccion" VALUES (29, 74, 1, 1);
 
 
 --
--- TOC entry 2316 (class 0 OID 125770)
+-- TOC entry 2317 (class 0 OID 125770)
 -- Dependencies: 179
 -- Data for Name: Personapotencial; Type: TABLE DATA; Schema: negocio; Owner: postgres
 --
@@ -4310,7 +4315,7 @@ INSERT INTO "Personapotencial" VALUES (11, 'paola', 'huarachi', 'pflucke', '4654
 
 
 --
--- TOC entry 2317 (class 0 OID 125774)
+-- TOC entry 2318 (class 0 OID 125774)
 -- Dependencies: 180
 -- Data for Name: ProgramaNovios; Type: TABLE DATA; Schema: negocio; Owner: postgres
 --
@@ -4322,18 +4327,16 @@ INSERT INTO "ProgramaNovios" VALUES (35, '010132', 65, 89, 7, '2014-08-21', '201
 
 
 --
--- TOC entry 2318 (class 0 OID 125781)
--- Dependencies: 181
+-- TOC entry 2344 (class 0 OID 126149)
+-- Dependencies: 226
 -- Data for Name: ProveedorTipoServicio; Type: TABLE DATA; Schema: negocio; Owner: postgres
 --
 
-INSERT INTO "ProveedorTipoServicio" VALUES (84, 6, 2, 'admin', '2014-08-17 00:16:44.344+02', '127.0.0.1', 'admin', '2014-08-17 00:16:44.344+02', '127.0.0.1', 1);
-INSERT INTO "ProveedorTipoServicio" VALUES (82, 10, 4, 'admin', '2014-08-17 00:17:01.257+02', '127.0.0.1', 'admin', '2014-08-17 00:17:01.257+02', '127.0.0.1', 1);
 
 
 --
 -- TOC entry 2319 (class 0 OID 125788)
--- Dependencies: 182
+-- Dependencies: 181
 -- Data for Name: ServicioCabecera; Type: TABLE DATA; Schema: negocio; Owner: postgres
 --
 
@@ -4342,11 +4345,12 @@ INSERT INTO "ServicioCabecera" VALUES (74, 55, 67, '2014-08-17', 1, 5, 'TRUJILLO
 INSERT INTO "ServicioCabecera" VALUES (81, 65, 89, '2014-08-24', 3, 7, 'SAN JOSE', 1, 1, 1, NULL, NULL, NULL, NULL, NULL, 128, 6580, 6400, 4, NULL, 'admin', '2014-08-25 06:47:50.553+02', '127.0.0.1      ', 'admin', '2014-08-25 06:47:50.553+02', '127.0.0.1      ', 1);
 INSERT INTO "ServicioCabecera" VALUES (75, 65, 89, '2014-08-24', 3, 7, 'SAN JOSE', 1, 1, 1, NULL, NULL, NULL, NULL, NULL, 128, 6580, 6400, 4, NULL, 'admin', '2014-08-25 04:36:54.933+02', '127.0.0.1      ', 'admin', '2014-08-25 07:53:28.686+02', '127.0.0.1      ', 0);
 INSERT INTO "ServicioCabecera" VALUES (86, 65, 89, '2014-08-25', 3, 7, 'SAN JOSE', 1, 1, 1, NULL, NULL, NULL, NULL, NULL, 128, 6580, 6400, 4, NULL, 'admin', '2014-08-25 07:53:28.686+02', '127.0.0.1      ', 'admin', '2014-08-25 07:53:28.686+02', '127.0.0.1      ', 1);
+INSERT INTO "ServicioCabecera" VALUES (87, 50, NULL, '2014-08-18', 3, 6, 'TUMBES', 1, 1, 2, NULL, 0.015, NULL, NULL, NULL, 120, 6280, 6000, 4, NULL, 'admin', '2014-08-27 02:51:25.282+02', '127.0.0.1      ', 'admin', '2014-08-27 02:51:25.282+02', '127.0.0.1      ', 1);
 
 
 --
 -- TOC entry 2320 (class 0 OID 125795)
--- Dependencies: 183
+-- Dependencies: 182
 -- Data for Name: ServicioDetalle; Type: TABLE DATA; Schema: negocio; Owner: postgres
 --
 
@@ -4360,11 +4364,14 @@ INSERT INTO "ServicioDetalle" VALUES (42, 6, 'LIMA - ROMA', 75, NULL, NULL, NULL
 INSERT INTO "ServicioDetalle" VALUES (51, 7, 'FEE', 86, NULL, NULL, NULL, NULL, '2014-08-18', NULL, 1, NULL, 150, NULL, 0, 150, 'admin', '2014-08-25 07:53:28.686+02', '127.0.0.1      ', 'admin', '2014-08-25 07:53:28.686+02', '127.0.0.1      ', 1);
 INSERT INTO "ServicioDetalle" VALUES (52, 8, 'IMPUESTO AEROPUERTO', 86, NULL, NULL, NULL, NULL, '2014-08-18', NULL, 1, NULL, 30, NULL, 0, 30, 'admin', '2014-08-25 07:53:28.686+02', '127.0.0.1      ', 'admin', '2014-08-25 07:53:28.686+02', '127.0.0.1      ', 1);
 INSERT INTO "ServicioDetalle" VALUES (53, 6, 'LIMA - ROMA', 86, NULL, NULL, NULL, NULL, '2014-08-22', NULL, 4, 84, 1600, 2, 128, 6400, 'admin', '2014-08-25 07:53:28.686+02', '127.0.0.1      ', 'admin', '2014-08-25 07:53:28.686+02', '127.0.0.1      ', 1);
+INSERT INTO "ServicioDetalle" VALUES (54, 6, 'LIMA - ROMA', 87, NULL, NULL, NULL, NULL, '2014-08-18', '2014-08-22', 4, 84, 1500, 2, 120, 6000, 'admin', '2014-08-27 02:51:25.282+02', '127.0.0.1      ', 'admin', '2014-08-27 02:51:25.282+02', '127.0.0.1      ', 1);
+INSERT INTO "ServicioDetalle" VALUES (55, 7, 'FEE', 87, NULL, NULL, NULL, NULL, '2014-08-18', NULL, 1, NULL, 130, NULL, 0, 130, 'admin', '2014-08-27 02:51:25.282+02', '127.0.0.1      ', 'admin', '2014-08-27 02:51:25.282+02', '127.0.0.1      ', 1);
+INSERT INTO "ServicioDetalle" VALUES (56, 8, 'IMPUESTO AEROPUERTO', 87, NULL, NULL, NULL, NULL, '2014-08-25', NULL, 1, NULL, 150, NULL, 0, 150, 'admin', '2014-08-27 02:51:25.282+02', '127.0.0.1      ', 'admin', '2014-08-27 02:51:25.282+02', '127.0.0.1      ', 1);
 
 
 --
 -- TOC entry 2321 (class 0 OID 125802)
--- Dependencies: 184
+-- Dependencies: 183
 -- Data for Name: Telefono; Type: TABLE DATA; Schema: negocio; Owner: postgres
 --
 
@@ -4386,7 +4393,6 @@ INSERT INTO "Telefono" VALUES (36, '987541236', 1, NULL, '2014-05-05 07:00:22.18
 INSERT INTO "Telefono" VALUES (37, '987452146', 2, NULL, '2014-05-05 07:00:22.184+02', NULL, NULL, '2014-05-05 07:00:22.184+02', NULL, 1);
 INSERT INTO "Telefono" VALUES (39, '976542323', 2, NULL, '2014-05-08 06:29:39.062+02', NULL, NULL, '2014-05-08 06:29:39.062+02', NULL, 1);
 INSERT INTO "Telefono" VALUES (40, '1312323', 3, NULL, '2014-05-09 07:12:35.458+02', NULL, NULL, '2014-05-09 07:12:35.458+02', NULL, 1);
-INSERT INTO "Telefono" VALUES (41, '4342343', 0, NULL, '2014-05-17 04:36:10.523+02', NULL, NULL, '2014-05-17 04:36:10.523+02', NULL, 1);
 INSERT INTO "Telefono" VALUES (42, '978456465', 3, NULL, '2014-05-17 04:36:10.523+02', NULL, NULL, '2014-05-17 04:36:10.523+02', NULL, 1);
 INSERT INTO "Telefono" VALUES (43, '30244654', 0, NULL, '2014-05-17 23:24:44.088+02', NULL, NULL, '2014-05-17 23:54:37.44+02', NULL, 0);
 INSERT INTO "Telefono" VALUES (45, '945654654', 2, NULL, '2014-05-18 02:30:47.824+02', NULL, NULL, '2014-05-18 02:30:47.824+02', NULL, 1);
@@ -4455,11 +4461,14 @@ INSERT INTO "Telefono" VALUES (109, '1213232', 0, NULL, '2014-08-02 08:37:30.345
 INSERT INTO "Telefono" VALUES (113, '1213232', 0, NULL, '2014-08-17 00:16:44.344+02', NULL, NULL, '2014-08-17 00:16:44.344+02', NULL, 1);
 INSERT INTO "Telefono" VALUES (104, '2342323', 0, NULL, '2014-07-29 18:55:10.795+02', NULL, '', '2014-08-17 00:17:01.257+02', NULL, 0);
 INSERT INTO "Telefono" VALUES (115, '986565656', 2, NULL, '2014-08-17 00:17:01.257+02', NULL, NULL, '2014-08-17 00:17:01.257+02', NULL, 1);
+INSERT INTO "Telefono" VALUES (41, '4342343', 0, NULL, '2014-05-17 04:36:10.523+02', NULL, '', '2014-08-27 03:10:24.48+02', NULL, 0);
+INSERT INTO "Telefono" VALUES (116, '4342343', 0, NULL, '2014-08-27 03:10:24.48+02', NULL, NULL, '2014-08-27 03:10:24.48+02', NULL, 1);
+INSERT INTO "Telefono" VALUES (117, '978456465', 3, NULL, '2014-08-27 03:10:24.48+02', NULL, NULL, '2014-08-27 03:10:24.48+02', NULL, 1);
 
 
 --
 -- TOC entry 2322 (class 0 OID 125806)
--- Dependencies: 185
+-- Dependencies: 184
 -- Data for Name: TelefonoDireccion; Type: TABLE DATA; Schema: negocio; Owner: postgres
 --
 
@@ -4512,11 +4521,12 @@ INSERT INTO "TelefonoDireccion" VALUES (109, 69, 1);
 INSERT INTO "TelefonoDireccion" VALUES (110, 70, 1);
 INSERT INTO "TelefonoDireccion" VALUES (113, 72, 1);
 INSERT INTO "TelefonoDireccion" VALUES (114, 73, 1);
+INSERT INTO "TelefonoDireccion" VALUES (116, 74, 1);
 
 
 --
 -- TOC entry 2323 (class 0 OID 125810)
--- Dependencies: 186
+-- Dependencies: 185
 -- Data for Name: TelefonoPersona; Type: TABLE DATA; Schema: negocio; Owner: postgres
 --
 
@@ -4558,11 +4568,12 @@ INSERT INTO "TelefonoPersona" VALUES (103, 81, 1);
 INSERT INTO "TelefonoPersona" VALUES (105, 83, 1);
 INSERT INTO "TelefonoPersona" VALUES (111, 90, 1);
 INSERT INTO "TelefonoPersona" VALUES (115, 93, 1);
+INSERT INTO "TelefonoPersona" VALUES (117, 94, 1);
 
 
 --
--- TOC entry 2354 (class 0 OID 0)
--- Dependencies: 187
+-- TOC entry 2355 (class 0 OID 0)
+-- Dependencies: 186
 -- Name: seq_correoelectronico; Type: SEQUENCE SET; Schema: negocio; Owner: postgres
 --
 
@@ -4570,17 +4581,17 @@ SELECT pg_catalog.setval('seq_correoelectronico', 25, true);
 
 
 --
--- TOC entry 2355 (class 0 OID 0)
--- Dependencies: 188
+-- TOC entry 2356 (class 0 OID 0)
+-- Dependencies: 187
 -- Name: seq_direccion; Type: SEQUENCE SET; Schema: negocio; Owner: postgres
 --
 
-SELECT pg_catalog.setval('seq_direccion', 73, true);
+SELECT pg_catalog.setval('seq_direccion', 74, true);
 
 
 --
--- TOC entry 2356 (class 0 OID 0)
--- Dependencies: 225
+-- TOC entry 2357 (class 0 OID 0)
+-- Dependencies: 224
 -- Name: seq_maestroservicio; Type: SEQUENCE SET; Schema: negocio; Owner: postgres
 --
 
@@ -4588,8 +4599,8 @@ SELECT pg_catalog.setval('seq_maestroservicio', 10, true);
 
 
 --
--- TOC entry 2357 (class 0 OID 0)
--- Dependencies: 189
+-- TOC entry 2358 (class 0 OID 0)
+-- Dependencies: 188
 -- Name: seq_novios; Type: SEQUENCE SET; Schema: negocio; Owner: postgres
 --
 
@@ -4597,17 +4608,17 @@ SELECT pg_catalog.setval('seq_novios', 35, true);
 
 
 --
--- TOC entry 2358 (class 0 OID 0)
--- Dependencies: 190
+-- TOC entry 2359 (class 0 OID 0)
+-- Dependencies: 189
 -- Name: seq_persona; Type: SEQUENCE SET; Schema: negocio; Owner: postgres
 --
 
-SELECT pg_catalog.setval('seq_persona', 93, true);
+SELECT pg_catalog.setval('seq_persona', 94, true);
 
 
 --
--- TOC entry 2359 (class 0 OID 0)
--- Dependencies: 191
+-- TOC entry 2360 (class 0 OID 0)
+-- Dependencies: 190
 -- Name: seq_personapotencial; Type: SEQUENCE SET; Schema: negocio; Owner: postgres
 --
 
@@ -4615,26 +4626,26 @@ SELECT pg_catalog.setval('seq_personapotencial', 11, true);
 
 
 --
--- TOC entry 2360 (class 0 OID 0)
--- Dependencies: 192
+-- TOC entry 2361 (class 0 OID 0)
+-- Dependencies: 191
 -- Name: seq_serviciocabecera; Type: SEQUENCE SET; Schema: negocio; Owner: postgres
 --
 
-SELECT pg_catalog.setval('seq_serviciocabecera', 86, true);
-
-
---
--- TOC entry 2361 (class 0 OID 0)
--- Dependencies: 193
--- Name: seq_serviciodetalle; Type: SEQUENCE SET; Schema: negocio; Owner: postgres
---
-
-SELECT pg_catalog.setval('seq_serviciodetalle', 53, true);
+SELECT pg_catalog.setval('seq_serviciocabecera', 87, true);
 
 
 --
 -- TOC entry 2362 (class 0 OID 0)
--- Dependencies: 194
+-- Dependencies: 192
+-- Name: seq_serviciodetalle; Type: SEQUENCE SET; Schema: negocio; Owner: postgres
+--
+
+SELECT pg_catalog.setval('seq_serviciodetalle', 56, true);
+
+
+--
+-- TOC entry 2363 (class 0 OID 0)
+-- Dependencies: 193
 -- Name: seq_serviciosnovios; Type: SEQUENCE SET; Schema: negocio; Owner: postgres
 --
 
@@ -4642,19 +4653,19 @@ SELECT pg_catalog.setval('seq_serviciosnovios', 5, true);
 
 
 --
--- TOC entry 2363 (class 0 OID 0)
--- Dependencies: 195
+-- TOC entry 2364 (class 0 OID 0)
+-- Dependencies: 194
 -- Name: seq_telefono; Type: SEQUENCE SET; Schema: negocio; Owner: postgres
 --
 
-SELECT pg_catalog.setval('seq_telefono', 115, true);
+SELECT pg_catalog.setval('seq_telefono', 117, true);
 
 
 SET search_path = seguridad, pg_catalog;
 
 --
 -- TOC entry 2335 (class 0 OID 125886)
--- Dependencies: 209
+-- Dependencies: 208
 -- Data for Name: rol; Type: TABLE DATA; Schema: seguridad; Owner: postgres
 --
 
@@ -4663,7 +4674,7 @@ INSERT INTO rol VALUES (1, 'admin');
 
 --
 -- TOC entry 2336 (class 0 OID 125889)
--- Dependencies: 210
+-- Dependencies: 209
 -- Data for Name: usuario; Type: TABLE DATA; Schema: seguridad; Owner: postgres
 --
 
@@ -4677,7 +4688,7 @@ SET search_path = soporte, pg_catalog;
 
 --
 -- TOC entry 2337 (class 0 OID 125898)
--- Dependencies: 212
+-- Dependencies: 211
 -- Data for Name: Parametro; Type: TABLE DATA; Schema: soporte; Owner: postgres
 --
 
@@ -4689,7 +4700,7 @@ INSERT INTO "Parametro" VALUES (4, 'CODIGO FEE', 'CODIGO DE SERVICIO FEE', '6', 
 
 --
 -- TOC entry 2334 (class 0 OID 125856)
--- Dependencies: 202
+-- Dependencies: 201
 -- Data for Name: Tablamaestra; Type: TABLE DATA; Schema: soporte; Owner: postgres
 --
 
@@ -4777,7 +4788,7 @@ INSERT INTO "Tablamaestra" VALUES (3, 14, 'PENDIENTE CON MORA', 'PENDIENTE CON M
 
 --
 -- TOC entry 2338 (class 0 OID 125901)
--- Dependencies: 213
+-- Dependencies: 212
 -- Data for Name: destino; Type: TABLE DATA; Schema: soporte; Owner: postgres
 --
 
@@ -4790,7 +4801,7 @@ INSERT INTO destino VALUES (7, 2, 16, 'SJO', 2, 'SAN JOSE', 'ADMIN', '2014-08-06
 
 --
 -- TOC entry 2339 (class 0 OID 125905)
--- Dependencies: 214
+-- Dependencies: 213
 -- Data for Name: pais; Type: TABLE DATA; Schema: soporte; Owner: postgres
 --
 
@@ -4805,8 +4816,8 @@ INSERT INTO pais VALUES (16, 'COSTA RICA', 2, 'ADMIN', '2014-08-06 04:06:45.301+
 
 
 --
--- TOC entry 2364 (class 0 OID 0)
--- Dependencies: 215
+-- TOC entry 2365 (class 0 OID 0)
+-- Dependencies: 214
 -- Name: seq_destino; Type: SEQUENCE SET; Schema: soporte; Owner: postgres
 --
 
@@ -4814,8 +4825,8 @@ SELECT pg_catalog.setval('seq_destino', 7, true);
 
 
 --
--- TOC entry 2365 (class 0 OID 0)
--- Dependencies: 216
+-- TOC entry 2366 (class 0 OID 0)
+-- Dependencies: 215
 -- Name: seq_pais; Type: SEQUENCE SET; Schema: soporte; Owner: postgres
 --
 
@@ -4824,7 +4835,7 @@ SELECT pg_catalog.setval('seq_pais', 16, true);
 
 --
 -- TOC entry 2333 (class 0 OID 125844)
--- Dependencies: 199
+-- Dependencies: 198
 -- Data for Name: ubigeo; Type: TABLE DATA; Schema: soporte; Owner: postgres
 --
 
@@ -6890,7 +6901,7 @@ INSERT INTO ubigeo VALUES ('250401', '25', '04', '01', 'PURUS');
 SET search_path = negocio, pg_catalog;
 
 --
--- TOC entry 2255 (class 2606 OID 125946)
+-- TOC entry 2256 (class 2606 OID 125946)
 -- Name: cons_uniq_idpersona; Type: CONSTRAINT; Schema: negocio; Owner: postgres; Tablespace: 
 --
 
@@ -6899,7 +6910,7 @@ ALTER TABLE ONLY "Persona"
 
 
 --
--- TOC entry 2249 (class 2606 OID 125948)
+-- TOC entry 2250 (class 2606 OID 125948)
 -- Name: pk_correoelectronico; Type: CONSTRAINT; Schema: negocio; Owner: postgres; Tablespace: 
 --
 
@@ -6908,7 +6919,7 @@ ALTER TABLE ONLY "CorreoElectronico"
 
 
 --
--- TOC entry 2251 (class 2606 OID 125950)
+-- TOC entry 2252 (class 2606 OID 125950)
 -- Name: pk_cronogramapago; Type: CONSTRAINT; Schema: negocio; Owner: postgres; Tablespace: 
 --
 
@@ -6917,7 +6928,7 @@ ALTER TABLE ONLY "CronogramaPago"
 
 
 --
--- TOC entry 2253 (class 2606 OID 125952)
+-- TOC entry 2254 (class 2606 OID 125952)
 -- Name: pk_direccion; Type: CONSTRAINT; Schema: negocio; Owner: postgres; Tablespace: 
 --
 
@@ -6926,7 +6937,7 @@ ALTER TABLE ONLY "Direccion"
 
 
 --
--- TOC entry 2297 (class 2606 OID 126115)
+-- TOC entry 2296 (class 2606 OID 126148)
 -- Name: pk_maestroservicios; Type: CONSTRAINT; Schema: negocio; Owner: postgres; Tablespace: 
 --
 
@@ -6935,7 +6946,7 @@ ALTER TABLE ONLY "MaestroServicios"
 
 
 --
--- TOC entry 2257 (class 2606 OID 125954)
+-- TOC entry 2258 (class 2606 OID 125954)
 -- Name: pk_persona; Type: CONSTRAINT; Schema: negocio; Owner: postgres; Tablespace: 
 --
 
@@ -6944,7 +6955,7 @@ ALTER TABLE ONLY "Persona"
 
 
 --
--- TOC entry 2261 (class 2606 OID 125956)
+-- TOC entry 2262 (class 2606 OID 125956)
 -- Name: pk_personacontactoproveedor; Type: CONSTRAINT; Schema: negocio; Owner: postgres; Tablespace: 
 --
 
@@ -6953,7 +6964,7 @@ ALTER TABLE ONLY "PersonaContactoProveedor"
 
 
 --
--- TOC entry 2263 (class 2606 OID 125958)
+-- TOC entry 2264 (class 2606 OID 125958)
 -- Name: pk_personadireccion; Type: CONSTRAINT; Schema: negocio; Owner: postgres; Tablespace: 
 --
 
@@ -6962,7 +6973,7 @@ ALTER TABLE ONLY "PersonaDireccion"
 
 
 --
--- TOC entry 2265 (class 2606 OID 126130)
+-- TOC entry 2266 (class 2606 OID 126130)
 -- Name: pk_personapotencial; Type: CONSTRAINT; Schema: negocio; Owner: postgres; Tablespace: 
 --
 
@@ -6971,7 +6982,7 @@ ALTER TABLE ONLY "Personapotencial"
 
 
 --
--- TOC entry 2259 (class 2606 OID 125960)
+-- TOC entry 2260 (class 2606 OID 125960)
 -- Name: pk_personaproveedor; Type: CONSTRAINT; Schema: negocio; Owner: postgres; Tablespace: 
 --
 
@@ -6980,7 +6991,7 @@ ALTER TABLE ONLY "PersonaAdicional"
 
 
 --
--- TOC entry 2267 (class 2606 OID 125962)
+-- TOC entry 2268 (class 2606 OID 125962)
 -- Name: pk_programanovios; Type: CONSTRAINT; Schema: negocio; Owner: postgres; Tablespace: 
 --
 
@@ -6989,7 +7000,7 @@ ALTER TABLE ONLY "ProgramaNovios"
 
 
 --
--- TOC entry 2269 (class 2606 OID 125964)
+-- TOC entry 2298 (class 2606 OID 126157)
 -- Name: pk_proveedortiposervicio; Type: CONSTRAINT; Schema: negocio; Owner: postgres; Tablespace: 
 --
 
@@ -6998,7 +7009,7 @@ ALTER TABLE ONLY "ProveedorTipoServicio"
 
 
 --
--- TOC entry 2271 (class 2606 OID 125966)
+-- TOC entry 2270 (class 2606 OID 125966)
 -- Name: pk_serviciocabecera; Type: CONSTRAINT; Schema: negocio; Owner: postgres; Tablespace: 
 --
 
@@ -7007,7 +7018,7 @@ ALTER TABLE ONLY "ServicioCabecera"
 
 
 --
--- TOC entry 2273 (class 2606 OID 125968)
+-- TOC entry 2272 (class 2606 OID 125968)
 -- Name: pk_serviciodetalle; Type: CONSTRAINT; Schema: negocio; Owner: postgres; Tablespace: 
 --
 
@@ -7016,7 +7027,7 @@ ALTER TABLE ONLY "ServicioDetalle"
 
 
 --
--- TOC entry 2275 (class 2606 OID 125970)
+-- TOC entry 2274 (class 2606 OID 125970)
 -- Name: pk_telefono; Type: CONSTRAINT; Schema: negocio; Owner: postgres; Tablespace: 
 --
 
@@ -7025,7 +7036,7 @@ ALTER TABLE ONLY "Telefono"
 
 
 --
--- TOC entry 2277 (class 2606 OID 125972)
+-- TOC entry 2276 (class 2606 OID 125972)
 -- Name: pk_telefonodireccion; Type: CONSTRAINT; Schema: negocio; Owner: postgres; Tablespace: 
 --
 
@@ -7034,7 +7045,7 @@ ALTER TABLE ONLY "TelefonoDireccion"
 
 
 --
--- TOC entry 2279 (class 2606 OID 125974)
+-- TOC entry 2278 (class 2606 OID 125974)
 -- Name: pk_telefonopersona; Type: CONSTRAINT; Schema: negocio; Owner: postgres; Tablespace: 
 --
 
@@ -7045,7 +7056,7 @@ ALTER TABLE ONLY "TelefonoPersona"
 SET search_path = seguridad, pg_catalog;
 
 --
--- TOC entry 2285 (class 2606 OID 125976)
+-- TOC entry 2284 (class 2606 OID 125976)
 -- Name: pk_rol; Type: CONSTRAINT; Schema: seguridad; Owner: postgres; Tablespace: 
 --
 
@@ -7054,7 +7065,7 @@ ALTER TABLE ONLY rol
 
 
 --
--- TOC entry 2287 (class 2606 OID 125978)
+-- TOC entry 2286 (class 2606 OID 125978)
 -- Name: pk_usuario; Type: CONSTRAINT; Schema: seguridad; Owner: postgres; Tablespace: 
 --
 
@@ -7063,7 +7074,7 @@ ALTER TABLE ONLY usuario
 
 
 --
--- TOC entry 2289 (class 2606 OID 125980)
+-- TOC entry 2288 (class 2606 OID 125980)
 -- Name: uq_usuario; Type: CONSTRAINT; Schema: seguridad; Owner: postgres; Tablespace: 
 --
 
@@ -7074,7 +7085,7 @@ ALTER TABLE ONLY usuario
 SET search_path = soporte, pg_catalog;
 
 --
--- TOC entry 2293 (class 2606 OID 125982)
+-- TOC entry 2292 (class 2606 OID 125982)
 -- Name: pk_destino; Type: CONSTRAINT; Schema: soporte; Owner: postgres; Tablespace: 
 --
 
@@ -7083,7 +7094,7 @@ ALTER TABLE ONLY destino
 
 
 --
--- TOC entry 2295 (class 2606 OID 125984)
+-- TOC entry 2294 (class 2606 OID 125984)
 -- Name: pk_pais; Type: CONSTRAINT; Schema: soporte; Owner: postgres; Tablespace: 
 --
 
@@ -7092,7 +7103,7 @@ ALTER TABLE ONLY pais
 
 
 --
--- TOC entry 2291 (class 2606 OID 125986)
+-- TOC entry 2290 (class 2606 OID 125986)
 -- Name: pk_parametro; Type: CONSTRAINT; Schema: soporte; Owner: postgres; Tablespace: 
 --
 
@@ -7101,7 +7112,7 @@ ALTER TABLE ONLY "Parametro"
 
 
 --
--- TOC entry 2283 (class 2606 OID 125988)
+-- TOC entry 2282 (class 2606 OID 125988)
 -- Name: pk_tablamaestra; Type: CONSTRAINT; Schema: soporte; Owner: postgres; Tablespace: 
 --
 
@@ -7110,7 +7121,7 @@ ALTER TABLE ONLY "Tablamaestra"
 
 
 --
--- TOC entry 2281 (class 2606 OID 125990)
+-- TOC entry 2280 (class 2606 OID 125990)
 -- Name: pk_ubigeo; Type: CONSTRAINT; Schema: soporte; Owner: postgres; Tablespace: 
 --
 
@@ -7139,7 +7150,7 @@ ALTER TABLE ONLY "ServicioCabecera"
 
 
 --
--- TOC entry 2300 (class 2606 OID 126001)
+-- TOC entry 2301 (class 2606 OID 126001)
 -- Name: fk_contacto; Type: FK CONSTRAINT; Schema: negocio; Owner: postgres
 --
 
@@ -7148,7 +7159,7 @@ ALTER TABLE ONLY "PersonaContactoProveedor"
 
 
 --
--- TOC entry 2298 (class 2606 OID 126006)
+-- TOC entry 2299 (class 2606 OID 126006)
 -- Name: fk_correopersona; Type: FK CONSTRAINT; Schema: negocio; Owner: postgres
 --
 
@@ -7157,7 +7168,7 @@ ALTER TABLE ONLY "CorreoElectronico"
 
 
 --
--- TOC entry 2302 (class 2606 OID 126011)
+-- TOC entry 2303 (class 2606 OID 126011)
 -- Name: fk_direccion; Type: FK CONSTRAINT; Schema: negocio; Owner: postgres
 --
 
@@ -7166,7 +7177,7 @@ ALTER TABLE ONLY "PersonaDireccion"
 
 
 --
--- TOC entry 2303 (class 2606 OID 126016)
+-- TOC entry 2304 (class 2606 OID 126016)
 -- Name: fk_persona; Type: FK CONSTRAINT; Schema: negocio; Owner: postgres
 --
 
@@ -7175,7 +7186,7 @@ ALTER TABLE ONLY "PersonaDireccion"
 
 
 --
--- TOC entry 2299 (class 2606 OID 126021)
+-- TOC entry 2300 (class 2606 OID 126021)
 -- Name: fk_personaproveedorpersona; Type: FK CONSTRAINT; Schema: negocio; Owner: postgres
 --
 
@@ -7184,7 +7195,7 @@ ALTER TABLE ONLY "PersonaAdicional"
 
 
 --
--- TOC entry 2301 (class 2606 OID 126026)
+-- TOC entry 2302 (class 2606 OID 126026)
 -- Name: fk_proveedor; Type: FK CONSTRAINT; Schema: negocio; Owner: postgres
 --
 
@@ -7193,7 +7204,7 @@ ALTER TABLE ONLY "PersonaContactoProveedor"
 
 
 --
--- TOC entry 2304 (class 2606 OID 126117)
+-- TOC entry 2309 (class 2606 OID 126158)
 -- Name: fk_proveedorservicio; Type: FK CONSTRAINT; Schema: negocio; Owner: postgres
 --
 
@@ -7222,7 +7233,7 @@ ALTER TABLE ONLY usuario
 
 
 --
--- TOC entry 2350 (class 0 OID 0)
+-- TOC entry 2351 (class 0 OID 0)
 -- Dependencies: 10
 -- Name: public; Type: ACL; Schema: -; Owner: postgres
 --
@@ -7233,7 +7244,7 @@ GRANT ALL ON SCHEMA public TO postgres;
 GRANT ALL ON SCHEMA public TO PUBLIC;
 
 
--- Completed on 2014-08-25 01:00:59
+-- Completed on 2014-08-26 23:53:47
 
 --
 -- PostgreSQL database dump complete
