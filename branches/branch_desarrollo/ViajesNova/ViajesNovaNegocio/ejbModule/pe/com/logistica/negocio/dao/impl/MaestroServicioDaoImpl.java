@@ -104,7 +104,7 @@ public class MaestroServicioDaoImpl implements MaestroServicioDao {
 			throws SQLException {
 		Connection conn = null;
 		CallableStatement cs = null;
-		String sql = "{ ? = call negocio.fn_ingresarservicio(?,?,?,?,?,?,?) }";
+		String sql = "{ ? = call negocio.fn_ingresarservicio(?,?,?,?,?,?,?,?,?,?,?,?) }";
 		Integer resultado = null;
 
 		try {
@@ -113,6 +113,12 @@ public class MaestroServicioDaoImpl implements MaestroServicioDao {
 			int i = 1;
 			cs.registerOutParameter(i++, Types.INTEGER);
 			cs.setString(i++, UtilJdbc.convertirMayuscula(servicio.getNombre()));
+			if (StringUtils.isNotBlank(servicio.getDescripcionCorta())){
+				cs.setString(i++, UtilJdbc.convertirMayuscula(servicio.getDescripcionCorta()));
+			}
+			else{
+				cs.setNull(i++, Types.VARCHAR);
+			}
 			if (StringUtils.isNotBlank(servicio.getDescripcion())){
 				cs.setString(i++, UtilJdbc.convertirMayuscula(servicio.getDescripcion()));
 			}
@@ -120,8 +126,28 @@ public class MaestroServicioDaoImpl implements MaestroServicioDao {
 				cs.setNull(i++, Types.VARCHAR);
 			}
 			cs.setBoolean(i++, servicio.isRequiereFee());
+			if (servicio.getServicioFee().getCodigoEntero()!= null && servicio.getServicioFee().getCodigoEntero().intValue()!=0){
+				cs.setInt(i++, servicio.getServicioFee().getCodigoEntero().intValue());
+			}
+			else{
+				cs.setNull(i++, Types.INTEGER);
+			}
+			
 			cs.setBoolean(i++, servicio.isPagaImpto());
+			if (servicio.getServicioImpto().getCodigoEntero()!= null && servicio.getServicioImpto().getCodigoEntero().intValue()!=0){
+				cs.setInt(i++, servicio.getServicioImpto().getCodigoEntero().intValue());
+			}
+			else{
+				cs.setNull(i++, Types.INTEGER);
+			}
 			cs.setBoolean(i++, servicio.isCargaComision());
+			cs.setBoolean(i++, servicio.isCargaIgv());
+			if (servicio.getValorComision() != null){
+				cs.setBigDecimal(i++, servicio.getValorComision());
+			}
+			else{
+				cs.setNull(i++, Types.DECIMAL);
+			}
 			cs.setString(i++, servicio.getUsuarioCreacion());
 			cs.setString(i++, servicio.getIpCreacion());
 			cs.execute();
