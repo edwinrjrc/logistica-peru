@@ -114,4 +114,10 @@ public interface NegocioServicio {
 
 	Integer actualizarVentaServicio(ServicioAgencia servicioAgencia)
 			throws ErrorRegistroDataException, SQLException, Exception;
+
+	List<MaestroServicio> listarMaestroServicioFee() throws SQLException,
+			Exception;
+
+	List<MaestroServicio> listarMaestroServicioImpto() throws SQLException,
+			Exception;
 }
