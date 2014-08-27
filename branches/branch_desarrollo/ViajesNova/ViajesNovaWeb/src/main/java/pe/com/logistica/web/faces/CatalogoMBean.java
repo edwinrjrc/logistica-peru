@@ -57,6 +57,8 @@ public class CatalogoMBean implements Serializable{
 	private List<SelectItem> catalogoTipoDestino;
 	private List<SelectItem> catalogoDestino;
 	private List<SelectItem> catalogoTipoServicio;
+	private List<SelectItem> catalogoTipoServicioFee;
+	private List<SelectItem> catalogoTipoServicioImpto;
 	private List<SelectItem> catalogoFormaPago;
 	private List<SelectItem> catalogoVendedores;
 
@@ -442,6 +444,61 @@ public class CatalogoMBean implements Serializable{
 	 */
 	public void setCatalogoVendedores(List<SelectItem> catalogoVendedores) {
 		this.catalogoVendedores = catalogoVendedores;
+	}
+
+	/**
+	 * @return the catalogoTipoServicioFee
+	 */
+	public List<SelectItem> getCatalogoTipoServicioFee() {
+		try {
+			List<MaestroServicio> lista = negocioServicio.listarMaestroServicioFee();
+			SelectItem si = null;
+			catalogoTipoServicioFee = new ArrayList<SelectItem>();
+			for (MaestroServicio maestroServicio : lista) {
+				si = new SelectItem();
+				si.setLabel(maestroServicio.getNombre());
+				si.setValue(maestroServicio.getCodigoEntero());
+				catalogoTipoServicioFee.add(si);
+			}
+		} catch (Exception e) {
+			logger.error(e.getMessage(), e);
+		}
+		return catalogoTipoServicioFee;
+	}
+
+	/**
+	 * @param catalogoTipoServicioFee the catalogoTipoServicioFee to set
+	 */
+	public void setCatalogoTipoServicioFee(List<SelectItem> catalogoTipoServicioFee) {
+		this.catalogoTipoServicioFee = catalogoTipoServicioFee;
+	}
+
+	/**
+	 * @return the catalogoTipoServicioImpto
+	 */
+	public List<SelectItem> getCatalogoTipoServicioImpto() {
+		try {
+			List<MaestroServicio> lista = negocioServicio.listarMaestroServicioFee();
+			SelectItem si = null;
+			catalogoTipoServicioImpto = new ArrayList<SelectItem>();
+			for (MaestroServicio maestroServicio : lista) {
+				si = new SelectItem();
+				si.setLabel(maestroServicio.getNombre());
+				si.setValue(maestroServicio.getCodigoEntero());
+				catalogoTipoServicioImpto.add(si);
+			}
+		} catch (Exception e) {
+			logger.error(e.getMessage(), e);
+		}
+		return catalogoTipoServicioImpto;
+	}
+
+	/**
+	 * @param catalogoTipoServicioImpto the catalogoTipoServicioImpto to set
+	 */
+	public void setCatalogoTipoServicioImpto(
+			List<SelectItem> catalogoTipoServicioImpto) {
+		this.catalogoTipoServicioImpto = catalogoTipoServicioImpto;
 	}
 
 }

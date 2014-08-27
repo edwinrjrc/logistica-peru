@@ -239,6 +239,20 @@ public class NegocioServicioImpl implements NegocioServicio {
 
 		return ejbSession.listarMaestroServicio();
 	}
+	
+	@Override
+	public List<MaestroServicio> listarMaestroServicioFee() throws SQLException,
+			Exception {
+
+		return ejbSession.listarMaestroServicioFee();
+	}
+	
+	@Override
+	public List<MaestroServicio> listarMaestroServicioImpto() throws SQLException,
+			Exception {
+
+		return ejbSession.listarMaestroServicioImpto();
+	}
 
 	@Override
 	public MaestroServicio consultarMaestroServicio(int idMaestroServicio)

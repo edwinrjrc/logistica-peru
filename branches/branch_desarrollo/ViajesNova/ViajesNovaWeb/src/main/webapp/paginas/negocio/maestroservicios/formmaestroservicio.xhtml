@@ -23,7 +23,7 @@
 
 		<h:form id="idFrMaeServicio">
 			<h:panelGrid id="idGrFrMaeServicio" cellpadding="0" cellspacing="0"
-				border="0" style="width:100%;" columns="2">
+				border="0" style="width:100%;" columns="4">
 				<f:facet name="header">
 					<h:panelGrid cellpadding="0" cellspacing="0" border="0"
 						style="width:100%;text-align:left;" columns="1">
@@ -42,6 +42,9 @@
 					<rich:message for="idNomServicio" showDetail="false"
 						showSummary="true" />
 				</h:panelGrid>
+				<h:outputText value=""  />
+				<h:outputText value=""  />
+				
 				<h:outputLabel value="Descripcion Corta"
 					style="width: 100px; text-align:left" />
 				<h:panelGrid cellpadding="0" cellspacing="0" border="0"
@@ -52,6 +55,9 @@
 					<rich:message for="idDescServicioCorta" showDetail="false"
 						showSummary="true" />
 				</h:panelGrid>
+				<h:outputText value=""  />
+				<h:outputText value=""  />
+				
 				<h:outputLabel value="Descripcion Larga"
 					style="width: 100px; text-align:left" />
 				<h:panelGrid cellpadding="0" cellspacing="0" border="0"
@@ -62,26 +68,46 @@
 					<rich:message for="idDescServicioLarga" showDetail="false"
 						showSummary="true" />
 				</h:panelGrid>
+				<h:outputText value=""  />
+				<h:outputText value=""  />
+				
 				<h:outputLabel value="Requiere FEE"
 					style="width: 100px; text-align:left" />
 				<h:selectBooleanCheckbox
 					value="#{maeServiciosMBean.maestroServicio.requiereFee}" />
+				<h:outputText value="" rendered="#{!maeServiciosMBean.maestroServicio.requiereFee}" />
+				<h:outputText value="" rendered="#{!maeServiciosMBean.maestroServicio.requiereFee}" />
+				<h:outputLabel value="Fee" rendered="#{maeServiciosMBean.maestroServicio.requiereFee}" />
+				<h:selectOneMenu value="">
+				</h:selectOneMenu>
+				
 				<h:outputLabel value="Paga Impuesto"
 					style="width: 100px; text-align:left" />
 				<h:selectBooleanCheckbox
 					value="#{maeServiciosMBean.maestroServicio.pagaImpto}" />
+				<h:outputText value="" rendered="#{!maeServiciosMBean.maestroServicio.pagaImpto}" />
+				<h:outputText value="" rendered="#{!maeServiciosMBean.maestroServicio.pagaImpto}" />
+				
 				<h:outputLabel value="Carga Comision"
 					style="width: 100px; text-align:left" />
 				<h:selectBooleanCheckbox
 					value="#{maeServiciosMBean.maestroServicio.cargaComision}" />
+				<h:outputText value=""  />
+				<h:outputText value=""  />
+				
 				<h:outputLabel value="Es Impuesto" rendered="#{maeServiciosMBean.editarMaestroServicio}"
 					style="width: 100px; text-align:left" />
 				<h:selectBooleanCheckbox rendered="#{maeServiciosMBean.editarMaestroServicio}"
 					value="#{maeServiciosMBean.maestroServicio.esImpuesto}" />
+				<h:outputText value=""  />
+				<h:outputText value=""  />
+				
 				<h:outputLabel value="Es Fee" rendered="#{maeServiciosMBean.editarMaestroServicio}"
 					style="width: 100px; text-align:left" />
 				<h:selectBooleanCheckbox rendered="#{maeServiciosMBean.editarMaestroServicio}"
 					value="#{maeServiciosMBean.maestroServicio.esFee}" />
+				<h:outputText value=""  />
+				<h:outputText value=""  />
 
 				<f:facet name="footer">
 					<h:panelGrid cellpadding="0" cellspacing="0" border="0"
