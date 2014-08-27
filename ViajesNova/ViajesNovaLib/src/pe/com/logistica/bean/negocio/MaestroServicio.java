@@ -6,6 +6,7 @@ package pe.com.logistica.bean.negocio;
 import java.math.BigDecimal;
 
 import pe.com.logistica.bean.base.BaseNegocio;
+import pe.com.logistica.bean.base.BaseVO;
 
 /**
  * @author edwreb
@@ -18,10 +19,14 @@ public class MaestroServicio extends BaseNegocio {
 	private static final long serialVersionUID = 499125844585986995L;
 	
 	private String nombre;
+	private String descripcionCorta;
 	private String descripcion;
 	private boolean requiereFee;
+	private BaseVO servicioFee;
 	private boolean pagaImpto;
+	private BaseVO servicioImpto;
 	private boolean cargaComision;
+	private boolean cargaIgv;
 	private boolean comisionPorcentaje;
 	private BigDecimal valorComision;
 
@@ -158,6 +163,68 @@ public class MaestroServicio extends BaseNegocio {
 	 */
 	public void setEsFee(boolean esFee) {
 		this.esFee = esFee;
+	}
+
+	/**
+	 * @return the descripcionCorta
+	 */
+	public String getDescripcionCorta() {
+		return descripcionCorta;
+	}
+
+	/**
+	 * @param descripcionCorta the descripcionCorta to set
+	 */
+	public void setDescripcionCorta(String descripcionCorta) {
+		this.descripcionCorta = descripcionCorta;
+	}
+
+	/**
+	 * @return the servicioFee
+	 */
+	public BaseVO getServicioFee() {
+		if (servicioFee == null){
+			servicioFee = new BaseVO();
+		}
+		return servicioFee;
+	}
+
+	/**
+	 * @param servicioFee the servicioFee to set
+	 */
+	public void setServicioFee(BaseVO servicioFee) {
+		this.servicioFee = servicioFee;
+	}
+
+	/**
+	 * @return the servicioImpto
+	 */
+	public BaseVO getServicioImpto() {
+		if (servicioImpto == null){
+			servicioImpto = new BaseVO();
+		}
+		return servicioImpto;
+	}
+
+	/**
+	 * @param servicioImpto the servicioImpto to set
+	 */
+	public void setServicioImpto(BaseVO servicioImpto) {
+		this.servicioImpto = servicioImpto;
+	}
+
+	/**
+	 * @return the cargaIgv
+	 */
+	public boolean isCargaIgv() {
+		return cargaIgv;
+	}
+
+	/**
+	 * @param cargaIgv the cargaIgv to set
+	 */
+	public void setCargaIgv(boolean cargaIgv) {
+		this.cargaIgv = cargaIgv;
 	}
 
 }
