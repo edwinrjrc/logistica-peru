@@ -96,6 +96,10 @@ public interface NegocioSessionRemote {
 	
 	public List<MaestroServicio> listarMaestroServicio() throws SQLException, Exception;
 	
+	public List<MaestroServicio> listarMaestroServicioFee() throws SQLException, Exception;
+	
+	public List<MaestroServicio> listarMaestroServicioImpto() throws SQLException, Exception;
+	
 	public MaestroServicio consultarMaestroServicio(int idMaestroServicio) throws SQLException, Exception;
 
 	public Integer actualizarNovios(ProgramaNovios programaNovios) throws SQLException, Exception;
