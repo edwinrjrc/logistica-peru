@@ -56,16 +56,11 @@ public class MaestroServicioDaoImpl implements MaestroServicioDao {
 				bean = new MaestroServicio();
 				bean.setCodigoEntero(UtilJdbc.obtenerNumero(rs, "id"));
 				bean.setNombre(UtilJdbc.obtenerCadena(rs, "nombre"));
-				bean.setDescripcion(UtilJdbc.obtenerCadena(rs, "descripcion"));
+				bean.setDescripcionCorta(UtilJdbc.obtenerCadena(rs, "desccorta"));
+				bean.setDescripcion(UtilJdbc.obtenerCadena(rs, "desclarga"));
 				bean.setRequiereFee(UtilJdbc.obtenerBoolean(rs, "requierefee"));
 				bean.setPagaImpto(UtilJdbc.obtenerBoolean(rs, "pagaimpto"));
 				bean.setCargaComision(UtilJdbc.obtenerBoolean(rs, "cargacomision"));
-				bean.setUsuarioCreacion(UtilJdbc.obtenerCadena(rs, "usuariocreacion"));
-				bean.setFechaCreacion(UtilJdbc.obtenerFecha(rs, "fechacreacion"));
-				bean.setIpCreacion(UtilJdbc.obtenerCadena(rs, "ipcreacion"));
-				bean.setUsuarioModificacion(UtilJdbc.obtenerCadena(rs, "usuariomodificacion"));
-				bean.setFechaModificacion(UtilJdbc.obtenerFecha(rs, "fechamodificacion"));
-				bean.setIpModificacion(UtilJdbc.obtenerCadena(rs, "ipmodificacion"));
 				resultado.add(bean);
 			}
 		} catch (SQLException e) {
@@ -301,7 +296,7 @@ public class MaestroServicioDaoImpl implements MaestroServicioDao {
 			throws SQLException {
 		Connection conn = null;
 		CallableStatement cs = null;
-		String sql = "{ ? = call negocio.fn_actualizarservicio(?,?,?,?,?,?,?,?,?,?) }";
+		String sql = "{ ? = call negocio.fn_actualizarservicio(?,?,?,?,?,?,?,?,?,?,?,?,?) }";
 		boolean resultado = false;
 
 		try {
@@ -311,6 +306,12 @@ public class MaestroServicioDaoImpl implements MaestroServicioDao {
 			cs.registerOutParameter(i++, Types.BOOLEAN);
 			cs.setInt(i++, servicio.getCodigoEntero().intValue());
 			cs.setString(i++, UtilJdbc.convertirMayuscula(servicio.getNombre()));
+			if (StringUtils.isNotBlank(servicio.getDescripcionCorta())){
+				cs.setString(i++, UtilJdbc.convertirMayuscula(servicio.getDescripcionCorta()));
+			}
+			else{
+				cs.setNull(i++, Types.VARCHAR);
+			}
 			if (StringUtils.isNotBlank(servicio.getDescripcion())){
 				cs.setString(i++, UtilJdbc.convertirMayuscula(servicio.getDescripcion()));
 			}
@@ -318,12 +319,24 @@ public class MaestroServicioDaoImpl implements MaestroServicioDao {
 				cs.setNull(i++, Types.VARCHAR);
 			}
 			cs.setBoolean(i++, servicio.isRequiereFee());
+			if (servicio.getServicioFee().getCodigoEntero()!= null && servicio.getServicioFee().getCodigoEntero().intValue()!=0){
+				cs.setInt(i++, servicio.getServicioFee().getCodigoEntero().intValue());
+			}
+			else{
+				cs.setNull(i++, Types.INTEGER);
+			}
 			cs.setBoolean(i++, servicio.isPagaImpto());
+			if (servicio.getServicioImpto().getCodigoEntero()!= null && servicio.getServicioImpto().getCodigoEntero().intValue()!=0){
+				cs.setInt(i++, servicio.getServicioImpto().getCodigoEntero().intValue());
+			}
+			else{
+				cs.setNull(i++, Types.INTEGER);
+			}
 			cs.setBoolean(i++, servicio.isCargaComision());
 			cs.setBoolean(i++, servicio.isEsImpuesto());
 			cs.setBoolean(i++, servicio.isEsFee());
-			cs.setString(i++, servicio.getUsuarioCreacion());
-			cs.setString(i++, servicio.getIpCreacion());
+			cs.setString(i++, servicio.getUsuarioModificacion());
+			cs.setString(i++, servicio.getIpModificacion());
 			cs.execute();
 
 			resultado = cs.getBoolean(1);
@@ -377,18 +390,13 @@ public class MaestroServicioDaoImpl implements MaestroServicioDao {
 				resultado = new MaestroServicio();
 				resultado.setCodigoEntero(UtilJdbc.obtenerNumero(rs, "id"));
 				resultado.setNombre(UtilJdbc.obtenerCadena(rs, "nombre"));
-				resultado.setDescripcion(UtilJdbc.obtenerCadena(rs, "descripcion"));
+				resultado.setDescripcionCorta(UtilJdbc.obtenerCadena(rs, "desccorta"));
+				resultado.setDescripcion(UtilJdbc.obtenerCadena(rs, "desclarga"));
 				resultado.setRequiereFee(UtilJdbc.obtenerBoolean(rs, "requierefee"));
 				resultado.setPagaImpto(UtilJdbc.obtenerBoolean(rs, "pagaimpto"));
 				resultado.setCargaComision(UtilJdbc.obtenerBoolean(rs, "cargacomision"));
 				resultado.setEsImpuesto(UtilJdbc.obtenerBoolean(rs, "esimpuesto"));
 				resultado.setEsFee(UtilJdbc.obtenerBoolean(rs, "esfee"));
-				resultado.setUsuarioCreacion(UtilJdbc.obtenerCadena(rs, "usuariocreacion"));
-				resultado.setFechaCreacion(UtilJdbc.obtenerFecha(rs, "fechacreacion"));
-				resultado.setIpCreacion(UtilJdbc.obtenerCadena(rs, "ipcreacion"));
-				resultado.setUsuarioModificacion(UtilJdbc.obtenerCadena(rs, "usuariomodificacion"));
-				resultado.setFechaModificacion(UtilJdbc.obtenerFecha(rs, "fechamodificacion"));
-				resultado.setIpModificacion(UtilJdbc.obtenerCadena(rs, "ipmodificacion"));
 			}
 		} catch (SQLException e) {
 			throw new SQLException(e);
