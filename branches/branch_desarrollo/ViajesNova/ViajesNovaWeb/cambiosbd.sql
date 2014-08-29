@@ -1,4 +1,4 @@
-CREATE OR REPLACE FUNCTION negocio.fn_consultarclientescumple()
+CREATE OR REPLACE FUNCTION negocio.fn_listarcorreoscontactos()
   RETURNS refcursor AS
 $BODY$
 declare micursor refcursor;
@@ -6,15 +6,14 @@ declare micursor refcursor;
 begin
 
 open micursor for
-select id, idtipopersona, nombres, apellidopaterno, apellidomaterno, 
-       idgenero, idestadocivil, idtipodocumento, numerodocumento, usuariocreacion, 
-       fechacreacion, ipcreacion, usuariomodificacion, fechamodificacion, 
-       ipmodificacion, idestadoregistro, fecnacimiento, nropasaporte, 
-       fecvctopasaporte
-  from negocio."Persona" p
- where p.idestadoregistro              = 1
-   and p.idtipopersona                 = 1
-   and to_char(p.fecnacimiento,'ddMM') = to_char(current_date,'ddMM');
+select cor.correo, con.*
+  from negocio."CorreoElectronico" cor,
+       negocio."Persona" con
+ where cor.idestadoregistro = 1
+   and con.idestadoregistro = 1
+   and con.idtipopersona    = 3
+   and cor.idpersona        = con.id;
+
 
 return micursor;
 
@@ -23,73 +22,45 @@ $BODY$
   LANGUAGE plpgsql VOLATILE
   COST 100;
   
--- Function: negocio.fn_listarmaestroservicios()
-
--- DROP FUNCTION negocio.fn_listarmaestroservicios();
-
-CREATE OR REPLACE FUNCTION negocio.fn_listarmaestroservicios()
-  RETURNS refcursor AS
-$BODY$
-
-declare micursor refcursor;
-
-begin
-
-open micursor for
-SELECT id, nombre, desccorta, desclarga, requierefee, pagaimpto, cargacomision
-  FROM negocio."MaestroServicios"
- WHERE idestadoregistro = 1;
-
-return micursor;
-
-end;
-$BODY$
-  LANGUAGE plpgsql VOLATILE
-  COST 100;
-
--- Function: negocio.fn_actualizarservicio(integer, character varying, character varying, boolean, boolean, boolean, boolean, boolean, character varying, character varying)
-
-
-CREATE OR REPLACE FUNCTION negocio.fn_actualizarservicio(p_id integer, p_nombreservicio character varying, 
-p_desccorta character varying, p_desclarga character varying, p_requierefee boolean, p_idmaeserfee integer, p_pagaimpto boolean, 
-p_idmaeserimpto integer, p_cargacomision boolean, 
-p_esimpuesto boolean, p_esfee boolean, p_usuariomodificacion character varying, p_ipmodificacion character varying)
+select percon.idcontacto, cli.*
+  from negocio.vw_clientesnova cli,
+       negocio."PersonaContactoProveedor" percon,
+       negocio."CorreoElectronico" cor
+ where percon.idestadoregistro = 1
+   and percon.idproveedor = cli.id
+   and cor.idestadoregistro = 1
+   and cor.idpersona = percon.idcontacto
+   and (select count(1) from negocio.vw_consultacontacto where id = percon.idcontacto) >0;
+   
+CREATE OR REPLACE FUNCTION negocio.fn_tienecorreo(p_idpersona integer)
   RETURNS boolean AS
 $BODY$
 
-declare fechahoy timestamp with time zone;
+declare cantidad integer;
 
 begin
 
-select current_timestamp into fechahoy;
+select count(1)
+  into cantidad
+  from negocio."PersonaContactoProveedor" percon,
+       negocio."CorreoElectronico" cor
+ where percon.idestadoregistro = 1 
+   and percon.idcontacto       = cor.idpersona
+   and percon.idproveedor      = p_idpersona;
 
-UPDATE negocio."MaestroServicios"
-   SET nombre              = p_nombreservicio, 
-       desccorta           = p_desccorta, 
-       desclarga           = p_desclarga, 
-       requierefee         = p_requierefee, 
-       idmaeserfee         = p_idmaeserfee,
-       pagaimpto           = p_pagaimpto, 
-       idmaeserimpto       = p_idmaeserimpto,
-       cargacomision       = p_cargacomision,
-       esimpuesto          = p_esimpuesto,
-       esfee	           = p_esfee,
-       usuariomodificacion = p_usuariomodificacion, 
-       fechamodificacion   = fechahoy, 
-       ipmodificacion      = p_ipmodificacion
- WHERE id                  = p_id;
-
+if cantidad > 0 then
 return true;
+else
+return false;
+end if;
+
 end;
 $BODY$
   LANGUAGE plpgsql VOLATILE
   COST 100;
+  
 
--- Function: negocio.fn_consultarservicio(integer)
-
--- DROP FUNCTION negocio.fn_consultarservicio(integer);
-
-CREATE OR REPLACE FUNCTION negocio.fn_consultarservicio(p_idservicio integer)
+CREATE OR REPLACE FUNCTION negocio.fn_listarclientescorreo()
   RETURNS refcursor AS
 $BODY$
 
@@ -98,9 +69,9 @@ declare micursor refcursor;
 begin
 
 open micursor for
-SELECT id, nombre, desccorta, desclarga, requierefee, pagaimpto, cargacomision, esimpuesto, esfee
-  FROM negocio."MaestroServicios"
- WHERE id = p_idservicio;
+select cli.*
+  from negocio.vw_clientesnova cli
+ where negocio.fn_tienecorreo(cast(cli.id as integer)) = true;
 
 return micursor;
 
