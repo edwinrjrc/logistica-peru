@@ -22,7 +22,7 @@ public class Contacto extends Persona {
 	private static final long serialVersionUID = 4988270415170041781L;
 	private List<CorreoElectronico> listaCorreos;
 	private List<Telefono> listaTelefonos;
-	private String anexo;	
+	private String anexo;
 	private BaseVO area;
 
 	public Contacto() {
