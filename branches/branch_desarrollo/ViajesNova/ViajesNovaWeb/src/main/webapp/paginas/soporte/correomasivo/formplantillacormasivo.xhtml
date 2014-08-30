@@ -8,7 +8,7 @@
 	xmlns:rich="http://richfaces.org/rich">
 
 	<rich:popupPanel id="idModalformplantillacorreo" modal="true"
-		width="600" height="500" style="background-color: #FFFFFF">
+		width="800" height="500" style="background-color: #FFFFFF">
 
 		<f:facet name="header">
 			<h:outputText id="idNomModal"
@@ -51,23 +51,8 @@
 					id="idGrdEditor">
 					<rich:editor id="idEditorCorreo" 
 						value="#{plantillaCorreoMasivoMBean.plantillaCorreo.contenidoPlantilla}"
-						style="margin-bottom: 1em">
-						<f:facet name="config">
-                    toolbar_custom:
-                        [
-                            { name: 'document', items : [ 'NewPage','Preview' ] },
-                            { name: 'clipboard', items : [ 'Cut','Copy','Paste','PasteText','PasteFromWord','-','Undo','Redo' ] },
-                            { name: 'editing', items : [ 'Find','Replace','-','SelectAll','-','Scayt' ] },
-                            { name: 'insert', items : [ 'Image','Flash','Table','HorizontalRule','Smiley','SpecialChar','PageBreak'
-                                     ,'Iframe' ] },
-                                    '/',
-                            { name: 'styles', items : [ 'Styles','Format' ] },
-                            { name: 'basicstyles', items : [ 'Bold','Italic','Strike','-','RemoveFormat' ] },
-                            { name: 'paragraph', items : [ 'NumberedList','BulletedList','-','Outdent','Indent','-','Blockquote' ] },
-                            { name: 'links', items : [ 'Link','Unlink','Anchor' ] },
-                            { name: 'tools', items : [ 'Maximize','-','About' ] }
-                        ]
-                    </f:facet>
+						style="margin-bottom: 1em" toolbar="full">
+						
 					</rich:editor>
 					<rich:message for="idEditorCorreo" showSummary="true"
 						showDetail="false" ajaxRendered="true" />

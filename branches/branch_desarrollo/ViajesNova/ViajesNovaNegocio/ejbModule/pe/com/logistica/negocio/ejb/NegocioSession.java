@@ -1373,4 +1373,37 @@ public class NegocioSession implements NegocioSessionRemote,
 		}
 		
 	}
+
+	@Override
+	public List<Cliente> listarClientesCorreo() throws SQLException, Exception {
+		ClienteDao clienteDao = new ClienteDaoImpl();
+		
+		List<Cliente> clientes = null;
+		Connection conn = null;
+		try {
+			conn = UtilConexion.obtenerConexion();
+			clientes = clienteDao.listarClientes(new Cliente(),conn);
+			
+			ContactoDao contactoDao = new ContactoDaoImpl();
+			for (Cliente cliente : clientes) {
+				cliente.setListaContactos(contactoDao.consultarContactoProveedor(cliente.getCodigoEntero()));
+				
+				for (Contacto contacto : cliente.getListaContactos()){
+					contacto.setListaCorreos(contactoDao.consultarCorreos(contacto.getCodigoEntero(), conn));
+				}
+			}
+		} catch (SQLException e) {
+			throw new SQLException(e);
+		} catch (Exception e) {
+			throw new Exception(e);
+		} finally {
+			if (conn != null) {
+				conn.close();
+			}
+		}
+		
+		return clientes;
+	}
+	
+	
 }

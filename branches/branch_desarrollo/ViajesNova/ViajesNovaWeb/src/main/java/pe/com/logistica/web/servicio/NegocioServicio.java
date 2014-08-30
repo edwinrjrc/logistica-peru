@@ -120,4 +120,6 @@ public interface NegocioServicio {
 
 	List<MaestroServicio> listarMaestroServicioImpto() throws SQLException,
 			Exception;
+
+	List<Cliente> listarClientesCorreo() throws SQLException, Exception;
 }

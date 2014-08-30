@@ -8,7 +8,6 @@ import java.sql.SQLException;
 import java.util.List;
 
 import pe.com.logistica.bean.base.CorreoElectronico;
-import pe.com.logistica.bean.negocio.Cliente;
 
 /**
  * @author Edwin
@@ -20,6 +19,4 @@ public interface CorreoElectronicoDao {
 
 	List<CorreoElectronico> consultarCorreosXPersona(int idPersona,
 			Connection conn) throws SQLException;
-
-	List<Cliente> listarCorreosContactos() throws SQLException;
 }

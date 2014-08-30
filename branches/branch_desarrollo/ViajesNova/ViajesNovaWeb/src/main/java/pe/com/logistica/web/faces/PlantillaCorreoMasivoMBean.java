@@ -27,6 +27,9 @@ public class PlantillaCorreoMasivoMBean extends BaseMBean {
 	private List<PlantillaCorreo> listaPlantilla;
 	
 	private PlantillaCorreo plantillaCorreo;
+	
+	private boolean nuevaPlantillaCorreo;
+	private boolean editarPlantillaCorreo;
 
 	/**
 	 * 
@@ -37,7 +40,9 @@ public class PlantillaCorreoMasivoMBean extends BaseMBean {
 
 	
 	public void nuevaPlantilla(){
-		
+		this.setNuevaPlantillaCorreo(true);
+		this.setEditarPlantillaCorreo(false);
+		this.setNombreFormulario("Nueva Plantilla Correo");
 	}
 
 
@@ -76,5 +81,37 @@ public class PlantillaCorreoMasivoMBean extends BaseMBean {
 	 */
 	public void setPlantillaCorreo(PlantillaCorreo plantillaCorreo) {
 		this.plantillaCorreo = plantillaCorreo;
+	}
+
+
+	/**
+	 * @return the nuevaPlantillaCorreo
+	 */
+	public boolean isNuevaPlantillaCorreo() {
+		return nuevaPlantillaCorreo;
+	}
+
+
+	/**
+	 * @param nuevaPlantillaCorreo the nuevaPlantillaCorreo to set
+	 */
+	public void setNuevaPlantillaCorreo(boolean nuevaPlantillaCorreo) {
+		this.nuevaPlantillaCorreo = nuevaPlantillaCorreo;
+	}
+
+
+	/**
+	 * @return the editarPlantillaCorreo
+	 */
+	public boolean isEditarPlantillaCorreo() {
+		return editarPlantillaCorreo;
+	}
+
+
+	/**
+	 * @param editarPlantillaCorreo the editarPlantillaCorreo to set
+	 */
+	public void setEditarPlantillaCorreo(boolean editarPlantillaCorreo) {
+		this.editarPlantillaCorreo = editarPlantillaCorreo;
 	}
 }

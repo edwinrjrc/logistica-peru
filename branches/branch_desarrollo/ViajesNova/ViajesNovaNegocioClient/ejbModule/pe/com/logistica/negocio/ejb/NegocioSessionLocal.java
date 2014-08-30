@@ -101,4 +101,6 @@ public interface NegocioSessionLocal {
 	
 	public Integer actualizarVentaServicio(ServicioAgencia servicioAgencia)
 			throws ErrorRegistroDataException, SQLException, Exception;
+	
+	public List<Cliente> listarClientesCorreo() throws SQLException, Exception;
 }

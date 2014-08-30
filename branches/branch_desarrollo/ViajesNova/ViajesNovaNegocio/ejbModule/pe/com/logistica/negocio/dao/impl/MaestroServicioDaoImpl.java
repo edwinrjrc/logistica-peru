@@ -393,7 +393,9 @@ public class MaestroServicioDaoImpl implements MaestroServicioDao {
 				resultado.setDescripcionCorta(UtilJdbc.obtenerCadena(rs, "desccorta"));
 				resultado.setDescripcion(UtilJdbc.obtenerCadena(rs, "desclarga"));
 				resultado.setRequiereFee(UtilJdbc.obtenerBoolean(rs, "requierefee"));
+				resultado.getServicioFee().setCodigoEntero(UtilJdbc.obtenerNumero(rs, "idmaeserfee"));
 				resultado.setPagaImpto(UtilJdbc.obtenerBoolean(rs, "pagaimpto"));
+				resultado.getServicioImpto().setCodigoEntero(UtilJdbc.obtenerNumero(rs, "idmaeserimpto"));
 				resultado.setCargaComision(UtilJdbc.obtenerBoolean(rs, "cargacomision"));
 				resultado.setEsImpuesto(UtilJdbc.obtenerBoolean(rs, "esimpuesto"));
 				resultado.setEsFee(UtilJdbc.obtenerBoolean(rs, "esfee"));
