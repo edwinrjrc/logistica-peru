@@ -12,7 +12,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import pe.com.logistica.bean.base.CorreoElectronico;
-import pe.com.logistica.bean.negocio.Cliente;
 import pe.com.logistica.negocio.dao.CorreoElectronicoDao;
 import pe.com.logistica.negocio.util.UtilConexion;
 import pe.com.logistica.negocio.util.UtilJdbc;
@@ -132,58 +131,4 @@ public class CorreoElectronicoDaoImpl implements CorreoElectronicoDao {
 
 		return resultado;
 	}
-
-	@Override
-	public List<Cliente> listarCorreosContactos() throws SQLException {
-		Connection conn = null;
-		CallableStatement cs = null;
-		String sql = "{ ? = call negocio.fn_telefonosxpersona(?) }";
-		ResultSet rs = null;
-		List<CorreoElectronico> resultado = null;
-
-		try {
-			conn = UtilConexion.obtenerConexion();
-			cs = conn.prepareCall(sql);
-			int i = 1;
-			cs.registerOutParameter(i++, Types.OTHER);
-			cs.setInt(i++, idPersona);
-			cs.execute();
-
-			rs = (ResultSet) cs.getObject(1);
-			resultado = new ArrayList<CorreoElectronico>();
-			CorreoElectronico bean = null;
-			while (rs.next()) {
-				bean = new CorreoElectronico();
-				bean.setCodigoEntero(UtilJdbc.obtenerNumero(rs, "id"));
-				bean.setDireccion(UtilJdbc.obtenerCadena(rs, "correo"));
-				resultado.add(bean);
-			}
-		} catch (SQLException e) {
-			throw new SQLException(e);
-		} finally {
-			try {
-				if (rs != null) {
-					rs.close();
-				}
-				if (cs != null) {
-					cs.close();
-				}
-				if (conn != null) {
-					conn.close();
-				}
-			} catch (SQLException e) {
-				try {
-					if (conn != null) {
-						conn.close();
-					}
-					throw new SQLException(e);
-				} catch (SQLException e1) {
-					throw new SQLException(e);
-				}
-			}
-		}
-
-		return resultado;
-	}
-
 }

@@ -47,29 +47,20 @@
 				</h:panelGrid>
 
 				<rich:dataTable
-					value="#{correoMasivoMBean.correoMasivo.listaClientes}" var="row">
-					<rich:column>
-						<f:facet name="header">
-							<h:outputText value="Cliente" />
-						</f:facet>
-						<h:outputText value="#{row.nombreCompleto}" />
-					</rich:column>
-					<rich:column>
-						<f:facet name="header">
-							<h:outputText value="Contacto" />
-						</f:facet>
-						<h:outputText value="#{row.nombreCompleto}" />
-					</rich:column>
-					<rich:column>
-						<f:facet name="header">
-							<h:outputText value="Correo Electronico" />
-						</f:facet>
-						<h:outputText
-							value="#{row.listaContactos[0].listaCorreos[0].direccion}" />
-					</rich:column>
-					<rich:column>
-						<h:selectBooleanCheckbox
-							value="#{row.listaContactos[0].listaCorreos[0].seleccionado}" />
+					value="#{correoMasivoMBean.listaClientesCorreo}" var="row">
+					<f:facet name="header">
+						<rich:columnGroup>
+							<rich:column colspan="3">
+								<h:outputText value="Cliente" />
+							</rich:column>
+							<rich:column breakRowBefore="true">
+								<h:outputText value="Correo Electronico" />
+							</rich:column>
+						</rich:columnGroup>
+					</f:facet>
+					
+					<rich:column colspan="3">
+					<h:outputText value="#{row.nombreCompleto}" />
 					</rich:column>
 
 				</rich:dataTable>

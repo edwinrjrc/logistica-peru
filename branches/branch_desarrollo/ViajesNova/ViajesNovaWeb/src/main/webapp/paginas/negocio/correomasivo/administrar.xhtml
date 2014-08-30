@@ -28,11 +28,11 @@
 					<h:panelGroup style="text-align:center;">
 						<h:panelGrid border="0" cellpadding="0" cellspacing="0"
 							style="height: 50px" width="100%">
-							<a4j:commandButton value="REGISTRAR VENTA"
+							<a4j:commandButton value="ENVIAR MASIVO"
 								action="#{correoMasivoMBean.nuevoEnvio()}"
 								style="height:20px; width:150px"
 								render="idGrRegisVenServicio, idNomModal"
-								oncomplete="#{rich:component('idModalfrventaservicio')}.show();">
+								oncomplete="#{rich:component('idModalfrenviomasivo')}.show();">
 							</a4j:commandButton>
 							<a4j:commandButton id="idBotonModalCorrecto"
 								style="display:none;" type="button"
