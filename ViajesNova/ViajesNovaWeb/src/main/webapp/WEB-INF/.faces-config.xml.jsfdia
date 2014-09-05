@@ -78,6 +78,12 @@
     PATH="/paginas/negocio/maestroservicios/administrar.xhtml"
     TARGET="rules:#paginas#negocio#maestroservicios#administrar.xhtml"
     TITLE="irAdministrarMaeServicios" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT
+    ID="irEnvioMasivoCorreo::#paginas#negocio#correomasivo#administrar.xhtml"
+    NAME="output14"
+    PATH="/paginas/negocio/correomasivo/administrar.xhtml"
+    TARGET="rules:#paginas#negocio#correomasivo#administrar.xhtml"
+    TITLE="irEnvioMasivoCorreo" model-entity="JSFProcessItemOutput"/>
   </PROCESS-ITEM>
  </PROCESS-ITEM>
  <PROCESS-ITEM NAME="rules:#paginas#seguridad#usuario#administrar.xhtml"
@@ -161,4 +167,8 @@
   NAME="rules:#paginas#negocio#maestroservicios#administrar.xhtml"
   PATH="/paginas/negocio/maestroservicios/administrar.xhtml"
   SHAPE="525,292,0,0" model-entity="JSFProcessGroup" persistent="true"/>
+ <PROCESS-ITEM
+  NAME="rules:#paginas#negocio#correomasivo#administrar.xhtml"
+  PATH="/paginas/negocio/correomasivo/administrar.xhtml"
+  SHAPE="524,407,0,0" model-entity="JSFProcessGroup" persistent="true"/>
 </PROCESS>

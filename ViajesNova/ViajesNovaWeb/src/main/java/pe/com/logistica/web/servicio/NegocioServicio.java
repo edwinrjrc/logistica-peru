@@ -9,6 +9,7 @@ import java.util.List;
 
 import pe.com.logistica.bean.negocio.Cliente;
 import pe.com.logistica.bean.negocio.Contacto;
+import pe.com.logistica.bean.negocio.CorreoClienteMasivo;
 import pe.com.logistica.bean.negocio.CuotaPago;
 import pe.com.logistica.bean.negocio.DetalleServicioAgencia;
 import pe.com.logistica.bean.negocio.Direccion;
@@ -121,5 +122,5 @@ public interface NegocioServicio {
 	List<MaestroServicio> listarMaestroServicioImpto() throws SQLException,
 			Exception;
 
-	List<Cliente> listarClientesCorreo() throws SQLException, Exception;
+	List<CorreoClienteMasivo> listarClientesCorreo() throws SQLException, Exception;
 }

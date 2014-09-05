@@ -16,6 +16,7 @@ import javax.servlet.ServletContext;
 import pe.com.logistica.bean.base.BaseVO;
 import pe.com.logistica.bean.negocio.Cliente;
 import pe.com.logistica.bean.negocio.Contacto;
+import pe.com.logistica.bean.negocio.CorreoClienteMasivo;
 import pe.com.logistica.bean.negocio.CuotaPago;
 import pe.com.logistica.bean.negocio.DetalleServicioAgencia;
 import pe.com.logistica.bean.negocio.Direccion;
@@ -267,7 +268,7 @@ public class NegocioServicioImpl implements NegocioServicio {
 	}
 	
 	@Override
-	public List<Cliente> listarClientesCorreo() throws SQLException,
+	public List<CorreoClienteMasivo> listarClientesCorreo() throws SQLException,
 			Exception {
 
 		return ejbSession.listarClientesCorreo();

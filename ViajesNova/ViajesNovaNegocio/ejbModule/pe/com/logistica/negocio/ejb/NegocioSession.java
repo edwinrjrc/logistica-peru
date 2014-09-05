@@ -17,6 +17,7 @@ import pe.com.logistica.bean.base.BaseVO;
 import pe.com.logistica.bean.base.CorreoElectronico;
 import pe.com.logistica.bean.negocio.Cliente;
 import pe.com.logistica.bean.negocio.Contacto;
+import pe.com.logistica.bean.negocio.CorreoClienteMasivo;
 import pe.com.logistica.bean.negocio.CorreoMasivo;
 import pe.com.logistica.bean.negocio.CuotaPago;
 import pe.com.logistica.bean.negocio.DetalleServicioAgencia;
@@ -32,6 +33,7 @@ import pe.com.logistica.bean.negocio.Telefono;
 import pe.com.logistica.bean.negocio.Ubigeo;
 import pe.com.logistica.negocio.dao.ClienteDao;
 import pe.com.logistica.negocio.dao.ContactoDao;
+import pe.com.logistica.negocio.dao.CorreoMasivoDao;
 import pe.com.logistica.negocio.dao.DestinoDao;
 import pe.com.logistica.negocio.dao.DireccionDao;
 import pe.com.logistica.negocio.dao.MaestroDao;
@@ -45,6 +47,7 @@ import pe.com.logistica.negocio.dao.TelefonoDao;
 import pe.com.logistica.negocio.dao.UbigeoDao;
 import pe.com.logistica.negocio.dao.impl.ClienteDaoImpl;
 import pe.com.logistica.negocio.dao.impl.ContactoDaoImpl;
+import pe.com.logistica.negocio.dao.impl.CorreoMasivoDaoImpl;
 import pe.com.logistica.negocio.dao.impl.DestinoDaoImpl;
 import pe.com.logistica.negocio.dao.impl.DireccionDaoImpl;
 import pe.com.logistica.negocio.dao.impl.MaestroDaoImpl;
@@ -1375,34 +1378,10 @@ public class NegocioSession implements NegocioSessionRemote,
 	}
 
 	@Override
-	public List<Cliente> listarClientesCorreo() throws SQLException, Exception {
-		ClienteDao clienteDao = new ClienteDaoImpl();
+	public List<CorreoClienteMasivo> listarClientesCorreo() throws SQLException, Exception {
+		CorreoMasivoDao correoMasivoDao = new CorreoMasivoDaoImpl();
 		
-		List<Cliente> clientes = null;
-		Connection conn = null;
-		try {
-			conn = UtilConexion.obtenerConexion();
-			clientes = clienteDao.listarClientes(new Cliente(),conn);
-			
-			ContactoDao contactoDao = new ContactoDaoImpl();
-			for (Cliente cliente : clientes) {
-				cliente.setListaContactos(contactoDao.consultarContactoProveedor(cliente.getCodigoEntero()));
-				
-				for (Contacto contacto : cliente.getListaContactos()){
-					contacto.setListaCorreos(contactoDao.consultarCorreos(contacto.getCodigoEntero(), conn));
-				}
-			}
-		} catch (SQLException e) {
-			throw new SQLException(e);
-		} catch (Exception e) {
-			throw new Exception(e);
-		} finally {
-			if (conn != null) {
-				conn.close();
-			}
-		}
-		
-		return clientes;
+		return correoMasivoDao.listarClientesCorreo();
 	}
 	
 	
