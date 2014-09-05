@@ -23,7 +23,7 @@
 
 		<h:form id="idFormEnviomasivo">
 
-			<h:panelGrid columns="2" border="0" cellpadding="0" cellspacing="0"
+			<h:panelGrid columns="1" border="0" cellpadding="0" cellspacing="0"
 				style="width:100%;" id="idGrenviomasivo">
 
 				<f:facet name="header">
@@ -46,23 +46,36 @@
 					</h:selectOneMenu>
 				</h:panelGrid>
 
-				<rich:dataTable
-					value="#{correoMasivoMBean.listaClientesCorreo}" var="row">
+				<rich:dataTable value="#{correoMasivoMBean.listaClientesCorreo}"
+					var="row" style="width:100%;">
 					<f:facet name="header">
 						<rich:columnGroup>
-							<rich:column colspan="3">
+							<rich:column>
 								<h:outputText value="Cliente" />
 							</rich:column>
-							<rich:column breakRowBefore="true">
+							<rich:column>
+								<h:outputText value="Contacto" />
+							</rich:column>
+							<rich:column>
 								<h:outputText value="Correo Electronico" />
+							</rich:column>
+							<rich:column>
+								<h:outputText value="Enviar" />
 							</rich:column>
 						</rich:columnGroup>
 					</f:facet>
-					
-					<rich:column colspan="3">
-					<h:outputText value="#{row.nombreCompleto}" />
+					<rich:column>
+						<h:outputText value="#{row.cliente.nombreCompleto}" />
 					</rich:column>
-
+					<rich:column>
+						<h:outputText value="#{row.contacto.nombreCompleto}" />
+					</rich:column>
+					<rich:column>
+						<h:outputText value="#{row.correoElectronico.direccion}" />
+					</rich:column>
+					<rich:column>
+						<h:selectBooleanCheckbox value="#{row.enviarCorreo}" />
+					</rich:column>
 				</rich:dataTable>
 
 

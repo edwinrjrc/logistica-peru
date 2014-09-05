@@ -9,6 +9,7 @@ import javax.ejb.Local;
 import pe.com.logistica.bean.base.BaseVO;
 import pe.com.logistica.bean.negocio.Cliente;
 import pe.com.logistica.bean.negocio.Contacto;
+import pe.com.logistica.bean.negocio.CorreoClienteMasivo;
 import pe.com.logistica.bean.negocio.CuotaPago;
 import pe.com.logistica.bean.negocio.DetalleServicioAgencia;
 import pe.com.logistica.bean.negocio.Direccion;
@@ -102,5 +103,5 @@ public interface NegocioSessionLocal {
 	public Integer actualizarVentaServicio(ServicioAgencia servicioAgencia)
 			throws ErrorRegistroDataException, SQLException, Exception;
 	
-	public List<Cliente> listarClientesCorreo() throws SQLException, Exception;
+	public List<CorreoClienteMasivo> listarClientesCorreo() throws SQLException, Exception;
 }
