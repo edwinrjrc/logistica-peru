@@ -88,14 +88,8 @@
 						id="idBotVenServicio">
 
 						<a4j:commandButton value="Enviar Correo"
-							rendered="#{!servicioAgenteMBean.transaccionExito}"
-							actionListener="#{servicioAgenteMBean.ejecutarMetodo()}"
-							render="idFormHidden,idPanelHidden,idPanelBotones,idModalcorrecto,idModalError,idGrRegisVenServicio"
-							oncomplete="mostrarModal('idformadmservicios')" />
-
-						<a4j:commandButton value="Salir"
-							rendered="#{servicioAgenteMBean.transaccionExito}"
-							oncomplete="#{rich:component('idModalfrventaservicio')}.hide(); return false;" />
+							actionListener="#{correoMasivoMBean.enviarMasivo()}"
+							render="idFormHidden,idPanelHidden,idPanelBotones,idModalcorrecto,idModalError" />
 
 					</h:panelGrid>
 				</f:facet>

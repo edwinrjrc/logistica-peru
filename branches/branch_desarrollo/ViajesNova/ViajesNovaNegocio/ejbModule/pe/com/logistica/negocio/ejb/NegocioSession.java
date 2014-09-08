@@ -1,5 +1,7 @@
 package pe.com.logistica.negocio.ejb;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -9,12 +11,14 @@ import java.util.Date;
 import java.util.List;
 
 import javax.ejb.Stateless;
+import javax.mail.MessagingException;
+import javax.mail.NoSuchProviderException;
+import javax.mail.internet.AddressException;
 
 import org.apache.commons.lang3.StringUtils;
 
 import pe.com.logistica.bean.Util.UtilParse;
 import pe.com.logistica.bean.base.BaseVO;
-import pe.com.logistica.bean.base.CorreoElectronico;
 import pe.com.logistica.bean.negocio.Cliente;
 import pe.com.logistica.bean.negocio.Contacto;
 import pe.com.logistica.bean.negocio.CorreoClienteMasivo;
@@ -59,6 +63,7 @@ import pe.com.logistica.negocio.dao.impl.ServicioNovaViajesDaoImpl;
 import pe.com.logistica.negocio.dao.impl.ServicioNoviosDaoImpl;
 import pe.com.logistica.negocio.dao.impl.TelefonoDaoImpl;
 import pe.com.logistica.negocio.dao.impl.UbigeoDaoImpl;
+import pe.com.logistica.negocio.exception.EnvioCorreoException;
 import pe.com.logistica.negocio.exception.ErrorRegistroDataException;
 import pe.com.logistica.negocio.exception.ResultadoCeroDaoException;
 import pe.com.logistica.negocio.exception.ValidacionException;
@@ -1102,19 +1107,29 @@ public class NegocioSession implements NegocioSessionRemote,
 		return servicioNovaViajesDao.consultarServiciosVenta(servicioAgencia);
 	}
 	
-	public void enviarCorreoMasivo(CorreoMasivo correoMasivo){
-		UtilCorreo utilCorreo = new UtilCorreo();
-		for (Cliente cliente : correoMasivo.getListaClientes()) {
-			for(Contacto contacto : cliente.getListaContactos()){
-				for (CorreoElectronico correo : contacto.getListaCorreos()){
-					if (correoMasivo.getArchivoAdjunto() == null){
-						utilCorreo.enviarCorreo(correo.getDireccion(), correoMasivo.getAsunto(), correoMasivo.getContenidoCorreo());
-					}
-					else{
-						utilCorreo.enviarCorreo(correo.getDireccion(), correoMasivo.getAsunto(), correoMasivo.getContenidoCorreo(), correoMasivo.getArchivoAdjunto());
-					}
+	public boolean enviarCorreoMasivo(CorreoMasivo correoMasivo) throws EnvioCorreoException, Exception{
+		try {
+			UtilCorreo utilCorreo = new UtilCorreo();
+			for (CorreoClienteMasivo envio : correoMasivo.getListaCorreoMasivo()) {
+				if (correoMasivo.getArchivoAdjunto() == null){
+					utilCorreo.enviarCorreo(envio.getCorreoElectronico().getDireccion(), correoMasivo.getAsunto(), correoMasivo.getContenidoCorreo());
+				}
+				else{
+					utilCorreo.enviarCorreo(envio.getCorreoElectronico().getDireccion(), correoMasivo.getAsunto(), correoMasivo.getContenidoCorreo(), correoMasivo.getArchivoAdjunto());
 				}
 			}
+			
+			return true;
+		} catch (AddressException e) {
+			throw new EnvioCorreoException("0001", "Error en la direccion de correo", e.getMessage(), e);
+		} catch (FileNotFoundException e) {
+			throw new EnvioCorreoException("0002", "Error en el archivo", e.getMessage(), e);
+		} catch (NoSuchProviderException e) {
+			throw new EnvioCorreoException("0003", "Error en la aplicacion", e.getMessage(), e);
+		} catch (IOException e) {
+			throw new EnvioCorreoException("0004", "Error en el archivo 2", e.getMessage(), e);
+		} catch (MessagingException e) {
+			throw new EnvioCorreoException("0005", "Error en el mensaje", e.getMessage(), e);
 		}
 	}
 	

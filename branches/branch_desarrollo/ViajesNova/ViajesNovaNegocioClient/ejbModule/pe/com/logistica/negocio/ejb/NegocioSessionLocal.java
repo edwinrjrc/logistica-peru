@@ -10,6 +10,7 @@ import pe.com.logistica.bean.base.BaseVO;
 import pe.com.logistica.bean.negocio.Cliente;
 import pe.com.logistica.bean.negocio.Contacto;
 import pe.com.logistica.bean.negocio.CorreoClienteMasivo;
+import pe.com.logistica.bean.negocio.CorreoMasivo;
 import pe.com.logistica.bean.negocio.CuotaPago;
 import pe.com.logistica.bean.negocio.DetalleServicioAgencia;
 import pe.com.logistica.bean.negocio.Direccion;
@@ -19,6 +20,7 @@ import pe.com.logistica.bean.negocio.Proveedor;
 import pe.com.logistica.bean.negocio.ServicioAgencia;
 import pe.com.logistica.bean.negocio.ServicioNovios;
 import pe.com.logistica.bean.negocio.ServicioProveedor;
+import pe.com.logistica.negocio.exception.EnvioCorreoException;
 import pe.com.logistica.negocio.exception.ErrorRegistroDataException;
 import pe.com.logistica.negocio.exception.ResultadoCeroDaoException;
 
@@ -104,4 +106,6 @@ public interface NegocioSessionLocal {
 			throws ErrorRegistroDataException, SQLException, Exception;
 	
 	public List<CorreoClienteMasivo> listarClientesCorreo() throws SQLException, Exception;
+	
+	public boolean enviarCorreoMasivo(CorreoMasivo correoMasivo) throws EnvioCorreoException, Exception;
 }

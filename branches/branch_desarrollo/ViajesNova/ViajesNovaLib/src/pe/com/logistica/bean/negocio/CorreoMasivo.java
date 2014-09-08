@@ -26,7 +26,7 @@ public class CorreoMasivo extends BaseNegocio {
 	private BaseVO plantillaCorreo;
 	private String contenidoCorreo;
 	
-	private List<Cliente> listaClientes;
+	private List<CorreoClienteMasivo> listaCorreoMasivo;
 	
 	private InputStream archivoAdjunto;
 
@@ -94,20 +94,6 @@ public class CorreoMasivo extends BaseNegocio {
 	}
 
 	/**
-	 * @return the listaClientes
-	 */
-	public List<Cliente> getListaClientes() {
-		return listaClientes;
-	}
-
-	/**
-	 * @param listaClientes the listaClientes to set
-	 */
-	public void setListaClientes(List<Cliente> listaClientes) {
-		this.listaClientes = listaClientes;
-	}
-
-	/**
 	 * @return the archivoAdjunto
 	 */
 	public InputStream getArchivoAdjunto() {
@@ -119,6 +105,20 @@ public class CorreoMasivo extends BaseNegocio {
 	 */
 	public void setArchivoAdjunto(InputStream archivoAdjunto) {
 		this.archivoAdjunto = archivoAdjunto;
+	}
+
+	/**
+	 * @return the listaCorreoMasivo
+	 */
+	public List<CorreoClienteMasivo> getListaCorreoMasivo() {
+		return listaCorreoMasivo;
+	}
+
+	/**
+	 * @param listaCorreoMasivo the listaCorreoMasivo to set
+	 */
+	public void setListaCorreoMasivo(List<CorreoClienteMasivo> listaCorreoMasivo) {
+		this.listaCorreoMasivo = listaCorreoMasivo;
 	}
 
 }
