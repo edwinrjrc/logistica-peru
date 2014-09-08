@@ -4,10 +4,8 @@
 package pe.com.logistica.negocio.util;
 
 
-import java.io.File;
-import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Properties;
@@ -48,6 +46,10 @@ public class UtilConexion {
 			e.printStackTrace();
 		} catch (SQLException e) {
 			e.printStackTrace();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 		
 		return null;
@@ -75,8 +77,10 @@ public class UtilConexion {
 
 	/**
 	 * @return the jndiProperties
+	 * @throws IOException 
+	 * @throws FileNotFoundException 
 	 */
-	public static String getJndiProperties() {
+	public static String getJndiProperties() throws FileNotFoundException, IOException {
 		Properties prop = UtilProperties.cargaArchivo("aplicacionConfiguracion.properties");
 		
 		String jndiProperties = prop.getProperty("jndi_ds");

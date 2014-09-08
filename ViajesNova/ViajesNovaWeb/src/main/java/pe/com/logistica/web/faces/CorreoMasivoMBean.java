@@ -3,6 +3,7 @@
  */
 package pe.com.logistica.web.faces;
 
+import java.io.InputStream;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -71,6 +72,24 @@ public class CorreoMasivoMBean extends BaseMBean {
         
         this.getArchivos().add(item);
     }
+	
+	public void enviarMasivo(){
+		try {
+			List<InputStream> streams = new ArrayList<InputStream>();
+			if (!this.getArchivos().isEmpty()){
+				for (UploadedFile archivo : this.getArchivos()){
+					streams.add(archivo.getInputStream());
+				}
+				getCorreoMasivo().setArchivoAdjunto(streams.get(0));
+			}
+			
+			getCorreoMasivo().setListaCorreoMasivo(getListaClientesCorreo());
+			this.negocioServicio.enviarCorreoMasivo(getCorreoMasivo());
+		
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 
 	/**
 	 * @return the correoMasivo
