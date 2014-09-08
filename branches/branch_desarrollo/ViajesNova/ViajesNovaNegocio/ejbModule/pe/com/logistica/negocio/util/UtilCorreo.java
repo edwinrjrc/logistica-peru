@@ -3,6 +3,7 @@
  */
 package pe.com.logistica.negocio.util;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Date;
@@ -34,9 +35,11 @@ public class UtilCorreo {
 	private final Properties properties = new Properties();
     private Session session;
 	/**
+	 * @throws IOException 
+	 * @throws FileNotFoundException 
 	 * 
 	 */
-	public UtilCorreo() {
+	public UtilCorreo() throws FileNotFoundException, IOException {
 		Properties prop = UtilProperties.cargaArchivo("correoconfiguracion.properties");
 		
 		inicializador(prop);
@@ -53,64 +56,44 @@ public class UtilCorreo {
         session = Session.getDefaultInstance(properties);
 	}
 
-	public void enviarCorreo(String correoDestino, String asunto, String mensaje){
-		try {
-			MimeMessage message = new MimeMessage(session);
-			message.setFrom(new InternetAddress((String) properties.get("mail.smtp.mail.sender")));
-			message.addRecipient(Message.RecipientType.TO, new InternetAddress(correoDestino));
-			message.setSubject(asunto);
-			message.setText(mensaje);
-			Transport t = session.getTransport("smtp");
-			t.connect((String) properties.get("mail.smtp.user"), (String) properties.get("mail.smtp.password"));
-			t.sendMessage(message, message.getAllRecipients());
-			t.close();
-			
-			
-		} catch (AddressException e) {
-			e.printStackTrace();
-		} catch (NoSuchProviderException e) {
-			e.printStackTrace();
-		} catch (MessagingException e) {
-			e.printStackTrace();
-		}
+	public void enviarCorreo(String correoDestino, String asunto, String mensaje) throws AddressException, NoSuchProviderException, MessagingException{
+		
+		MimeMessage message = new MimeMessage(session);
+		message.setFrom(new InternetAddress((String) properties.get("mail.smtp.mail.sender")));
+		message.addRecipient(Message.RecipientType.TO, new InternetAddress(correoDestino));
+		message.setSubject(asunto);
+		message.setText(mensaje);
+		Transport t = session.getTransport("smtp");
+		t.connect((String) properties.get("mail.smtp.user"), (String) properties.get("mail.smtp.password"));
+		t.sendMessage(message, message.getAllRecipients());
+		t.close();
 	}
 	
-	public void enviarCorreo(String correoDestino, String asunto, String mensaje, InputStream archivoAdjunto){
-		try {
-			MimeMessage message = new MimeMessage(session);
-			message.setFrom(new InternetAddress((String) properties.get("mail.smtp.mail.sender")));
-			message.addRecipient(Message.RecipientType.TO, new InternetAddress(correoDestino));
-			message.setSubject(asunto);
-			message.setSentDate(new Date());
-			
-			MimeBodyPart messageBodyPart = new MimeBodyPart();
-	        messageBodyPart.setContent(mensaje, "text/html");
-	 
-	        // creates multi-part
-	        Multipart multipart = new MimeMultipart();
-	        multipart.addBodyPart(messageBodyPart);
-	        
-	        MimeBodyPart attachPart = new MimeBodyPart();
-	        
-	        byte[] data = IOUtils.toByteArray(archivoAdjunto);
-	        
-	        attachPart.setDataHandler(new DataHandler(data,"application/octet-stream"));
-            multipart.addBodyPart(attachPart);
-			
-	        message.setContent(multipart);
-			Transport t = session.getTransport("smtp");
-			t.connect((String) properties.get("mail.smtp.user"), (String) properties.get("mail.smtp.password"));
-			t.sendMessage(message, message.getAllRecipients());
-			t.close();
-			
-		} catch (IOException ex) {
-            ex.printStackTrace();
-		} catch (AddressException e) {
-			e.printStackTrace();
-		} catch (NoSuchProviderException e) {
-			e.printStackTrace();
-		} catch (MessagingException e) {
-			e.printStackTrace();
-		}
+	public void enviarCorreo(String correoDestino, String asunto, String mensaje, InputStream archivoAdjunto) throws MessagingException, IOException{
+		MimeMessage message = new MimeMessage(session);
+		message.setFrom(new InternetAddress((String) properties.get("mail.smtp.mail.sender")));
+		message.addRecipient(Message.RecipientType.TO, new InternetAddress(correoDestino));
+		message.setSubject(asunto);
+		message.setSentDate(new Date());
+		
+		MimeBodyPart messageBodyPart = new MimeBodyPart();
+        messageBodyPart.setContent(mensaje, "text/html");
+ 
+        // creates multi-part
+        Multipart multipart = new MimeMultipart();
+        multipart.addBodyPart(messageBodyPart);
+        
+        MimeBodyPart attachPart = new MimeBodyPart();
+        
+        byte[] data = IOUtils.toByteArray(archivoAdjunto);
+        
+        attachPart.setDataHandler(new DataHandler(data,"application/octet-stream"));
+        multipart.addBodyPart(attachPart);
+		
+        message.setContent(multipart);
+		Transport t = session.getTransport("smtp");
+		t.connect((String) properties.get("mail.smtp.user"), (String) properties.get("mail.smtp.password"));
+		t.sendMessage(message, message.getAllRecipients());
+		t.close();
 	}
 }

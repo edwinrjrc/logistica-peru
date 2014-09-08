@@ -3,6 +3,9 @@
  */
 package pe.com.logistica.bean.negocio;
 
+import java.io.InputStream;
+import java.util.List;
+
 import pe.com.logistica.bean.base.BaseNegocio;
 import pe.com.logistica.bean.base.CorreoElectronico;
 
@@ -22,6 +25,9 @@ public class CorreoClienteMasivo extends BaseNegocio {
 	private CorreoElectronico correoElectronico;
 	
 	private boolean enviarCorreo;
+	
+	private InputStream archivoAdjunto;
+	private List<InputStream> listaAdjuntos;
 	/**
 	 * 
 	 */
@@ -84,6 +90,30 @@ public class CorreoClienteMasivo extends BaseNegocio {
 	 */
 	public void setEnviarCorreo(boolean enviarCorreo) {
 		this.enviarCorreo = enviarCorreo;
+	}
+	/**
+	 * @return the listaAdjuntos
+	 */
+	public List<InputStream> getListaAdjuntos() {
+		return listaAdjuntos;
+	}
+	/**
+	 * @param listaAdjuntos the listaAdjuntos to set
+	 */
+	public void setListaAdjuntos(List<InputStream> listaAdjuntos) {
+		this.listaAdjuntos = listaAdjuntos;
+	}
+	/**
+	 * @return the archivoAdjunto
+	 */
+	public InputStream getArchivoAdjunto() {
+		return archivoAdjunto;
+	}
+	/**
+	 * @param archivoAdjunto the archivoAdjunto to set
+	 */
+	public void setArchivoAdjunto(InputStream archivoAdjunto) {
+		this.archivoAdjunto = archivoAdjunto;
 	}
 
 }

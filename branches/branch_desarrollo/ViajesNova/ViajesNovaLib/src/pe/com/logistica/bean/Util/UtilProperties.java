@@ -5,6 +5,7 @@ package pe.com.logistica.bean.Util;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
@@ -15,7 +16,7 @@ import java.util.Properties;
  */
 public class UtilProperties {
 	
-	public static Properties cargaArchivo(String archivoProperties){
+	public static Properties cargaArchivo(String archivoProperties) throws FileNotFoundException, IOException{
 		String c = "C:\\aplicacion\\"+archivoProperties;
 		String d = "D:\\aplicacion\\"+archivoProperties;
 		File fc = new File(c);
@@ -23,23 +24,17 @@ public class UtilProperties {
 		Properties prop = new Properties();
 		InputStream input = null;
 		
-		try {
+		
+		if (fc.exists()){
+			input = new FileInputStream(fc);
+			prop.load(input);
+		}
+		else{
+			fc = new File(d);
 			if (fc.exists()){
 				input = new FileInputStream(fc);
 				prop.load(input);
 			}
-			else{
-				fc = new File(d);
-				if (fc.exists()){
-					input = new FileInputStream(fc);
-					prop.load(input);
-				}
-			}
-			
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (Exception e){
-			e.printStackTrace();
 		}
 		
 		return prop;
