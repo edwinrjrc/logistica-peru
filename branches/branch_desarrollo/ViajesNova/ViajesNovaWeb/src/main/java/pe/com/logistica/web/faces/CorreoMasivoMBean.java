@@ -4,6 +4,7 @@
 package pe.com.logistica.web.faces;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.faces.bean.ManagedBean;
@@ -13,6 +14,8 @@ import javax.naming.NamingException;
 import javax.servlet.ServletContext;
 
 import org.apache.log4j.Logger;
+import org.richfaces.event.FileUploadEvent;
+import org.richfaces.model.UploadedFile;
 
 import pe.com.logistica.bean.negocio.CorreoClienteMasivo;
 import pe.com.logistica.bean.negocio.CorreoMasivo;
@@ -38,6 +41,8 @@ public class CorreoMasivoMBean extends BaseMBean {
 	
 	private List<CorreoClienteMasivo> listaClientesCorreo;
 	
+	private List<UploadedFile> archivos;
+	
 	private NegocioServicio negocioServicio;
 
 	/**
@@ -56,11 +61,24 @@ public class CorreoMasivoMBean extends BaseMBean {
 	public void nuevoEnvio(){
 		
 	}
+	
+	public void cargarArchivo(){
+		
+	}
+	
+	public void listener(FileUploadEvent event) throws Exception {
+        UploadedFile item = event.getUploadedFile();
+        
+        this.getArchivos().add(item);
+    }
 
 	/**
 	 * @return the correoMasivo
 	 */
 	public CorreoMasivo getCorreoMasivo() {
+		if (correoMasivo == null){
+			correoMasivo = new CorreoMasivo();
+		}
 		return correoMasivo;
 	}
 
@@ -91,6 +109,23 @@ public class CorreoMasivoMBean extends BaseMBean {
 	 */
 	public void setListaClientesCorreo(List<CorreoClienteMasivo> listaClientesCorreo) {
 		this.listaClientesCorreo = listaClientesCorreo;
+	}
+
+	/**
+	 * @return the archivos
+	 */
+	public List<UploadedFile> getArchivos() {
+		if (archivos == null){
+			archivos = new ArrayList<UploadedFile>();
+		}
+		return archivos;
+	}
+
+	/**
+	 * @param archivos the archivos to set
+	 */
+	public void setArchivos(List<UploadedFile> archivos) {
+		this.archivos = archivos;
 	}
 
 }
