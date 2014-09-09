@@ -1111,11 +1111,13 @@ public class NegocioSession implements NegocioSessionRemote,
 		try {
 			UtilCorreo utilCorreo = new UtilCorreo();
 			for (CorreoClienteMasivo envio : correoMasivo.getListaCorreoMasivo()) {
-				if (correoMasivo.getArchivoAdjunto() == null){
-					utilCorreo.enviarCorreo(envio.getCorreoElectronico().getDireccion(), correoMasivo.getAsunto(), correoMasivo.getContenidoCorreo());
-				}
-				else{
-					utilCorreo.enviarCorreo(envio.getCorreoElectronico().getDireccion(), correoMasivo.getAsunto(), correoMasivo.getContenidoCorreo(), correoMasivo.getArchivoAdjunto());
+				if (envio.isEnviarCorreo()){
+					if (!correoMasivo.isArchivoCargado()){
+						utilCorreo.enviarCorreo(envio.getCorreoElectronico().getDireccion(), correoMasivo.getAsunto(), correoMasivo.getContenidoCorreo());
+					}
+					else{
+						utilCorreo.enviarCorreo(envio.getCorreoElectronico().getDireccion(), correoMasivo.getAsunto(), correoMasivo.getContenidoCorreo(), correoMasivo.getBuffer());
+					}
 				}
 			}
 			
