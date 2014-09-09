@@ -28,7 +28,9 @@ public class CorreoMasivo extends BaseNegocio {
 	
 	private List<CorreoClienteMasivo> listaCorreoMasivo;
 	
-	private InputStream archivoAdjunto;
+	private byte[] buffer;
+	
+	private boolean archivoCargado;
 
 	/**
 	 * 
@@ -94,20 +96,6 @@ public class CorreoMasivo extends BaseNegocio {
 	}
 
 	/**
-	 * @return the archivoAdjunto
-	 */
-	public InputStream getArchivoAdjunto() {
-		return archivoAdjunto;
-	}
-
-	/**
-	 * @param archivoAdjunto the archivoAdjunto to set
-	 */
-	public void setArchivoAdjunto(InputStream archivoAdjunto) {
-		this.archivoAdjunto = archivoAdjunto;
-	}
-
-	/**
 	 * @return the listaCorreoMasivo
 	 */
 	public List<CorreoClienteMasivo> getListaCorreoMasivo() {
@@ -119,6 +107,34 @@ public class CorreoMasivo extends BaseNegocio {
 	 */
 	public void setListaCorreoMasivo(List<CorreoClienteMasivo> listaCorreoMasivo) {
 		this.listaCorreoMasivo = listaCorreoMasivo;
+	}
+
+	/**
+	 * @return the buffer
+	 */
+	public byte[] getBuffer() {
+		return buffer;
+	}
+
+	/**
+	 * @param buffer the buffer to set
+	 */
+	public void setBuffer(byte[] buffer) {
+		this.buffer = buffer;
+	}
+
+	/**
+	 * @return the archivoCargado
+	 */
+	public boolean isArchivoCargado() {
+		return archivoCargado;
+	}
+
+	/**
+	 * @param archivoCargado the archivoCargado to set
+	 */
+	public void setArchivoCargado(boolean archivoCargado) {
+		this.archivoCargado = archivoCargado;
 	}
 
 }

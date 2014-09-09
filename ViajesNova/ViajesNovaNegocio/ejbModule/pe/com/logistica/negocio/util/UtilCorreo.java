@@ -6,6 +6,7 @@ package pe.com.logistica.negocio.util;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 import java.util.Date;
 import java.util.Properties;
 
@@ -50,19 +51,22 @@ public class UtilCorreo {
         properties.put("mail.smtp.starttls.enable", propiedades.getProperty("smtp.starttls.enable"));
         properties.put("mail.smtp.port", propiedades.getProperty("smtp.port"));
         properties.put("mail.smtp.mail.sender", propiedades.getProperty("smtp.mail.sender"));
+        properties.put("mail.smtp.mail.senderName", propiedades.getProperty("smtp.mail.senderName"));
         properties.put("mail.smtp.password", propiedades.getProperty("smtp.password"));
         properties.put("mail.smtp.user", propiedades.getProperty("smtp.user"));
         properties.put("mail.smtp.auth", propiedades.getProperty("smtp.auth"));
         session = Session.getDefaultInstance(properties);
 	}
 
-	public void enviarCorreo(String correoDestino, String asunto, String mensaje) throws AddressException, NoSuchProviderException, MessagingException{
+	public void enviarCorreo(String correoDestino, String asunto, String mensaje) throws AddressException, NoSuchProviderException, MessagingException, UnsupportedEncodingException{
 		
 		MimeMessage message = new MimeMessage(session);
-		message.setFrom(new InternetAddress((String) properties.get("mail.smtp.mail.sender")));
+		
+		InternetAddress internetAdd = new InternetAddress((String) properties.get("mail.smtp.mail.sender"),(String) properties.get("mail.smtp.mail.senderName"));
+		message.setFrom(internetAdd);
 		message.addRecipient(Message.RecipientType.TO, new InternetAddress(correoDestino));
 		message.setSubject(asunto);
-		message.setText(mensaje);
+		message.setContent(mensaje, "text/html");
 		Transport t = session.getTransport("smtp");
 		t.connect((String) properties.get("mail.smtp.user"), (String) properties.get("mail.smtp.password"));
 		t.sendMessage(message, message.getAllRecipients());
@@ -86,6 +90,32 @@ public class UtilCorreo {
         MimeBodyPart attachPart = new MimeBodyPart();
         
         byte[] data = IOUtils.toByteArray(archivoAdjunto);
+        
+        attachPart.setDataHandler(new DataHandler(data,"application/octet-stream"));
+        multipart.addBodyPart(attachPart);
+		
+        message.setContent(multipart);
+		Transport t = session.getTransport("smtp");
+		t.connect((String) properties.get("mail.smtp.user"), (String) properties.get("mail.smtp.password"));
+		t.sendMessage(message, message.getAllRecipients());
+		t.close();
+	}
+	
+	public void enviarCorreo(String correoDestino, String asunto, String mensaje, byte[] data) throws MessagingException, IOException{
+		MimeMessage message = new MimeMessage(session);
+		message.setFrom(new InternetAddress((String) properties.get("mail.smtp.mail.sender")));
+		message.addRecipient(Message.RecipientType.TO, new InternetAddress(correoDestino));
+		message.setSubject(asunto);
+		message.setSentDate(new Date());
+		
+		MimeBodyPart messageBodyPart = new MimeBodyPart();
+        messageBodyPart.setContent(mensaje, "text/html");
+ 
+        // creates multi-part
+        Multipart multipart = new MimeMultipart();
+        multipart.addBodyPart(messageBodyPart);
+        
+        MimeBodyPart attachPart = new MimeBodyPart();
         
         attachPart.setDataHandler(new DataHandler(data,"application/octet-stream"));
         multipart.addBodyPart(attachPart);

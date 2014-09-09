@@ -14,10 +14,12 @@ import javax.faces.context.FacesContext;
 import javax.naming.NamingException;
 import javax.servlet.ServletContext;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 import org.richfaces.event.FileUploadEvent;
 import org.richfaces.model.UploadedFile;
 
+import pe.com.logistica.bean.negocio.ArchivoAdjunto;
 import pe.com.logistica.bean.negocio.CorreoClienteMasivo;
 import pe.com.logistica.bean.negocio.CorreoMasivo;
 import pe.com.logistica.web.servicio.NegocioServicio;
@@ -42,7 +44,7 @@ public class CorreoMasivoMBean extends BaseMBean {
 	
 	private List<CorreoClienteMasivo> listaClientesCorreo;
 	
-	private List<UploadedFile> archivos;
+	private List<ArchivoAdjunto> archivos;
 	
 	private NegocioServicio negocioServicio;
 
@@ -70,19 +72,29 @@ public class CorreoMasivoMBean extends BaseMBean {
 	public void listener(FileUploadEvent event) throws Exception {
         UploadedFile item = event.getUploadedFile();
         
-        this.getArchivos().add(item);
+        ArchivoAdjunto archivo = new ArchivoAdjunto(item.getName());
+        archivo.setStream(item.getInputStream());
+        archivo.setTipoContenido(item.getContentType());
+        getArchivos().add(archivo);
     }
 	
 	public void enviarMasivo(){
 		try {
-			List<InputStream> streams = new ArrayList<InputStream>();
-			if (!this.getArchivos().isEmpty()){
-				for (UploadedFile archivo : this.getArchivos()){
-					streams.add(archivo.getInputStream());
-				}
-				getCorreoMasivo().setArchivoAdjunto(streams.get(0));
-			}
 			
+			InputStream stream = archivos.get(0).getStream();
+			
+			byte[] buffer = IOUtils.toByteArray(stream);
+			
+			getCorreoMasivo().setArchivoCargado(buffer.length>0);
+			getCorreoMasivo().setBuffer(buffer);
+			
+			String mensaje = "<html>";
+			mensaje = mensaje + "<body>";
+			mensaje = mensaje + "<H1> Hola Prueba de Correo Masivo </H1>";
+			mensaje = mensaje + "</body>";
+			mensaje = mensaje + "</html>";
+				
+			getCorreoMasivo().setContenidoCorreo(mensaje);
 			getCorreoMasivo().setListaCorreoMasivo(getListaClientesCorreo());
 			this.negocioServicio.enviarCorreoMasivo(getCorreoMasivo());
 		
@@ -133,9 +145,9 @@ public class CorreoMasivoMBean extends BaseMBean {
 	/**
 	 * @return the archivos
 	 */
-	public List<UploadedFile> getArchivos() {
+	public List<ArchivoAdjunto> getArchivos() {
 		if (archivos == null){
-			archivos = new ArrayList<UploadedFile>();
+			archivos = new ArrayList<ArchivoAdjunto>();
 		}
 		return archivos;
 	}
@@ -143,7 +155,7 @@ public class CorreoMasivoMBean extends BaseMBean {
 	/**
 	 * @param archivos the archivos to set
 	 */
-	public void setArchivos(List<UploadedFile> archivos) {
+	public void setArchivos(List<ArchivoAdjunto> archivos) {
 		this.archivos = archivos;
 	}
 
