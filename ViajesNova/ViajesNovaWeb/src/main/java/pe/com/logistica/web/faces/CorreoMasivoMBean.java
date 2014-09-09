@@ -81,12 +81,14 @@ public class CorreoMasivoMBean extends BaseMBean {
 	public void enviarMasivo(){
 		try {
 			
-			InputStream stream = archivos.get(0).getStream();
-			
-			byte[] buffer = IOUtils.toByteArray(stream);
-			
-			getCorreoMasivo().setArchivoCargado(buffer.length>0);
-			getCorreoMasivo().setBuffer(buffer);
+			if (!getArchivos().isEmpty()){
+				InputStream stream = getArchivos().get(0).getStream();
+				
+				byte[] buffer = IOUtils.toByteArray(stream);
+				
+				getCorreoMasivo().setArchivoCargado(buffer.length>0);
+				getCorreoMasivo().setBuffer(buffer);
+			}
 			
 			String mensaje = "<html>";
 			mensaje = mensaje + "<body>";
