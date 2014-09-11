@@ -14,6 +14,7 @@ import javax.faces.context.FacesContext;
 import javax.naming.NamingException;
 import javax.servlet.ServletContext;
 
+import org.ajax4jsf.io.FastBufferInputStream;
 import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 import org.richfaces.event.FileUploadEvent;
@@ -73,28 +74,31 @@ public class CorreoMasivoMBean extends BaseMBean {
         UploadedFile item = event.getUploadedFile();
         
         ArchivoAdjunto archivo = new ArchivoAdjunto(item.getName());
-        archivo.setStream(item.getInputStream());
+        
         archivo.setTipoContenido(item.getContentType());
+        archivo.setDatos(IOUtils.toByteArray(item.getInputStream()));
+        archivo.setContent(item.getContentType());
         getArchivos().add(archivo);
     }
 	
 	public void enviarMasivo(){
 		try {
 			
+			String mensaje = "";
 			if (!getArchivos().isEmpty()){
-				InputStream stream = getArchivos().get(0).getStream();
 				
-				byte[] buffer = IOUtils.toByteArray(stream);
+				byte[] buffer = getArchivos().get(0).getDatos();
 				
+				getCorreoMasivo().setArchivoAdjunto(getArchivos().get(0));
 				getCorreoMasivo().setArchivoCargado(buffer.length>0);
 				getCorreoMasivo().setBuffer(buffer);
+				
+				mensaje = "<html>";
+				mensaje = mensaje + "<body>";
+				mensaje = mensaje + "<img src='"+getCorreoMasivo().getArchivoAdjunto().getNombreArchivo()+"'>";
+				mensaje = mensaje + "</body>";
+				mensaje = mensaje + "</html>";
 			}
-			
-			String mensaje = "<html>";
-			mensaje = mensaje + "<body>";
-			mensaje = mensaje + "<H1> Hola Prueba de Correo Masivo </H1>";
-			mensaje = mensaje + "</body>";
-			mensaje = mensaje + "</html>";
 				
 			getCorreoMasivo().setContenidoCorreo(mensaje);
 			getCorreoMasivo().setListaCorreoMasivo(getListaClientesCorreo());

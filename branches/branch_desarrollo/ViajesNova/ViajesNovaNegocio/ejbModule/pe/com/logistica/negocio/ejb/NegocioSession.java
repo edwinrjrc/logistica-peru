@@ -1116,7 +1116,7 @@ public class NegocioSession implements NegocioSessionRemote,
 						utilCorreo.enviarCorreo(envio.getCorreoElectronico().getDireccion(), correoMasivo.getAsunto(), correoMasivo.getContenidoCorreo());
 					}
 					else{
-						utilCorreo.enviarCorreo(envio.getCorreoElectronico().getDireccion(), correoMasivo.getAsunto(), correoMasivo.getContenidoCorreo(), correoMasivo.getBuffer());
+						utilCorreo.enviarCorreo(envio.getCorreoElectronico().getDireccion(), correoMasivo.getAsunto(), correoMasivo.getContenidoCorreo(), correoMasivo.getArchivoAdjunto());
 					}
 				}
 			}
