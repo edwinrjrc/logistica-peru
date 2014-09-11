@@ -26,6 +26,7 @@ import javax.mail.internet.MimeMultipart;
 import org.apache.commons.io.IOUtils;
 
 import pe.com.logistica.bean.Util.UtilProperties;
+import pe.com.logistica.bean.negocio.ArchivoAdjunto;
 
 /**
  * @author edwreb
@@ -75,7 +76,8 @@ public class UtilCorreo {
 	
 	public void enviarCorreo(String correoDestino, String asunto, String mensaje, InputStream archivoAdjunto) throws MessagingException, IOException{
 		MimeMessage message = new MimeMessage(session);
-		message.setFrom(new InternetAddress((String) properties.get("mail.smtp.mail.sender")));
+		InternetAddress internetAdd = new InternetAddress((String) properties.get("mail.smtp.mail.sender"),(String) properties.get("mail.smtp.mail.senderName"));
+		message.setFrom(internetAdd);
 		message.addRecipient(Message.RecipientType.TO, new InternetAddress(correoDestino));
 		message.setSubject(asunto);
 		message.setSentDate(new Date());
@@ -103,7 +105,8 @@ public class UtilCorreo {
 	
 	public void enviarCorreo(String correoDestino, String asunto, String mensaje, byte[] data) throws MessagingException, IOException{
 		MimeMessage message = new MimeMessage(session);
-		message.setFrom(new InternetAddress((String) properties.get("mail.smtp.mail.sender")));
+		InternetAddress internetAdd = new InternetAddress((String) properties.get("mail.smtp.mail.sender"),(String) properties.get("mail.smtp.mail.senderName"));
+		message.setFrom(internetAdd);
 		message.addRecipient(Message.RecipientType.TO, new InternetAddress(correoDestino));
 		message.setSubject(asunto);
 		message.setSentDate(new Date());
@@ -118,6 +121,34 @@ public class UtilCorreo {
         MimeBodyPart attachPart = new MimeBodyPart();
         
         attachPart.setDataHandler(new DataHandler(data,"application/octet-stream"));
+        multipart.addBodyPart(attachPart);
+		
+        message.setContent(multipart);
+		Transport t = session.getTransport("smtp");
+		t.connect((String) properties.get("mail.smtp.user"), (String) properties.get("mail.smtp.password"));
+		t.sendMessage(message, message.getAllRecipients());
+		t.close();
+	}
+	
+	public void enviarCorreo(String correoDestino, String asunto, String mensaje, ArchivoAdjunto archivo) throws MessagingException, IOException{
+		MimeMessage message = new MimeMessage(session);
+		InternetAddress internetAdd = new InternetAddress((String) properties.get("mail.smtp.mail.sender"),(String) properties.get("mail.smtp.mail.senderName"));
+		message.setFrom(internetAdd);
+		message.addRecipient(Message.RecipientType.TO, new InternetAddress(correoDestino));
+		message.setSubject(asunto);
+		message.setSentDate(new Date());
+		
+		MimeBodyPart messageBodyPart = new MimeBodyPart();
+        messageBodyPart.setContent(mensaje, "text/html");
+ 
+        // creates multi-part
+        Multipart multipart = new MimeMultipart();
+        multipart.addBodyPart(messageBodyPart);
+        
+        MimeBodyPart attachPart = new MimeBodyPart();
+        
+        attachPart.setDataHandler(new DataHandler(archivo.getDatos(),archivo.getContent()));
+        attachPart.setFileName(archivo.getNombreArchivo());
         multipart.addBodyPart(attachPart);
 		
         message.setContent(multipart);

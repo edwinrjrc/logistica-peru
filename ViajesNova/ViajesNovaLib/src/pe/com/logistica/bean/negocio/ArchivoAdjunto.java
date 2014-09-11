@@ -5,15 +5,25 @@ package pe.com.logistica.bean.negocio;
 
 import java.io.InputStream;
 
+import pe.com.logistica.bean.base.Base;
+
 /**
  * @author Edwin
  *
  */
-public class ArchivoAdjunto {
+public class ArchivoAdjunto extends Base{
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -6843568135765114678L;
+	
 	
 	private InputStream stream;
 	private String nombreArchivo;
 	private String tipoContenido;
+	private String content;
+	private byte[] datos;
 	
 	
 	public ArchivoAdjunto() {
@@ -63,6 +73,34 @@ public class ArchivoAdjunto {
 	 */
 	public void setTipoContenido(String tipoContenido) {
 		this.tipoContenido = tipoContenido;
+	}
+
+	/**
+	 * @return the datos
+	 */
+	public byte[] getDatos() {
+		return datos;
+	}
+
+	/**
+	 * @param datos the datos to set
+	 */
+	public void setDatos(byte[] datos) {
+		this.datos = datos;
+	}
+
+	/**
+	 * @return the content
+	 */
+	public String getContent() {
+		return content;
+	}
+
+	/**
+	 * @param content the content to set
+	 */
+	public void setContent(String content) {
+		this.content = content;
 	}
 
 }

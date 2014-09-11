@@ -28,6 +28,7 @@ public class CorreoMasivo extends BaseNegocio {
 	
 	private List<CorreoClienteMasivo> listaCorreoMasivo;
 	
+	private ArchivoAdjunto archivoAdjunto;
 	private byte[] buffer;
 	
 	private boolean archivoCargado;
@@ -135,6 +136,20 @@ public class CorreoMasivo extends BaseNegocio {
 	 */
 	public void setArchivoCargado(boolean archivoCargado) {
 		this.archivoCargado = archivoCargado;
+	}
+
+	/**
+	 * @return the archivoAdjunto
+	 */
+	public ArchivoAdjunto getArchivoAdjunto() {
+		return archivoAdjunto;
+	}
+
+	/**
+	 * @param archivoAdjunto the archivoAdjunto to set
+	 */
+	public void setArchivoAdjunto(ArchivoAdjunto archivoAdjunto) {
+		this.archivoAdjunto = archivoAdjunto;
 	}
 
 }
