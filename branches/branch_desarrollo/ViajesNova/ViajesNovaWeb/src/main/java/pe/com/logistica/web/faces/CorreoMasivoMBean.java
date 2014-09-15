@@ -104,7 +104,7 @@ public class CorreoMasivoMBean extends BaseMBean {
 			
 			this.setShowModal(true);
 			this.setTipoModal(this.TIPO_MODAL_EXITO);
-			this.setMensajeModal("");
+			this.setMensajeModal("Correos Enviados Satisfactoriamente");
 		} catch (EnvioCorreoException e) {
 			this.setShowModal(true);
 			this.setTipoModal(this.TIPO_MODAL_ERROR);
