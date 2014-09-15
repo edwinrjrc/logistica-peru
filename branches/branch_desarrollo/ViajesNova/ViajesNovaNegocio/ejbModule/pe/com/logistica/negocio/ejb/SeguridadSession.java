@@ -11,6 +11,7 @@ import pe.com.logistica.negocio.dao.CatalogoDao;
 import pe.com.logistica.negocio.dao.UsuarioDao;
 import pe.com.logistica.negocio.dao.impl.CatalogoDaoImpl;
 import pe.com.logistica.negocio.dao.impl.UsuarioDaoImpl;
+import pe.com.logistica.negocio.exception.ErrorEncriptacionException;
 
 /**
  * Session Bean implementation class Seguridad
@@ -28,7 +29,7 @@ public class SeguridadSession implements SeguridadRemote, SeguridadLocal {
     }
     
     @Override
-    public boolean registrarUsuario(Usuario usuario) throws SQLException{
+    public boolean registrarUsuario(Usuario usuario) throws SQLException, ErrorEncriptacionException{
     	usuarioDao = new UsuarioDaoImpl();
     	return usuarioDao.registrarUsuario(usuario);
     }

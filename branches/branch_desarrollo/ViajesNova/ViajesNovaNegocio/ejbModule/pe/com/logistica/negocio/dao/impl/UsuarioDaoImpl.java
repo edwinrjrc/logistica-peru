@@ -13,6 +13,7 @@ import java.util.List;
 
 import pe.com.logistica.bean.negocio.Usuario;
 import pe.com.logistica.negocio.dao.UsuarioDao;
+import pe.com.logistica.negocio.exception.ErrorEncriptacionException;
 import pe.com.logistica.negocio.util.UtilConexion;
 import pe.com.logistica.negocio.util.UtilEncripta;
 import pe.com.logistica.negocio.util.UtilJdbc;
@@ -30,7 +31,7 @@ public class UsuarioDaoImpl implements UsuarioDao{
 	}
 
 	@Override
-	public boolean registrarUsuario(Usuario usuario) throws SQLException {
+	public boolean registrarUsuario(Usuario usuario) throws SQLException, ErrorEncriptacionException {
 		boolean resultado = false;
 		Connection conn = null;
 		CallableStatement cs = null;
@@ -243,7 +244,7 @@ public class UsuarioDaoImpl implements UsuarioDao{
 	}
 
 	@Override
-	public boolean inicioSesion(Usuario usuario) throws SQLException {
+	public boolean inicioSesion(Usuario usuario) throws SQLException, ErrorEncriptacionException {
 		boolean resultado = false;
 		Connection conn = null;
 		CallableStatement cs = null;
@@ -287,7 +288,7 @@ public class UsuarioDaoImpl implements UsuarioDao{
 	}
 	
 	@Override
-	public Usuario inicioSesion2(Usuario usuario) throws SQLException {
+	public Usuario inicioSesion2(Usuario usuario) throws SQLException, ErrorEncriptacionException {
 		Usuario resultado = null;
 		Connection conn = null;
 		CallableStatement cs = null;
@@ -344,7 +345,7 @@ public class UsuarioDaoImpl implements UsuarioDao{
 	}
 	
 	@Override
-	public boolean cambiarClaveUsuario(Usuario usuario) throws SQLException {
+	public boolean cambiarClaveUsuario(Usuario usuario) throws SQLException, ErrorEncriptacionException {
 		boolean resultado = false;
 		Connection conn = null;
 		CallableStatement cs = null;
@@ -388,7 +389,7 @@ public class UsuarioDaoImpl implements UsuarioDao{
 	}
 	
 	@Override
-	public boolean actualizarClaveUsuario(Usuario usuario) throws SQLException {
+	public boolean actualizarClaveUsuario(Usuario usuario) throws SQLException, ErrorEncriptacionException {
 		boolean resultado = false;
 		Connection conn = null;
 		CallableStatement cs = null;

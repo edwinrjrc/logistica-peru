@@ -27,6 +27,7 @@ import org.apache.commons.io.IOUtils;
 
 import pe.com.logistica.bean.Util.UtilProperties;
 import pe.com.logistica.bean.negocio.ArchivoAdjunto;
+import pe.com.logistica.negocio.exception.ErrorEncriptacionException;
 
 /**
  * @author edwreb
@@ -39,15 +40,16 @@ public class UtilCorreo {
 	/**
 	 * @throws IOException 
 	 * @throws FileNotFoundException 
+	 * @throws ErrorEncriptacionException 
 	 * 
 	 */
-	public UtilCorreo() throws FileNotFoundException, IOException {
+	public UtilCorreo() throws FileNotFoundException, IOException, ErrorEncriptacionException {
 		Properties prop = UtilProperties.cargaArchivo("correoconfiguracion.properties");
 		
 		inicializador(prop);
 	}
 	
-	private void inicializador(Properties propiedades){
+	private void inicializador(Properties propiedades) throws ErrorEncriptacionException{
 		properties.put("mail.smtp.host", propiedades.getProperty("smtp.host"));
         properties.put("mail.smtp.starttls.enable", propiedades.getProperty("smtp.starttls.enable"));
         properties.put("mail.smtp.port", propiedades.getProperty("smtp.port"));

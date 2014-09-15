@@ -15,6 +15,7 @@ import javax.servlet.ServletContext;
 import pe.com.logistica.bean.base.BaseVO;
 import pe.com.logistica.bean.negocio.Usuario;
 import pe.com.logistica.negocio.ejb.SeguridadRemote;
+import pe.com.logistica.negocio.exception.ErrorEncriptacionException;
 import pe.com.logistica.web.servicio.SeguridadServicio;
 
 /**
@@ -47,7 +48,7 @@ public class SeguridadServicioImpl implements SeguridadServicio{
 		
 	}
 	@Override
-	public boolean registrarUsuario(Usuario usuario) throws SQLException {
+	public boolean registrarUsuario(Usuario usuario) throws SQLException, ErrorEncriptacionException {
 		return ejbSession.registrarUsuario(usuario);
 	}
 	@Override
