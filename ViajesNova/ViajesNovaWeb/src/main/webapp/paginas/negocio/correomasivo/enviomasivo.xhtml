@@ -89,7 +89,8 @@
 
 						<a4j:commandButton value="Enviar Correo"
 							actionListener="#{correoMasivoMBean.enviarMasivo()}"
-							render="idFormHidden,idPanelHidden,idPanelBotones,idModalcorrecto,idModalError" />
+							render="idFormHidden,idPanelHidden,idPanelBotones,idModalcorrecto,idModalError"
+							oncomplete="mostrarModal('idformenviocorreo')" />
 
 					</h:panelGrid>
 				</f:facet>

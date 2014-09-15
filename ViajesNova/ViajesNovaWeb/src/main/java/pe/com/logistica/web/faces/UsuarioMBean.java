@@ -23,15 +23,14 @@ import pe.com.logistica.negocio.exception.ValidacionException;
 import pe.com.logistica.web.servicio.SeguridadServicio;
 import pe.com.logistica.web.servicio.impl.SeguridadServicioImpl;
 
-
 /**
  * @author Edwin
- *
+ * 
  */
-@ManagedBean(name="usuarioMBean")
+@ManagedBean(name = "usuarioMBean")
 @SessionScoped()
 public class UsuarioMBean extends BaseMBean {
-	
+
 	private final static Logger logger = Logger.getLogger(UsuarioMBean.class);
 	/**
 	 * 
@@ -39,43 +38,44 @@ public class UsuarioMBean extends BaseMBean {
 	private static final long serialVersionUID = 6495326572788019729L;
 
 	private List<Usuario> listaUsuarios;
-	
+
 	private Usuario usuario;
-	
+
 	private String credencialNueva;
 	private String reCredencial;
 	private String msjeError;
 	private String idModalPopup;
-	
+
 	private String modalNombre;
-	
+
 	private boolean nuevoUsuario;
 	private boolean editarUsuario;
-	
-	
+
 	private SeguridadServicio seguridadServicio;
+
 	/**
 	 * 
 	 */
 	public UsuarioMBean() {
 		try {
-			ServletContext servletContext = (ServletContext)FacesContext.getCurrentInstance().getExternalContext().getContext();
+			ServletContext servletContext = (ServletContext) FacesContext
+					.getCurrentInstance().getExternalContext().getContext();
 			seguridadServicio = new SeguridadServicioImpl(servletContext);
 		} catch (NamingException e) {
 			logger.error(e.getMessage(), e);
 		}
 		usuario = new Usuario();
 	}
-	
-	public void nuevoUsuario(){
+
+	public void nuevoUsuario() {
 		this.setNuevoUsuario(true);
 		this.setEditarUsuario(false);
 		this.setUsuario(null);
 		this.setNombreFormulario("Nuevo Usuario");
 		this.setIdModalPopup("idModalformusuario");
 	}
-	
-	public void consultarUsuario(Integer id){
+
+	public void consultarUsuario(Integer id) {
 		try {
 			this.setNombreFormulario("Editar Usuario");
 			this.setIdModalPopup("idModalformusuario");
@@ -87,40 +87,44 @@ public class UsuarioMBean extends BaseMBean {
 			logger.error(e.getMessage(), e);
 		}
 	}
-	
-	public void registrarUsuario(){
+
+	public void registrarUsuario() {
 		try {
 			seguridadServicio.registrarUsuario(getUsuario());
 		} catch (SQLException e) {
 			logger.error(e.getMessage(), e);
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
-	
-	public void ejecutarMetodo(ActionEvent e){
+
+	public void ejecutarMetodo(ActionEvent e) {
 		try {
-			if (validarUsuarioFormulario()){
-				if (this.isNuevoUsuario()){
+			if (validarUsuarioFormulario()) {
+				if (this.isNuevoUsuario()) {
 					seguridadServicio.registrarUsuario(getUsuario());
 					this.setShowModal(true);
 					this.setTipoModal("1");
 					this.setMensajeModal("Usuario registrado Satisfactoriamente");
-				}
-				else if(this.isEditarUsuario()){
+				} else if (this.isEditarUsuario()) {
 					seguridadServicio.actualizarUsuario(usuario);
 					this.setShowModal(true);
 					this.setTipoModal("1");
 					this.setMensajeModal("Usuario actualizado Satisfactoriamente");
 				}
 			}
-			
+
 		} catch (SQLException ex) {
 			logger.error(ex.getMessage(), ex);
+
+		} catch (Exception ex) {
+			ex.printStackTrace();
 		}
 	}
-	
+
 	private boolean validarUsuarioFormulario() {
 		String idFormulario = "idFormUsuario";
-		if (!this.getUsuario().getCredencial().equals(this.getReCredencial())){
+		if (!this.getUsuario().getCredencial().equals(this.getReCredencial())) {
 			this.agregarMensaje(idFormulario + ":idReClave",
 					"Las claves no coinciden", "", FacesMessage.SEVERITY_ERROR);
 			return false;
@@ -128,16 +132,15 @@ public class UsuarioMBean extends BaseMBean {
 		return true;
 	}
 
-	public String inicioSesion(){
+	public String inicioSesion() {
 		try {
 			usuario = seguridadServicio.inicioSesion(usuario);
-			
-			if (usuario.isEncontrado()){
+
+			if (usuario.isEncontrado()) {
 				HttpSession session = (HttpSession) obtenerSession(true);
 				session.setAttribute("usuarioSession", usuario);
 				return "irInicio";
-			}
-			else{
+			} else {
 				String msje = "El usuario y la contraseña son incorrectas";
 				obtenerRequest().setAttribute("msjeError", msje);
 			}
@@ -156,20 +159,20 @@ public class UsuarioMBean extends BaseMBean {
 			obtenerRequest().setAttribute("msjeError", msje);
 			logger.error(e.getMessage(), e);
 		}
-		
+
 		return "";
 	}
-	
-	public void cambiarClave(){
+
+	public void cambiarClave() {
 		try {
-			if (validarClave()){
+			if (validarClave()) {
 				this.seguridadServicio.cambiarClaveUsuario(getUsuario());
-				
+
 				this.setShowModal(true);
 				this.setTipoModal("1");
 				this.setMensajeModal("Cambio de clave Satisfactorio");
 			}
-			
+
 		} catch (SQLException e) {
 			this.setTipoModal("2");
 			this.setShowModal(true);
@@ -182,18 +185,18 @@ public class UsuarioMBean extends BaseMBean {
 			logger.error(e.getMessage(), e);
 		}
 	}
-	
-	public void actualizarClave(){
+
+	public void actualizarClave() {
 		try {
-			if (validarClave()){
+			if (validarClave()) {
 				this.seguridadServicio.actualizarClaveUsuario(getUsuario());
-				
+
 				this.setShowModal(true);
 				this.setTipoModal("1");
 				this.setMensajeModal("Cambio de clave Satisfactorio");
 			}
-			
-		} catch (ValidacionException e){
+
+		} catch (ValidacionException e) {
 			this.setTipoModal("2");
 			this.setShowModal(true);
 			this.setMensajeModal(e.getMessage());
@@ -209,20 +212,22 @@ public class UsuarioMBean extends BaseMBean {
 			logger.error(e.getMessage(), e);
 		}
 	}
-		
+
 	private boolean validarClave() throws ValidacionException {
-		if (!getUsuario().getCredencialNueva().equals(this.getCredencialNueva())){
+		if (!getUsuario().getCredencialNueva()
+				.equals(this.getCredencialNueva())) {
 			throw new ValidacionException("Las claves no coinciden");
 		}
 		return true;
 	}
 
-	public String salirSesion(){
+	public String salirSesion() {
 		try {
-			HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(true);
+			HttpSession session = (HttpSession) FacesContext
+					.getCurrentInstance().getExternalContext().getSession(true);
 			Enumeration<String> enuatributos = session.getAttributeNames();
-			
-			while (enuatributos.hasMoreElements()){
+
+			while (enuatributos.hasMoreElements()) {
 				session.removeAttribute(enuatributos.nextElement());
 			}
 			session.invalidate();
@@ -230,13 +235,14 @@ public class UsuarioMBean extends BaseMBean {
 			logger.error("Error cerrando sesion");
 			logger.error(e.getMessage(), e);
 		}
-		
+
 		return "irSalirSistema";
 	}
-	
-	public void consultarCambioClave(Integer id){
+
+	public void consultarCambioClave(Integer id) {
 		this.setIdModalPopup("idModalfrcambioclaveusuario");
 	}
+
 	/**
 	 * @return the listaUsuarios
 	 */
@@ -244,41 +250,49 @@ public class UsuarioMBean extends BaseMBean {
 		try {
 			this.setShowModal(false);
 			listaUsuarios = seguridadServicio.listarUsuarios();
-			
+
 		} catch (SQLException e) {
 			logger.error(e.getMessage(), e);
 		}
 		return listaUsuarios;
 	}
+
 	/**
-	 * @param listaUsuarios the listaUsuarios to set
+	 * @param listaUsuarios
+	 *            the listaUsuarios to set
 	 */
 	public void setListaUsuarios(List<Usuario> listaUsuarios) {
 		this.listaUsuarios = listaUsuarios;
 	}
+
 	/**
 	 * @return the usuario
 	 */
 	public Usuario getUsuario() {
-		if (usuario == null){
+		if (usuario == null) {
 			usuario = new Usuario();
 		}
 		return usuario;
 	}
+
 	/**
-	 * @param usuario the usuario to set
+	 * @param usuario
+	 *            the usuario to set
 	 */
 	public void setUsuario(Usuario usuario) {
 		this.usuario = usuario;
 	}
+
 	/**
 	 * @return the reCredencial
 	 */
 	public String getReCredencial() {
 		return reCredencial;
 	}
+
 	/**
-	 * @param reCredencial the reCredencial to set
+	 * @param reCredencial
+	 *            the reCredencial to set
 	 */
 	public void setReCredencial(String reCredencial) {
 		this.reCredencial = reCredencial;
@@ -292,7 +306,8 @@ public class UsuarioMBean extends BaseMBean {
 	}
 
 	/**
-	 * @param nuevoUsuario the nuevoUsuario to set
+	 * @param nuevoUsuario
+	 *            the nuevoUsuario to set
 	 */
 	public void setNuevoUsuario(boolean nuevoUsuario) {
 		this.nuevoUsuario = nuevoUsuario;
@@ -306,7 +321,8 @@ public class UsuarioMBean extends BaseMBean {
 	}
 
 	/**
-	 * @param editarUsuario the editarUsuario to set
+	 * @param editarUsuario
+	 *            the editarUsuario to set
 	 */
 	public void setEditarUsuario(boolean editarUsuario) {
 		this.editarUsuario = editarUsuario;
@@ -320,7 +336,8 @@ public class UsuarioMBean extends BaseMBean {
 	}
 
 	/**
-	 * @param msjeError the msjeError to set
+	 * @param msjeError
+	 *            the msjeError to set
 	 */
 	public void setMsjeError(String msjeError) {
 		this.msjeError = msjeError;
@@ -334,7 +351,8 @@ public class UsuarioMBean extends BaseMBean {
 	}
 
 	/**
-	 * @param modalNombre the modalNombre to set
+	 * @param modalNombre
+	 *            the modalNombre to set
 	 */
 	public void setModalNombre(String modalNombre) {
 		this.modalNombre = modalNombre;
@@ -348,7 +366,8 @@ public class UsuarioMBean extends BaseMBean {
 	}
 
 	/**
-	 * @param seguridadServicio the seguridadServicio to set
+	 * @param seguridadServicio
+	 *            the seguridadServicio to set
 	 */
 	public void setSeguridadServicio(SeguridadServicio seguridadServicio) {
 		this.seguridadServicio = seguridadServicio;
@@ -362,7 +381,8 @@ public class UsuarioMBean extends BaseMBean {
 	}
 
 	/**
-	 * @param credencialNueva the credencialNueva to set
+	 * @param credencialNueva
+	 *            the credencialNueva to set
 	 */
 	public void setCredencialNueva(String credencialNueva) {
 		this.credencialNueva = credencialNueva;
@@ -376,7 +396,8 @@ public class UsuarioMBean extends BaseMBean {
 	}
 
 	/**
-	 * @param idModalPopup the idModalPopup to set
+	 * @param idModalPopup
+	 *            the idModalPopup to set
 	 */
 	public void setIdModalPopup(String idModalPopup) {
 		this.idModalPopup = idModalPopup;

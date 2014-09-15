@@ -8,6 +8,7 @@ import java.util.List;
 
 import pe.com.logistica.bean.base.BaseVO;
 import pe.com.logistica.bean.negocio.Usuario;
+import pe.com.logistica.negocio.exception.ErrorEncriptacionException;
 
 /**
  * @author Edwin
@@ -16,7 +17,7 @@ import pe.com.logistica.bean.negocio.Usuario;
 public interface SeguridadServicio {
 
 	
-	public boolean registrarUsuario(Usuario usuario) throws SQLException;
+	public boolean registrarUsuario(Usuario usuario) throws SQLException, ErrorEncriptacionException;
 	public List<Usuario> listarUsuarios() throws SQLException;
 	public List<BaseVO> listarRoles();
 	public Usuario consultarUsuario(int id) throws SQLException;
