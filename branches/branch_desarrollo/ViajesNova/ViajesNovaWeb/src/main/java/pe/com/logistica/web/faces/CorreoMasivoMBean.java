@@ -3,7 +3,6 @@
  */
 package pe.com.logistica.web.faces;
 
-import java.io.InputStream;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,7 +13,6 @@ import javax.faces.context.FacesContext;
 import javax.naming.NamingException;
 import javax.servlet.ServletContext;
 
-import org.ajax4jsf.io.FastBufferInputStream;
 import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 import org.richfaces.event.FileUploadEvent;
@@ -23,6 +21,7 @@ import org.richfaces.model.UploadedFile;
 import pe.com.logistica.bean.negocio.ArchivoAdjunto;
 import pe.com.logistica.bean.negocio.CorreoClienteMasivo;
 import pe.com.logistica.bean.negocio.CorreoMasivo;
+import pe.com.logistica.negocio.exception.EnvioCorreoException;
 import pe.com.logistica.web.servicio.NegocioServicio;
 import pe.com.logistica.web.servicio.impl.NegocioServicioImpl;
 
@@ -83,7 +82,6 @@ public class CorreoMasivoMBean extends BaseMBean {
 	
 	public void enviarMasivo(){
 		try {
-			
 			String mensaje = "";
 			if (!getArchivos().isEmpty()){
 				
@@ -95,17 +93,26 @@ public class CorreoMasivoMBean extends BaseMBean {
 				
 				mensaje = "<html>";
 				mensaje = mensaje + "<body>";
-				mensaje = mensaje + "<img src='"+getCorreoMasivo().getArchivoAdjunto().getNombreArchivo()+"'>";
+				mensaje = mensaje + "<img src='cid:"+getCorreoMasivo().getArchivoAdjunto().getNombreArchivo()+"'>";
 				mensaje = mensaje + "</body>";
 				mensaje = mensaje + "</html>";
 			}
 				
 			getCorreoMasivo().setContenidoCorreo(mensaje);
-			getCorreoMasivo().setListaCorreoMasivo(getListaClientesCorreo());
+			getCorreoMasivo().setListaCorreoMasivo(listaClientesCorreo);
 			this.negocioServicio.enviarCorreoMasivo(getCorreoMasivo());
-		
+			
+			this.setShowModal(true);
+			this.setTipoModal(this.TIPO_MODAL_EXITO);
+			this.setMensajeModal("");
+		} catch (EnvioCorreoException e) {
+			this.setShowModal(true);
+			this.setTipoModal(this.TIPO_MODAL_ERROR);
+			this.setMensajeModal(e.getMessage());
 		} catch (Exception e) {
-			e.printStackTrace();
+			this.setShowModal(true);
+			this.setTipoModal(this.TIPO_MODAL_ERROR);
+			this.setMensajeModal(e.getMessage());
 		}
 	}
 
