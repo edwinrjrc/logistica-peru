@@ -53,7 +53,7 @@ public class UtilCorreo {
         properties.put("mail.smtp.port", propiedades.getProperty("smtp.port"));
         properties.put("mail.smtp.mail.sender", propiedades.getProperty("smtp.mail.sender"));
         properties.put("mail.smtp.mail.senderName", propiedades.getProperty("smtp.mail.senderName"));
-        properties.put("mail.smtp.password", propiedades.getProperty("smtp.password"));
+        properties.put("mail.smtp.password", UtilEncripta.desencriptaCadena(propiedades.getProperty("smtp.password")));
         properties.put("mail.smtp.user", propiedades.getProperty("smtp.user"));
         properties.put("mail.smtp.auth", propiedades.getProperty("smtp.auth"));
         session = Session.getDefaultInstance(properties);
@@ -149,6 +149,7 @@ public class UtilCorreo {
         
         attachPart.setDataHandler(new DataHandler(archivo.getDatos(),archivo.getContent()));
         attachPart.setFileName(archivo.getNombreArchivo());
+        attachPart.setHeader("Content-ID","<"+archivo.getNombreArchivo()+">");
         multipart.addBodyPart(attachPart);
 		
         message.setContent(multipart);
