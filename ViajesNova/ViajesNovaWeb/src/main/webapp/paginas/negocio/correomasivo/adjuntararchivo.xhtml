@@ -22,15 +22,28 @@
 
 		<h:form id="idFormAdjuntarArchivo" enctype="multipart/form-data">
 
-			<h:panelGrid border="0" cellpadding="0" cellspacing="0">
+			<h:panelGrid border="0" cellpadding="0" cellspacing="0"
+				style="text-align:center;">
 
+				<h:outputText value="Tamaño Maximo para cargar 500 KB." />
 				<rich:fileUpload fileUploadListener="#{correoMasivoMBean.listener}"
-					id="upload" acceptedTypes="jpg, gif, png, bmp"
-					ontyperejected="alert('Only JPG, GIF, PNG and BMP files are accepted');"
-					maxFilesQuantity="5">
+					id="upload"
+					acceptedTypes="jpg, gif, png, jpeg, JPG, GIF, PNG, JPEG"
+					ontyperejected="alert('Only JPG, GIF, PNG files are accepted');"
+					maxFilesQuantity="1">
 					<a4j:ajax event="uploadcomplete" execute="@none" />
 				</rich:fileUpload>
 
+				<f:facet name="footer">
+					<h:panelGrid border="0" cellpadding="0" cellspacing="0"
+						style="width:100%;text-align:center;">
+
+						<a4j:commandButton value="Cerrar" style="width:100px;"
+							oncomplete="#{rich:component('idModalfradjarchivo')}.hide(); return false;">
+						</a4j:commandButton>
+
+					</h:panelGrid>
+				</f:facet>
 			</h:panelGrid>
 
 		</h:form>

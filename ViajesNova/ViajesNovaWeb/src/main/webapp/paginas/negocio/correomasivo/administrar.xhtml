@@ -48,6 +48,10 @@
 		
 		<ui:include src="/paginas/negocio/correomasivo/enviomasivo.xhtml" />
 		<ui:include src="/paginas/negocio/correomasivo/adjuntararchivo.xhtml" />
+		<ui:include src="/resources/includes/includemensaje.xhtml">
+			<ui:param name="backBean" value="#{correoMasivoMBean}" />
+			<ui:param name="idModalForm" value="idModalfrenviomasivo" />
+		</ui:include>
 	</ui:define>
 </ui:composition>
 
