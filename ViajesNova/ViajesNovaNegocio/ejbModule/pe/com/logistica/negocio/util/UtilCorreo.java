@@ -151,7 +151,7 @@ public class UtilCorreo {
         
         attachPart.setDataHandler(new DataHandler(archivo.getDatos(),archivo.getContent()));
         attachPart.setFileName(archivo.getNombreArchivo());
-        attachPart.setHeader("Content-ID","<"+archivo.getNombreArchivo()+">");
+        attachPart.setHeader("Content-ID","<imagenCorreo>");
         multipart.addBodyPart(attachPart);
 		
         message.setContent(multipart);
