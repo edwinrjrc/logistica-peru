@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j">
+
+	<!-- la ventana modal -->
+	<rich:popupPanel id="idModalConfirma" width="375" height="160"
+		resizeable="false">
+		<f:facet name="header">
+			<h:outputText value="Confirmar" />
+		</f:facet>
+		<h:panelGrid style="width:100%;">
+			<h:panelGrid columns="2">
+				<h:graphicImage value="#{facesContext.externalContext.requestContextPath}/../resources/img/pregunta.gif"></h:graphicImage>
+				<h:outputText
+					value="#{pregunta}" />
+			</h:panelGrid>
+
+			<f:facet name="footer">
+				<h:panelGrid cellpadding="0" cellspacing="0" border="0" style="width:100%;" columns="1">
+					<h:panelGrid cellpadding="0" cellspacing="0" border="0" style="width:50%;" columns="2">
+					<a4j:commandButton value="Aceptar"></a4j:commandButton>
+					<a4j:commandButton value="Cancelar"></a4j:commandButton>
+					
+					</h:panelGrid>
+				</h:panelGrid>
+			</f:facet>
+		</h:panelGrid>
+	</rich:popupPanel>
+
+</ui:composition>

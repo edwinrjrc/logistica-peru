@@ -47,6 +47,8 @@ public class CorreoMasivoMBean extends BaseMBean {
 	private List<ArchivoAdjunto> archivos;
 	
 	private NegocioServicio negocioServicio;
+	
+	private boolean correoEnviado;
 
 	/**
 	 * 
@@ -62,7 +64,7 @@ public class CorreoMasivoMBean extends BaseMBean {
 	}
 	
 	public void nuevoEnvio(){
-		
+		this.setCorreoEnviado(false);
 	}
 	
 	public void cargarArchivo(){
@@ -80,6 +82,12 @@ public class CorreoMasivoMBean extends BaseMBean {
         getArchivos().add(archivo);
     }
 	
+	public String correoEnviadoAction(){
+		this.setCorreoEnviado(true);
+		
+		return "";
+	}
+	
 	public void enviarMasivo(){
 		try {
 			String mensaje = "";
@@ -93,7 +101,7 @@ public class CorreoMasivoMBean extends BaseMBean {
 				
 				mensaje = "<html>";
 				mensaje = mensaje + "<body>";
-				mensaje = mensaje + "<img src='cid:"+getCorreoMasivo().getArchivoAdjunto().getNombreArchivo()+"'>";
+				mensaje = mensaje + "<img src='cid:imagenCorreo'>";
 				mensaje = mensaje + "</body>";
 				mensaje = mensaje + "</html>";
 			}
@@ -170,6 +178,20 @@ public class CorreoMasivoMBean extends BaseMBean {
 	 */
 	public void setArchivos(List<ArchivoAdjunto> archivos) {
 		this.archivos = archivos;
+	}
+
+	/**
+	 * @return the correoEnviado
+	 */
+	public boolean isCorreoEnviado() {
+		return correoEnviado;
+	}
+
+	/**
+	 * @param correoEnviado the correoEnviado to set
+	 */
+	public void setCorreoEnviado(boolean correoEnviado) {
+		this.correoEnviado = correoEnviado;
 	}
 
 }
