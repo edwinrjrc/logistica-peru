@@ -49,6 +49,8 @@ public class CorreoMasivoMBean extends BaseMBean {
 	private NegocioServicio negocioServicio;
 	
 	private boolean correoEnviado;
+	
+	private String pregunta;
 
 	/**
 	 * 
@@ -65,6 +67,7 @@ public class CorreoMasivoMBean extends BaseMBean {
 	
 	public void nuevoEnvio(){
 		this.setCorreoEnviado(false);
+		this.setCorreoMasivo(null);
 	}
 	
 	public void cargarArchivo(){
@@ -88,12 +91,20 @@ public class CorreoMasivoMBean extends BaseMBean {
 		return "";
 	}
 	
+	public void confirmarEnvioCorreo(){
+		this.setPregunta("¿ Esta seguro de enviar el correo masivo?");
+	}
+	
 	public void enviarMasivo(){
 		try {
 			String mensaje = "";
 			if (!getArchivos().isEmpty()){
 				
 				byte[] buffer = getArchivos().get(0).getDatos();
+				
+				if (buffer == null || buffer.length == 0){
+					throw new EnvioCorreoException("No se adjunto archivo al correo");
+				}
 				
 				getCorreoMasivo().setArchivoAdjunto(getArchivos().get(0));
 				getCorreoMasivo().setArchivoCargado(buffer.length>0);
@@ -104,6 +115,9 @@ public class CorreoMasivoMBean extends BaseMBean {
 				mensaje = mensaje + "<img src='cid:imagenCorreo'>";
 				mensaje = mensaje + "</body>";
 				mensaje = mensaje + "</html>";
+			}
+			else{
+				throw new EnvioCorreoException("No se adjunto archivo al correo");
 			}
 				
 			getCorreoMasivo().setContenidoCorreo(mensaje);
@@ -122,6 +136,10 @@ public class CorreoMasivoMBean extends BaseMBean {
 			this.setTipoModal(this.TIPO_MODAL_ERROR);
 			this.setMensajeModal(e.getMessage());
 		}
+	}
+	
+	public void aceptarConfirmacion(){
+		
 	}
 
 	/**
@@ -192,6 +210,20 @@ public class CorreoMasivoMBean extends BaseMBean {
 	 */
 	public void setCorreoEnviado(boolean correoEnviado) {
 		this.correoEnviado = correoEnviado;
+	}
+
+	/**
+	 * @return the pregunta
+	 */
+	public String getPregunta() {
+		return pregunta;
+	}
+
+	/**
+	 * @param pregunta the pregunta to set
+	 */
+	public void setPregunta(String pregunta) {
+		this.pregunta = pregunta;
 	}
 
 }
