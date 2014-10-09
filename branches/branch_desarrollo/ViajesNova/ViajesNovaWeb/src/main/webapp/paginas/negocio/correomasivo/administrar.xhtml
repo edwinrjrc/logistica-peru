@@ -44,15 +44,41 @@
 					</h:panelGroup>
 				</f:facet>
 			</h:panelGrid>
+
 		</h:form>
-		
+
 		<ui:include src="/paginas/negocio/correomasivo/enviomasivo.xhtml" />
 		<ui:include src="/paginas/negocio/correomasivo/adjuntararchivo.xhtml" />
 		<ui:include src="/resources/includes/includemensaje.xhtml">
 			<ui:param name="backBean" value="#{correoMasivoMBean}" />
 			<ui:param name="idModalForm" value="idModalfrenviomasivo" />
-		</ui:include><ui:include src="/resources/modal/modalconfirmacion.xhtml"/>
-		
+		</ui:include>
+		<h:panelGrid id="idConfirm">
+			<ui:include src="/resources/modal/modalconfirmacion.xhtml">
+				<ui:param name="pregunta" value="#{correoMasivoMBean.pregunta}" />
+				<ui:param name="idBotonEjecutar"
+					value="idFormEnviomasivo:idBtnEnviarCorreo" />
+			</ui:include>
+		</h:panelGrid>
+
+		<rich:popupPanel modal="true" width="375" height="100"
+			resizeable="false" id="idModalEspera">
+			<f:facet name="header">
+				<h:outputText value="Procesando" />
+			</f:facet>
+
+			<h:panelGrid cellpadding="0" cellspacing="0" border="0"
+				style="width:100%;text-align:center; height:50px;" columns="1">
+
+				<h:graphicImage
+					value="#{facesContext.externalContext.requestContextPath}/../resources/img/loading.gif"></h:graphicImage>
+				<h:outputText value="Por favor, espere..."
+					style="font-weight: bold;" />
+
+			</h:panelGrid>
+
+		</rich:popupPanel>
+
 	</ui:define>
 </ui:composition>
 

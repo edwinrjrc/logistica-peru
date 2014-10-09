@@ -62,7 +62,7 @@ public class CorreoMasivoDaoImpl implements CorreoMasivoDao {
 				correoClienteMasivo.getContacto().setApellidoPaterno(UtilJdbc.obtenerCadena(rs, "apepatcontacto"));
 				correoClienteMasivo.getContacto().setApellidoMaterno(UtilJdbc.obtenerCadena(rs, "apematcontacto"));
 				correoClienteMasivo.getCorreoElectronico().setDireccion(UtilJdbc.obtenerCadena(rs, "correo"));
-				correoClienteMasivo.setEnviarCorreo(true);
+				correoClienteMasivo.setEnviarCorreo(UtilJdbc.obtenerBoolean(rs, "recibirPromociones"));
 				
 				resultado.add(correoClienteMasivo);
 			}

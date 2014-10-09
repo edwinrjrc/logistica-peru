@@ -257,7 +257,7 @@ public class ContactoDaoImpl implements ContactoDao {
 			throws SQLException {
 		boolean resultado = false;
 		CallableStatement cs = null;
-		String sql = "{ ? = call negocio.fn_ingresarcorreoelectronico(?,?,?,?) }";
+		String sql = "{ ? = call negocio.fn_ingresarcorreoelectronico(?,?,?,?,?) }";
 		
 		try {
 			
@@ -267,6 +267,7 @@ public class ContactoDaoImpl implements ContactoDao {
 				cs.registerOutParameter(i++, Types.INTEGER);
 				cs.setString(i++, UtilJdbc.convertirMayuscula(correo.getDireccion()));
 				cs.setInt(i++, contacto.getCodigoEntero().intValue());
+				cs.setBoolean(i++, correo.isRecibirPromociones());
 				cs.setString(i++, UtilJdbc.convertirMayuscula(contacto.getUsuarioCreacion()));
 				cs.setString(i++, contacto.getIpCreacion());
 				
@@ -342,6 +343,7 @@ public class ContactoDaoImpl implements ContactoDao {
 				correoElectronico = new CorreoElectronico();
 				correoElectronico.setCodigoEntero(UtilJdbc.obtenerNumero(rs, "id"));
 				correoElectronico.setDireccion(UtilJdbc.obtenerCadena(rs, "correo"));
+				correoElectronico.setRecibirPromociones(UtilJdbc.obtenerBoolean(rs, "recibirPromociones"));
 				resultado.add(correoElectronico);
 			}
 			
