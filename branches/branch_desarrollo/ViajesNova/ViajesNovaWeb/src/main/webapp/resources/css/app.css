@@ -103,6 +103,10 @@
 	height: 20px;
 	width: 150px";
 }
+.estiloBoton2{
+	height: 20px;
+	width: 100px";
+}
 
 .estilocampo1 {
 	text-transform: uppercase;
@@ -157,4 +161,16 @@
 }
 .colNov5{
 	width: 80%;
+}
+.col1confirm{
+	width:20%;
+	text-align: center;
+}
+.col2confirm{
+	width:80%;
+	font-weight: bold;
+}
+.columna1Tabla{
+	width:100%;
+	text-align: center;
 }

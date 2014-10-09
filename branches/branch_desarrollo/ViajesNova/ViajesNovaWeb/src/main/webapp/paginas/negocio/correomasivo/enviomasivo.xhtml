@@ -81,38 +81,41 @@
 					</rich:column>
 				</rich:dataTable>
 
-
 				<f:facet name="footer">
-					<h:panelGrid border="0" cellpadding="0" cellspacing="0" columns="2"
+					<h:panelGrid border="0" cellpadding="0" cellspacing="0" columns="1"
 						style="heght:50px; width:100%;text-align:center;"
-						id="idBotVenServicio">
-
-						<a4j:commandButton value="Enviar Correo" 
-							render="idFormHidden,idPanelHidden,idPanelBotones,idModalcorrecto,idModalError,idBotVenServicio"
-							oncomplete="#{rich:component('idModalConfirma')}.show(); return false;" rendered="#{!correoMasivoMBean.correoEnviado}" />
-						<a4j:commandButton value="Cancelar" rendered="#{!correoMasivoMBean.correoEnviado}"
-							oncomplete="#{rich:component('idModalfrenviomasivo')}.hide(); return false;"></a4j:commandButton>
+						columnClasses="columna1Tabla">
+						<br></br>
+						<table cellpadding="0" cellspacing="0" border="0"
+							style="width: 70%;" align="center">
+							<tr>
+								<td align="center"><h:panelGrid border="0" cellpadding="0"
+										cellspacing="0" columns="3" style="width:100%;">
+										<a4j:commandButton value="Enviar Correo"
+											action="#{correoMasivoMBean.confirmarEnvioCorreo()}"
+											style="width: 150px; height: 20px;" render="idConfirm"
+											oncomplete="#{rich:component('idModalConfirma')}.show(); return false;"
+											rendered="#{!correoMasivoMBean.correoEnviado}" />
+										<a4j:commandButton id="idBtnEnviarCorreo" status="ajaxCorreo"
+											action="#{correoMasivoMBean.enviarMasivo()}"
+											render="idFormHidden,idPanelHidden,idPanelBotones,idModalcorrecto,idModalError"
+											style="display:none;"
+											oncomplete="mostrarModal('idformenviocorreo')" />
+										<a4j:commandButton value="Cancelar"
+											rendered="#{!correoMasivoMBean.correoEnviado}"
+											style="width: 150px; height: 20px;"
+											oncomplete="#{rich:component('idModalfrenviomasivo')}.hide(); return false;"></a4j:commandButton>
+									</h:panelGrid></td>
+							</tr>
+						</table>
 
 					</h:panelGrid>
 				</f:facet>
 			</h:panelGrid>
-			<a4j:status>
-				<f:facet name="start">
-					<h:panelGrid cellpadding="0" cellspacing="0" border="0"
-						style="width:100%;text-align:center" columns="1"></h:panelGrid>
-					<h:graphicImage
-						value="#{facesContext.externalContext.requestContextPath}/../resources/img/loading.gif"></h:graphicImage>
-					<h:outputText value="Por favor, espere..."
-						style="font-weight: bold;" />
-				</f:facet>
-				<f:facet name="stop">
-					<a4j:commandButton value="Salir"
-						oncomplete="#{rich:component('idModalfrenviomasivo')}.hide(); return false;"></a4j:commandButton>
-				</f:facet>
-			</a4j:status>
 		</h:form>
-
-
+		<a4j:status name="ajaxCorreo"
+			onstart="#{rich:component('idModalEspera')}.show(); return false;"
+			onstop="#{rich:component('idModalEspera')}.hide(); return false;"></a4j:status>
 
 	</rich:popupPanel>
 </ui:composition>

@@ -17,6 +17,7 @@ public class CorreoElectronico extends Base {
 
 	private String direccion;
 	private boolean seleccionado;
+	private boolean recibirPromociones;
 
 
 	/**
@@ -48,5 +49,21 @@ public class CorreoElectronico extends Base {
 	 */
 	public void setSeleccionado(boolean seleccionado) {
 		this.seleccionado = seleccionado;
+	}
+
+
+	/**
+	 * @return the recibirPromociones
+	 */
+	public boolean isRecibirPromociones() {
+		return recibirPromociones;
+	}
+
+
+	/**
+	 * @param recibirPromociones the recibirPromociones to set
+	 */
+	public void setRecibirPromociones(boolean recibirPromociones) {
+		this.recibirPromociones = recibirPromociones;
 	}
 }
