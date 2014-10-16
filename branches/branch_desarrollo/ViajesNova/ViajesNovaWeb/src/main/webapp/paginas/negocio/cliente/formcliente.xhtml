@@ -38,7 +38,7 @@
 									columns="1">
 									<h:selectOneMenu id="idFPSelTipoDoc"
 										value="#{clienteMBean.cliente.documentoIdentidad.tipoDocumento.codigoEntero}"
-										required="True" requiredMessage="Seleccione tipo de documento">
+										requiredMessage="Seleccione tipo de documento">
 										<f:selectItem itemLabel="-Seleccione-" />
 										<f:selectItems value="#{catalogoMBean.catalogoTipoDocumento}" />
 										<a4j:ajax event="valueChange" render="idGrdFrmProv"
@@ -52,7 +52,6 @@
 									columns="1">
 									<h:inputText id="idFPInNumDoc"
 										value="#{clienteMBean.cliente.documentoIdentidad.numeroDocumento}"
-										required="True"
 										requiredMessage="Ingrese el número de documento"
 										maxlength="12" />
 									<rich:message for="idFPInNumDoc" ajaxRendered="true"
@@ -116,7 +115,7 @@
 									columns="1">
 									<h:selectOneMenu id="idFPSelEstCivil"
 										value="#{clienteMBean.cliente.estadoCivil.codigoEntero}"
-										required="true" requiredMessage="Seleccione el Estado Civil">
+										requiredMessage="Seleccione el Estado Civil">
 										<f:selectItem itemLabel="-Seleccione-" />
 										<f:selectItems value="#{catalogoMBean.catalogoEstadoCivil}" />
 									</h:selectOneMenu>
@@ -128,7 +127,7 @@
 									columns="1">
 									<h:selectOneMenu id="idFPSelGenero"
 										value="#{clienteMBean.cliente.genero.codigoCadena}"
-										required="true" requiredMessage="Seleccione el Estado Civil">
+										requiredMessage="Seleccione el Estado Civil">
 										<f:selectItem itemLabel="-Seleccione-" />
 										<f:selectItem itemLabel="MASCULINO" itemValue="M" />
 										<f:selectItem itemLabel="FEMENINO" itemValue="F" />
@@ -140,7 +139,7 @@
 								<h:outputText value="Fecha Nacimiento" />
 								<h:panelGrid border="0" cellpadding="0" cellspacing="0"
 									columns="1">
-									<rich:calendar id="idFPFecNacimiento" required="true"
+									<rich:calendar id="idFPFecNacimiento"
 										value="#{clienteMBean.cliente.fechaNacimiento}"
 										datePattern="dd/MM/yyyy"
 										requiredMessage="Ingrese la fecha de nacimiento" popup="true">
@@ -177,7 +176,7 @@
 									columns="1">
 									<h:selectOneMenu id="idFPSelRubro"
 										value="#{clienteMBean.cliente.rubro.codigoEntero}"
-										required="true" requiredMessage="Seleccione el rubro">
+										requiredMessage="Seleccione el rubro">
 										<f:selectItem itemLabel="-Seleccione-" />
 										<f:selectItems value="#{catalogoMBean.catalogoRubro}" />
 									</h:selectOneMenu>
@@ -301,8 +300,8 @@
 								</rich:column>
 								<f:facet name="header">
 									<h:panelGrid columns="1" style="width:100%;text-align:right;">
-										<a4j:commandButton value="Agregar" immediate="true"
-											action="#{clienteMBean.nuevoContacto()}"
+										<a4j:commandButton value="Agregar"
+											action="#{clienteMBean.nuevoContacto}"
 											oncomplete="#{rich:component('idModalFormContacto')}.show();"
 											render="idNomModalContacto,idGrdFCon" />
 									</h:panelGrid>
