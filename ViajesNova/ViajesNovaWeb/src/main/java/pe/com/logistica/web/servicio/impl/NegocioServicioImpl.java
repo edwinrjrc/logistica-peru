@@ -281,5 +281,10 @@ public class NegocioServicioImpl implements NegocioServicio {
 		
 		return ejbSession.enviarCorreoMasivo(correoMasivo);
 	}
+
+	@Override
+	public List<Cliente> listarClientesCumples() throws SQLException, Exception {
+		return ejbSession.listarClientesCumples();
+	}
 }
 	

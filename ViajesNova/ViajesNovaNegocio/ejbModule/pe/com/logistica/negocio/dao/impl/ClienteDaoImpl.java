@@ -675,4 +675,67 @@ public class ClienteDaoImpl implements ClienteDao {
 		
 		return resultado;
 	}
+
+	@Override
+	public List<Cliente> listarClienteCumpleanieros() throws SQLException {
+		List<Cliente> resultado = null;
+		Connection conn = null;
+		CallableStatement cs = null;
+		ResultSet rs = null;
+		String sql = "{ ? = call negocio.fn_listarclientescumples()}";
+
+		try {
+			conn = UtilConexion.obtenerConexion();
+			cs = conn.prepareCall(sql);
+			cs.execute();
+			rs = (ResultSet)cs.getObject(1);
+
+			resultado = new ArrayList<Cliente>();
+			Cliente persona2 = null;
+			while (rs.next()) {
+				persona2 = new Cliente();
+				persona2.setCodigoEntero(UtilJdbc.obtenerNumero(rs,
+						"id"));
+				persona2.getDocumentoIdentidad()
+						.getTipoDocumento()
+						.setCodigoEntero(
+								UtilJdbc.obtenerNumero(rs, "idtipodocumento"));
+				persona2.getDocumentoIdentidad().setNumeroDocumento(
+						UtilJdbc.obtenerCadena(rs, "numerodocumento"));
+				persona2.setNombres(UtilJdbc.obtenerCadena(rs, "nombres"));
+				persona2.setApellidoPaterno(UtilJdbc.obtenerCadena(rs,
+						"apellidopaterno"));
+				persona2.setApellidoMaterno(UtilJdbc.obtenerCadena(rs,
+						"apellidomaterno"));
+				resultado.add(persona2);
+			}
+			
+		} catch (SQLException e) {
+			resultado = null;
+			throw new SQLException(e);
+		} finally {
+			try {
+				if (rs != null) {
+					rs.close();
+				}
+				if (cs != null) {
+					cs.close();
+				}
+				if (conn != null) {
+					conn.close();
+				}
+			} catch (SQLException e) {
+				try {
+					if (conn != null) {
+						conn.close();
+					}
+					throw new SQLException(e);
+				} catch (SQLException e1) {
+					throw new SQLException(e);
+				}
+			}
+		}
+
+		return resultado;
+	}
 }

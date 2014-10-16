@@ -35,5 +35,7 @@ public interface ClienteDao {
 	List<Cliente> listarClientes(Persona persona, Connection conn)
 			throws SQLException;
 
-	List<Cliente> consultarClientesNovios(Cliente cliente) throws SQLException; 
+	List<Cliente> consultarClientesNovios(Cliente cliente) throws SQLException;
+	
+	List<Cliente> listarClienteCumpleanieros() throws SQLException;
 }

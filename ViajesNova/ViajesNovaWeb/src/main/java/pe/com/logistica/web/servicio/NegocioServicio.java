@@ -127,4 +127,6 @@ public interface NegocioServicio {
 	List<CorreoClienteMasivo> listarClientesCorreo() throws SQLException, Exception;
 	
 	public boolean enviarCorreoMasivo(CorreoMasivo correoMasivo) throws EnvioCorreoException, Exception;
+	
+	public List<Cliente> listarClientesCumples() throws SQLException, Exception;
 }
