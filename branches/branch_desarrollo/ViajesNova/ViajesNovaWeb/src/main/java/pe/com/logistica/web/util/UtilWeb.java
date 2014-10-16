@@ -4,6 +4,7 @@
 package pe.com.logistica.web.util;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -95,5 +96,39 @@ public class UtilWeb {
 			return cadena.length();
 		}
 		return 0;
+	}
+	
+	public static String diaHoy(){
+		Calendar cal = Calendar.getInstance();
+		
+		switch (cal.get(Calendar.DAY_OF_WEEK)){
+		case 2:
+			return "Lunes";
+		case 3:
+			return "Martes";
+		case 4:
+			return "Miercoles";
+		case 5:
+			return "Jueves";
+		case 6:
+			return "Viernes";
+		case 7:
+			return "Sabado";
+		case 1:
+			return "Domingo";
+		}
+		
+		return "";
+	}
+	
+	public static boolean validaEnteroEsNuloOCero(Integer numero){
+		try {
+			return (numero == null || numero.intValue()==0);
+			
+		} catch (Exception e) {
+			System.out.println("Error validacion numero cero o nullo ::"+e.getMessage());
+		}
+		
+		return false;
 	}
 }

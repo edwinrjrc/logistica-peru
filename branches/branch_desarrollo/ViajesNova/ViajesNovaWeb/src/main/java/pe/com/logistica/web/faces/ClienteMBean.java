@@ -5,6 +5,7 @@ package pe.com.logistica.web.faces;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import javax.faces.application.FacesMessage;
@@ -52,6 +53,7 @@ public class ClienteMBean extends BaseMBean {
 	private static final long serialVersionUID = -3161805888946994195L;
 
 	private List<Cliente> listaClientes;
+	private List<Cliente> listaClientesCumples;
 	
 	private Cliente cliente;
 	private Cliente clienteBusqueda;
@@ -72,6 +74,7 @@ public class ClienteMBean extends BaseMBean {
 	private String nombreFormularioDireccion;
 	private String nombreFormularioContacto;
 	private String pestanaActiva = "idFC01";
+	private String fechaHoy;
 
 	private List<SelectItem> listaProvincia;
 	private List<SelectItem> listaDistrito;
@@ -271,43 +274,69 @@ public class ClienteMBean extends BaseMBean {
 		int tipoDocRUC = UtilWeb.obtenerEnteroPropertieMaestro(
 				"tipoDocumentoRUC", "aplicacionDatos");
 
-		if (tipoDocDNI == getCliente().getDocumentoIdentidad()
-				.getTipoDocumento().getCodigoEntero().intValue()
-				|| tipoDocCE == getCliente().getDocumentoIdentidad()
-						.getTipoDocumento().getCodigoEntero().intValue()) {
-			if (StringUtils.isBlank(getCliente().getApellidoMaterno())) {
-				this.agregarMensaje(idFormulario + ":idApeMatPro",
-						"Ingrese el apellido materno", "",
-						FacesMessage.SEVERITY_ERROR);
-				resultado = false;
+		if (StringUtils.isBlank(getCliente().getDocumentoIdentidad().getNumeroDocumento())){
+			this.agregarMensaje(idFormulario+":idFPInNumDoc", "Seleccione el tipo de documento", "", FacesMessage.SEVERITY_ERROR);
+		}
+		if (getCliente().getDocumentoIdentidad()
+				.getTipoDocumento().getCodigoEntero()== null || getCliente().getDocumentoIdentidad()
+						.getTipoDocumento().getCodigoEntero().intValue() == 0){
+			this.agregarMensaje(idFormulario+":idFPSelTipoDoc", "Seleccione el tipo de documento", "", FacesMessage.SEVERITY_ERROR);
+		}
+		else{
+			if (tipoDocDNI == getCliente().getDocumentoIdentidad()
+					.getTipoDocumento().getCodigoEntero().intValue()
+					|| tipoDocCE == getCliente().getDocumentoIdentidad()
+							.getTipoDocumento().getCodigoEntero().intValue()) {
+				if (StringUtils.isBlank(getCliente().getApellidoMaterno())) {
+					this.agregarMensaje(idFormulario + ":idApeMatPro",
+							"Ingrese el apellido materno", "",
+							FacesMessage.SEVERITY_ERROR);
+					resultado = false;
+				}
+				if (StringUtils.isBlank(getCliente().getApellidoPaterno())) {
+					this.agregarMensaje(idFormulario + ":idApePatPro",
+							"Ingrese el apellido paterno", "",
+							FacesMessage.SEVERITY_ERROR);
+					resultado = false;
+				}
+				if (StringUtils.isBlank(getCliente().getApellidoPaterno())) {
+					this.agregarMensaje(idFormulario + ":idApePatPro",
+							"Ingrese el apellido paterno", "",
+							FacesMessage.SEVERITY_ERROR);
+					resultado = false;
+				}
+				if (StringUtils.isBlank(getCliente().getNombres())) {
+					this.agregarMensaje(idFormulario + ":idNomPro",
+							"Ingrese los nombres", "", FacesMessage.SEVERITY_ERROR);
+					resultado = false;
+				}
+				if (UtilWeb.validaEnteroEsNuloOCero(getCliente().getEstadoCivil().getCodigoEntero())){
+					this.agregarMensaje(idFormulario + ":idFPSelEstCivil",
+							"Seleccione el estado civil", "", FacesMessage.SEVERITY_ERROR);
+					resultado = false;
+				}
+				if (StringUtils.isBlank(getCliente().getGenero().getCodigoCadena())){
+					this.agregarMensaje(idFormulario + ":idFPSelGenero",
+							"Seleccione el genero", "", FacesMessage.SEVERITY_ERROR);
+					resultado = false;
+				}
+				if (getCliente().getFechaNacimiento() == null){
+					this.agregarMensaje(idFormulario + ":idFPFecNacimiento",
+							"Seleccione la fecha de nacimiento", "", FacesMessage.SEVERITY_ERROR);
+					resultado = false;
+				}
 			}
-			if (StringUtils.isBlank(getCliente().getApellidoPaterno())) {
-				this.agregarMensaje(idFormulario + ":idApePatPro",
-						"Ingrese el apellido paterno", "",
-						FacesMessage.SEVERITY_ERROR);
-				resultado = false;
-			}
-			if (StringUtils.isBlank(getCliente().getApellidoPaterno())) {
-				this.agregarMensaje(idFormulario + ":idApePatPro",
-						"Ingrese el apellido paterno", "",
-						FacesMessage.SEVERITY_ERROR);
-				resultado = false;
-			}
-			if (StringUtils.isBlank(getCliente().getNombres())) {
-				this.agregarMensaje(idFormulario + ":idNomPro",
-						"Ingrese los nombres", "", FacesMessage.SEVERITY_ERROR);
-				resultado = false;
+			if (tipoDocRUC == getCliente().getDocumentoIdentidad()
+					.getTipoDocumento().getCodigoEntero().intValue()) {
+				if (StringUtils.isBlank(getCliente().getRazonSocial())) {
+					this.agregarMensaje(idFormulario + ":idRazSocPro",
+							"Ingrese la razon social", "",
+							FacesMessage.SEVERITY_ERROR);
+					resultado = false;
+				}
 			}
 		}
-		if (tipoDocRUC == getCliente().getDocumentoIdentidad()
-				.getTipoDocumento().getCodigoEntero().intValue()) {
-			if (StringUtils.isBlank(getCliente().getRazonSocial())) {
-				this.agregarMensaje(idFormulario + ":idRazSocPro",
-						"Ingrese la razon social", "",
-						FacesMessage.SEVERITY_ERROR);
-				resultado = false;
-			}
-		}
+		
 		
 		return resultado;
 	}
@@ -473,6 +502,13 @@ public class ClienteMBean extends BaseMBean {
 		this.setNuevoContacto(true);
 		this.setEditarContacto(false);
 		this.setContactoAgregada(false);
+		
+		if (this.getCliente().getListaContactos().isEmpty() && StringUtils.isNotBlank(this.getCliente().getApellidoPaterno()) && StringUtils.isNotBlank(this.getCliente().getNombres())){
+			this.getContacto().setDocumentoIdentidad(this.getCliente().getDocumentoIdentidad());
+			this.getContacto().setNombres(this.getCliente().getNombres());
+			this.getContacto().setApellidoPaterno(this.getCliente().getApellidoPaterno());
+			this.getContacto().setApellidoMaterno(this.getCliente().getApellidoMaterno());
+		}
 	}
 
 	public void agregarContacto(ActionEvent e) {
@@ -624,6 +660,10 @@ public class ClienteMBean extends BaseMBean {
 	
 	public void eliminarTelefonoContacto(Telefono telefono) {
 		this.getContacto().getListaTelefonos().remove(telefono);
+	}
+	
+	public void eliminarCorreoContacto(CorreoElectronico correo) {
+		this.getContacto().getListaCorreos().remove(correo);
 	}
 
 	/**
@@ -960,6 +1000,50 @@ public class ClienteMBean extends BaseMBean {
 	 */
 	public void setClienteBusqueda(Cliente clienteBusqueda) {
 		this.clienteBusqueda = clienteBusqueda;
+	}
+
+	/**
+	 * @return the listaClientesCumples
+	 */
+	public List<Cliente> getListaClientesCumples() {
+		try {
+			
+			
+			listaClientesCumples = this.negocioServicio.listarClientesCumples();
+			
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return listaClientesCumples;
+	}
+
+	/**
+	 * @param listaClientesCumples the listaClientesCumples to set
+	 */
+	public void setListaClientesCumples(List<Cliente> listaClientesCumples) {
+		this.listaClientesCumples = listaClientesCumples;
+	}
+
+	/**
+	 * @return the fechaHoy
+	 */
+	public String getFechaHoy() {
+		
+		Calendar cal = Calendar.getInstance();
+		
+		fechaHoy = ""+UtilWeb.diaHoy()+", ";
+		return fechaHoy;
+	}
+
+	/**
+	 * @param fechaHoy the fechaHoy to set
+	 */
+	public void setFechaHoy(String fechaHoy) {
+		this.fechaHoy = fechaHoy;
 	}
 
 }

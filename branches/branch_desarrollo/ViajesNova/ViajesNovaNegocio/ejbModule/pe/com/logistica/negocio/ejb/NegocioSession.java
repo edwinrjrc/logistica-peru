@@ -1401,5 +1401,8 @@ public class NegocioSession implements NegocioSessionRemote,
 		return correoMasivoDao.listarClientesCorreo();
 	}
 	
-	
+	public List<Cliente> listarClientesCumples() throws SQLException, Exception {
+		ClienteDao clienteDao = new ClienteDaoImpl();
+		return clienteDao.listarClienteCumpleanieros();
+	}
 }
