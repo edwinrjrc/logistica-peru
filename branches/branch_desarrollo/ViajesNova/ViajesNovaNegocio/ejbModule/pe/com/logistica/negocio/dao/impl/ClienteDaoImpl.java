@@ -687,6 +687,7 @@ public class ClienteDaoImpl implements ClienteDao {
 		try {
 			conn = UtilConexion.obtenerConexion();
 			cs = conn.prepareCall(sql);
+			cs.registerOutParameter(1, Types.OTHER);
 			cs.execute();
 			rs = (ResultSet)cs.getObject(1);
 
