@@ -124,7 +124,7 @@ public class UtilWeb {
 	public static String mesHoy(){
 		Calendar cal = Calendar.getInstance();
 		
-		switch (cal.get(Calendar.MONTH)){
+		switch (cal.get(Calendar.MONTH)+1){
 		case 1:
 			return "Enero";
 		case 2:
