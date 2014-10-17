@@ -1035,7 +1035,7 @@ public class ClienteMBean extends BaseMBean {
 		
 		Calendar cal = Calendar.getInstance();
 		
-		fechaHoy = ""+UtilWeb.diaHoy()+", ";
+		fechaHoy = ""+UtilWeb.diaHoy()+", "+cal.get(Calendar.DATE)+" de "+UtilWeb.mesHoy()+" de "+cal.get(Calendar.YEAR);
 		return fechaHoy;
 	}
 
