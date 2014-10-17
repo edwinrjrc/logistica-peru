@@ -277,7 +277,7 @@ public class NegocioServicioImpl implements NegocioServicio {
 	}
 
 	@Override
-	public boolean enviarCorreoMasivo(CorreoMasivo correoMasivo) throws EnvioCorreoException, Exception{
+	public int enviarCorreoMasivo(CorreoMasivo correoMasivo) throws EnvioCorreoException, Exception{
 		
 		return ejbSession.enviarCorreoMasivo(correoMasivo);
 	}
