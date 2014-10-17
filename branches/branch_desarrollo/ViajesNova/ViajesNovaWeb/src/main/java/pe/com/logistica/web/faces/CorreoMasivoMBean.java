@@ -122,11 +122,16 @@ public class CorreoMasivoMBean extends BaseMBean {
 				
 			getCorreoMasivo().setContenidoCorreo(mensaje);
 			getCorreoMasivo().setListaCorreoMasivo(listaClientesCorreo);
-			this.negocioServicio.enviarCorreoMasivo(getCorreoMasivo());
+			int tipo = this.negocioServicio.enviarCorreoMasivo(getCorreoMasivo());
+			
+			String msje = "Correos Enviados Satisfactoriamente";
+			if (tipo > 0){
+				msje = "Correos Enviados con errores verifique el log";
+			}
 			
 			this.setShowModal(true);
 			this.setTipoModal(this.TIPO_MODAL_EXITO);
-			this.setMensajeModal("Correos Enviados Satisfactoriamente");
+			this.setMensajeModal(msje);
 		} catch (EnvioCorreoException e) {
 			e.printStackTrace();
 			this.setShowModal(true);
