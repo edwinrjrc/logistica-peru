@@ -1107,32 +1107,51 @@ public class NegocioSession implements NegocioSessionRemote,
 		return servicioNovaViajesDao.consultarServiciosVenta(servicioAgencia);
 	}
 	
-	public boolean enviarCorreoMasivo(CorreoMasivo correoMasivo) throws EnvioCorreoException, Exception{
+	public int enviarCorreoMasivo(CorreoMasivo correoMasivo) throws EnvioCorreoException, Exception{
+		int respuesta = 0;
 		try {
 			UtilCorreo utilCorreo = new UtilCorreo();
 			for (CorreoClienteMasivo envio : correoMasivo.getListaCorreoMasivo()) {
-				if (envio.isEnviarCorreo()){
-					if (!correoMasivo.isArchivoCargado()){
-						utilCorreo.enviarCorreo(envio.getCorreoElectronico().getDireccion(), correoMasivo.getAsunto(), correoMasivo.getContenidoCorreo());
-					}
-					else{
-						utilCorreo.enviarCorreo(envio.getCorreoElectronico().getDireccion(), correoMasivo.getAsunto(), correoMasivo.getContenidoCorreo(), correoMasivo.getArchivoAdjunto());
+				try{
+					if (envio.isEnviarCorreo()){
+						if (!correoMasivo.isArchivoCargado()){
+							utilCorreo.enviarCorreo(envio.getCorreoElectronico().getDireccion(), correoMasivo.getAsunto(), correoMasivo.getContenidoCorreo());
+						}
+						else{
+							utilCorreo.enviarCorreo(envio.getCorreoElectronico().getDireccion(), correoMasivo.getAsunto(), correoMasivo.getContenidoCorreo(), correoMasivo.getArchivoAdjunto());
+						}
 					}
 				}
+				catch (AddressException e) {
+					respuesta = 1;
+					System.out.println("ERROR EN ENVIO DE CORREO ::"+envio.getCorreoElectronico().getDireccion());
+					e.printStackTrace();
+				} catch (FileNotFoundException e) {
+					respuesta = 2;
+					System.out.println("ERROR EN ENVIO DE CORREO ::"+envio.getCorreoElectronico().getDireccion());
+					e.printStackTrace();
+				} catch (NoSuchProviderException e) {
+					respuesta = 3;
+					System.out.println("ERROR EN ENVIO DE CORREO ::"+envio.getCorreoElectronico().getDireccion());
+					e.printStackTrace();
+				} catch (IOException e) {
+					respuesta = 4;
+					System.out.println("ERROR EN ENVIO DE CORREO ::"+envio.getCorreoElectronico().getDireccion());
+					e.printStackTrace();
+				} catch (MessagingException e) {
+					respuesta = 5;
+					System.out.println("ERROR EN ENVIO DE CORREO ::"+envio.getCorreoElectronico().getDireccion());
+					e.printStackTrace();
+				}
 			}
+			System.out.println("respuesta de envio de correo ::"+ respuesta);
 			
-			return true;
-		} catch (AddressException e) {
-			throw new EnvioCorreoException("0001", "Error en la direccion de correo", e.getMessage(), e);
-		} catch (FileNotFoundException e) {
-			throw new EnvioCorreoException("0002", "Error en el archivo", e.getMessage(), e);
-		} catch (NoSuchProviderException e) {
-			throw new EnvioCorreoException("0003", "Error en la aplicacion", e.getMessage(), e);
-		} catch (IOException e) {
-			throw new EnvioCorreoException("0004", "Error en el archivo 2", e.getMessage(), e);
-		} catch (MessagingException e) {
-			throw new EnvioCorreoException("0005", "Error en el mensaje", e.getMessage(), e);
+			return respuesta;
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new EnvioCorreoException("0001", "Error en envio de correo masivo", e.getMessage(), e);
 		}
+		
 	}
 	
 	@Override
