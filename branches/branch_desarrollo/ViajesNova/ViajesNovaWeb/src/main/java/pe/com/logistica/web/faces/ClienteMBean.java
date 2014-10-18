@@ -29,7 +29,9 @@ import pe.com.logistica.bean.negocio.Direccion;
 import pe.com.logistica.bean.negocio.Telefono;
 import pe.com.logistica.bean.negocio.Ubigeo;
 import pe.com.logistica.bean.negocio.Usuario;
+import pe.com.logistica.negocio.exception.ErrorRegistroDataException;
 import pe.com.logistica.negocio.exception.NoEnvioDatoException;
+import pe.com.logistica.negocio.exception.ValidacionException;
 import pe.com.logistica.web.servicio.NegocioServicio;
 import pe.com.logistica.web.servicio.SoporteServicio;
 import pe.com.logistica.web.servicio.impl.NegocioServicioImpl;
@@ -527,7 +529,7 @@ public class ClienteMBean extends BaseMBean {
 				
 				this.getCliente().getListaContactos().add(negocioServicio.agregarContacto(getContacto()));
 				this.setContactoAgregada(true);
-			}
+			}	
 		} catch (SQLException ex) {
 			logger.error(ex.getMessage(), ex);
 		} catch (Exception ex) {
@@ -535,7 +537,7 @@ public class ClienteMBean extends BaseMBean {
 		}
 	}
 
-	private boolean validarContacto(ActionEvent e) {
+	private boolean validarContacto(ActionEvent e) throws ValidacionException {
 		boolean resultado = true;
 		String idFormulario = "idFCPr";
 		int tipoDocDNI = UtilWeb.obtenerEnteroPropertieMaestro(
@@ -625,6 +627,14 @@ public class ClienteMBean extends BaseMBean {
 					if (StringUtils.isBlank(correo.getDireccion())){
 						this.agregarMensaje(idFormulario + ":idTablaCorreoContacto",
 								"Complete los correos electronicos vacios", "",
+								FacesMessage.SEVERITY_ERROR);
+						resultado = false;
+						this.setPestanaActiva("idFC03");
+						break;
+					}
+					if (UtilWeb.validarCorreo(correo.getDireccion())){
+						this.agregarMensaje(idFormulario + ":idTablaCorreoContacto",
+								"Error en el correo, por favor corrija", "",
 								FacesMessage.SEVERITY_ERROR);
 						resultado = false;
 						this.setPestanaActiva("idFC03");

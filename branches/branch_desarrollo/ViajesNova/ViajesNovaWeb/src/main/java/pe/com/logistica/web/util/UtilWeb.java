@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.faces.model.SelectItem;
 
@@ -163,5 +165,18 @@ public class UtilWeb {
 		}
 		
 		return false;
+	}
+	
+	public static boolean validarCorreo(String email){
+		try {
+			String patternEmail = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@"
+			        + "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
+			Pattern pattern = Pattern.compile(patternEmail);
+			Matcher matcher = pattern.matcher(email);
+			return matcher.matches();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+        return false;
 	}
 }
