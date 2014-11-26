@@ -57,6 +57,7 @@ public class CatalogoMBean implements Serializable{
 	private List<SelectItem> catalogoTipoDestino;
 	private List<SelectItem> catalogoDestino;
 	private List<SelectItem> catalogoTipoServicio;
+	private List<SelectItem> catalogoTipoServicioIgv;
 	private List<SelectItem> catalogoTipoServicioFee;
 	private List<SelectItem> catalogoTipoServicioImpto;
 	private List<SelectItem> catalogoFormaPago;
@@ -499,6 +500,33 @@ public class CatalogoMBean implements Serializable{
 	public void setCatalogoTipoServicioImpto(
 			List<SelectItem> catalogoTipoServicioImpto) {
 		this.catalogoTipoServicioImpto = catalogoTipoServicioImpto;
+	}
+
+	/**
+	 * @return the catalogoTipoServicioIgv
+	 */
+	public List<SelectItem> getCatalogoTipoServicioIgv() {
+		try {
+			List<MaestroServicio> lista = negocioServicio.listarMaestroServicioIgv();
+			SelectItem si = null;
+			catalogoTipoServicioIgv = new ArrayList<SelectItem>();
+			for (MaestroServicio maestroServicio : lista) {
+				si = new SelectItem();
+				si.setLabel(maestroServicio.getNombre());
+				si.setValue(maestroServicio.getCodigoEntero());
+				catalogoTipoServicioIgv.add(si);
+			}
+		} catch (Exception e) {
+			logger.error(e.getMessage(), e);
+		}
+		return catalogoTipoServicioIgv;
+	}
+
+	/**
+	 * @param catalogoTipoServicioIgv the catalogoTipoServicioIgv to set
+	 */
+	public void setCatalogoTipoServicioIgv(List<SelectItem> catalogoTipoServicioIgv) {
+		this.catalogoTipoServicioIgv = catalogoTipoServicioIgv;
 	}
 
 }
