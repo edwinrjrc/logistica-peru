@@ -25,6 +25,8 @@ public interface MaestroServicioDao {
 	List<MaestroServicio> listarMaestroServiciosFee() throws SQLException;
 
 	List<MaestroServicio> listarMaestroServiciosImpto() throws SQLException;
+
+	List<MaestroServicio> listarMaestroServiciosIgv() throws SQLException;
 	
 
 }

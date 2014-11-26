@@ -110,4 +110,6 @@ public interface NegocioSessionLocal {
 	public int enviarCorreoMasivo(CorreoMasivo correoMasivo) throws EnvioCorreoException, Exception;
 	
 	public List<Cliente> listarClientesCumples() throws SQLException, Exception;
+	
+	public List<MaestroServicio> listarMaestroServicioIgv() throws SQLException, Exception;
 }
