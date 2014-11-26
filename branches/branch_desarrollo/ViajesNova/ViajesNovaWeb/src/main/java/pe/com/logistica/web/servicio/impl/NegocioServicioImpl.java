@@ -286,5 +286,12 @@ public class NegocioServicioImpl implements NegocioServicio {
 	public List<Cliente> listarClientesCumples() throws SQLException, Exception {
 		return ejbSession.listarClientesCumples();
 	}
+	
+	@Override
+	public List<MaestroServicio> listarMaestroServicioIgv() throws SQLException,
+			Exception {
+
+		return ejbSession.listarMaestroServicioIgv();
+	}
 }
 	

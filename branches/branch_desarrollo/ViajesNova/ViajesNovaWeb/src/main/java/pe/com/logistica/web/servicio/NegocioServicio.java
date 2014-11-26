@@ -129,4 +129,7 @@ public interface NegocioServicio {
 	public int enviarCorreoMasivo(CorreoMasivo correoMasivo) throws EnvioCorreoException, Exception;
 	
 	public List<Cliente> listarClientesCumples() throws SQLException, Exception;
+
+	List<MaestroServicio> listarMaestroServicioIgv() throws SQLException,
+			Exception;
 }

@@ -23,7 +23,9 @@ public class MaestroServicio extends BaseNegocio {
 	private String descripcion;
 	private boolean requiereFee;
 	private BaseVO servicioFee;
+	private BaseVO imptoIgv;
 	private boolean pagaImpto;
+	private boolean pagaIgv;
 	private BaseVO servicioImpto;
 	private boolean cargaComision;
 	private boolean cargaIgv;
@@ -225,6 +227,37 @@ public class MaestroServicio extends BaseNegocio {
 	 */
 	public void setCargaIgv(boolean cargaIgv) {
 		this.cargaIgv = cargaIgv;
+	}
+
+	/**
+	 * @return the pagaIgv
+	 */
+	public boolean isPagaIgv() {
+		return pagaIgv;
+	}
+
+	/**
+	 * @param pagaIgv the pagaIgv to set
+	 */
+	public void setPagaIgv(boolean pagaIgv) {
+		this.pagaIgv = pagaIgv;
+	}
+
+	/**
+	 * @return the imptoIgv
+	 */
+	public BaseVO getImptoIgv() {
+		if (imptoIgv == null){
+			imptoIgv = new BaseVO();
+		}
+		return imptoIgv;
+	}
+
+	/**
+	 * @param imptoIgv the imptoIgv to set
+	 */
+	public void setImptoIgv(BaseVO imptoIgv) {
+		this.imptoIgv = imptoIgv;
 	}
 
 }

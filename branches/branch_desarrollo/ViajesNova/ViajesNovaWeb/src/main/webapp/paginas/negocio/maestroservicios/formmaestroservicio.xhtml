@@ -64,11 +64,11 @@
 
 				<h:outputLabel value="Requiere FEE"
 					style="width: 100px; text-align:left" />
-				<h:panelGrid cellpadding="0" cellspacing="0" border="0" columns="2" id="idGrFee">
+				<h:panelGrid cellpadding="0" cellspacing="0" border="0" columns="2"
+					id="idGrFee">
 					<h:selectBooleanCheckbox
 						value="#{maeServiciosMBean.maestroServicio.requiereFee}">
-						<a4j:ajax event="valueChange"
-							render="idGrFee, idSelSerFee"></a4j:ajax>
+						<a4j:ajax event="valueChange" render="idGrFee, idSelSerFee"></a4j:ajax>
 					</h:selectBooleanCheckbox>
 					<h:outputText value=""
 						rendered="#{!maeServiciosMBean.maestroServicio.requiereFee}" />
@@ -83,7 +83,9 @@
 				<h:outputLabel value="Paga Impuesto"
 					style="width: 100px; text-align:left" />
 				<h:selectBooleanCheckbox
-					value="#{maeServiciosMBean.maestroServicio.pagaImpto}" />
+					value="#{maeServiciosMBean.maestroServicio.pagaImpto}" >
+					<a4j:ajax event="valueChange" render="idGrPagaImpto, idTabImpto"></a4j:ajax>
+				</h:selectBooleanCheckbox>
 				<h:outputText value=""
 					rendered="#{!maeServiciosMBean.maestroServicio.pagaImpto}" />
 				<h:outputText value=""
@@ -113,6 +115,22 @@
 					value="#{maeServiciosMBean.maestroServicio.esFee}" />
 				<h:outputText value="" />
 				<h:outputText value="" />
+
+				<h:panelGrid cellpadding="0" cellspacing="0" border="0" columns="1"
+					width="style:100%;" id="idGrPagaImpto">
+					hola
+					<rich:dataTable id="idTabImpto" rendered="#{maeServiciosMBean.maestroServicio.pagaImpto}">
+					
+					<rich:column>
+						<h:selectOneMenu ></h:selectOneMenu>
+					</rich:column>
+					<rich:column>
+						<a4j:commandButton value="Eliminar"></a4j:commandButton>
+					</rich:column>
+					
+					</rich:dataTable>
+
+				</h:panelGrid>
 
 				<f:facet name="footer">
 					<h:panelGrid cellpadding="0" cellspacing="0" border="0"
