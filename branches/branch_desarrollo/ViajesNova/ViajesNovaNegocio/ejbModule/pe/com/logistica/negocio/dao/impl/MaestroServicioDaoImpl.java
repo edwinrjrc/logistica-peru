@@ -13,6 +13,7 @@ import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 
+import pe.com.logistica.bean.base.BaseVO;
 import pe.com.logistica.bean.negocio.MaestroServicio;
 import pe.com.logistica.negocio.dao.MaestroServicioDao;
 import pe.com.logistica.negocio.util.UtilConexion;
@@ -213,7 +214,7 @@ public class MaestroServicioDaoImpl implements MaestroServicioDao {
 			throws SQLException {
 		Connection conn = null;
 		CallableStatement cs = null;
-		String sql = "{ ? = call negocio.fn_ingresarservicio(?,?,?,?,?,?,?,?,?,?,?,?) }";
+		String sql = "{ ? = call negocio.fn_ingresarservicio(?,?,?,?,?,?,?,?,?,?,?,?,?) }";
 		Integer resultado = null;
 
 		try {
@@ -259,6 +260,13 @@ public class MaestroServicioDaoImpl implements MaestroServicioDao {
 			}
 			cs.setString(i++, servicio.getUsuarioCreacion());
 			cs.setString(i++, servicio.getIpCreacion());
+			if (servicio.getParametroAsociado().getCodigoEntero()!= null && servicio.getParametroAsociado().getCodigoEntero().intValue()!=0){
+				cs.setInt(i++, servicio.getParametroAsociado().getCodigoEntero().intValue());
+			}
+			else{
+				cs.setNull(i++, Types.INTEGER);
+			}
+			cs.setBoolean(i++, true);
 			cs.execute();
 
 			resultado = cs.getInt(1);
@@ -296,7 +304,7 @@ public class MaestroServicioDaoImpl implements MaestroServicioDao {
 			throws SQLException {
 		Connection conn = null;
 		CallableStatement cs = null;
-		String sql = "{ ? = call negocio.fn_actualizarservicio(?,?,?,?,?,?,?,?,?,?,?,?,?) }";
+		String sql = "{ ? = call negocio.fn_actualizarservicio(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) }";
 		boolean resultado = false;
 
 		try {
@@ -337,6 +345,13 @@ public class MaestroServicioDaoImpl implements MaestroServicioDao {
 			cs.setBoolean(i++, servicio.isEsFee());
 			cs.setString(i++, servicio.getUsuarioModificacion());
 			cs.setString(i++, servicio.getIpModificacion());
+			if (servicio.getParametroAsociado().getCodigoEntero()!= null && servicio.getParametroAsociado().getCodigoEntero().intValue()!=0){
+				cs.setInt(i++, servicio.getParametroAsociado().getCodigoEntero().intValue());
+			}
+			else{
+				cs.setNull(i++, Types.INTEGER);
+			}
+			cs.setBoolean(i++, servicio.isVisible());
 			cs.execute();
 
 			resultado = cs.getBoolean(1);
@@ -399,6 +414,8 @@ public class MaestroServicioDaoImpl implements MaestroServicioDao {
 				resultado.setCargaComision(UtilJdbc.obtenerBoolean(rs, "cargacomision"));
 				resultado.setEsImpuesto(UtilJdbc.obtenerBoolean(rs, "esimpuesto"));
 				resultado.setEsFee(UtilJdbc.obtenerBoolean(rs, "esfee"));
+				resultado.getParametroAsociado().setCodigoEntero(UtilJdbc.obtenerNumero(rs, "idparametroasociado"));
+				resultado.setVisible(UtilJdbc.obtenerBoolean(rs, "visible"));
 			}
 		} catch (SQLException e) {
 			throw new SQLException(e);
@@ -485,4 +502,103 @@ public class MaestroServicioDaoImpl implements MaestroServicioDao {
 		return resultado;
 	}
 
+	@Override
+	public void ingresarServicioMaestroServicio(Integer idServicio, List<BaseVO> listaMaeServicioImpto) throws SQLException, Exception{
+		Connection conn = null;
+		CallableStatement cs = null;
+		String sql = "{ ? = call negocio.fn_ingresarserviciomaestroservicio(?,?) }";
+
+		try {
+			conn = UtilConexion.obtenerConexion();
+			
+			for (BaseVO idServicioDepende : listaMaeServicioImpto){
+				cs = conn.prepareCall(sql);
+				int i = 1;
+				cs.registerOutParameter(i++, Types.BOOLEAN);
+				cs.setInt(i++, idServicio);
+				cs.setInt(i++, idServicioDepende.getCodigoEntero());
+				
+				cs.execute();
+				if (cs != null){
+					cs.close();
+				}
+			}
+			
+
+		} catch (SQLException e) {
+			throw new SQLException(e);
+		} finally {
+			try {
+				if (cs != null) {
+					cs.close();
+				}
+				if (conn != null) {
+					conn.close();
+				}
+			} catch (SQLException e) {
+				try {
+					if (conn != null) {
+						conn.close();
+					}
+					throw new SQLException(e);
+				} catch (SQLException e1) {
+					throw new SQLException(e);
+				}
+			}
+		}
+
+	}
+	
+	@Override
+	public List<BaseVO> consultarServicioDependientes(Integer idServicio) throws SQLException {
+		Connection conn = null;
+		CallableStatement cs = null;
+		String sql = "{ ? = call negocio.fn_consultarserviciodependientes(?) }";
+		ResultSet rs = null;
+		List<BaseVO> resultado = null;
+
+		try {
+			conn = UtilConexion.obtenerConexion();
+			cs = conn.prepareCall(sql);
+			int i = 1;
+			cs.registerOutParameter(i++, Types.OTHER);
+			cs.setInt(i++, idServicio);
+			cs.execute();
+
+			rs = (ResultSet) cs.getObject(1);
+			resultado = new ArrayList<BaseVO>();
+			BaseVO bean = null;
+			while (rs.next()) {
+				bean = new BaseVO();
+				bean.setCodigoEntero(UtilJdbc.obtenerNumero(rs, "idserviciodepende"));
+				
+				resultado.add(bean);
+			}
+		} catch (SQLException e) {
+			throw new SQLException(e);
+		} finally {
+			try {
+				if (rs != null) {
+					rs.close();
+				}
+				if (cs != null) {
+					cs.close();
+				}
+				if (conn != null) {
+					conn.close();
+				}
+			} catch (SQLException e) {
+				try {
+					if (conn != null) {
+						conn.close();
+					}
+					throw new SQLException(e);
+				} catch (SQLException e1) {
+					throw new SQLException(e);
+				}
+			}
+		}
+
+		return resultado;
+	}
 }

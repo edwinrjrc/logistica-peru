@@ -1285,6 +1285,10 @@ public class NegocioSession implements NegocioSessionRemote,
 		if (!maestroServicioDao.actualizarMaestroServicio(servicio)){
 			throw new ErrorRegistroDataException("No se pudo completar la actualizacion de servicio");
 		}
+		
+		if (servicio.getListaServicioDepende() !=null && !servicio.getListaServicioDepende().isEmpty()){
+			maestroServicioDao.ingresarServicioMaestroServicio(servicio.getCodigoEntero(), servicio.getListaServicioDepende());
+		}
 		return true;
 	}
 	
@@ -1320,7 +1324,13 @@ public class NegocioSession implements NegocioSessionRemote,
 	public MaestroServicio consultarMaestroServicio(int idMaestroServicio) throws SQLException, Exception{
 		MaestroServicioDao maestroServicioDao = new MaestroServicioDaoImpl();
 		
-		return maestroServicioDao.consultarMaestroServicio(idMaestroServicio);
+		MaestroServicio maestroServicio = maestroServicioDao.consultarMaestroServicio(idMaestroServicio);
+		
+		List<BaseVO> listaDependientes = maestroServicioDao.consultarServicioDependientes(maestroServicio.getCodigoEntero());
+		
+		maestroServicio.setListaServicioDepende(listaDependientes);
+		
+		return maestroServicio;
 	}
 
 	@Override

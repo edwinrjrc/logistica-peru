@@ -4,6 +4,7 @@
 package pe.com.logistica.web.faces;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.faces.application.FacesMessage;
@@ -17,6 +18,7 @@ import javax.servlet.http.HttpSession;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 
+import pe.com.logistica.bean.base.BaseVO;
 import pe.com.logistica.bean.negocio.MaestroServicio;
 import pe.com.logistica.bean.negocio.Usuario;
 import pe.com.logistica.negocio.exception.ErrorRegistroDataException;
@@ -40,6 +42,7 @@ public class MaestroServiciosMBean extends BaseMBean {
 	private boolean editarMaestroServicio;
 	
 	private List<MaestroServicio> listaMaeServicio;
+	private List<BaseVO> listaMaeServicioImpto;
 	
 	private NegocioServicio negocioServicio;
 
@@ -86,6 +89,7 @@ public class MaestroServiciosMBean extends BaseMBean {
 					this.setTipoModal(TIPO_MODAL_EXITO);
 				}
 				else{
+					getMaestroServicio().setListaServicioDepende(getListaMaeServicioImpto());
 					this.negocioServicio.actualizarMaestroServicio(getMaestroServicio());
 					this.setShowModal(true);
 					this.setMensajeModal("Servicio actualizado satisfactoriamente");
@@ -142,6 +146,14 @@ public class MaestroServiciosMBean extends BaseMBean {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public void agregarServicioImpto(){
+		this.getListaMaeServicioImpto().add(new BaseVO());
+	}
+	
+	public void eliminarServicioImpto(BaseVO idServicio){
+		this.getListaMaeServicioImpto().remove(idServicio);
 	}
 
 	/**
@@ -211,6 +223,23 @@ public class MaestroServiciosMBean extends BaseMBean {
 	 */
 	public void setListaMaeServicio(List<MaestroServicio> listaMaeServicio) {
 		this.listaMaeServicio = listaMaeServicio;
+	}
+
+	/**
+	 * @return the listaMaeServicioImpto
+	 */
+	public List<BaseVO> getListaMaeServicioImpto() {
+		if (listaMaeServicioImpto == null){
+			listaMaeServicioImpto = new ArrayList<BaseVO>();
+		}
+		return listaMaeServicioImpto;
+	}
+
+	/**
+	 * @param listaMaeServicioImpto the listaMaeServicioImpto to set
+	 */
+	public void setListaMaeServicioImpto(List<BaseVO> listaMaeServicioImpto) {
+		this.listaMaeServicioImpto = listaMaeServicioImpto;
 	}
 
 }
