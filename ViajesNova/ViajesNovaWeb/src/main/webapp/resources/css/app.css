@@ -174,3 +174,11 @@
 	width:100%;
 	text-align: center;
 }
+.col1servicio{
+	width: 20%;
+	text-align: left;
+}
+.col2servivio{
+	width: 80%;
+	text-align: left;
+}
