@@ -4,6 +4,8 @@
 package pe.com.logistica.bean.negocio;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 import pe.com.logistica.bean.base.BaseNegocio;
 import pe.com.logistica.bean.base.BaseVO;
@@ -34,6 +36,10 @@ public class MaestroServicio extends BaseNegocio {
 
 	private boolean esImpuesto;
 	private boolean esFee;
+	private boolean visible;
+	
+	private List<BaseVO> listaServicioDepende;
+	private BaseVO parametroAsociado;
 	/**
 	 * 
 	 */
@@ -258,6 +264,54 @@ public class MaestroServicio extends BaseNegocio {
 	 */
 	public void setImptoIgv(BaseVO imptoIgv) {
 		this.imptoIgv = imptoIgv;
+	}
+
+	/**
+	 * @return the listaServicioDepende
+	 */
+	public List<BaseVO> getListaServicioDepende() {
+		if (listaServicioDepende == null){
+			listaServicioDepende = new ArrayList<BaseVO>();
+		}
+		return listaServicioDepende;
+	}
+
+	/**
+	 * @param listaServicioDepende the listaServicioDepende to set
+	 */
+	public void setListaServicioDepende(List<BaseVO> listaServicioDepende) {
+		this.listaServicioDepende = listaServicioDepende;
+	}
+
+	/**
+	 * @return the parametroAsociado
+	 */
+	public BaseVO getParametroAsociado() {
+		if (parametroAsociado == null){
+			parametroAsociado = new BaseVO();
+		}
+		return parametroAsociado;
+	}
+
+	/**
+	 * @param parametroAsociado the parametroAsociado to set
+	 */
+	public void setParametroAsociado(BaseVO parametroAsociado) {
+		this.parametroAsociado = parametroAsociado;
+	}
+
+	/**
+	 * @return the visible
+	 */
+	public boolean isVisible() {
+		return visible;
+	}
+
+	/**
+	 * @param visible the visible to set
+	 */
+	public void setVisible(boolean visible) {
+		this.visible = visible;
 	}
 
 }
