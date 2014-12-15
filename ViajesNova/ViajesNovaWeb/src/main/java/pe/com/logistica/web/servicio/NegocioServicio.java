@@ -7,6 +7,7 @@ import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.util.List;
 
+import pe.com.logistica.bean.base.BaseVO;
 import pe.com.logistica.bean.negocio.Cliente;
 import pe.com.logistica.bean.negocio.Contacto;
 import pe.com.logistica.bean.negocio.CorreoClienteMasivo;
@@ -21,6 +22,7 @@ import pe.com.logistica.bean.negocio.ServicioAgencia;
 import pe.com.logistica.bean.negocio.ServicioNovios;
 import pe.com.logistica.bean.negocio.ServicioProveedor;
 import pe.com.logistica.negocio.exception.EnvioCorreoException;
+import pe.com.logistica.negocio.exception.ErrorConsulaDataException;
 import pe.com.logistica.negocio.exception.ErrorRegistroDataException;
 import pe.com.logistica.negocio.exception.ResultadoCeroDaoException;
 
@@ -132,4 +134,12 @@ public interface NegocioServicio {
 
 	List<MaestroServicio> listarMaestroServicioIgv() throws SQLException,
 			Exception;
+
+	public List<DetalleServicioAgencia> agregarServicioVentaInvisible(
+			DetalleServicioAgencia detalleServicio2) throws ErrorConsulaDataException, Exception;
+
+	List<MaestroServicio> listarMaestroServicioAdm() throws SQLException,
+			Exception;
+
+	List<BaseVO> consultaServiciosDependientes(Integer idServicio) throws SQLException, Exception;
 }

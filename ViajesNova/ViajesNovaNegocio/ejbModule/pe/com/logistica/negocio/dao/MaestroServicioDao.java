@@ -34,6 +34,11 @@ public interface MaestroServicioDao {
 
 	List<BaseVO> consultarServicioDependientes(Integer idServicio)
 			throws SQLException;
+
+	List<MaestroServicio> consultarServiciosInvisibles(Integer idServicio)
+			throws SQLException, Exception;
+
+	List<MaestroServicio> listarMaestroServiciosAdm() throws SQLException;
 	
 
 }

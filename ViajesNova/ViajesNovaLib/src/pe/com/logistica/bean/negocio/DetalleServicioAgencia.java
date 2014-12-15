@@ -31,6 +31,7 @@ public class DetalleServicioAgencia extends BaseNegocio {
 	private int cantidad;
 	private BigDecimal precioUnitario;
 	private BigDecimal montoComision;
+	private BigDecimal montoIGV;
 	private ServicioProveedor servicioProveedor;
 
 	/**
@@ -173,14 +174,19 @@ public class DetalleServicioAgencia extends BaseNegocio {
 	}
 	
 	public BigDecimal getTotalServicio(){
-		BigDecimal cantidadDecimal = BigDecimal.ZERO;
-		if (cantidad != 0){
-			cantidadDecimal = cantidadDecimal.add(UtilParse.parseIntABigDecimal(cantidad));
+		BigDecimal total = BigDecimal.ZERO;
+		try {
+			BigDecimal cantidadDecimal = BigDecimal.ZERO;
+			if (cantidad != 0){
+				cantidadDecimal = cantidadDecimal.add(UtilParse.parseIntABigDecimal(cantidad));
+			}
+			else{
+				cantidadDecimal = BigDecimal.ONE;
+			}
+			total = total.add(this.precioUnitario.multiply(cantidadDecimal));
+		} catch (Exception e) {
+			total = BigDecimal.ZERO;
 		}
-		else{
-			cantidadDecimal = BigDecimal.ONE;
-		}
-		BigDecimal total = this.precioUnitario.multiply(cantidadDecimal);
 		return total;
 	}
 
@@ -219,6 +225,9 @@ public class DetalleServicioAgencia extends BaseNegocio {
 	 * @return the montoComision
 	 */
 	public BigDecimal getMontoComision() {
+		if (montoComision == null){
+			montoComision = BigDecimal.ZERO;
+		}
 		return montoComision;
 	}
 
@@ -227,6 +236,23 @@ public class DetalleServicioAgencia extends BaseNegocio {
 	 */
 	public void setMontoComision(BigDecimal montoComision) {
 		this.montoComision = montoComision;
+	}
+
+	/**
+	 * @return the montoIGV
+	 */
+	public BigDecimal getMontoIGV() {
+		if (montoIGV == null){
+			montoIGV = BigDecimal.ZERO;
+		}
+		return montoIGV;
+	}
+
+	/**
+	 * @param montoIGV the montoIGV to set
+	 */
+	public void setMontoIGV(BigDecimal montoIGV) {
+		this.montoIGV = montoIGV;
 	}
 
 }

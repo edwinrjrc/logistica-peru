@@ -22,6 +22,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 
 import pe.com.logistica.bean.Util.UtilParse;
+import pe.com.logistica.bean.base.BaseVO;
 import pe.com.logistica.bean.negocio.Cliente;
 import pe.com.logistica.bean.negocio.Destino;
 import pe.com.logistica.bean.negocio.DetalleServicioAgencia;
@@ -30,6 +31,7 @@ import pe.com.logistica.bean.negocio.Parametro;
 import pe.com.logistica.bean.negocio.ServicioAgencia;
 import pe.com.logistica.bean.negocio.ServicioProveedor;
 import pe.com.logistica.bean.negocio.Usuario;
+import pe.com.logistica.negocio.exception.ErrorConsulaDataException;
 import pe.com.logistica.negocio.exception.ErrorRegistroDataException;
 import pe.com.logistica.web.servicio.NegocioServicio;
 import pe.com.logistica.web.servicio.ParametroServicio;
@@ -60,6 +62,7 @@ public class ServicioAgenteMBean extends BaseMBean{
 	
 	private List<ServicioAgencia> listadoServicioAgencia;
 	private List<DetalleServicioAgencia> listadoDetalleServicio;
+	private List<DetalleServicioAgencia> listadoDetalleServicioTotal;
 	private List<Cliente> listadoClientes;
 	private List<SelectItem> listadoEmpresas;
 	private List<ServicioProveedor> listaProveedores;
@@ -189,9 +192,15 @@ public class ServicioAgenteMBean extends BaseMBean{
 						.setUsuarioCreacion(usuario.getUsuario());
 				getDetalleServicio().setIpCreacion(
 						obtenerRequest().getRemoteAddr());
-				this.getListadoDetalleServicio().add(negocioServicio.agregarServicioVenta(getDetalleServicio()));
+				
+				DetalleServicioAgencia detalleServicioAgregar = negocioServicio.agregarServicioVenta(getDetalleServicio());
+				
+				this.getListadoDetalleServicio().add(detalleServicioAgregar);
+				this.getListadoDetalleServicioTotal().add(detalleServicioAgregar);
 				
 				this.setListadoDetalleServicio(negocioServicio.ordenarServiciosVenta(getListadoDetalleServicio()));
+				
+				agregarServicioInvisible(getDetalleServicio());
 				
 				this.setDetalleServicio(null);
 				
@@ -214,7 +223,14 @@ public class ServicioAgenteMBean extends BaseMBean{
 		}
 	}
 	
-	private boolean validarRegistroServicioVenta() throws ErrorRegistroDataException, SQLException {
+	private void agregarServicioInvisible(
+			DetalleServicioAgencia detalleServicio2) throws ErrorConsulaDataException, Exception {
+		List<DetalleServicioAgencia> lista = negocioServicio.agregarServicioVentaInvisible(detalleServicio2);
+		this.getListadoDetalleServicioTotal().addAll(lista);
+		
+	}
+
+	private boolean validarRegistroServicioVenta() throws Exception {
 		boolean resultado = true;
 		String idFormulario = "idFormVentaServi";
 		if (this.getServicioAgencia().getCliente() == null || this.getServicioAgencia().getCliente().getCodigoEntero() == null || this.getServicioAgencia().getCliente().getCodigoEntero().intValue()==0){
@@ -268,6 +284,8 @@ public class ServicioAgenteMBean extends BaseMBean{
 			else{
 				
 				validarServicios();
+				
+				validarFee();
 				/*
 				Parametro param = this.parametroServicio.consultarParametro(UtilWeb.obtenerEnteroPropertieMaestro(
 						"codigoParametroFee", "aplicacionDatos"));
@@ -289,17 +307,32 @@ public class ServicioAgenteMBean extends BaseMBean{
 		return resultado;
 	}
 
-	private void validarServicios() throws ErrorRegistroDataException {
+	private void validarServicios() throws ErrorRegistroDataException, SQLException, Exception {
 		
 		for (DetalleServicioAgencia detalle : this.getListadoDetalleServicio()){
-			if (detalle.getTipoServicio().isRequiereFee()){
-				validarFee();
+			
+			List<BaseVO> listaDependientes = this.negocioServicio.consultaServiciosDependientes(detalle.getTipoServicio().getCodigoEntero());
+			
+			for (BaseVO baseVO : listaDependientes) {
+				if (!estaEnListaServicios(baseVO)){
+					throw new ErrorRegistroDataException("No se agrego "+baseVO.getNombre());
+				}
 			}
-			if (detalle.getTipoServicio().isPagaImpto()){
-				validarImpto();
+			
+		}
+		
+	}
+	
+	private boolean estaEnListaServicios(BaseVO baseVO){
+		boolean resultado = false;
+		
+		for (DetalleServicioAgencia detalle : this.getListadoDetalleServicio()){
+			if (detalle.getTipoServicio().getCodigoEntero().intValue() == baseVO.getCodigoEntero().intValue()){
+				resultado = true;
 			}
 		}
 		
+		return resultado;
 	}
 
 	private void validarImpto() throws ErrorRegistroDataException {
@@ -383,16 +416,20 @@ public class ServicioAgenteMBean extends BaseMBean{
 		BigDecimal montoTotal = BigDecimal.ZERO;
 		BigDecimal montoComision = BigDecimal.ZERO;
 		BigDecimal montoFee = BigDecimal.ZERO;
+		BigDecimal montoIgv = BigDecimal.ZERO;
 		try {
 			
 			Parametro param = this.parametroServicio.consultarParametro(UtilWeb.obtenerEnteroPropertieMaestro(
 					"codigoParametroFee", "aplicacionDatos"));
 			
-			for (DetalleServicioAgencia detalleServicio : this.getListadoDetalleServicio()){
+			for (DetalleServicioAgencia detalleServicio : this.getListadoDetalleServicioTotal()){
 				montoTotal = montoTotal.add(detalleServicio.getTotalServicio());
 				montoComision = montoComision.add(detalleServicio.getMontoComision());
+				montoIgv = montoIgv.add(detalleServicio.getMontoIGV());
 				
-				if (detalleServicio.getTipoServicio().getCodigoEntero().toString().equals(param.getValor())){
+				montoTotal = montoTotal.add(montoIgv);
+				
+				if (detalleServicio.getTipoServicio().getCodigoEntero()!=null && detalleServicio.getTipoServicio().isEsFee()){
 					montoFee = montoFee.add(detalleServicio.getTotalServicio());
 				}
 			}
@@ -404,7 +441,7 @@ public class ServicioAgenteMBean extends BaseMBean{
 		this.getServicioAgencia().setMontoTotalServicios(montoTotal);
 		this.getServicioAgencia().setMontoTotalComision(montoComision);
 		this.getServicioAgencia().setMontoTotalFee(montoFee);
-		
+		this.getServicioAgencia().setMontoTotalIGV(montoIgv);
 	}
 
 	public void ejecutarMetodo(){
@@ -805,6 +842,24 @@ public class ServicioAgenteMBean extends BaseMBean{
 	 */
 	public void setBusquedaRealizada(boolean busquedaRealizada) {
 		this.busquedaRealizada = busquedaRealizada;
+	}
+
+	/**
+	 * @return the listadoDetalleServicioTotal
+	 */
+	public List<DetalleServicioAgencia> getListadoDetalleServicioTotal() {
+		if (listadoDetalleServicioTotal == null){
+			listadoDetalleServicioTotal = new ArrayList<DetalleServicioAgencia>();
+		}
+		return listadoDetalleServicioTotal;
+	}
+
+	/**
+	 * @param listadoDetalleServicioTotal the listadoDetalleServicioTotal to set
+	 */
+	public void setListadoDetalleServicioTotal(
+			List<DetalleServicioAgencia> listadoDetalleServicioTotal) {
+		this.listadoDetalleServicioTotal = listadoDetalleServicioTotal;
 	}
 
 
