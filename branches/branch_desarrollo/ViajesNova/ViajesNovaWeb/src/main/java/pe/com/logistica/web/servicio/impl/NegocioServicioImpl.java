@@ -29,6 +29,7 @@ import pe.com.logistica.bean.negocio.ServicioNovios;
 import pe.com.logistica.bean.negocio.ServicioProveedor;
 import pe.com.logistica.negocio.ejb.NegocioSessionRemote;
 import pe.com.logistica.negocio.exception.EnvioCorreoException;
+import pe.com.logistica.negocio.exception.ErrorConsulaDataException;
 import pe.com.logistica.negocio.exception.ErrorRegistroDataException;
 import pe.com.logistica.negocio.exception.ResultadoCeroDaoException;
 import pe.com.logistica.web.servicio.NegocioServicio;
@@ -244,6 +245,13 @@ public class NegocioServicioImpl implements NegocioServicio {
 	}
 	
 	@Override
+	public List<MaestroServicio> listarMaestroServicioAdm() throws SQLException,
+			Exception {
+
+		return ejbSession.listarMaestroServicioAdm();
+	}
+	
+	@Override
 	public List<MaestroServicio> listarMaestroServicioFee() throws SQLException,
 			Exception {
 
@@ -292,6 +300,18 @@ public class NegocioServicioImpl implements NegocioServicio {
 			Exception {
 
 		return ejbSession.listarMaestroServicioIgv();
+	}
+
+	@Override
+	public List<DetalleServicioAgencia> agregarServicioVentaInvisible(
+			DetalleServicioAgencia detalleServicio2) throws ErrorConsulaDataException, Exception {
+		
+		return ejbSession.agregarServicioVentaInvisible(detalleServicio2);
+	}
+	
+	@Override
+	public List<BaseVO> consultaServiciosDependientes(Integer idServicio) throws SQLException, Exception{
+		return ejbSession.consultaServiciosDependientes(idServicio);
 	}
 }
 	

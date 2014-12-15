@@ -40,6 +40,7 @@ public class MaestroServicio extends BaseNegocio {
 	
 	private List<BaseVO> listaServicioDepende;
 	private BaseVO parametroAsociado;
+	private String valorParametro;
 	/**
 	 * 
 	 */
@@ -312,6 +313,20 @@ public class MaestroServicio extends BaseNegocio {
 	 */
 	public void setVisible(boolean visible) {
 		this.visible = visible;
+	}
+
+	/**
+	 * @return the valorParametro
+	 */
+	public String getValorParametro() {
+		return valorParametro;
+	}
+
+	/**
+	 * @param valorParametro the valorParametro to set
+	 */
+	public void setValorParametro(String valorParametro) {
+		this.valorParametro = valorParametro;
 	}
 
 }

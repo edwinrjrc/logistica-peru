@@ -38,6 +38,7 @@ public class ServicioAgencia extends BaseNegocio{
 	private BigDecimal montoTotalServicios;
 	private BigDecimal montoTotalFee;
 	private BigDecimal montoTotalComision;
+	private BigDecimal montoTotalIGV;
 	
 	private List<DetalleServicioAgencia> listaDetalleServicio;
 	private List<CuotaPago> cronogramaPago;
@@ -153,6 +154,10 @@ public class ServicioAgencia extends BaseNegocio{
 		this.listaDetalleServicio = listaDetalleServicio;
 	}
 
+	/**
+	 * Calcula el monto total de los servicios sumando el total servicio
+	 * @return
+	 */
 	public BigDecimal getMontoTotal(){
 		BigDecimal monto = BigDecimal.ZERO;
 		
@@ -473,5 +478,23 @@ public class ServicioAgencia extends BaseNegocio{
 	 */
 	public void setEsProgramaNovios(boolean esProgramaNovios) {
 		this.esProgramaNovios = esProgramaNovios;
+	}
+
+
+
+	/**
+	 * @return the montoTotalIGV
+	 */
+	public BigDecimal getMontoTotalIGV() {
+		return montoTotalIGV;
+	}
+
+
+
+	/**
+	 * @param montoTotalIGV the montoTotalIGV to set
+	 */
+	public void setMontoTotalIGV(BigDecimal montoTotalIGV) {
+		this.montoTotalIGV = montoTotalIGV;
 	}
 }
