@@ -93,6 +93,63 @@ public class MaestroServicioDaoImpl implements MaestroServicioDao {
 	}
 	
 	@Override
+	public List<MaestroServicio> listarMaestroServiciosAdm() throws SQLException {
+		Connection conn = null;
+		CallableStatement cs = null;
+		String sql = "{ ? = call negocio.fn_listarmaestroserviciosadm() }";
+		ResultSet rs = null;
+		List<MaestroServicio> resultado = null;
+
+		try {
+			conn = UtilConexion.obtenerConexion();
+			cs = conn.prepareCall(sql);
+			int i = 1;
+			cs.registerOutParameter(i++, Types.OTHER);
+			cs.execute();
+
+			rs = (ResultSet) cs.getObject(1);
+			resultado = new ArrayList<MaestroServicio>();
+			MaestroServicio bean = null;
+			while (rs.next()) {
+				bean = new MaestroServicio();
+				bean.setCodigoEntero(UtilJdbc.obtenerNumero(rs, "id"));
+				bean.setNombre(UtilJdbc.obtenerCadena(rs, "nombre"));
+				bean.setDescripcionCorta(UtilJdbc.obtenerCadena(rs, "desccorta"));
+				bean.setDescripcion(UtilJdbc.obtenerCadena(rs, "desclarga"));
+				bean.setRequiereFee(UtilJdbc.obtenerBoolean(rs, "requierefee"));
+				bean.setPagaImpto(UtilJdbc.obtenerBoolean(rs, "pagaimpto"));
+				bean.setCargaComision(UtilJdbc.obtenerBoolean(rs, "cargacomision"));
+				resultado.add(bean);
+			}
+		} catch (SQLException e) {
+			throw new SQLException(e);
+		} finally {
+			try {
+				if (rs != null) {
+					rs.close();
+				}
+				if (cs != null) {
+					cs.close();
+				}
+				if (conn != null) {
+					conn.close();
+				}
+			} catch (SQLException e) {
+				try {
+					if (conn != null) {
+						conn.close();
+					}
+					throw new SQLException(e);
+				} catch (SQLException e1) {
+					throw new SQLException(e);
+				}
+			}
+		}
+
+		return resultado;
+	}
+	
+	@Override
 	public List<MaestroServicio> listarMaestroServiciosFee() throws SQLException {
 		Connection conn = null;
 		CallableStatement cs = null;
@@ -571,6 +628,63 @@ public class MaestroServicioDaoImpl implements MaestroServicioDao {
 			while (rs.next()) {
 				bean = new BaseVO();
 				bean.setCodigoEntero(UtilJdbc.obtenerNumero(rs, "idserviciodepende"));
+				bean.setNombre(UtilJdbc.obtenerCadena(rs, "nombre"));
+				
+				
+				resultado.add(bean);
+			}
+		} catch (SQLException e) {
+			throw new SQLException(e);
+		} finally {
+			try {
+				if (rs != null) {
+					rs.close();
+				}
+				if (cs != null) {
+					cs.close();
+				}
+				if (conn != null) {
+					conn.close();
+				}
+			} catch (SQLException e) {
+				try {
+					if (conn != null) {
+						conn.close();
+					}
+					throw new SQLException(e);
+				} catch (SQLException e1) {
+					throw new SQLException(e);
+				}
+			}
+		}
+
+		return resultado;
+	}
+	
+	@Override
+	public List<MaestroServicio> consultarServiciosInvisibles(Integer idServicio) throws SQLException, Exception{
+		Connection conn = null;
+		CallableStatement cs = null;
+		String sql = "{ ? = call negocio.fn_consultarserviciosinvisibles(?) }";
+		ResultSet rs = null;
+		List<MaestroServicio> resultado = null;
+
+		try {
+			conn = UtilConexion.obtenerConexion();
+			cs = conn.prepareCall(sql);
+			int i = 1;
+			cs.registerOutParameter(i++, Types.OTHER);
+			cs.setInt(i++, idServicio);
+			cs.execute();
+
+			rs = (ResultSet) cs.getObject(1);
+			resultado = new ArrayList<MaestroServicio>();
+			MaestroServicio bean = null;
+			while (rs.next()) {
+				bean = new MaestroServicio();
+				bean.setCodigoEntero(UtilJdbc.obtenerNumero(rs, "idserviciodepende"));
+				bean.setNombre(UtilJdbc.obtenerCadena(rs, "nombre"));
+				bean.setValorParametro(UtilJdbc.obtenerCadena(rs, "valor"));
 				
 				resultado.add(bean);
 			}

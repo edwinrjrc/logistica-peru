@@ -141,6 +141,8 @@ public class MaestroServiciosMBean extends BaseMBean {
 			
 			this.setMaestroServicio(this.negocioServicio.consultarMaestroServicio(idServicio));
 			
+			this.setListaMaeServicioImpto(this.getMaestroServicio().getListaServicioDepende());
+			
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} catch (Exception e) {
@@ -207,7 +209,7 @@ public class MaestroServiciosMBean extends BaseMBean {
 	public List<MaestroServicio> getListaMaeServicio() {
 		try {
 			
-			listaMaeServicio = negocioServicio.listarMaestroServicio();
+			listaMaeServicio = negocioServicio.listarMaestroServicioAdm();
 			this.setShowModal(false);
 			
 		} catch (SQLException e) {

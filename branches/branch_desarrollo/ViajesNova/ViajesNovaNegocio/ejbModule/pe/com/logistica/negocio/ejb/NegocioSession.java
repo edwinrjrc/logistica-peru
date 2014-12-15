@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
@@ -64,6 +65,7 @@ import pe.com.logistica.negocio.dao.impl.ServicioNoviosDaoImpl;
 import pe.com.logistica.negocio.dao.impl.TelefonoDaoImpl;
 import pe.com.logistica.negocio.dao.impl.UbigeoDaoImpl;
 import pe.com.logistica.negocio.exception.EnvioCorreoException;
+import pe.com.logistica.negocio.exception.ErrorConsulaDataException;
 import pe.com.logistica.negocio.exception.ErrorRegistroDataException;
 import pe.com.logistica.negocio.exception.ResultadoCeroDaoException;
 import pe.com.logistica.negocio.exception.ValidacionException;
@@ -1300,6 +1302,13 @@ public class NegocioSession implements NegocioSessionRemote,
 	}
 	
 	@Override
+	public List<MaestroServicio> listarMaestroServicioAdm() throws SQLException, Exception{
+		MaestroServicioDao maestroServicioDao = new MaestroServicioDaoImpl();
+		
+		return maestroServicioDao.listarMaestroServiciosAdm();
+	}
+	
+	@Override
 	public List<MaestroServicio> listarMaestroServicioFee() throws SQLException, Exception{
 		MaestroServicioDao maestroServicioDao = new MaestroServicioDaoImpl();
 		
@@ -1440,5 +1449,49 @@ public class NegocioSession implements NegocioSessionRemote,
 	public List<Cliente> listarClientesCumples() throws SQLException, Exception {
 		ClienteDao clienteDao = new ClienteDaoImpl();
 		return clienteDao.listarClienteCumpleanieros();
+	}
+
+	@Override
+	public List<DetalleServicioAgencia> agregarServicioVentaInvisible(
+			DetalleServicioAgencia detalleServicio2) throws ErrorConsulaDataException, Exception {
+		
+		List<DetalleServicioAgencia> listaServicios = new ArrayList<DetalleServicioAgencia>();
+		try {
+			MaestroServicioDao maestroServicioDao = new MaestroServicioDaoImpl();
+			
+			List<MaestroServicio> lista = maestroServicioDao.consultarServiciosInvisibles(detalleServicio2.getTipoServicio().getCodigoEntero());
+			
+			for (MaestroServicio maestroServicio : lista) {
+				DetalleServicioAgencia detalle = null;
+				detalle = new DetalleServicioAgencia();
+				detalle.setCodigoEntero(maestroServicio.getCodigoEntero());
+				detalle.setDescripcionServicio(maestroServicio.getNombre());
+				detalle.setCantidad(1);
+				
+				BigDecimal cantidad = BigDecimal.valueOf(Double.valueOf(String.valueOf(detalleServicio2.getCantidad())));
+				BigDecimal totalServicioPrecede = detalleServicio2.getPrecioUnitario().multiply(cantidad);
+				
+				BigDecimal porcenIGV = BigDecimal.valueOf(Double.valueOf(maestroServicio.getValorParametro()));
+				BigDecimal igvServicio = totalServicioPrecede.multiply(porcenIGV);
+				
+				detalle.setMontoIGV(igvServicio);
+				listaServicios.add(detalle);
+			}
+			
+			return listaServicios;
+		} catch (SQLException e) {
+			throw new ErrorConsulaDataException("Error en Consulta de Servicios Ocultos", e);
+		} catch (Exception e){
+			throw new ErrorConsulaDataException("Error en Consulta de Servicios Ocultos", e);
+		}
+		
+		
+	}
+
+	@Override
+	public List<BaseVO> consultaServiciosDependientes(Integer idServicio) throws SQLException, Exception {
+		MaestroServicioDao maestroServicioDao = new MaestroServicioDaoImpl();
+		
+		return maestroServicioDao.consultarServicioDependientes(idServicio);
 	}
 }
