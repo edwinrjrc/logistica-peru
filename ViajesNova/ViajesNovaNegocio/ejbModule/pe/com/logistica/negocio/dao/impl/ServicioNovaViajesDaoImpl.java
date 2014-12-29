@@ -56,11 +56,11 @@ public class ServicioNovaViajesDaoImpl implements ServicioNovaViajesDao {
 				cs.setNull(i++, Types.INTEGER);
 			}
 			cs.setDate(i++, UtilJdbc.convertirUtilDateSQLDate(servicioAgencia.getFechaServicio()));
-			if (servicioAgencia.getCantidadServicios() != 0){
-				cs.setInt(i++, servicioAgencia.getCantidadServicios());
+			if (servicioAgencia.getMontoTotalIGV()!= null && !servicioAgencia.getMontoTotalIGV().equals(BigDecimal.ZERO)){
+				cs.setBigDecimal(i++, servicioAgencia.getMontoTotalIGV());
 			}
 			else{
-				cs.setNull(i++, Types.INTEGER);
+				cs.setNull(i++, Types.DECIMAL);
 			}
 			if (servicioAgencia.getMontoTotal() != null && !servicioAgencia.getMontoTotal().equals(BigDecimal.ZERO)){
 				cs.setBigDecimal(i++, servicioAgencia.getMontoTotal());
@@ -188,14 +188,14 @@ public class ServicioNovaViajesDaoImpl implements ServicioNovaViajesDao {
 				cs.setNull(i++, Types.INTEGER);
 			}
 			cs.setDate(i++, UtilJdbc.convertirUtilDateSQLDate(servicioAgencia.getFechaServicio()));
-			if (servicioAgencia.getCantidadServicios() != 0){
-				cs.setInt(i++, servicioAgencia.getCantidadServicios());
+			if (servicioAgencia.getMontoTotalIGV()!= null && !servicioAgencia.getMontoTotalIGV().equals(BigDecimal.ZERO)){
+				cs.setBigDecimal(i++, servicioAgencia.getMontoTotalIGV());
 			}
 			else{
-				cs.setNull(i++, Types.INTEGER);
+				cs.setNull(i++, Types.DECIMAL);
 			}
-			if (servicioAgencia.getMontoTotalServicios() != null && !servicioAgencia.getMontoTotalServicios().equals(BigDecimal.ZERO)){
-				cs.setBigDecimal(i++, servicioAgencia.getMontoTotalServicios());
+			if (servicioAgencia.getMontoTotal() != null && !servicioAgencia.getMontoTotal().equals(BigDecimal.ZERO)){
+				cs.setBigDecimal(i++, servicioAgencia.getMontoTotal());
 			}
 			else{
 				cs.setNull(i++, Types.DECIMAL);
@@ -297,7 +297,7 @@ public class ServicioNovaViajesDaoImpl implements ServicioNovaViajesDao {
 		Connection conn = null;
 		CallableStatement cs = null;
 
-		String sql = "{ ? = call negocio.fn_ingresarserviciodetalle(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}";
+		String sql = "{ ? = call negocio.fn_ingresarserviciodetalle(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}";
 		
 		try {
 			conn = UtilConexion.obtenerConexion();
@@ -349,6 +349,12 @@ public class ServicioNovaViajesDaoImpl implements ServicioNovaViajesDao {
 			cs.setBigDecimal(i++, detalleServicio.getServicioProveedor().getPorcentajeComision());
 			cs.setBigDecimal(i++, detalleServicio.getMontoComision());
 			cs.setBigDecimal(i++, detalleServicio.getTotalServicio());
+			if (detalleServicio.getServicioPadre().getCodigoEntero()!=null){
+				cs.setInt(i++, detalleServicio.getServicioPadre().getCodigoEntero().intValue());
+			}
+			else{
+				cs.setNull(i++, Types.INTEGER);
+			}
 			cs.setString(i++, detalleServicio.getUsuarioCreacion());
 			cs.setString(i++, detalleServicio.getIpCreacion());
 			cs.execute();
@@ -381,17 +387,17 @@ public class ServicioNovaViajesDaoImpl implements ServicioNovaViajesDao {
 	}
 	
 	@Override
-	public boolean ingresarDetalleServicio(DetalleServicioAgencia detalleServicio, int idServicio, Connection conn)
+	public Integer ingresarDetalleServicio(DetalleServicioAgencia detalleServicio, int idServicio, Connection conn)
 			throws SQLException {
-		boolean resultado = false;
+		Integer resultado = 0;
 		CallableStatement cs = null;
 
-		String sql = "{ ? = call negocio.fn_ingresarserviciodetalle(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}";
+		String sql = "{ ? = call negocio.fn_ingresarserviciodetalle(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}";
 		
 		try {
 			cs = conn.prepareCall(sql);
 			int i=1;
-			cs.registerOutParameter(i++, Types.BOOLEAN);
+			cs.registerOutParameter(i++, Types.INTEGER);
 			cs.setInt(i++, detalleServicio.getTipoServicio().getCodigoEntero().intValue());
 			cs.setInt(i++, idServicio);
 			cs.setString(i++, detalleServicio.getDescripcionServicio());
@@ -433,6 +439,12 @@ public class ServicioNovaViajesDaoImpl implements ServicioNovaViajesDao {
 			else{
 				cs.setNull(i++, Types.INTEGER);
 			}
+			if (detalleServicio.getConsolidador().getCodigoEntero()!=null && detalleServicio.getConsolidador().getCodigoEntero().intValue()!=0){
+				cs.setInt(i++, detalleServicio.getConsolidador().getCodigoEntero().intValue());
+			}
+			else{
+				cs.setNull(i++, Types.INTEGER);
+			}
 			cs.setBigDecimal(i++, detalleServicio.getPrecioUnitario());
 			if (detalleServicio.getServicioProveedor().getPorcentajeComision()!=null && !detalleServicio.getServicioProveedor().getPorcentajeComision().equals(BigDecimal.ZERO)){
 				cs.setBigDecimal(i++, detalleServicio.getServicioProveedor().getPorcentajeComision());
@@ -442,13 +454,19 @@ public class ServicioNovaViajesDaoImpl implements ServicioNovaViajesDao {
 			}
 			cs.setBigDecimal(i++, detalleServicio.getMontoComision());
 			cs.setBigDecimal(i++, detalleServicio.getTotalServicio());
+			if (detalleServicio.getServicioPadre().getCodigoEntero()!=null && detalleServicio.getServicioPadre().getCodigoEntero().intValue()!=0){
+				cs.setInt(i++, detalleServicio.getServicioPadre().getCodigoEntero().intValue());
+			}
+			else{
+				cs.setNull(i++, Types.INTEGER);
+			}
 			cs.setString(i++, detalleServicio.getUsuarioCreacion());
 			cs.setString(i++, detalleServicio.getIpCreacion());
 			cs.execute();
 			
-			resultado = cs.getBoolean(1);
+			resultado = cs.getInt(1);
 		} catch (SQLException e) {
-			resultado = false;
+			resultado = 0;
 			throw new SQLException(e);
 		} finally {
 			try {
@@ -656,9 +674,11 @@ public class ServicioNovaViajesDaoImpl implements ServicioNovaViajesDao {
 				servicioAgencia2.getCliente2().setNombres(UtilJdbc.obtenerCadena(rs, "nombres2"));
 				servicioAgencia2.getCliente2().setApellidoPaterno(UtilJdbc.obtenerCadena(rs, "apellidopaterno2"));
 				servicioAgencia2.getCliente2().setApellidoMaterno(UtilJdbc.obtenerCadena(rs, "apellidomaterno2"));
-				servicioAgencia2.setFechaServicio(UtilJdbc.obtenerFecha(rs, "fechaservicio"));
+				servicioAgencia2.setFechaServicio(UtilJdbc.obtenerFecha(rs, "fechacompra"));
 				servicioAgencia2.setMontoTotalServicios(UtilJdbc.obtenerBigDecimal(rs, "montototal"));
-				servicioAgencia2.setCantidadServicios(UtilJdbc.obtenerNumero(rs, "cantidadservicios"));
+				servicioAgencia2.setMontoTotalComision(UtilJdbc.obtenerBigDecimal(rs, "montocomisiontotal"));
+				servicioAgencia2.setMontoTotalIGV(UtilJdbc.obtenerBigDecimal(rs, "montototaligv"));
+				servicioAgencia2.setMontoTotalFee(UtilJdbc.obtenerBigDecimal(rs, "montototalfee"));
 				servicioAgencia2.getDestino().setCodigoEntero(UtilJdbc.obtenerNumero(rs, "iddestino"));
 				servicioAgencia2.getDestino().setDescripcion(UtilJdbc.obtenerCadena(rs, "descdestino"));
 				servicioAgencia2.getFormaPago().setCodigoEntero(UtilJdbc.obtenerNumero(rs, "idformapago"));
@@ -670,7 +690,6 @@ public class ServicioNovaViajesDaoImpl implements ServicioNovaViajesDao {
 				servicioAgencia2.setValorCuota(UtilJdbc.obtenerBigDecimal(rs, "valorcuota"));
 				servicioAgencia2.setFechaPrimerCuota(UtilJdbc.obtenerFecha(rs, "fechaprimercuota"));
 				servicioAgencia2.setFechaUltimaCuota(UtilJdbc.obtenerFecha(rs, "fechaultcuota"));
-				servicioAgencia2.setMontoTotalComision(UtilJdbc.obtenerBigDecimal(rs, "montocomisiontotal"));
 				String nombreVendedor = UtilJdbc.obtenerCadena(rs, "nombresvendedor")+" "+UtilJdbc.obtenerCadena(rs, "apepaterno")+" "+UtilJdbc.obtenerCadena(rs, "apematerno");
 				nombreVendedor = StringUtils.normalizeSpace(nombreVendedor);
 				servicioAgencia2.getVendedor().setNombre(nombreVendedor);
@@ -803,8 +822,74 @@ public class ServicioNovaViajesDaoImpl implements ServicioNovaViajesDao {
 				detalleServicio.getTipoServicio().setEsImpuesto(UtilJdbc.obtenerBoolean(rs, "esimpuesto"));
 				detalleServicio.getTipoServicio().setEsFee(UtilJdbc.obtenerBoolean(rs, "esfee"));
 				detalleServicio.setDescripcionServicio(UtilJdbc.obtenerCadena(rs, "descripcionservicio"));
-				detalleServicio.getDestino().setCodigoEntero(UtilJdbc.obtenerNumero(rs, "iddestino"));
-				detalleServicio.getDestino().setNombre(UtilJdbc.obtenerCadena(rs, "descripciondestino"));
+				detalleServicio.setDias(UtilJdbc.obtenerNumero(rs, "dias"));
+				detalleServicio.setNoches(UtilJdbc.obtenerNumero(rs, "noches"));
+				detalleServicio.setFechaIda(UtilJdbc.obtenerFecha(rs, "fechaida"));
+				detalleServicio.setFechaRegreso(UtilJdbc.obtenerFecha(rs, "fecharegreso"));
+				detalleServicio.setCantidad(UtilJdbc.obtenerNumero(rs, "cantidad"));
+				detalleServicio.setPrecioUnitario(UtilJdbc.obtenerBigDecimal(rs, "preciobase"));
+				detalleServicio.getServicioProveedor().setPorcentajeComision(UtilJdbc.obtenerBigDecimal(rs, "porcencomision"));
+				detalleServicio.setMontoComision(UtilJdbc.obtenerBigDecimal(rs, "montocomision"));
+				detalleServicio.getServicioProveedor().getProveedor().setCodigoEntero(UtilJdbc.obtenerNumero(rs, "idproveedor"));
+				detalleServicio.getServicioProveedor().getProveedor().setNombres(UtilJdbc.obtenerCadena(rs, "nombres"));
+				detalleServicio.getServicioProveedor().getProveedor().setApellidoPaterno(UtilJdbc.obtenerCadena(rs, "apellidopaterno"));
+				detalleServicio.getServicioProveedor().getProveedor().setApellidoMaterno(UtilJdbc.obtenerCadena(rs, "apellidomaterno"));
+				detalleServicio.getTipoServicio().setVisible(UtilJdbc.obtenerBoolean(rs, "visible"));
+				
+				resultado.add(detalleServicio);
+			}
+		} catch (SQLException e) {
+			throw new SQLException(e);
+		} finally {
+			try {
+				if (rs != null) {
+					rs.close();
+				}
+				if (cs != null) {
+					cs.close();
+				}
+				
+			} catch (SQLException e) {
+				throw new SQLException(e);
+				
+			}
+		}
+		
+		return resultado;
+	}
+	
+	@Override
+	public List<DetalleServicioAgencia> consultaServicioDetalleHijos(int idServicio, int idSerPadre, Connection conn)
+			throws SQLException {
+		List<DetalleServicioAgencia> resultado = null;
+		CallableStatement cs = null;
+		ResultSet rs = null;
+		String sql = "{ ? = call negocio.fn_consultarserviciodetallehijos(?,?)}";
+		
+		try {
+			cs = conn.prepareCall(sql);
+			int i=1;
+			cs.registerOutParameter(i++, Types.OTHER);
+			cs.setInt(i++, idServicio);
+			cs.setInt(i++, idSerPadre);
+			cs.execute();
+			
+			rs = (ResultSet)cs.getObject(1);
+			DetalleServicioAgencia detalleServicio = null;
+			resultado = new ArrayList<DetalleServicioAgencia>();
+			while (rs.next()){
+				detalleServicio = new DetalleServicioAgencia();
+
+				detalleServicio.setCodigoEntero(UtilJdbc.obtenerNumero(rs, "idSerdetalle"));
+				detalleServicio.getTipoServicio().setCodigoEntero(UtilJdbc.obtenerNumero(rs, "idtiposervicio"));
+				detalleServicio.getTipoServicio().setNombre(UtilJdbc.obtenerCadena(rs, "nomtipservicio"));
+				detalleServicio.getTipoServicio().setDescripcion(UtilJdbc.obtenerCadena(rs, "descservicio"));
+				detalleServicio.getTipoServicio().setRequiereFee(UtilJdbc.obtenerBoolean(rs, "requierefee"));
+				detalleServicio.getTipoServicio().setPagaImpto(UtilJdbc.obtenerBoolean(rs, "pagaimpto"));
+				detalleServicio.getTipoServicio().setCargaComision(UtilJdbc.obtenerBoolean(rs, "cargacomision"));
+				detalleServicio.getTipoServicio().setEsImpuesto(UtilJdbc.obtenerBoolean(rs, "esimpuesto"));
+				detalleServicio.getTipoServicio().setEsFee(UtilJdbc.obtenerBoolean(rs, "esfee"));
+				detalleServicio.setDescripcionServicio(UtilJdbc.obtenerCadena(rs, "descripcionservicio"));
 				detalleServicio.setDias(UtilJdbc.obtenerNumero(rs, "dias"));
 				detalleServicio.setNoches(UtilJdbc.obtenerNumero(rs, "noches"));
 				detalleServicio.setFechaIda(UtilJdbc.obtenerFecha(rs, "fechaida"));
@@ -887,9 +972,8 @@ public class ServicioNovaViajesDaoImpl implements ServicioNovaViajesDao {
 				servicioAgencia2.getCliente2().setNombres(UtilJdbc.obtenerCadena(rs, "nombres2"));
 				servicioAgencia2.getCliente2().setApellidoPaterno(UtilJdbc.obtenerCadena(rs, "apellidopaterno2"));
 				servicioAgencia2.getCliente2().setApellidoMaterno(UtilJdbc.obtenerCadena(rs, "apellidomaterno2"));
-				servicioAgencia2.setFechaServicio(UtilJdbc.obtenerFecha(rs, "fechaservicio"));
+				servicioAgencia2.setFechaServicio(UtilJdbc.obtenerFecha(rs, "fechacompra"));
 				servicioAgencia2.setMontoTotalServicios(UtilJdbc.obtenerBigDecimal(rs, "montototal"));
-				servicioAgencia2.setCantidadServicios(UtilJdbc.obtenerNumero(rs, "cantidadservicios"));
 				servicioAgencia2.getDestino().setCodigoEntero(UtilJdbc.obtenerNumero(rs, "iddestino"));
 				servicioAgencia2.getDestino().setDescripcion(UtilJdbc.obtenerCadena(rs, "descdestino"));
 				servicioAgencia2.getFormaPago().setCodigoEntero(UtilJdbc.obtenerNumero(rs, "idformapago"));

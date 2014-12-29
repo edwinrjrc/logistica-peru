@@ -319,8 +319,14 @@ public class ProveedorMBean extends BaseMBean {
 				resultado = false;
 			}
 		}
-		if (this.getProveedor().getListaServicioProveedor()== null || this.getProveedor().getListaServicioProveedor().isEmpty()){
+		/*if (this.getProveedor().getListaServicioProveedor()== null || this.getProveedor().getListaServicioProveedor().isEmpty()){
 			throw new ValidacionException("Registre al menos 1 servicio para el proveedor");
+		}*/
+		if (this.getProveedor().getTipoProveedor().getCodigoEntero()== null || this.getProveedor().getTipoProveedor().getCodigoEntero().intValue()==0){
+			this.agregarMensaje(idFormulario + ":idFPSelTipoProveedor",
+					"Selecciona el tipo de proveedor", "",
+					FacesMessage.SEVERITY_ERROR);
+			resultado = false;
 		}
 		
 		return resultado;
