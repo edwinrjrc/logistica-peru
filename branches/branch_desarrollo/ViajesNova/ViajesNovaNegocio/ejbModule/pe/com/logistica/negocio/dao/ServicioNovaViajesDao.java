@@ -25,7 +25,7 @@ public interface ServicioNovaViajesDao {
 	boolean ingresarDetalleServicio(DetalleServicioAgencia detalleServicio,
 			int idServicio) throws SQLException;
 
-	boolean ingresarDetalleServicio(DetalleServicioAgencia detalleServicio,
+	Integer ingresarDetalleServicio(DetalleServicioAgencia detalleServicio,
 			int idServicio, Connection conn) throws SQLException;
 
 	boolean generarCronogramaPago(ServicioAgencia servicioAgencia,
@@ -65,5 +65,8 @@ public interface ServicioNovaViajesDao {
 
 	boolean eliminarCronogramaServicio(ServicioAgencia servicioAgencia,
 			Connection conn) throws SQLException;
+
+	List<DetalleServicioAgencia> consultaServicioDetalleHijos(int idServicio,
+			int idSerPadre, Connection conn) throws SQLException;
 	
 }

@@ -21,6 +21,7 @@ import org.apache.commons.lang3.StringUtils;
 import pe.com.logistica.bean.Util.UtilParse;
 import pe.com.logistica.bean.base.BaseVO;
 import pe.com.logistica.bean.negocio.Cliente;
+import pe.com.logistica.bean.negocio.Consolidador;
 import pe.com.logistica.bean.negocio.Contacto;
 import pe.com.logistica.bean.negocio.CorreoClienteMasivo;
 import pe.com.logistica.bean.negocio.CorreoMasivo;
@@ -37,6 +38,7 @@ import pe.com.logistica.bean.negocio.ServicioProveedor;
 import pe.com.logistica.bean.negocio.Telefono;
 import pe.com.logistica.bean.negocio.Ubigeo;
 import pe.com.logistica.negocio.dao.ClienteDao;
+import pe.com.logistica.negocio.dao.ConsolidadorDao;
 import pe.com.logistica.negocio.dao.ContactoDao;
 import pe.com.logistica.negocio.dao.CorreoMasivoDao;
 import pe.com.logistica.negocio.dao.DestinoDao;
@@ -51,6 +53,7 @@ import pe.com.logistica.negocio.dao.ServicioNoviosDao;
 import pe.com.logistica.negocio.dao.TelefonoDao;
 import pe.com.logistica.negocio.dao.UbigeoDao;
 import pe.com.logistica.negocio.dao.impl.ClienteDaoImpl;
+import pe.com.logistica.negocio.dao.impl.ConsolidadorDaoImpl;
 import pe.com.logistica.negocio.dao.impl.ContactoDaoImpl;
 import pe.com.logistica.negocio.dao.impl.CorreoMasivoDaoImpl;
 import pe.com.logistica.negocio.dao.impl.DestinoDaoImpl;
@@ -226,6 +229,8 @@ public class NegocioSession implements NegocioSessionRemote,
 			}
 			
 			proveedorDao.registroProveedor(proveedor, conexion);
+			
+			proveedorDao.registroProveedorTipo(proveedor, conexion);
 
 			return true;
 		} catch (ResultadoCeroDaoException e) {
@@ -336,6 +341,8 @@ public class NegocioSession implements NegocioSessionRemote,
 				}
 			}
 			proveedorDao.actualizarProveedor(proveedor, conexion);
+			
+			proveedorDao.actualizarProveedorTipo(proveedor, conexion);
 
 			return true;
 		} catch (ResultadoCeroDaoException e) {
@@ -745,10 +752,10 @@ public class NegocioSession implements NegocioSessionRemote,
 					&& !programaNovios.getListaServicios().isEmpty()) {
 				for (DetalleServicioAgencia servicioNovios : programaNovios
 						.getListaServicios()) {
-					boolean exitoRegistro = servicioNovaViajesDao
+					Integer exitoRegistro = servicioNovaViajesDao
 							.ingresarDetalleServicio(servicioNovios,
 									idServicio, conexion);;
-					if (!exitoRegistro) {
+					if (exitoRegistro==null || exitoRegistro.intValue()==0) {
 						throw new ErrorRegistroDataException(
 								"No se pudo registrar los servicios de los novios");
 					}
@@ -885,6 +892,8 @@ public class NegocioSession implements NegocioSessionRemote,
 		}
 		
 		detalleServicio.setMontoComision(comision);
+		
+		detalleServicio.setCodigoCadena(String.valueOf(System.currentTimeMillis()));
 
 		return detalleServicio;
 	}
@@ -963,12 +972,24 @@ public class NegocioSession implements NegocioSessionRemote,
 					&& !servicioAgencia.getListaDetalleServicio().isEmpty()) {
 				for (DetalleServicioAgencia detalleServicio : servicioAgencia
 						.getListaDetalleServicio()) {
-					boolean resultado = servicioNovaViajesDao
+					Integer resultado = servicioNovaViajesDao
 							.ingresarDetalleServicio(detalleServicio,
 									idServicio, conexion);
-					if (!resultado) {
+					if (resultado == null || resultado.intValue() ==0) {
 						throw new ErrorRegistroDataException(
 								"No se pudo registrar los servicios de la venta");
+					}
+					else{
+						for (DetalleServicioAgencia detalleServicio2 : detalleServicio.getServiciosHijos()){
+							detalleServicio2.getServicioPadre().setCodigoEntero(resultado);
+							resultado = servicioNovaViajesDao
+									.ingresarDetalleServicio(detalleServicio2,
+											idServicio, conexion);
+							if (resultado == null || resultado.intValue() ==0) {
+								throw new ErrorRegistroDataException(
+										"No se pudo registrar los servicios de la venta");
+							}
+						}
 					}
 				}
 			}
@@ -1034,10 +1055,10 @@ public class NegocioSession implements NegocioSessionRemote,
 				
 				for (DetalleServicioAgencia detalleServicio : servicioAgencia
 						.getListaDetalleServicio()) {
-					boolean resultado = servicioNovaViajesDao
+					Integer resultado = servicioNovaViajesDao
 							.ingresarDetalleServicio(detalleServicio,
 									idServicio, conexion);
-					if (!resultado) {
+					if (resultado==null || resultado.intValue()==0) {
 						throw new ErrorRegistroDataException(
 								"No se pudo registrar los servicios de la venta");
 					}
@@ -1085,9 +1106,12 @@ public class NegocioSession implements NegocioSessionRemote,
 			
 			servicioAgencia.setListaDetalleServicio(servicioNovaViajesDao.consultaServicioDetalle(servicioAgencia.getCodigoEntero(), conn));
 			
+			for (DetalleServicioAgencia detalle : servicioAgencia.getListaDetalleServicio()) {
+				detalle.setServiciosHijos(servicioNovaViajesDao.consultaServicioDetalleHijos(idServicio, detalle.getCodigoEntero(), conn));
+			}
+			
 			if (servicioAgencia.getFormaPago().getCodigoEntero().intValue() == 2) {
 				servicioAgencia.setCronogramaPago(servicioNovaViajesDao.consultarCronogramaPago(servicioAgencia));
-				
 			}
 			
 		} catch (SQLException e) {
@@ -1390,10 +1414,10 @@ public class NegocioSession implements NegocioSessionRemote,
 				servicioNovaViajesDao.eliminarDetalleServicio(servicioAgencia, conexion);
 				for (DetalleServicioAgencia servicioNovios : programaNovios
 						.getListaServicios()) {
-					boolean exitoRegistro = servicioNovaViajesDao
+					Integer exitoRegistro = servicioNovaViajesDao
 							.ingresarDetalleServicio(servicioNovios,
 									idServicio, conexion);;
-					if (!exitoRegistro) {
+					if (exitoRegistro==null || exitoRegistro.intValue()==0) {
 						throw new ErrorRegistroDataException(
 								"No se pudo actualizar los servicios de los novios");
 					}
@@ -1467,15 +1491,26 @@ public class NegocioSession implements NegocioSessionRemote,
 				detalle.setCodigoEntero(maestroServicio.getCodigoEntero());
 				detalle.setDescripcionServicio(maestroServicio.getNombre());
 				detalle.setCantidad(1);
+				detalle.getTipoServicio().setCodigoEntero(maestroServicio.getCodigoEntero());
+				detalle.getTipoServicio().setNombre(maestroServicio.getNombre());
+				detalle.setFechaIda(new Date());
 				
-				BigDecimal cantidad = BigDecimal.valueOf(Double.valueOf(String.valueOf(detalleServicio2.getCantidad())));
-				BigDecimal totalServicioPrecede = detalleServicio2.getPrecioUnitario().multiply(cantidad);
-				
-				BigDecimal porcenIGV = BigDecimal.valueOf(Double.valueOf(maestroServicio.getValorParametro()));
-				BigDecimal igvServicio = totalServicioPrecede.multiply(porcenIGV);
-				
-				detalle.setMontoIGV(igvServicio);
-				listaServicios.add(detalle);
+				try {
+					BigDecimal cantidad = BigDecimal.valueOf(Double.valueOf(String.valueOf(detalleServicio2.getCantidad())));
+					BigDecimal totalServicioPrecede = detalleServicio2.getPrecioUnitario().multiply(cantidad);
+					
+					BigDecimal porcenIGV = BigDecimal.valueOf(Double.valueOf(maestroServicio.getValorParametro()));
+					BigDecimal igvServicio = totalServicioPrecede.multiply(porcenIGV);
+					
+					detalle.setMontoIGV(igvServicio);
+					detalle.setPrecioUnitario(igvServicio);
+					listaServicios.add(detalle);
+				} catch (Exception e) {
+					detalle.setMontoIGV(BigDecimal.ZERO);
+					detalle.setPrecioUnitario(BigDecimal.ZERO);
+					listaServicios.add(detalle);
+					e.printStackTrace();
+				}
 			}
 			
 			return listaServicios;
@@ -1493,5 +1528,33 @@ public class NegocioSession implements NegocioSessionRemote,
 		MaestroServicioDao maestroServicioDao = new MaestroServicioDaoImpl();
 		
 		return maestroServicioDao.consultarServicioDependientes(idServicio);
+	}
+	
+	@Override
+	public boolean ingresarConsolidador(Consolidador consolidador) throws SQLException, Exception{
+		ConsolidadorDao consolidadorDao = new ConsolidadorDaoImpl();
+		
+		return consolidadorDao.ingresarConsolidador(consolidador);
+	}
+	
+	@Override
+	public boolean actualizarConsolidador(Consolidador consolidador) throws SQLException, Exception{
+		ConsolidadorDao consolidadorDao = new ConsolidadorDaoImpl();
+		
+		return consolidadorDao.actualizarConsolidador(consolidador);
+	}
+	
+	@Override
+	public List<Consolidador> listarConsolidador() throws SQLException, Exception{
+		ConsolidadorDao consolidadorDao = new ConsolidadorDaoImpl();
+		
+		return consolidadorDao.listarConsolidador();
+	}
+	
+	@Override
+	public Consolidador consultarConsolidador(Consolidador consolidador) throws SQLException, Exception{
+		ConsolidadorDao consolidadorDao = new ConsolidadorDaoImpl();
+		
+		return consolidadorDao.consultarConsolidador(consolidador);
 	}
 }

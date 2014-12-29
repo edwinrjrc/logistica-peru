@@ -16,8 +16,10 @@ public class ServicioProveedor extends BaseNegocio {
 
 	private BaseVO tipoServicio;
 	private BigDecimal porcentajeComision;
+	private BigDecimal porcenComInternacional;
 	private String nombreProveedor;
 	private Proveedor proveedor;
+	private Proveedor proveedorServicio;
 	
 	/**
 	 * 
@@ -91,6 +93,37 @@ public class ServicioProveedor extends BaseNegocio {
 	 */
 	public void setProveedor(Proveedor proveedor) {
 		this.proveedor = proveedor;
+	}
+
+	/**
+	 * @return the proveedorServicio
+	 */
+	public Proveedor getProveedorServicio() {
+		if (proveedorServicio == null){
+			proveedorServicio = new Proveedor();
+		}
+		return proveedorServicio;
+	}
+
+	/**
+	 * @param proveedorServicio the proveedorServicio to set
+	 */
+	public void setProveedorServicio(Proveedor proveedorServicio) {
+		this.proveedorServicio = proveedorServicio;
+	}
+
+	/**
+	 * @return the porcenComInternacional
+	 */
+	public BigDecimal getPorcenComInternacional() {
+		return porcenComInternacional;
+	}
+
+	/**
+	 * @param porcenComInternacional the porcenComInternacional to set
+	 */
+	public void setPorcenComInternacional(BigDecimal porcenComInternacional) {
+		this.porcenComInternacional = porcenComInternacional;
 	}
 
 }

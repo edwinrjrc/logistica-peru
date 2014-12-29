@@ -6,6 +6,7 @@ package pe.com.logistica.web.faces;
 import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.faces.application.FacesMessage;
@@ -27,7 +28,6 @@ import pe.com.logistica.bean.negocio.Cliente;
 import pe.com.logistica.bean.negocio.Destino;
 import pe.com.logistica.bean.negocio.DetalleServicioAgencia;
 import pe.com.logistica.bean.negocio.MaestroServicio;
-import pe.com.logistica.bean.negocio.Parametro;
 import pe.com.logistica.bean.negocio.ServicioAgencia;
 import pe.com.logistica.bean.negocio.ServicioProveedor;
 import pe.com.logistica.bean.negocio.Usuario;
@@ -154,7 +154,9 @@ public class ServicioAgenteMBean extends BaseMBean{
 			this.setListadoDetalleServicio(this.getServicioAgencia().getListaDetalleServicio());
 			this.setDetalleServicio(null);
 			
-			calcularTotales();
+			this.setListadoDetalleServicioTotal(this.getListadoDetalleServicio());
+			
+			borrarInvisibles();
 			
 		} catch (SQLException e) {
 			logger.error(e.getMessage(), e);
@@ -163,6 +165,15 @@ public class ServicioAgenteMBean extends BaseMBean{
 		}
 	}
 	
+	private void borrarInvisibles() {
+		for (DetalleServicioAgencia detalle : this.getListadoDetalleServicio()){
+			if (!detalle.getTipoServicio().isVisible()){
+				this.getListadoDetalleServicio().remove(detalle);
+			}
+		}
+		
+	}
+
 	public void registrarNuevaVenta(){
 		this.setNombreFormulario("Nuevo Registro Venta");
 		this.setNuevaVenta(true);
@@ -174,6 +185,7 @@ public class ServicioAgenteMBean extends BaseMBean{
 		consultarTasaPredeterminada();
 		this.setListadoEmpresas(null);
 		this.setListadoDetalleServicio(null);
+		this.setListadoDetalleServicioTotal(null);
 		
 		HttpSession session = obtenerSession(false);
 		Usuario usuario = (Usuario)session.getAttribute(USUARIO_SESSION);
@@ -181,6 +193,8 @@ public class ServicioAgenteMBean extends BaseMBean{
 			this.getServicioAgencia().getVendedor().setCodigoEntero(usuario.getCodigoEntero());
 			this.getServicioAgencia().getVendedor().setNombre(usuario.getNombreCompleto());	
 		}
+		
+		this.getServicioAgencia().setFechaServicio(new Date());
 	}
 	public void agregarServicio(){
 		try {
@@ -195,12 +209,11 @@ public class ServicioAgenteMBean extends BaseMBean{
 				
 				DetalleServicioAgencia detalleServicioAgregar = negocioServicio.agregarServicioVenta(getDetalleServicio());
 				
+				detalleServicioAgregar = agregarServicioInvisible(detalleServicioAgregar);
 				this.getListadoDetalleServicio().add(detalleServicioAgregar);
 				this.getListadoDetalleServicioTotal().add(detalleServicioAgregar);
 				
 				this.setListadoDetalleServicio(negocioServicio.ordenarServiciosVenta(getListadoDetalleServicio()));
-				
-				agregarServicioInvisible(getDetalleServicio());
 				
 				this.setDetalleServicio(null);
 				
@@ -223,11 +236,21 @@ public class ServicioAgenteMBean extends BaseMBean{
 		}
 	}
 	
-	private void agregarServicioInvisible(
+	private DetalleServicioAgencia agregarServicioInvisible(
 			DetalleServicioAgencia detalleServicio2) throws ErrorConsulaDataException, Exception {
 		List<DetalleServicioAgencia> lista = negocioServicio.agregarServicioVentaInvisible(detalleServicio2);
-		this.getListadoDetalleServicioTotal().addAll(lista);
+		HttpSession session = obtenerSession(false);
+		Usuario usuario = (Usuario) session
+				.getAttribute("usuarioSession");
+		for (DetalleServicioAgencia detalleServicioAgencia : lista) {
+			detalleServicioAgencia.setUsuarioCreacion(usuario.getUsuario());
+			detalleServicioAgencia.setUsuarioModificacion(usuario.getUsuario());
+			detalleServicioAgencia.setIpCreacion(obtenerRequest().getRemoteAddr());
+			detalleServicioAgencia.setIpModificacion(obtenerRequest().getRemoteAddr());
+		}
+		detalleServicio2.setServiciosHijos(lista);
 		
+		return detalleServicio2;
 	}
 
 	private boolean validarRegistroServicioVenta() throws Exception {
@@ -395,9 +418,29 @@ public class ServicioAgenteMBean extends BaseMBean{
 						"Ingrese la fecha del servicio", "", FacesMessage.SEVERITY_ERROR);
 				resultado = false;
 			}
+			if (UtilWeb.fecha1EsMayorIgualFecha2(this.getDetalleServicio().getFechaIda(), new Date())){
+				this.agregarMensaje(idFormulario + ":idFecServicio",
+						"La fecha del servicio no puede ser menor que la fecha de actual", "", FacesMessage.SEVERITY_ERROR);
+				resultado = false;
+			}
+			else if (this.getDetalleServicio().getFechaRegreso()!=null && this.getDetalleServicio().getFechaIda().after(this.getDetalleServicio().getFechaRegreso())){
+				this.agregarMensaje(idFormulario + ":idFecServicio",
+						"La fecha del servicio no puede ser mayor que la fecha de regreso", "", FacesMessage.SEVERITY_ERROR);
+				resultado = false;
+			}
+			if (this.getDetalleServicio().getServicioProveedor().getProveedor().getCodigoEntero()==null || this.getDetalleServicio().getServicioProveedor().getProveedor().getCodigoEntero().intValue()==0){
+				this.agregarMensaje(idFormulario + ":idSelEmpServicio",
+						"Seleccione el proveedor del servicio", "", FacesMessage.SEVERITY_ERROR);
+				resultado = false;
+			}
+			if (this.getDetalleServicio().getConsolidador().getCodigoEntero()==null || this.getDetalleServicio().getConsolidador().getCodigoEntero().intValue()==0){
+				this.agregarMensaje(idFormulario + ":idSelconsolidador",
+						"Seleccione el consolidador del servicio", "", FacesMessage.SEVERITY_ERROR);
+				resultado = false;
+			}
 		}
 		else{
-			if (this.getDetalleServicio().getPrecioUnitario() == null || this.getDetalleServicio().getPrecioUnitario().doubleValue() == 0.0){
+			if (this.getDetalleServicio().getPrecioUnitario() == null){
 				this.agregarMensaje(idFormulario + ":idMonFee",
 						"Ingrese el Monto Fee", "", FacesMessage.SEVERITY_ERROR);
 				resultado = false;
@@ -419,25 +462,29 @@ public class ServicioAgenteMBean extends BaseMBean{
 		BigDecimal montoIgv = BigDecimal.ZERO;
 		try {
 			
-			Parametro param = this.parametroServicio.consultarParametro(UtilWeb.obtenerEnteroPropertieMaestro(
-					"codigoParametroFee", "aplicacionDatos"));
+			/*Parametro param = this.parametroServicio.consultarParametro(UtilWeb.obtenerEnteroPropertieMaestro(
+					"codigoParametroFee", "aplicacionDatos"));*/
 			
 			for (DetalleServicioAgencia detalleServicio : this.getListadoDetalleServicioTotal()){
 				montoTotal = montoTotal.add(detalleServicio.getTotalServicio());
 				montoComision = montoComision.add(detalleServicio.getMontoComision());
-				montoIgv = montoIgv.add(detalleServicio.getMontoIGV());
-				
-				montoTotal = montoTotal.add(montoIgv);
+				for (DetalleServicioAgencia detalleServicio2 : detalleServicio.getServiciosHijos()){
+					montoIgv = montoIgv.add(detalleServicio2.getMontoIGV());
+				}
 				
 				if (detalleServicio.getTipoServicio().getCodigoEntero()!=null && detalleServicio.getTipoServicio().isEsFee()){
 					montoFee = montoFee.add(detalleServicio.getTotalServicio());
 				}
+				
 			}
-
+			
+			montoTotal = montoTotal.add(montoIgv);
+			
 		} catch (Exception e){
 			logger.error(e.getMessage(), e);
 			montoTotal = BigDecimal.ZERO;
 		}
+		
 		this.getServicioAgencia().setMontoTotalServicios(montoTotal);
 		this.getServicioAgencia().setMontoTotalComision(montoComision);
 		this.getServicioAgencia().setMontoTotalFee(montoFee);
@@ -456,7 +503,7 @@ public class ServicioAgenteMBean extends BaseMBean{
 					getServicioAgencia().setIpCreacion(
 							obtenerRequest().getRemoteAddr());
 					
-					this.getServicioAgencia().setListaDetalleServicio(getListadoDetalleServicio());
+					this.getServicioAgencia().setListaDetalleServicio(getListadoDetalleServicioTotal());
 					
 					Integer idServicio = this.negocioServicio.registrarVentaServicio(getServicioAgencia());
 					
@@ -628,7 +675,15 @@ public class ServicioAgenteMBean extends BaseMBean{
 	}
 	
 	public void eliminarServicio(DetalleServicioAgencia detalleServicio){
-		this.getListadoDetalleServicio().remove(detalleServicio);
+		if (listadoDetalleServicio != null){
+			for (int i=0; i<listadoDetalleServicio.size(); i++) {
+				DetalleServicioAgencia detalle = listadoDetalleServicio.get(i);
+				if (detalleServicio.getCodigoCadena().equals(detalle.getCodigoCadena())){
+					this.listadoDetalleServicio.remove(i);
+					this.listadoDetalleServicioTotal.remove(i);
+				}
+			}
+		}
 		
 		calcularTotales();
 	}

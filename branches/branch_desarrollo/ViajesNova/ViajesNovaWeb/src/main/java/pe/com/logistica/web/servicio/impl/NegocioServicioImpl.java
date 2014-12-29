@@ -15,6 +15,7 @@ import javax.servlet.ServletContext;
 
 import pe.com.logistica.bean.base.BaseVO;
 import pe.com.logistica.bean.negocio.Cliente;
+import pe.com.logistica.bean.negocio.Consolidador;
 import pe.com.logistica.bean.negocio.Contacto;
 import pe.com.logistica.bean.negocio.CorreoClienteMasivo;
 import pe.com.logistica.bean.negocio.CorreoMasivo;
@@ -312,6 +313,30 @@ public class NegocioServicioImpl implements NegocioServicio {
 	@Override
 	public List<BaseVO> consultaServiciosDependientes(Integer idServicio) throws SQLException, Exception{
 		return ejbSession.consultaServiciosDependientes(idServicio);
+	}
+
+	@Override
+	public boolean ingresarConsolidador(Consolidador consolidador)
+			throws SQLException, Exception {
+		return ejbSession.ingresarConsolidador(consolidador);
+	}
+
+	@Override
+	public boolean actualizarConsolidador(Consolidador consolidador)
+			throws SQLException, Exception {
+		return ejbSession.actualizarConsolidador(consolidador);
+	}
+
+	@Override
+	public List<Consolidador> listarConsolidador() throws SQLException,
+			Exception {
+		return ejbSession.listarConsolidador();
+	}
+
+	@Override
+	public Consolidador consultarConsolidador(Consolidador consolidador)
+			throws SQLException, Exception {
+		return ejbSession.consultarConsolidador(consolidador);
 	}
 }
 	

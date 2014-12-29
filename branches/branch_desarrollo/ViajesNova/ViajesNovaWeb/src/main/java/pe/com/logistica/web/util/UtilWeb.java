@@ -3,8 +3,11 @@
  */
 package pe.com.logistica.web.util;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.regex.Matcher;
@@ -178,5 +181,19 @@ public class UtilWeb {
 			e.printStackTrace();
 		}
         return false;
+	}
+	
+	public static boolean fecha1EsMayorIgualFecha2(Date fecha1, Date fecha2){
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/YYYY");
+		if (sdf.format(fecha1).equals(sdf.format(fecha2))){
+			return true;
+		}
+		else{
+			if (fecha1.before(fecha2)){
+				return true;
+			}
+		}
+		
+		return false;
 	}
 }

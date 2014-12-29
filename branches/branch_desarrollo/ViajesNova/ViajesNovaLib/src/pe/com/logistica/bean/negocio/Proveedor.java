@@ -3,6 +3,7 @@ package pe.com.logistica.bean.negocio;
 import java.util.ArrayList;
 import java.util.List;
 
+import pe.com.logistica.bean.base.BaseVO;
 import pe.com.logistica.bean.base.Persona;
 
 /**
@@ -19,6 +20,7 @@ public class Proveedor extends Persona {
 	private List<Contacto> listaContactos;
 	private List<CuentaBancaria> listaCuentas;
 	private List<ServicioProveedor> listaServicioProveedor;
+	private BaseVO tipoProveedor;
 
 	public Proveedor() {
 
@@ -79,6 +81,23 @@ public class Proveedor extends Persona {
 	 */
 	public void setListaServicioProveedor(List<ServicioProveedor> listaServicioProveedor) {
 		this.listaServicioProveedor = listaServicioProveedor;
+	}
+
+	/**
+	 * @return the tipoProveedor
+	 */
+	public BaseVO getTipoProveedor() {
+		if (tipoProveedor == null){
+			tipoProveedor = new BaseVO();
+		}
+		return tipoProveedor;
+	}
+
+	/**
+	 * @param tipoProveedor the tipoProveedor to set
+	 */
+	public void setTipoProveedor(BaseVO tipoProveedor) {
+		this.tipoProveedor = tipoProveedor;
 	}
 
 }
