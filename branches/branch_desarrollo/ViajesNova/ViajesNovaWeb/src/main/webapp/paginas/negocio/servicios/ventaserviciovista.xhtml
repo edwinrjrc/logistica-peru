@@ -8,7 +8,7 @@
 	xmlns:rich="http://richfaces.org/rich">
 
 	<rich:popupPanel id="idModalventaservicio" modal="true" width="900"
-		height="600" >
+		height="600">
 
 		<f:facet name="header">
 			<h:outputText value="Venta Servicio" />
@@ -74,13 +74,13 @@
 						</h:panelGrid>
 
 						<h:panelGrid columns="4" border="0" cellpadding="0"
-							cellspacing="0" style="width:100%;" 
+							cellspacing="0" style="width:100%;"
 							columnClasses="col1form,col2form,col1form,col2form">
 
 							<h:outputText value="Tasa Interes (TEA)"
 								rendered="#{servicioAgenteMBean.servicioAgencia.formaPago.codigoEntero == 2}" />
 							<h:outputText value="#{servicioAgenteMBean.servicioAgencia.tea}"
-								rendered="#{servicioAgenteMBean.servicioAgencia.formaPago.codigoEntero == 2}" >
+								rendered="#{servicioAgenteMBean.servicioAgencia.formaPago.codigoEntero == 2}">
 								<f:convertNumber pattern="###,##0.00" locale="en_US" />
 							</h:outputText>
 
@@ -183,20 +183,23 @@
 										<f:convertNumber pattern="###,##0.00" locale="en_US" />
 									</h:outputText>
 								</rich:column>
-								
+
 								<f:facet name="footer">
 									<rich:dataScroller for="idServVentaVista" />
 								</f:facet>
 							</rich:dataTable>
 							<h:panelGrid columns="2" cellpadding="0" cellspacing="0"
-								border="0" style="width:100%;"
-								columnClasses="col1RSPN,col2RSPN">
+								border="0" style="width:100%;" columnClasses="col1RSPN,col2RSPN">
 								<h:outputText value="Total Comision" />
 								<h:outputText
 									value="#{servicioAgenteMBean.servicioAgencia.montoTotalComision}">
 									<f:convertNumber pattern="###,##0.00" locale="en_US" />
 								</h:outputText>
-
+								<h:outputText value="Total IGV" />
+								<h:outputText
+									value="#{servicioAgenteMBean.servicioAgencia.montoTotalIGV}">
+									<f:convertNumber pattern="###,##0.00" locale="en_US" />
+								</h:outputText>
 								<h:outputText value="Total Servicios" />
 								<h:outputText
 									value="#{servicioAgenteMBean.servicioAgencia.montoTotalServicios}">
@@ -263,7 +266,7 @@
 							<h:outputText value="#{cuota.estadoCuota.nombre}" />
 						</rich:column>
 						<f:facet name="footer">
-						<rich:dataScroller for="idTablaCronogramaVista"></rich:dataScroller>
+							<rich:dataScroller for="idTablaCronogramaVista"></rich:dataScroller>
 						</f:facet>
 					</rich:dataTable>
 				</rich:tab>

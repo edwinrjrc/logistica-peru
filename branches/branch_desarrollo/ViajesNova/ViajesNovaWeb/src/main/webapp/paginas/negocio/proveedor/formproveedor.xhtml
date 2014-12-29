@@ -83,7 +83,7 @@
 								</h:panelGrid>
 							</h:panelGrid>
 							<h:panelGrid border="0" cellpadding="0" cellspacing="0"
-								style="width:100%;" columns="2"
+								style="width:100%;" columns="4"
 								columnClasses="col1fil2proveedor,col2fil2proveedor">
 								<h:outputText value="Nombres"
 									rendered="#{proveedorMBean.proveedor.documentoIdentidad.tipoDocumento.codigoEntero == 1 or proveedorMBean.proveedor.documentoIdentidad.tipoDocumento.codigoEntero == 2}" />
@@ -92,7 +92,7 @@
 									rendered="#{proveedorMBean.proveedor.documentoIdentidad.tipoDocumento.codigoEntero == 1 or proveedorMBean.proveedor.documentoIdentidad.tipoDocumento.codigoEntero == 2}">
 									<h:inputText id="idNomPro"
 										value="#{proveedorMBean.proveedor.nombres}" maxlength="80"
-										styleClass="estilocampo1" />
+										size="80" styleClass="estilocampo1" />
 									<rich:message for="idNomPro" showSummary="true"
 										showDetail="false" />
 								</h:panelGrid>
@@ -103,10 +103,15 @@
 									rendered="#{proveedorMBean.proveedor.documentoIdentidad.tipoDocumento.codigoEntero == 3}">
 									<h:inputText id="idRazSocPro"
 										value="#{proveedorMBean.proveedor.razonSocial}" maxlength="80"
-										styleClass="estilocampo1" />
+										size="80" styleClass="estilocampo1" />
 									<rich:message for="idRazSocPro" showSummary="true"
 										showDetail="false" />
 								</h:panelGrid>
+							</h:panelGrid>
+							<h:panelGrid border="0" cellpadding="0" cellspacing="0"
+								style="width:100%;" columns="4"
+								columnClasses="col1fil1proveedor,col2fil1proveedor,col3fil1proveedor,col4fil1proveedor">
+
 								<h:outputText value="Rubro" />
 								<h:panelGrid border="0" cellpadding="0" cellspacing="0"
 									columns="1">
@@ -120,8 +125,22 @@
 									<rich:message for="idFPSelRubro" showSummary="true"
 										showDetail="false" />
 								</h:panelGrid>
-								<h:outputText value="Fecha Registro" />
 
+								<h:outputText value="Tipo Proveedor" />
+								<h:panelGrid border="0" cellpadding="0" cellspacing="0"
+									columns="1">
+									<h:selectOneMenu id="idFPSelTipoProveedor"
+										value="#{proveedorMBean.proveedor.tipoProveedor.codigoEntero}"
+										required="true" requiredMessage="Seleccione el rubro"
+										styleClass="estilocampo1">
+										<f:selectItem itemLabel="-Seleccione-" />
+										<f:selectItems value="#{catalogoMBean.catalogoTipoProveedor}" />
+									</h:selectOneMenu>
+									<rich:message for="idFPSelTipoProveedor" showSummary="true"
+										showDetail="false" />
+								</h:panelGrid>
+
+								<h:outputText value="Fecha Registro" />
 								<h:panelGrid border="0" columns="1">
 									<h:outputText value="#{proveedorMBean.proveedor.fechaCreacion}">
 										<f:convertDateTime pattern="dd/MM/yyyy" />
@@ -262,9 +281,27 @@
 								</rich:column>
 								<rich:column>
 									<f:facet name="header">
+										<h:outputText value="Proveedor" />
+									</f:facet>
+									<h:selectOneMenu value="#{row.proveedorServicio.codigoEntero}">
+										<f:selectItem itemLabel="-Seleccione-" />
+										<f:selectItems value="#{catalogoMBean.catalogoProveedores}" />
+									</h:selectOneMenu>
+								</rich:column>
+								<rich:column>
+									<f:facet name="header">
 										<h:outputText value="Porcentaje Comision" />
 									</f:facet>
-									<h:inputText maxlength="2" value="#{row.porcentajeComision}" onkeypress="return js_soloEntero(event);"  />
+									<h:panelGrid cellpadding="0" cellspacing="0" border="0"
+										style="width:100%;" columns="4">
+										<h:outputLabel value="Nac." />
+										<h:inputText maxlength="2" value="#{row.porcentajeComision}"
+											onkeypress="return js_soloEntero(event);" size="5" />
+										<h:outputLabel value="Internac." />
+										<h:inputText maxlength="2" size="5" 
+											value="#{row.porcenComInternacional}"
+											onkeypress="return js_soloEntero(event);" />
+									</h:panelGrid>
 								</rich:column>
 								<rich:column>
 									<a4j:commandButton value="Eliminar" render="idGrdListaServicio"

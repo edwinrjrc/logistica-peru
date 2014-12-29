@@ -4,7 +4,9 @@
 package pe.com.logistica.bean.negocio;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import pe.com.logistica.bean.Util.UtilParse;
 import pe.com.logistica.bean.base.BaseNegocio;
@@ -33,7 +35,10 @@ public class DetalleServicioAgencia extends BaseNegocio {
 	private BigDecimal montoComision;
 	private BigDecimal montoIGV;
 	private ServicioProveedor servicioProveedor;
-
+	private BaseVO servicioPadre;
+	private Consolidador consolidador;
+	
+	private List<DetalleServicioAgencia> serviciosHijos;
 	/**
 	 * 
 	 */
@@ -253,6 +258,57 @@ public class DetalleServicioAgencia extends BaseNegocio {
 	 */
 	public void setMontoIGV(BigDecimal montoIGV) {
 		this.montoIGV = montoIGV;
+	}
+
+	/**
+	 * @return the servicioPadre
+	 */
+	public BaseVO getServicioPadre() {
+		if (servicioPadre == null){
+			servicioPadre = new BaseVO();
+		}
+		return servicioPadre;
+	}
+
+	/**
+	 * @param servicioPadre the servicioPadre to set
+	 */
+	public void setServicioPadre(BaseVO servicioPadre) {
+		this.servicioPadre = servicioPadre;
+	}
+
+	/**
+	 * @return the serviciosHijos
+	 */
+	public List<DetalleServicioAgencia> getServiciosHijos() {
+		if (serviciosHijos == null){
+			serviciosHijos = new ArrayList<DetalleServicioAgencia>();
+		}
+		return serviciosHijos;
+	}
+
+	/**
+	 * @param serviciosHijos the serviciosHijos to set
+	 */
+	public void setServiciosHijos(List<DetalleServicioAgencia> serviciosHijos) {
+		this.serviciosHijos = serviciosHijos;
+	}
+
+	/**
+	 * @return the consolidador
+	 */
+	public Consolidador getConsolidador() {
+		if (consolidador == null){
+			consolidador = new Consolidador();
+		}
+		return consolidador;
+	}
+
+	/**
+	 * @param consolidador the consolidador to set
+	 */
+	public void setConsolidador(Consolidador consolidador) {
+		this.consolidador = consolidador;
 	}
 
 }

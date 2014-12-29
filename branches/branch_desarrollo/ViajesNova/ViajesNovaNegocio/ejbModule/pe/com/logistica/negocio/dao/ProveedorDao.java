@@ -41,4 +41,10 @@ public interface ProveedorDao {
 
 	List<ServicioProveedor> consultarServicioProveedor(int idProveedor,
 			Connection conn) throws SQLException;
+
+	void registroProveedorTipo(Proveedor proveedor, Connection conexion)
+			throws SQLException;
+
+	void actualizarProveedorTipo(Proveedor proveedor, Connection conexion)
+			throws SQLException;
 }

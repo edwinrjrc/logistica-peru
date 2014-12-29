@@ -3,6 +3,7 @@
  */
 package pe.com.logistica.negocio.dao.impl;
 
+import java.math.BigDecimal;
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -242,6 +243,7 @@ public class ProveedorDaoImpl implements ProveedorDao {
 				resultado.setUsuarioCreacion(UtilJdbc.obtenerCadena(rs, "usuariocreacion"));
 				resultado.setFechaCreacion(UtilJdbc.obtenerFecha(rs, "fechacreacion"));
 				resultado.setIpCreacion(UtilJdbc.obtenerCadena(rs, "ipcreacion"));
+				resultado.getTipoProveedor().setCodigoEntero(UtilJdbc.obtenerNumero(rs, "idtipoproveedor"));
 			}
 		} catch (SQLException e) {
 			resultado = null;
@@ -308,7 +310,7 @@ public class ProveedorDaoImpl implements ProveedorDao {
 	public boolean ingresarServicioProveedor(Integer idproveedor, ServicioProveedor servicio, Connection conn) throws SQLException {
 		boolean resultado = false;
 		CallableStatement cs = null;
-		String sql = "{ ? = call negocio.fn_ingresarservicioproveedor(?,?,?,?,?) }";
+		String sql = "{ ? = call negocio.fn_ingresarservicioproveedor(?,?,?,?,?,?,?) }";
 		
 		try {
 			cs = conn.prepareCall(sql);
@@ -316,7 +318,19 @@ public class ProveedorDaoImpl implements ProveedorDao {
 			cs.registerOutParameter(i++, Types.BOOLEAN);
 			cs.setInt(i++, idproveedor);
 			cs.setInt(i++, servicio.getTipoServicio().getCodigoEntero().intValue());
+			if (servicio.getProveedorServicio().getCodigoEntero()!=null && servicio.getProveedorServicio().getCodigoEntero().intValue()!=0){
+				cs.setInt(i++, servicio.getProveedorServicio().getCodigoEntero().intValue());
+			}
+			else {
+				cs.setNull(i++, Types.INTEGER);
+			}
 			cs.setBigDecimal(i++, servicio.getPorcentajeComision());
+			if (servicio.getPorcenComInternacional() !=null || servicio.getPorcenComInternacional().compareTo(BigDecimal.ZERO)==1){
+				cs.setBigDecimal(i++, servicio.getPorcenComInternacional());
+			}
+			else {
+				cs.setNull(i++, Types.DECIMAL);
+			}
 			cs.setString(i++, servicio.getUsuarioCreacion());
 			cs.setString(i++, servicio.getIpCreacion());
 			cs.execute();
@@ -341,7 +355,7 @@ public class ProveedorDaoImpl implements ProveedorDao {
 	public boolean actualizarServicioProveedor(Integer idproveedor, ServicioProveedor servicio, Connection conn) throws SQLException {
 		boolean resultado = false;
 		CallableStatement cs = null;
-		String sql = "{ ? = call negocio.fn_actualizarproveedorservicio(?,?,?,?,?) }";
+		String sql = "{ ? = call negocio.fn_actualizarproveedorservicio(?,?,?,?,?,?,?) }";
 		
 		try {
 			cs = conn.prepareCall(sql);
@@ -349,7 +363,14 @@ public class ProveedorDaoImpl implements ProveedorDao {
 			cs.registerOutParameter(i++, Types.BOOLEAN);
 			cs.setInt(i++, idproveedor);
 			cs.setInt(i++, servicio.getTipoServicio().getCodigoEntero().intValue());
+			cs.setInt(i++, servicio.getProveedorServicio().getCodigoEntero().intValue());
 			cs.setBigDecimal(i++, servicio.getPorcentajeComision());
+			if (servicio.getPorcenComInternacional() !=null || servicio.getPorcenComInternacional().compareTo(BigDecimal.ZERO)==1){
+				cs.setBigDecimal(i++, servicio.getPorcenComInternacional());
+			}
+			else {
+				cs.setNull(i++, Types.DECIMAL);
+			}
 			cs.setString(i++, servicio.getUsuarioModificacion());
 			cs.setString(i++, servicio.getIpModificacion());
 			cs.execute();
@@ -391,8 +412,10 @@ public class ProveedorDaoImpl implements ProveedorDao {
 			while (rs.next()){
 				servicioProveedor = new ServicioProveedor();
 				servicioProveedor.getProveedor().setCodigoEntero(UtilJdbc.obtenerNumero(rs, "idproveedor"));
-				servicioProveedor.getTipoServicio().setCodigoEntero(UtilJdbc.obtenerNumero(rs, "idservicio"));
-				servicioProveedor.setPorcentajeComision(UtilJdbc.obtenerBigDecimal(rs, "porcencomision"));
+				servicioProveedor.getTipoServicio().setCodigoEntero(UtilJdbc.obtenerNumero(rs, "idtiposervicio"));
+				servicioProveedor.getProveedorServicio().setCodigoEntero(UtilJdbc.obtenerNumero(rs, "idproveedorservicio"));
+				servicioProveedor.setPorcentajeComision(UtilJdbc.obtenerBigDecimal(rs, "porcencomnacional"));
+				servicioProveedor.setPorcenComInternacional(UtilJdbc.obtenerBigDecimal(rs, "porcencominternacional"));
 				resultado.add(servicioProveedor);
 			}
 		} catch (SQLException e) {
@@ -462,5 +485,61 @@ public class ProveedorDaoImpl implements ProveedorDao {
 		}
 		
 		return resultado;
+	}
+	
+	@Override
+	public void registroProveedorTipo(Proveedor proveedor, Connection conexion) throws SQLException {
+		CallableStatement cs = null;
+		String sql = "{ ? = call negocio.fn_ingresarproveedortipo(?,?,?,?) }";
+		
+		try {
+			cs = conexion.prepareCall(sql);
+			int i=1;
+			cs.registerOutParameter(i++, Types.BOOLEAN);
+			cs.setInt(i++, proveedor.getCodigoEntero());
+			cs.setInt(i++, proveedor.getTipoProveedor().getCodigoEntero().intValue());
+			cs.setString(i++, proveedor.getUsuarioCreacion());
+			cs.setString(i++, proveedor.getIpCreacion());
+			
+			cs.execute();
+		} catch (SQLException e) {
+			throw new SQLException(e);
+		} finally{
+			try {
+				if (cs != null){
+					cs.close();
+				}
+			} catch (SQLException e) {
+				throw new SQLException(e);
+			}
+		}
+	}
+	
+	@Override
+	public void actualizarProveedorTipo(Proveedor proveedor, Connection conexion) throws SQLException {
+		CallableStatement cs = null;
+		String sql = "{ ? = call negocio.fn_actualizarproveedortipo(?,?,?,?) }";
+		
+		try {
+			cs = conexion.prepareCall(sql);
+			int i=1;
+			cs.registerOutParameter(i++, Types.BOOLEAN);
+			cs.setInt(i++, proveedor.getCodigoEntero());
+			cs.setInt(i++, proveedor.getTipoProveedor().getCodigoEntero().intValue());
+			cs.setString(i++, proveedor.getUsuarioModificacion());
+			cs.setString(i++, proveedor.getIpModificacion());
+			
+			cs.execute();
+		} catch (SQLException e) {
+			throw new SQLException(e);
+		} finally{
+			try {
+				if (cs != null){
+					cs.close();
+				}
+			} catch (SQLException e) {
+				throw new SQLException(e);
+			}
+		}
 	}
 }

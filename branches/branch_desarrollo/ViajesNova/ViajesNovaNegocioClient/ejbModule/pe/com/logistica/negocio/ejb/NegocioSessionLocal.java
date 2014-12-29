@@ -8,6 +8,7 @@ import javax.ejb.Local;
 
 import pe.com.logistica.bean.base.BaseVO;
 import pe.com.logistica.bean.negocio.Cliente;
+import pe.com.logistica.bean.negocio.Consolidador;
 import pe.com.logistica.bean.negocio.Contacto;
 import pe.com.logistica.bean.negocio.CorreoClienteMasivo;
 import pe.com.logistica.bean.negocio.CorreoMasivo;
@@ -151,4 +152,12 @@ public interface NegocioSessionLocal {
 	public List<BaseVO> consultaServiciosDependientes(Integer idServicio)
 			throws SQLException, Exception;
 
+	boolean ingresarConsolidador(Consolidador consolidador)
+			throws SQLException, Exception;
+	
+	public boolean actualizarConsolidador(Consolidador consolidador) throws SQLException, Exception;
+	
+	public List<Consolidador> listarConsolidador() throws SQLException, Exception;
+	
+	public Consolidador consultarConsolidador(Consolidador consolidador) throws SQLException, Exception;
 }

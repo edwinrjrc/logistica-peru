@@ -18,9 +18,11 @@ import javax.servlet.ServletContext;
 import org.apache.log4j.Logger;
 
 import pe.com.logistica.bean.base.BaseVO;
+import pe.com.logistica.bean.negocio.Consolidador;
 import pe.com.logistica.bean.negocio.Destino;
 import pe.com.logistica.bean.negocio.MaestroServicio;
 import pe.com.logistica.bean.negocio.Parametro;
+import pe.com.logistica.bean.negocio.Proveedor;
 import pe.com.logistica.bean.negocio.Usuario;
 import pe.com.logistica.web.servicio.NegocioServicio;
 import pe.com.logistica.web.servicio.ParametroServicio;
@@ -65,7 +67,10 @@ public class CatalogoMBean implements Serializable{
 	private List<SelectItem> catalogoTipoServicioImpto;
 	private List<SelectItem> catalogoFormaPago;
 	private List<SelectItem> catalogoVendedores;
+	private List<SelectItem> catalogoConsolidadores;
+	private List<SelectItem> catalogoTipoProveedor;
 	private List<SelectItem> catalogoParametros;
+	private List<SelectItem> catalogoProveedores;
 
 	private SeguridadServicio seguridadServicio;
 	private SoporteServicio soporteServicio;
@@ -372,7 +377,6 @@ public class CatalogoMBean implements Serializable{
 	 * @return the catalogoTipoServicio
 	 */
 	public List<SelectItem> getCatalogoTipoServicio() {
-
 		try {
 			List<MaestroServicio> lista = negocioServicio.listarMaestroServicio();
 			SelectItem si = null;
@@ -386,6 +390,16 @@ public class CatalogoMBean implements Serializable{
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
 		}
+		/*int idmaestro = UtilWeb.obtenerEnteroPropertieMaestro(
+				"maestroTipoServicios", "aplicacionDatos");
+
+		try {
+			List<BaseVO> lista = soporteServicio
+					.listarCatalogoMaestro(idmaestro);
+			catalogoTipoServicio = UtilWeb.convertirSelectItem(lista);
+		} catch (Exception e) {
+			logger.error(e.getMessage(), e);
+		}*/
 		return catalogoTipoServicio;
 	}
 
@@ -560,6 +574,84 @@ public class CatalogoMBean implements Serializable{
 	 */
 	public void setCatalogoParametros(List<SelectItem> catalogoParametros) {
 		this.catalogoParametros = catalogoParametros;
+	}
+
+	/**
+	 * @return the catalogoConsolidadores
+	 */
+	public List<SelectItem> getCatalogoConsolidadores() {
+		try {
+			List<Consolidador> lista = this.negocioServicio.listarConsolidador();
+			SelectItem si = null;
+			catalogoConsolidadores = new ArrayList<SelectItem>();
+			for (Consolidador consolidador : lista) {
+				si = new SelectItem();
+				si.setLabel(consolidador.getNombre());
+				si.setValue(consolidador.getCodigoEntero());
+				catalogoConsolidadores.add(si);
+			}
+		} catch (Exception e) {
+			logger.error(e.getMessage(), e);
+		}
+		return catalogoConsolidadores;
+	}
+
+	/**
+	 * @param catalogoConsolidadores the catalogoConsolidadores to set
+	 */
+	public void setCatalogoConsolidadores(List<SelectItem> catalogoConsolidadores) {
+		this.catalogoConsolidadores = catalogoConsolidadores;
+	}
+
+	/**
+	 * @return the catalogoTipoProveedor
+	 */
+	public List<SelectItem> getCatalogoTipoProveedor() {
+		int idmaestro = UtilWeb.obtenerEnteroPropertieMaestro(
+				"maestroTipoProveedor", "aplicacionDatos");
+
+		try {
+			List<BaseVO> lista = soporteServicio
+					.listarCatalogoMaestro(idmaestro);
+			catalogoTipoProveedor = UtilWeb.convertirSelectItem(lista);
+		} catch (Exception e) {
+			logger.error(e.getMessage(), e);
+		}
+		return catalogoTipoProveedor;
+	}
+
+	/**
+	 * @param catalogoTipoProveedor the catalogoTipoProveedor to set
+	 */
+	public void setCatalogoTipoProveedor(List<SelectItem> catalogoTipoProveedor) {
+		this.catalogoTipoProveedor = catalogoTipoProveedor;
+	}
+
+	/**
+	 * @return the catalogoProveedores
+	 */
+	public List<SelectItem> getCatalogoProveedores() {
+		try {
+			List<Proveedor> lista = this.negocioServicio.listarProveedor(new Proveedor());
+			SelectItem si = null;
+			catalogoProveedores = new ArrayList<SelectItem>();
+			for (Proveedor proveedor : lista) {
+				si = new SelectItem();
+				si.setLabel(proveedor.getNombreCompleto());
+				si.setValue(proveedor.getCodigoEntero());
+				catalogoProveedores.add(si);
+			}
+		} catch (Exception e) {
+			logger.error(e.getMessage(), e);
+		}
+		return catalogoProveedores;
+	}
+
+	/**
+	 * @param catalogoProveedores the catalogoProveedores to set
+	 */
+	public void setCatalogoProveedores(List<SelectItem> catalogoProveedores) {
+		this.catalogoProveedores = catalogoProveedores;
 	}
 
 }

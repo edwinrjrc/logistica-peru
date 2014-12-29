@@ -87,6 +87,11 @@
   <navigation-case>
    <from-outcome>irEnvioMasivoCorreo</from-outcome>
    <to-view-id>/paginas/negocio/correomasivo/administrar.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>irAdministrarConsolidador</from-outcome>
+   <to-view-id>/paginas/negocio/consolidador/administrar.xhtml</to-view-id>
    <redirect></redirect>
   </navigation-case>
  </navigation-rule>
