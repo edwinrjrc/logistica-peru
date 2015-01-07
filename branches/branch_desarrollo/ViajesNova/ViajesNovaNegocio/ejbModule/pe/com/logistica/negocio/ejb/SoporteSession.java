@@ -3,19 +3,27 @@ package pe.com.logistica.negocio.ejb;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import javax.ejb.Stateless;
 
 import pe.com.logistica.bean.base.BaseVO;
+import pe.com.logistica.bean.negocio.ConfiguracionTipoServicio;
 import pe.com.logistica.bean.negocio.Destino;
 import pe.com.logistica.bean.negocio.Maestro;
 import pe.com.logistica.bean.negocio.Pais;
+import pe.com.logistica.bean.negocio.Proveedor;
 import pe.com.logistica.negocio.dao.CatalogoDao;
+import pe.com.logistica.negocio.dao.ConfiguracionServicioDao;
 import pe.com.logistica.negocio.dao.DestinoDao;
 import pe.com.logistica.negocio.dao.MaestroDao;
+import pe.com.logistica.negocio.dao.ProveedorDao;
 import pe.com.logistica.negocio.dao.impl.CatalogoDaoImpl;
+import pe.com.logistica.negocio.dao.impl.ConfiguracionServicioDaoImpl;
 import pe.com.logistica.negocio.dao.impl.DestinoDaoImpl;
 import pe.com.logistica.negocio.dao.impl.MaestroDaoImpl;
+import pe.com.logistica.negocio.dao.impl.ProveedorDaoImpl;
+import pe.com.logistica.negocio.exception.ErrorConsultaDataException;
 
 /**
  * Session Bean implementation class SoporteSession
@@ -143,5 +151,38 @@ public class SoporteSession implements SoporteRemote, SoporteLocal {
 			Exception {
 		destinoDao = new DestinoDaoImpl();
 		return destinoDao.listarDestinos();
+	}
+
+	@Override
+	public ConfiguracionTipoServicio consultarConfiguracionServicio(
+			int idTipoServicio) throws SQLException, Exception {
+		ConfiguracionServicioDao configuracionServicioDao = new ConfiguracionServicioDaoImpl();
+		
+		return configuracionServicioDao.consultarConfiguracionServicio(idTipoServicio);
+	}
+	
+	@Override
+	public List<Proveedor> listarProveedorTipo(
+			BaseVO tipoProveedor) throws SQLException, Exception {
+		ProveedorDao proveedorDao = new ProveedorDaoImpl();
+		
+		return proveedorDao.listarComboProveedorTipo(tipoProveedor);
+	}
+
+	@Override
+	public boolean esDestinoNacional(Integer destino) throws ErrorConsultaDataException, SQLException, Exception {
+		DestinoDao destinoDao = new DestinoDaoImpl();
+		
+		try {
+			Destino destinoConsultado = destinoDao.consultarDestino(destino);
+			
+			Locale localidad = Locale.getDefault();
+			
+			return localidad.getCountry().equals(destinoConsultado.getPais().getAbreviado());
+		} catch (SQLException e){
+			throw new ErrorConsultaDataException("Error al determinar la nacionalidad del destino");
+		} catch (Exception e) {
+			throw new ErrorConsultaDataException("Error al determinar la nacionalidad del destino");
+		}
 	}
 }

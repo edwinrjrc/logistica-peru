@@ -157,6 +157,7 @@ public class DestinoDaoImpl implements DestinoDao {
 				destino.getTipoDestino().setCodigoEntero(UtilJdbc.obtenerNumero(rs, "idtipodestino"));
 				destino.getTipoDestino().setNombre(UtilJdbc.obtenerCadena(rs, "nombretipdestino"));
 				destino.setDescripcion(UtilJdbc.obtenerCadena(rs, "descripcion"));
+				destino.getPais().setAbreviado(UtilJdbc.obtenerCadena(rs, "abreviado"));
 				listaDestinos.add(destino);
 			}
 			
@@ -210,8 +211,10 @@ public class DestinoDaoImpl implements DestinoDao {
 				destino.setCodigoEntero(UtilJdbc.obtenerNumero(rs, "id"));
 				destino.setCodigoIATA(UtilJdbc.obtenerCadena(rs, "codigoiata"));
 				destino.getTipoDestino().setCodigoEntero(UtilJdbc.obtenerNumero(rs, "idtipodestino"));
-				destino.getTipoDestino().setNombre(UtilJdbc.obtenerCadena(rs, "nombretipdestino"));
-				destino.setDescripcion(UtilJdbc.obtenerCadena(rs, "descripcion"));
+				destino.setDescripcion(UtilJdbc.obtenerCadena(rs, "descdestino"));
+				destino.getPais().setCodigoEntero(UtilJdbc.obtenerNumero(rs, "idpais"));
+				destino.getPais().setDescripcion(UtilJdbc.obtenerCadena(rs, "descpais"));
+				destino.getPais().setAbreviado(UtilJdbc.obtenerCadena(rs, "abreviado"));
 			}
 			
 		} catch (SQLException e) {

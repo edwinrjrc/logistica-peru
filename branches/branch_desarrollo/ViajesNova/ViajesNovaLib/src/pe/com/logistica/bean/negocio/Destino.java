@@ -24,6 +24,8 @@ public class Destino extends BaseNegocio {
 	private BaseVO tipoDestino;
 	private String codigoIATA;
 	
+	private Integer codigoSeleccionado;
+	
 
 	/**
 	 * 
@@ -106,6 +108,20 @@ public class Destino extends BaseNegocio {
 	 */
 	public void setDescripcionCompleto(String descripcionCompleto) {
 		this.descripcionCompleto = descripcionCompleto;
+	}
+
+	/**
+	 * @return the codigoSeleccionado
+	 */
+	public Integer getCodigoSeleccionado() {
+		return codigoSeleccionado;
+	}
+
+	/**
+	 * @param codigoSeleccionado the codigoSeleccionado to set
+	 */
+	public void setCodigoSeleccionado(Integer codigoSeleccionado) {
+		this.codigoSeleccionado = codigoSeleccionado;
 	}
 
 }

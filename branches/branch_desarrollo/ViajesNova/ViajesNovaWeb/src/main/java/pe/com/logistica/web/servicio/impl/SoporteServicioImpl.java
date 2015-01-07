@@ -13,10 +13,13 @@ import javax.naming.NamingException;
 import javax.servlet.ServletContext;
 
 import pe.com.logistica.bean.base.BaseVO;
+import pe.com.logistica.bean.negocio.ConfiguracionTipoServicio;
 import pe.com.logistica.bean.negocio.Destino;
 import pe.com.logistica.bean.negocio.Maestro;
 import pe.com.logistica.bean.negocio.Pais;
+import pe.com.logistica.bean.negocio.Proveedor;
 import pe.com.logistica.negocio.ejb.SoporteRemote;
+import pe.com.logistica.negocio.exception.ErrorConsultaDataException;
 import pe.com.logistica.web.servicio.SoporteServicio;
 
 /**
@@ -148,5 +151,29 @@ public class SoporteServicioImpl implements SoporteServicio {
 	public List<Destino> listarDestinos() throws SQLException,
 			Exception {
 		return ejbSession.listarDestinos();
+	}
+
+	@Override
+	public ConfiguracionTipoServicio consultarConfiguracionServicio(int convertirCadenaEntero) {
+		try {
+			return ejbSession.consultarConfiguracionServicio(convertirCadenaEntero);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	@Override
+	public List<Proveedor> listarComboProveedorTipo(BaseVO proveedor)
+			throws SQLException, Exception {
+		
+		return ejbSession.listarProveedorTipo(proveedor);
+	}
+
+	@Override
+	public boolean esDestinoNacional(Integer destino) throws ErrorConsultaDataException, SQLException, Exception {
+		return ejbSession.esDestinoNacional(destino);
 	}
 }

@@ -24,7 +24,9 @@ public class DetalleServicioAgencia extends BaseNegocio {
 	
 	private MaestroServicio tipoServicio;
 	private String descripcionServicio;
-	private BaseVO destino;
+	private Destino origen;
+	private Destino destino;
+	private BaseVO aerolinea;
 	private int dias;
 	private int noches;
 	private Date fechaServicio;
@@ -39,6 +41,8 @@ public class DetalleServicioAgencia extends BaseNegocio {
 	private Consolidador consolidador;
 	
 	private List<DetalleServicioAgencia> serviciosHijos;
+	
+	private ConfiguracionTipoServicio configuracionTipoServicio;
 	/**
 	 * 
 	 */
@@ -80,9 +84,9 @@ public class DetalleServicioAgencia extends BaseNegocio {
 	/**
 	 * @return the destino
 	 */
-	public BaseVO getDestino() {
+	public Destino getDestino() {
 		if (destino == null){
-			destino = new BaseVO();
+			destino = new Destino();
 		}
 		return destino;
 	}
@@ -90,7 +94,7 @@ public class DetalleServicioAgencia extends BaseNegocio {
 	/**
 	 * @param destino the destino to set
 	 */
-	public void setDestino(BaseVO destino) {
+	public void setDestino(Destino destino) {
 		this.destino = destino;
 	}
 
@@ -309,6 +313,57 @@ public class DetalleServicioAgencia extends BaseNegocio {
 	 */
 	public void setConsolidador(Consolidador consolidador) {
 		this.consolidador = consolidador;
+	}
+
+	/**
+	 * @return the configuracionTipoServicio
+	 */
+	public ConfiguracionTipoServicio getConfiguracionTipoServicio() {
+		if (configuracionTipoServicio == null) {
+			configuracionTipoServicio = new ConfiguracionTipoServicio();
+		}
+		return configuracionTipoServicio;
+	}
+
+	/**
+	 * @param configuracionTipoServicio the configuracionTipoServicio to set
+	 */
+	public void setConfiguracionTipoServicio(ConfiguracionTipoServicio configuracionTipoServicio) {
+		this.configuracionTipoServicio = configuracionTipoServicio;
+	}
+
+	/**
+	 * @return the aerolinea
+	 */
+	public BaseVO getAerolinea() {
+		if (aerolinea == null){
+			aerolinea = new BaseVO();
+		}
+		return aerolinea;
+	}
+
+	/**
+	 * @param aerolinea the aerolinea to set
+	 */
+	public void setAerolinea(BaseVO aerolinea) {
+		this.aerolinea = aerolinea;
+	}
+
+	/**
+	 * @return the origen
+	 */
+	public Destino getOrigen() {
+		if (origen == null){
+			origen = new Destino();
+		}
+		return origen;
+	}
+
+	/**
+	 * @param origen the origen to set
+	 */
+	public void setOrigen(Destino origen) {
+		this.origen = origen;
 	}
 
 }

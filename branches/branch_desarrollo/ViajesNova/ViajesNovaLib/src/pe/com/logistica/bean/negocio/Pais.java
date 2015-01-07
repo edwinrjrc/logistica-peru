@@ -19,7 +19,8 @@ public class Pais extends BaseNegocio {
 	
 	private String descripcion;
 	private BaseVO continente;
-
+	private String abreviado;
+	
 	/**
 	 * 
 	 */
@@ -56,6 +57,20 @@ public class Pais extends BaseNegocio {
 	 */
 	public void setDescripcion(String descripcion) {
 		this.descripcion = descripcion;
+	}
+
+	/**
+	 * @return the abreviado
+	 */
+	public String getAbreviado() {
+		return abreviado;
+	}
+
+	/**
+	 * @param abreviado the abreviado to set
+	 */
+	public void setAbreviado(String abreviado) {
+		this.abreviado = abreviado;
 	}
 
 }

@@ -6,9 +6,12 @@ import java.util.List;
 import javax.ejb.Local;
 
 import pe.com.logistica.bean.base.BaseVO;
+import pe.com.logistica.bean.negocio.ConfiguracionTipoServicio;
 import pe.com.logistica.bean.negocio.Destino;
 import pe.com.logistica.bean.negocio.Maestro;
 import pe.com.logistica.bean.negocio.Pais;
+import pe.com.logistica.bean.negocio.Proveedor;
+import pe.com.logistica.negocio.exception.ErrorConsultaDataException;
 
 @Local
 public interface SoporteLocal {
@@ -47,4 +50,12 @@ public interface SoporteLocal {
 	public boolean actualizarDestino(Destino destino) throws SQLException, Exception;
 
 	List<Destino> listarDestinos() throws SQLException, Exception;
+	
+	public ConfiguracionTipoServicio consultarConfiguracionServicio(
+			int convertirCadenaEntero) throws SQLException, Exception;
+	
+	public List<Proveedor> listarProveedorTipo(
+			BaseVO tipoProveedor) throws SQLException, Exception;
+	
+	public boolean esDestinoNacional(Integer destino) throws ErrorConsultaDataException, SQLException, Exception;
 }

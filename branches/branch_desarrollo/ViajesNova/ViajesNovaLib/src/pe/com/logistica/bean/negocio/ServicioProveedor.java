@@ -15,6 +15,7 @@ import pe.com.logistica.bean.base.BaseVO;
 public class ServicioProveedor extends BaseNegocio {
 
 	private BaseVO tipoServicio;
+	private boolean editoComision;
 	private BigDecimal porcentajeComision;
 	private BigDecimal porcenComInternacional;
 	private String nombreProveedor;
@@ -124,6 +125,20 @@ public class ServicioProveedor extends BaseNegocio {
 	 */
 	public void setPorcenComInternacional(BigDecimal porcenComInternacional) {
 		this.porcenComInternacional = porcenComInternacional;
+	}
+
+	/**
+	 * @return the editoComision
+	 */
+	public boolean isEditoComision() {
+		return editoComision;
+	}
+
+	/**
+	 * @param editoComision the editoComision to set
+	 */
+	public void setEditoComision(boolean editoComision) {
+		this.editoComision = editoComision;
 	}
 
 }
