@@ -10,6 +10,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import javax.ejb.Stateless;
 import javax.mail.MessagingException;
@@ -26,6 +27,7 @@ import pe.com.logistica.bean.negocio.Contacto;
 import pe.com.logistica.bean.negocio.CorreoClienteMasivo;
 import pe.com.logistica.bean.negocio.CorreoMasivo;
 import pe.com.logistica.bean.negocio.CuotaPago;
+import pe.com.logistica.bean.negocio.Destino;
 import pe.com.logistica.bean.negocio.DetalleServicioAgencia;
 import pe.com.logistica.bean.negocio.Direccion;
 import pe.com.logistica.bean.negocio.Maestro;
@@ -68,7 +70,7 @@ import pe.com.logistica.negocio.dao.impl.ServicioNoviosDaoImpl;
 import pe.com.logistica.negocio.dao.impl.TelefonoDaoImpl;
 import pe.com.logistica.negocio.dao.impl.UbigeoDaoImpl;
 import pe.com.logistica.negocio.exception.EnvioCorreoException;
-import pe.com.logistica.negocio.exception.ErrorConsulaDataException;
+import pe.com.logistica.negocio.exception.ErrorConsultaDataException;
 import pe.com.logistica.negocio.exception.ErrorRegistroDataException;
 import pe.com.logistica.negocio.exception.ResultadoCeroDaoException;
 import pe.com.logistica.negocio.exception.ValidacionException;
@@ -1477,7 +1479,7 @@ public class NegocioSession implements NegocioSessionRemote,
 
 	@Override
 	public List<DetalleServicioAgencia> agregarServicioVentaInvisible(
-			DetalleServicioAgencia detalleServicio2) throws ErrorConsulaDataException, Exception {
+			DetalleServicioAgencia detalleServicio2) throws ErrorConsultaDataException, Exception {
 		
 		List<DetalleServicioAgencia> listaServicios = new ArrayList<DetalleServicioAgencia>();
 		try {
@@ -1515,9 +1517,9 @@ public class NegocioSession implements NegocioSessionRemote,
 			
 			return listaServicios;
 		} catch (SQLException e) {
-			throw new ErrorConsulaDataException("Error en Consulta de Servicios Ocultos", e);
+			throw new ErrorConsultaDataException("Error en Consulta de Servicios Ocultos", e);
 		} catch (Exception e){
-			throw new ErrorConsulaDataException("Error en Consulta de Servicios Ocultos", e);
+			throw new ErrorConsultaDataException("Error en Consulta de Servicios Ocultos", e);
 		}
 		
 		
@@ -1556,5 +1558,32 @@ public class NegocioSession implements NegocioSessionRemote,
 		ConsolidadorDao consolidadorDao = new ConsolidadorDaoImpl();
 		
 		return consolidadorDao.consultarConsolidador(consolidador);
+	}
+
+	@Override
+	public BigDecimal calculaPorcentajeComision(
+			DetalleServicioAgencia detalleServicio) throws SQLException, Exception {
+		DestinoDao destinoDao = new DestinoDaoImpl();
+		
+		if (detalleServicio.getDestino().getCodigoEntero()!= null && detalleServicio.getServicioProveedor().getProveedor().getCodigoEntero()!=null && detalleServicio.getAerolinea().getCodigoEntero()!=null){
+			Destino destinoConsultado = destinoDao.consultarDestino(detalleServicio.getDestino().getCodigoEntero());
+			
+			Locale localidad = Locale.getDefault();
+						
+			ProveedorDao proveedorDao = new ProveedorDaoImpl();
+			List<ServicioProveedor> lista = proveedorDao.consultarServicioProveedor(detalleServicio.getServicioProveedor().getProveedor().getCodigoEntero());
+			for (ServicioProveedor servicioProveedor : lista) {
+				if (servicioProveedor.getProveedorServicio().getCodigoEntero().intValue() == detalleServicio.getAerolinea().getCodigoEntero().intValue()){
+					if (localidad.getCountry().equals(destinoConsultado.getPais().getAbreviado())){
+						return servicioProveedor.getPorcentajeComision();
+					}
+					else {
+						return servicioProveedor.getPorcenComInternacional();
+					}
+				}
+			}
+		}
+		
+		return BigDecimal.ZERO;
 	}
 }

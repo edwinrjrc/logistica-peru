@@ -71,6 +71,7 @@ public class CatalogoMBean implements Serializable{
 	private List<SelectItem> catalogoTipoProveedor;
 	private List<SelectItem> catalogoParametros;
 	private List<SelectItem> catalogoProveedores;
+	private List<SelectItem> catalogoAerolineas;
 
 	private SeguridadServicio seguridadServicio;
 	private SoporteServicio soporteServicio;
@@ -652,6 +653,35 @@ public class CatalogoMBean implements Serializable{
 	 */
 	public void setCatalogoProveedores(List<SelectItem> catalogoProveedores) {
 		this.catalogoProveedores = catalogoProveedores;
+	}
+
+	/**
+	 * @return the catalogoAerolineas
+	 */
+	public List<SelectItem> getCatalogoAerolineas() {
+		try {
+			BaseVO tipoProveedor = new BaseVO();
+			tipoProveedor.setCodigoEntero(1);
+			List<Proveedor> lista = this.soporteServicio.listarComboProveedorTipo(tipoProveedor);
+			SelectItem si = null;
+			catalogoAerolineas = new ArrayList<SelectItem>();
+			for (Proveedor proveedor : lista) {
+				si = new SelectItem();
+				si.setLabel(proveedor.getNombreCompleto());
+				si.setValue(proveedor.getCodigoEntero());
+				catalogoAerolineas.add(si);
+			}
+		} catch (Exception e) {
+			logger.error(e.getMessage(), e);
+		}
+		return catalogoAerolineas;
+	}
+
+	/**
+	 * @param catalogoAerolineas the catalogoAerolineas to set
+	 */
+	public void setCatalogoAerolineas(List<SelectItem> catalogoAerolineas) {
+		this.catalogoAerolineas = catalogoAerolineas;
 	}
 
 }

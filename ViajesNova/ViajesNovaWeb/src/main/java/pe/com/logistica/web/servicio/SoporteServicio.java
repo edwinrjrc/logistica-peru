@@ -7,9 +7,12 @@ import java.sql.SQLException;
 import java.util.List;
 
 import pe.com.logistica.bean.base.BaseVO;
+import pe.com.logistica.bean.negocio.ConfiguracionTipoServicio;
 import pe.com.logistica.bean.negocio.Destino;
 import pe.com.logistica.bean.negocio.Maestro;
 import pe.com.logistica.bean.negocio.Pais;
+import pe.com.logistica.bean.negocio.Proveedor;
+import pe.com.logistica.negocio.exception.ErrorConsultaDataException;
 
 /**
  * @author Edwin
@@ -51,4 +54,10 @@ public interface SoporteServicio {
 	boolean actualizarDestino (Destino destino) throws SQLException, Exception;
 
 	List<Destino> listarDestinos() throws SQLException, Exception;
+
+	public ConfiguracionTipoServicio consultarConfiguracionServicio(int convertirCadenaEntero);
+	
+	public List<Proveedor> listarComboProveedorTipo(BaseVO proveedor) throws SQLException, Exception;
+
+	public boolean esDestinoNacional(Integer destino) throws ErrorConsultaDataException, SQLException, Exception;
 }

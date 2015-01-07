@@ -47,6 +47,8 @@ public class ServicioAgencia extends BaseNegocio{
 	private String observaciones;
 	
 	private boolean esProgramaNovios;
+	
+	private BaseVO aerolinea;
 
 	/**
 	 * 
@@ -496,5 +498,23 @@ public class ServicioAgencia extends BaseNegocio{
 	 */
 	public void setMontoTotalIGV(BigDecimal montoTotalIGV) {
 		this.montoTotalIGV = montoTotalIGV;
+	}
+
+
+
+	/**
+	 * @return the aerolinea
+	 */
+	public BaseVO getAerolinea() {
+		return aerolinea;
+	}
+
+
+
+	/**
+	 * @param aerolinea the aerolinea to set
+	 */
+	public void setAerolinea(BaseVO aerolinea) {
+		this.aerolinea = aerolinea;
 	}
 }

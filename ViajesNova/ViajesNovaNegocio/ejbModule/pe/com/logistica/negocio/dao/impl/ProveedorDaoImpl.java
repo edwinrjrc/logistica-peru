@@ -14,6 +14,7 @@ import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 
+import pe.com.logistica.bean.base.BaseVO;
 import pe.com.logistica.bean.negocio.Contacto;
 import pe.com.logistica.bean.negocio.Proveedor;
 import pe.com.logistica.bean.negocio.ServicioProveedor;
@@ -541,5 +542,51 @@ public class ProveedorDaoImpl implements ProveedorDao {
 				throw new SQLException(e);
 			}
 		}
+	}
+
+	@Override
+	public List<Proveedor> listarComboProveedorTipo(BaseVO tipoProveedor)
+			throws SQLException {
+		List<Proveedor> resultado = null;
+		Connection conn = null;
+		CallableStatement cs = null;
+		ResultSet rs = null;
+		String sql = "{ ? = call negocio.fn_comboproveedorestipo(?) }";
+
+		try {
+			conn = UtilConexion.obtenerConexion();
+			cs = conn.prepareCall(sql);
+			cs.registerOutParameter(1, Types.OTHER);
+			cs.setInt(2, tipoProveedor.getCodigoEntero().intValue());
+			cs.execute();
+			rs = (ResultSet)cs.getObject(1);
+			
+			resultado = new ArrayList<Proveedor>();
+			Proveedor proveedor = null;
+			while (rs.next()){
+				proveedor = new Proveedor();
+				proveedor.setCodigoEntero(UtilJdbc.obtenerNumero(rs, "id"));
+				proveedor.setNombres(UtilJdbc.obtenerCadena(rs, "nombres"));
+				proveedor.setApellidoPaterno(UtilJdbc.obtenerCadena(rs, "apellidopaterno"));
+				proveedor.setApellidoMaterno(UtilJdbc.obtenerCadena(rs, "apellidomaterno"));
+				resultado.add(proveedor);
+			}
+		} catch (SQLException e) {
+			resultado = null;
+			throw new SQLException(e);
+		} finally{
+			try {
+				if (rs != null){
+					rs.close();
+				}
+				if (cs != null){
+					cs.close();
+				}
+			} catch (SQLException e) {
+				throw new SQLException(e);
+			}
+		}
+		
+		return resultado;
 	}
 }
