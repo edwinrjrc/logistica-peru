@@ -30,7 +30,7 @@ import pe.com.logistica.bean.negocio.ServicioNovios;
 import pe.com.logistica.bean.negocio.ServicioProveedor;
 import pe.com.logistica.negocio.ejb.NegocioSessionRemote;
 import pe.com.logistica.negocio.exception.EnvioCorreoException;
-import pe.com.logistica.negocio.exception.ErrorConsulaDataException;
+import pe.com.logistica.negocio.exception.ErrorConsultaDataException;
 import pe.com.logistica.negocio.exception.ErrorRegistroDataException;
 import pe.com.logistica.negocio.exception.ResultadoCeroDaoException;
 import pe.com.logistica.web.servicio.NegocioServicio;
@@ -305,7 +305,7 @@ public class NegocioServicioImpl implements NegocioServicio {
 
 	@Override
 	public List<DetalleServicioAgencia> agregarServicioVentaInvisible(
-			DetalleServicioAgencia detalleServicio2) throws ErrorConsulaDataException, Exception {
+			DetalleServicioAgencia detalleServicio2) throws ErrorConsultaDataException, Exception {
 		
 		return ejbSession.agregarServicioVentaInvisible(detalleServicio2);
 	}
@@ -337,6 +337,12 @@ public class NegocioServicioImpl implements NegocioServicio {
 	public Consolidador consultarConsolidador(Consolidador consolidador)
 			throws SQLException, Exception {
 		return ejbSession.consultarConsolidador(consolidador);
+	}
+
+	@Override
+	public BigDecimal calculaPorcentajeComision(
+			DetalleServicioAgencia detalleServicio) throws SQLException, Exception {
+		return ejbSession.calculaPorcentajeComision(detalleServicio);
 	}
 }
 	

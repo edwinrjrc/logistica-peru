@@ -22,7 +22,7 @@ import pe.com.logistica.bean.negocio.ServicioAgencia;
 import pe.com.logistica.bean.negocio.ServicioNovios;
 import pe.com.logistica.bean.negocio.ServicioProveedor;
 import pe.com.logistica.negocio.exception.EnvioCorreoException;
-import pe.com.logistica.negocio.exception.ErrorConsulaDataException;
+import pe.com.logistica.negocio.exception.ErrorConsultaDataException;
 import pe.com.logistica.negocio.exception.ErrorRegistroDataException;
 import pe.com.logistica.negocio.exception.ResultadoCeroDaoException;
 
@@ -144,7 +144,7 @@ public interface NegocioSessionLocal {
 
 	public List<DetalleServicioAgencia> agregarServicioVentaInvisible(
 			DetalleServicioAgencia detalleServicio2)
-			throws ErrorConsulaDataException, Exception;
+			throws ErrorConsultaDataException, Exception;
 
 	List<MaestroServicio> listarMaestroServicioAdm() throws SQLException,
 			Exception;
@@ -160,4 +160,7 @@ public interface NegocioSessionLocal {
 	public List<Consolidador> listarConsolidador() throws SQLException, Exception;
 	
 	public Consolidador consultarConsolidador(Consolidador consolidador) throws SQLException, Exception;
+	
+	public BigDecimal calculaPorcentajeComision(
+			DetalleServicioAgencia detalleServicio) throws SQLException, Exception;
 }

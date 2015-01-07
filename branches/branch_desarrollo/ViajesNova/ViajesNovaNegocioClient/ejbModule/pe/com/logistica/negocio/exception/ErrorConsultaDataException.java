@@ -7,7 +7,7 @@ package pe.com.logistica.negocio.exception;
  * @author edwreb
  *
  */
-public class ErrorConsulaDataException extends LogisticaNegocioException {
+public class ErrorConsultaDataException extends LogisticaNegocioException {
 
 	/**
 	 * 
@@ -17,14 +17,14 @@ public class ErrorConsulaDataException extends LogisticaNegocioException {
 	/**
 	 * 
 	 */
-	public ErrorConsulaDataException() {
+	public ErrorConsultaDataException() {
 		// TODO Auto-generated constructor stub
 	}
 
 	/**
 	 * @param arg0
 	 */
-	public ErrorConsulaDataException(String arg0) {
+	public ErrorConsultaDataException(String arg0) {
 		super(arg0);
 		// TODO Auto-generated constructor stub
 	}
@@ -33,7 +33,7 @@ public class ErrorConsulaDataException extends LogisticaNegocioException {
 	 * @param arg0
 	 * @param arg1
 	 */
-	public ErrorConsulaDataException(String arg0, String arg1) {
+	public ErrorConsultaDataException(String arg0, String arg1) {
 		super(arg0, arg1);
 		// TODO Auto-generated constructor stub
 	}
@@ -41,7 +41,7 @@ public class ErrorConsulaDataException extends LogisticaNegocioException {
 	/**
 	 * @param arg0
 	 */
-	public ErrorConsulaDataException(Throwable arg0) {
+	public ErrorConsultaDataException(Throwable arg0) {
 		super(arg0);
 		// TODO Auto-generated constructor stub
 	}
@@ -50,7 +50,7 @@ public class ErrorConsulaDataException extends LogisticaNegocioException {
 	 * @param arg0
 	 * @param arg1
 	 */
-	public ErrorConsulaDataException(String arg0, Throwable arg1) {
+	public ErrorConsultaDataException(String arg0, Throwable arg1) {
 		super(arg0, arg1);
 		// TODO Auto-generated constructor stub
 	}
@@ -60,7 +60,7 @@ public class ErrorConsulaDataException extends LogisticaNegocioException {
 	 * @param mensaje
 	 * @param arg1
 	 */
-	public ErrorConsulaDataException(String codigo, String mensaje,
+	public ErrorConsultaDataException(String codigo, String mensaje,
 			Throwable arg1) {
 		super(codigo, mensaje, arg1);
 		// TODO Auto-generated constructor stub
@@ -72,7 +72,7 @@ public class ErrorConsulaDataException extends LogisticaNegocioException {
 	 * @param arg2
 	 * @param arg3
 	 */
-	public ErrorConsulaDataException(String arg0, Throwable arg1,
+	public ErrorConsultaDataException(String arg0, Throwable arg1,
 			boolean arg2, boolean arg3) {
 		super(arg0, arg1, arg2, arg3);
 		// TODO Auto-generated constructor stub

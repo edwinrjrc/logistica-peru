@@ -31,7 +31,7 @@ import pe.com.logistica.bean.negocio.MaestroServicio;
 import pe.com.logistica.bean.negocio.ServicioAgencia;
 import pe.com.logistica.bean.negocio.ServicioProveedor;
 import pe.com.logistica.bean.negocio.Usuario;
-import pe.com.logistica.negocio.exception.ErrorConsulaDataException;
+import pe.com.logistica.negocio.exception.ErrorConsultaDataException;
 import pe.com.logistica.negocio.exception.ErrorRegistroDataException;
 import pe.com.logistica.web.servicio.NegocioServicio;
 import pe.com.logistica.web.servicio.ParametroServicio;
@@ -59,6 +59,8 @@ public class ServicioAgenteMBean extends BaseMBean{
 	private ServicioAgencia servicioAgenciaBusqueda;
 	private DetalleServicioAgencia detalleServicio;
 	private Cliente clienteBusqueda;
+	private Destino destinoBusqueda;
+	private Destino origenBusqueda;
 	
 	private List<ServicioAgencia> listadoServicioAgencia;
 	private List<DetalleServicioAgencia> listadoDetalleServicio;
@@ -66,11 +68,14 @@ public class ServicioAgenteMBean extends BaseMBean{
 	private List<Cliente> listadoClientes;
 	private List<SelectItem> listadoEmpresas;
 	private List<ServicioProveedor> listaProveedores;
+	private List<Destino> listaDestinosBusqueda;
+	private List<Destino> listaOrigenesBusqueda;
 	
 	public boolean nuevaVenta;
 	public boolean editarVenta;
 	private boolean servicioFee;
 	private boolean busquedaRealizada;
+	private boolean editarComision;
 
 	private ParametroServicio parametroServicio;
 	private NegocioServicio negocioServicio;
@@ -104,6 +109,21 @@ public class ServicioAgenteMBean extends BaseMBean{
 		}
 	}
 	
+	public void consultarDestinos(){
+		try {
+			this.setListaDestinosBusqueda(null);
+			this.setDestinoBusqueda(null);
+			
+			List<Destino> listaDestinos = this.soporteServicio.listarDestinos();
+			
+			this.setListaDestinosBusqueda(listaDestinos);
+			this.setListaOrigenesBusqueda(listaDestinos);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 	public void buscarCliente(){
 		try {
 			this.setListadoClientes(this.negocioServicio.buscarCliente(getClienteBusqueda()));
@@ -117,6 +137,40 @@ public class ServicioAgenteMBean extends BaseMBean{
 		this.getServicioAgencia().setCliente(obtenerClienteListado());
 	}
 	
+	public void seleccionarDestino(){
+		try {
+			this.getDetalleServicio().setDestino(obtenerDestinoListado());
+			
+			this.getDetalleServicio().getServicioProveedor().setPorcentajeComision(this.negocioServicio.calculaPorcentajeComision(this.getDetalleServicio()));
+		} catch (SQLException e) {
+			logger.error(e.getMessage(), e);
+			this.setShowModal(true);
+			this.setMensajeModal(e.getMessage());
+			this.setTipoModal(TIPO_MODAL_ERROR);
+			e.printStackTrace();
+		} catch (Exception e) {
+			logger.error(e.getMessage(), e);
+			this.setShowModal(true);
+			this.setMensajeModal(e.getMessage());
+			this.setTipoModal(TIPO_MODAL_ERROR);
+			e.printStackTrace();
+		}
+	}
+	
+	private Destino obtenerDestinoListado() {
+		try {
+			for (Destino destino : this.listaDestinosBusqueda){
+				if (destino.getCodigoEntero().intValue() == destino.getCodigoSeleccionado().intValue()){
+					return destino;
+				}
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
 	private Cliente obtenerClienteListado() {
 		try {
 			for (Cliente clienteLocal : this.getListadoClientes()) {
@@ -207,6 +261,8 @@ public class ServicioAgenteMBean extends BaseMBean{
 				getDetalleServicio().setIpCreacion(
 						obtenerRequest().getRemoteAddr());
 				
+				getDetalleServicio().getServicioProveedor().setEditoComision(this.isEditarComision());
+				
 				DetalleServicioAgencia detalleServicioAgregar = negocioServicio.agregarServicioVenta(getDetalleServicio());
 				
 				detalleServicioAgregar = agregarServicioInvisible(detalleServicioAgregar);
@@ -237,7 +293,7 @@ public class ServicioAgenteMBean extends BaseMBean{
 	}
 	
 	private DetalleServicioAgencia agregarServicioInvisible(
-			DetalleServicioAgencia detalleServicio2) throws ErrorConsulaDataException, Exception {
+			DetalleServicioAgencia detalleServicio2) throws ErrorConsultaDataException, Exception {
 		List<DetalleServicioAgencia> lista = negocioServicio.agregarServicioVentaInvisible(detalleServicio2);
 		HttpSession session = obtenerSession(false);
 		Usuario usuario = (Usuario) session
@@ -433,11 +489,11 @@ public class ServicioAgenteMBean extends BaseMBean{
 						"Seleccione el proveedor del servicio", "", FacesMessage.SEVERITY_ERROR);
 				resultado = false;
 			}
-			if (this.getDetalleServicio().getConsolidador().getCodigoEntero()==null || this.getDetalleServicio().getConsolidador().getCodigoEntero().intValue()==0){
+			/*if (this.getDetalleServicio().getConsolidador().getCodigoEntero()==null || this.getDetalleServicio().getConsolidador().getCodigoEntero().intValue()==0){
 				this.agregarMensaje(idFormulario + ":idSelconsolidador",
 						"Seleccione el consolidador del servicio", "", FacesMessage.SEVERITY_ERROR);
 				resultado = false;
-			}
+			}*/
 		}
 		else{
 			if (this.getDetalleServicio().getPrecioUnitario() == null){
@@ -602,6 +658,24 @@ public class ServicioAgenteMBean extends BaseMBean{
 			if (oe != null){
 				String valor = oe.toString();
 				
+				boolean destinoNacional = this.soporteServicio.esDestinoNacional(UtilWeb.convertirCadenaEntero(valor));
+				
+				System.out.println("es nacional"+destinoNacional);
+				
+			}
+		} catch (SQLException ex) {
+			logger.error(ex.getMessage(), ex);
+		} catch (Exception ex) {
+			logger.error(ex.getMessage(), ex);
+		}
+	}
+	
+	public void cambiarAerolinea(ValueChangeEvent e){
+		Object oe = e.getNewValue();
+		try {
+			if (oe != null){
+				String valor = oe.toString();
+				
 				List<Destino> listaDestino = this.soporteServicio.listarDestinos();
 				
 				for(Destino destino : listaDestino){
@@ -618,7 +692,7 @@ public class ServicioAgenteMBean extends BaseMBean{
 		}
 	}
 	
-	public void cargarProveedores(ValueChangeEvent e){
+	public void cargarDatosValores(ValueChangeEvent e){
 		Object oe = e.getNewValue();
 		try {
 			setListadoEmpresas(null);
@@ -632,6 +706,8 @@ public class ServicioAgenteMBean extends BaseMBean{
 				this.setServicioFee(valor.equals(param.getValor()));*/
 				
 				MaestroServicio maestroServicio = this.negocioServicio.consultarMaestroServicio(UtilWeb.convertirCadenaEntero(valor));
+				
+				this.getDetalleServicio().setConfiguracionTipoServicio(this.soporteServicio.consultarConfiguracionServicio(UtilWeb.convertirCadenaEntero(valor)));
 				
 				this.setServicioFee(maestroServicio.isEsFee() || maestroServicio.isEsImpuesto());
 				
@@ -661,12 +737,27 @@ public class ServicioAgenteMBean extends BaseMBean{
 			if (oe != null){
 				String valor = oe.toString();
 				
-				for (ServicioProveedor servicioProveedor: this.listaProveedores){
-					if (servicioProveedor.getCodigoEntero().intValue() == UtilWeb.convertirCadenaEntero(valor)){
-						this.getDetalleServicio().getServicioProveedor().setPorcentajeComision(servicioProveedor.getPorcentajeComision());
-						break;
-					}
-				}
+				this.getDetalleServicio().getServicioProveedor().getProveedor().setCodigoEntero(UtilWeb.convertirCadenaEntero(valor));
+				
+				this.getDetalleServicio().getServicioProveedor().setPorcentajeComision(this.negocioServicio.calculaPorcentajeComision(this.getDetalleServicio()));
+				
+			}
+		} catch (Exception ex) {
+			this.getDetalleServicio().getServicioProveedor().setPorcentajeComision(BigDecimal.ZERO);
+			logger.error(ex.getMessage(), ex);
+		}
+	}
+	
+	public void seleccionarAerolinea(ValueChangeEvent e){
+		Object oe = e.getNewValue();
+		try {
+			if (oe != null){
+				String valor = oe.toString();
+				
+				this.getDetalleServicio().getAerolinea().setCodigoEntero(UtilWeb.convertirCadenaEntero(valor));
+				
+				this.getDetalleServicio().getServicioProveedor().setPorcentajeComision(this.negocioServicio.calculaPorcentajeComision(this.getDetalleServicio()));
+				
 			}
 		} catch (Exception ex) {
 			this.getDetalleServicio().getServicioProveedor().setPorcentajeComision(BigDecimal.ZERO);
@@ -687,7 +778,41 @@ public class ServicioAgenteMBean extends BaseMBean{
 		
 		calcularTotales();
 	}
+	
+	public void buscarDestino(){
+		
+	}
+	
+	public void buscarOrigen(){
+		
+	}
+	
+	public void seleccionarOrigen(){
+		try {
+			this.getDetalleServicio().setOrigen(obtenerOrigenListado());
+			
+		} catch (Exception e) {
+			logger.error(e.getMessage(), e);
+			this.setShowModal(true);
+			this.setMensajeModal(e.getMessage());
+			this.setTipoModal(TIPO_MODAL_ERROR);
+			e.printStackTrace();
+		}
+	}
 
+	private Destino obtenerOrigenListado() {
+		try {
+			for (Destino destino : this.getListaOrigenesBusqueda()){
+				if (destino.getCodigoEntero().intValue() == destino.getCodigoSeleccionado().intValue()){
+					return destino;
+				}
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
 	/**
 	 * @return the servicioAgencia
 	 */
@@ -915,6 +1040,82 @@ public class ServicioAgenteMBean extends BaseMBean{
 	public void setListadoDetalleServicioTotal(
 			List<DetalleServicioAgencia> listadoDetalleServicioTotal) {
 		this.listadoDetalleServicioTotal = listadoDetalleServicioTotal;
+	}
+
+	/**
+	 * @return the destinoBusqueda
+	 */
+	public Destino getDestinoBusqueda() {
+		if (destinoBusqueda == null){
+			destinoBusqueda = new Destino();
+		}
+		return destinoBusqueda;
+	}
+
+	/**
+	 * @param destinoBusqueda the destinoBusqueda to set
+	 */
+	public void setDestinoBusqueda(Destino destinoBusqueda) {
+		this.destinoBusqueda = destinoBusqueda;
+	}
+
+	/**
+	 * @return the listaDestinosBusqueda
+	 */
+	public List<Destino> getListaDestinosBusqueda() {
+		return listaDestinosBusqueda;
+	}
+
+	/**
+	 * @param listaDestinosBusqueda the listaDestinosBusqueda to set
+	 */
+	public void setListaDestinosBusqueda(List<Destino> listaDestinosBusqueda) {
+		this.listaDestinosBusqueda = listaDestinosBusqueda;
+	}
+
+	/**
+	 * @return the editarComision
+	 */
+	public boolean isEditarComision() {
+		return editarComision;
+	}
+
+	/**
+	 * @param editarComision the editarComision to set
+	 */
+	public void setEditarComision(boolean editarComision) {
+		this.editarComision = editarComision;
+	}
+
+	/**
+	 * @return the origenBusqueda
+	 */
+	public Destino getOrigenBusqueda() {
+		if (origenBusqueda == null){
+			origenBusqueda = new Destino();
+		}
+		return origenBusqueda;
+	}
+
+	/**
+	 * @param origenBusqueda the origenBusqueda to set
+	 */
+	public void setOrigenBusqueda(Destino origenBusqueda) {
+		this.origenBusqueda = origenBusqueda;
+	}
+
+	/**
+	 * @return the listaOrigenesBusqueda
+	 */
+	public List<Destino> getListaOrigenesBusqueda() {
+		return listaOrigenesBusqueda;
+	}
+
+	/**
+	 * @param listaOrigenesBusqueda the listaOrigenesBusqueda to set
+	 */
+	public void setListaOrigenesBusqueda(List<Destino> listaOrigenesBusqueda) {
+		this.listaOrigenesBusqueda = listaOrigenesBusqueda;
 	}
 
 

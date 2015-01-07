@@ -95,6 +95,7 @@ public class ServicioNegocioDaoImpl implements ServicioNegocioDao {
 				servicio2.setCodigoEntero(UtilJdbc.obtenerNumero(rs, "id"));
 				servicio2.setNombreProveedor(UtilJdbc.obtenerCadena(rs, "nombres"));
 				servicio2.setPorcentajeComision(UtilJdbc.obtenerBigDecimal(rs, "porcencomnacional"));
+				servicio2.setPorcenComInternacional(UtilJdbc.obtenerBigDecimal(rs, "porcencominternacional"));
 				resultado.add(servicio2);
 			}
 		} catch (SQLException e) {
