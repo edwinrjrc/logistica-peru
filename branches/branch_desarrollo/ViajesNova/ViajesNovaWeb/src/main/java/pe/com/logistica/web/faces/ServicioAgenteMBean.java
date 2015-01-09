@@ -317,11 +317,11 @@ public class ServicioAgenteMBean extends BaseMBean{
 					"Seleccione el cliente del servicio", "", FacesMessage.SEVERITY_ERROR);
 			resultado = false;
 		}
-		if (this.getServicioAgencia().getDestino().getCodigoEntero() == null || this.getServicioAgencia().getDestino().getCodigoEntero().intValue() == 0){
+		/*if (this.getServicioAgencia().getDestino().getCodigoEntero() == null || this.getServicioAgencia().getDestino().getCodigoEntero().intValue() == 0){
 			this.agregarMensaje(idFormulario + ":idSelDestino",
 					"Seleccione el destino global del servicio", "", FacesMessage.SEVERITY_ERROR);
 			resultado = false;
-		}
+		}*/
 		if (this.getServicioAgencia().getFormaPago().getCodigoEntero() == null || this.getServicioAgencia().getFormaPago().getCodigoEntero().intValue() == 0){
 			this.agregarMensaje(idFormulario + ":idSelForPago",
 					"Seleccione el forma de Pago", "", FacesMessage.SEVERITY_ERROR);
@@ -813,6 +813,7 @@ public class ServicioAgenteMBean extends BaseMBean{
 		}
 		return null;
 	}
+	
 	/**
 	 * @return the servicioAgencia
 	 */

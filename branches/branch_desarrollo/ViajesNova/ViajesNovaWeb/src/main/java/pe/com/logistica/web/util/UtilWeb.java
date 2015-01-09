@@ -176,7 +176,10 @@ public class UtilWeb {
 			        + "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
 			Pattern pattern = Pattern.compile(patternEmail);
 			Matcher matcher = pattern.matcher(email);
-			return matcher.matches();
+			
+			boolean resultado = matcher.matches();
+			
+			return resultado;
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

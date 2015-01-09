@@ -39,6 +39,8 @@ public class DetalleServicioAgencia extends BaseNegocio {
 	private ServicioProveedor servicioProveedor;
 	private BaseVO servicioPadre;
 	private Consolidador consolidador;
+	private BaseVO empresaTransporte;
+	private BaseVO hotel;
 	
 	private List<DetalleServicioAgencia> serviciosHijos;
 	
@@ -364,6 +366,40 @@ public class DetalleServicioAgencia extends BaseNegocio {
 	 */
 	public void setOrigen(Destino origen) {
 		this.origen = origen;
+	}
+
+	/**
+	 * @return the empresaTransporte
+	 */
+	public BaseVO getEmpresaTransporte() {
+		if (empresaTransporte == null){
+			empresaTransporte = new BaseVO();
+		}
+		return empresaTransporte;
+	}
+
+	/**
+	 * @param empresaTransporte the empresaTransporte to set
+	 */
+	public void setEmpresaTransporte(BaseVO empresaTransporte) {
+		this.empresaTransporte = empresaTransporte;
+	}
+
+	/**
+	 * @return the hotel
+	 */
+	public BaseVO getHotel() {
+		if (hotel == null){
+			hotel = new BaseVO();
+		}
+		return hotel;
+	}
+
+	/**
+	 * @param hotel the hotel to set
+	 */
+	public void setHotel(BaseVO hotel) {
+		this.hotel = hotel;
 	}
 
 }
