@@ -631,7 +631,7 @@ public class ClienteMBean extends BaseMBean {
 						this.setPestanaActiva("idFC03");
 						break;
 					}
-					if (UtilWeb.validarCorreo(correo.getDireccion())){
+					if (!UtilWeb.validarCorreo(correo.getDireccion())){
 						this.agregarMensaje(idFormulario + ":idTablaCorreoContacto",
 								"Error en el correo, por favor corrija", "",
 								FacesMessage.SEVERITY_ERROR);
