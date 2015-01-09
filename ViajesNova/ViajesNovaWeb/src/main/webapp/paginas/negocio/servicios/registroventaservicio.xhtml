@@ -226,11 +226,12 @@
 								<h:panelGrid columns="4" cellpadding="0" cellspacing="0"
 									border="0" style="width:100%;"
 									columnClasses="col1fil1formulario,col2fil1formulario,col3fil1formulario,col4fil1formulario"
-									rendered="#{servicioAgenteMBean.detalleServicio.configuracionTipoServicio.muestraDestino}">
-									<h:outputText value="Origen" />
+									>
+									<h:outputText value="Origen" rendered="#{servicioAgenteMBean.detalleServicio.configuracionTipoServicio.muestraDestino}"/>
 									<h:panelGrid columns="2" border="0" cellpadding="0"
 										cellspacing="0" id="idSelOrigen"
-										columnClasses="col1iconoformulario,col1iconoformulario">
+										columnClasses="col1iconoformulario,col1iconoformulario"
+										rendered="#{servicioAgenteMBean.detalleServicio.configuracionTipoServicio.muestraDestino}">
 										<h:inputText readonly="true"
 											value="#{servicioAgenteMBean.detalleServicio.origen.descripcion}"
 											id="idTxtOrigen" />
@@ -245,10 +246,11 @@
 											showDetail="false" ajaxRendered="true" />
 									</h:panelGrid>
 									
-									<h:outputText value="Destino" />
+									<h:outputText value="Destino" rendered="#{servicioAgenteMBean.detalleServicio.configuracionTipoServicio.muestraDestino}"/>
 									<h:panelGrid columns="2" border="0" cellpadding="0"
 										cellspacing="0" id="idSelDestino"
-										columnClasses="col1iconoformulario,col1iconoformulario">
+										columnClasses="col1iconoformulario,col1iconoformulario"
+										rendered="#{servicioAgenteMBean.detalleServicio.configuracionTipoServicio.muestraDestino}">
 										<h:inputText readonly="true"
 											value="#{servicioAgenteMBean.detalleServicio.destino.descripcion}"
 											id="idTxtDestino" />
@@ -263,10 +265,12 @@
 											showDetail="false" ajaxRendered="true" />
 									</h:panelGrid>
 
-									<h:outputText value="Aerolinea" />
+									<h:outputText value="Aerolinea" 
+									rendered="#{servicioAgenteMBean.detalleServicio.configuracionTipoServicio.muestraAerolinea}"/>
 									<h:panelGrid columns="1" border="0" cellpadding="0"
 										cellspacing="0"
-										columnClasses="col1iconoformulario,col1iconoformulario">
+										columnClasses="col1iconoformulario,col1iconoformulario"
+										rendered="#{servicioAgenteMBean.detalleServicio.configuracionTipoServicio.muestraAerolinea}">
 										<h:selectOneMenu id="idSelAerolinea"
 											value="#{servicioAgenteMBean.detalleServicio.aerolinea.codigoEntero}"
 											valueChangeListener="#{servicioAgenteMBean.seleccionarAerolinea}">
@@ -275,6 +279,22 @@
 											<a4j:ajax event="valueChange" render="idGrComiPro" />
 										</h:selectOneMenu>
 										<rich:message for="idSelAerolinea" showSummary="true"
+											showDetail="false" ajaxRendered="true" />
+									</h:panelGrid>
+									
+									<h:outputText value="Hotel" 
+									rendered="#{servicioAgenteMBean.detalleServicio.configuracionTipoServicio.muestraHotel}"/>
+									<h:panelGrid columns="1" border="0" cellpadding="0"
+										cellspacing="0"
+										columnClasses="col1iconoformulario,col1iconoformulario"
+										rendered="#{servicioAgenteMBean.detalleServicio.configuracionTipoServicio.muestraHotel}">
+										<h:selectOneMenu id="idSelHotel"
+											value="#{servicioAgenteMBean.detalleServicio.hotel.codigoEntero}">
+											<f:selectItem itemLabel="-Seleccione el hotel-" />
+											<f:selectItems value="#{catalogoMBean.catalogoHoteles}" />
+											<a4j:ajax event="valueChange" render="idGrComiPro" />
+										</h:selectOneMenu>
+										<rich:message for="idSelHotel" showSummary="true"
 											showDetail="false" ajaxRendered="true" />
 									</h:panelGrid>
 									
