@@ -9,6 +9,7 @@ import java.util.List;
 
 import pe.com.logistica.bean.negocio.CuotaPago;
 import pe.com.logistica.bean.negocio.DetalleServicioAgencia;
+import pe.com.logistica.bean.negocio.PagoServicio;
 import pe.com.logistica.bean.negocio.ServicioAgencia;
 
 /**
@@ -69,4 +70,10 @@ public interface ServicioNovaViajesDao {
 	List<DetalleServicioAgencia> consultaServicioDetalleHijos(int idServicio,
 			int idSerPadre, Connection conn) throws SQLException;
 	
+	void registrarSaldosServicio(ServicioAgencia servicioAgencia,
+			Connection conn) throws SQLException;
+	
+	void registrarPagoServicio(PagoServicio pago) throws SQLException;
+	
+	List<PagoServicio> listarPagosServicio(Integer idServicio) throws SQLException;
 }

@@ -202,6 +202,7 @@ public class ProveedorMBean extends BaseMBean {
 									getProveedor().setNombres(getProveedor().getRazonSocial());
 								}
 								
+								parseaUsuarioListaServicio(getProveedor());
 								this.setShowModal(negocioServicio
 										.actualizarProveedor(getProveedor()));
 								this.setTipoModal("1");
@@ -240,6 +241,21 @@ public class ProveedorMBean extends BaseMBean {
 			this.setMensajeModal(ex.getMessage());
 			logger.error(ex.getMessage(), ex);
 		}
+	}
+
+	private void parseaUsuarioListaServicio(Proveedor proveedor2) throws Exception {
+		for (ServicioProveedor servicio : proveedor2.getListaServicioProveedor()){
+			HttpSession session = obtenerSession(false);
+			Usuario usuario = (Usuario) session
+					.getAttribute("usuarioSession");
+			servicio.setUsuarioCreacion(
+					usuario.getUsuario());
+			servicio.setIpCreacion(
+					obtenerRequest().getRemoteAddr());
+			servicio.setUsuarioModificacion(usuario.getUsuario());
+			servicio.setIpModificacion(obtenerRequest().getRemoteAddr());
+		}
+		
 	}
 
 	private boolean validarContactoProveedor(ActionEvent e) {
