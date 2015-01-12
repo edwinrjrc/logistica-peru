@@ -61,6 +61,15 @@
 	width: 75%;
 }
 
+.col1fil2Negrita {
+	width: 15%;
+	font-weight: bold;
+}
+
+.col2fil2Negrita {
+	width: 85%;
+}
+
 #estilos general
 .col1fil1formulario {
 	width: 25%;
@@ -181,4 +190,13 @@
 .col2servivio{
 	width: 80%;
 	text-align: left;
+}
+.col1TablaCentro{
+	width: 20%;
+}
+.col2TablaCentro{
+	width: 60%;
+}
+.col3TablaCentro{
+	width: 20%;
 }
