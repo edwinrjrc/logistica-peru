@@ -289,7 +289,8 @@
 										columnClasses="col1iconoformulario,col1iconoformulario"
 										rendered="#{servicioAgenteMBean.detalleServicio.configuracionTipoServicio.muestraHotel}">
 										<h:selectOneMenu id="idSelHotel"
-											value="#{servicioAgenteMBean.detalleServicio.hotel.codigoEntero}">
+											value="#{servicioAgenteMBean.detalleServicio.hotel.codigoEntero}"
+											valueChangeListener="#{servicioAgenteMBean.seleccionarHotel}">
 											<f:selectItem itemLabel="-Seleccione el hotel-" />
 											<f:selectItems value="#{catalogoMBean.catalogoHoteles}" />
 											<a4j:ajax event="valueChange" render="idGrComiPro" />

@@ -23,6 +23,7 @@ import pe.com.logistica.bean.negocio.CuotaPago;
 import pe.com.logistica.bean.negocio.DetalleServicioAgencia;
 import pe.com.logistica.bean.negocio.Direccion;
 import pe.com.logistica.bean.negocio.MaestroServicio;
+import pe.com.logistica.bean.negocio.PagoServicio;
 import pe.com.logistica.bean.negocio.ProgramaNovios;
 import pe.com.logistica.bean.negocio.Proveedor;
 import pe.com.logistica.bean.negocio.ServicioAgencia;
@@ -343,6 +344,18 @@ public class NegocioServicioImpl implements NegocioServicio {
 	public BigDecimal calculaPorcentajeComision(
 			DetalleServicioAgencia detalleServicio) throws SQLException, Exception {
 		return ejbSession.calculaPorcentajeComision(detalleServicio);
+	}
+
+	@Override
+	public void registrarPago(PagoServicio pago) throws SQLException, Exception {
+		ejbSession.registrarPago(pago);
+	}
+
+	@Override
+	public List<PagoServicio> listarPagosServicio(Integer idServicio)
+			throws SQLException, Exception {
+		
+		return ejbSession.listarPagosServicio(idServicio);
 	}
 }
 	

@@ -3,6 +3,7 @@
  */
 package pe.com.logistica.negocio.dao.impl;
 
+import java.io.ByteArrayInputStream;
 import java.math.BigDecimal;
 import java.sql.CallableStatement;
 import java.sql.Connection;
@@ -17,6 +18,7 @@ import org.apache.commons.lang3.StringUtils;
 import pe.com.logistica.bean.Util.UtilParse;
 import pe.com.logistica.bean.negocio.CuotaPago;
 import pe.com.logistica.bean.negocio.DetalleServicioAgencia;
+import pe.com.logistica.bean.negocio.PagoServicio;
 import pe.com.logistica.bean.negocio.ServicioAgencia;
 import pe.com.logistica.negocio.dao.ServicioNovaViajesDao;
 import pe.com.logistica.negocio.util.UtilConexion;
@@ -188,30 +190,10 @@ public class ServicioNovaViajesDaoImpl implements ServicioNovaViajesDao {
 				cs.setNull(i++, Types.INTEGER);
 			}
 			cs.setDate(i++, UtilJdbc.convertirUtilDateSQLDate(servicioAgencia.getFechaServicio()));
-			if (servicioAgencia.getMontoTotalIGV()!= null && !servicioAgencia.getMontoTotalIGV().equals(BigDecimal.ZERO)){
-				cs.setBigDecimal(i++, servicioAgencia.getMontoTotalIGV());
-			}
-			else{
-				cs.setNull(i++, Types.DECIMAL);
-			}
-			if (servicioAgencia.getMontoTotal() != null && !servicioAgencia.getMontoTotal().equals(BigDecimal.ZERO)){
-				cs.setBigDecimal(i++, servicioAgencia.getMontoTotal());
-			}
-			else{
-				cs.setNull(i++, Types.DECIMAL);
-			}
-			if (servicioAgencia.getMontoTotalFee() != null && !servicioAgencia.getMontoTotalFee().equals(BigDecimal.ZERO)){
-				cs.setBigDecimal(i++, servicioAgencia.getMontoTotalFee());
-			}
-			else{
-				cs.setNull(i++, Types.DECIMAL);
-			}
-			if (servicioAgencia.getMontoTotalComision() != null && !servicioAgencia.getMontoTotalComision().equals(BigDecimal.ZERO)){
-				cs.setBigDecimal(i++, servicioAgencia.getMontoTotalComision());
-			}
-			else{
-				cs.setNull(i++, Types.DECIMAL);
-			}
+			cs.setBigDecimal(i++, servicioAgencia.getMontoTotalIGV());
+			cs.setBigDecimal(i++, servicioAgencia.getMontoTotal());
+			cs.setBigDecimal(i++, servicioAgencia.getMontoTotalFee());
+			cs.setBigDecimal(i++, servicioAgencia.getMontoTotalComision());
 			if (servicioAgencia.getFormaPago().getCodigoEntero()!=null && servicioAgencia.getFormaPago().getCodigoEntero().intValue()!=0){
 				cs.setInt(i++, servicioAgencia.getFormaPago().getCodigoEntero().intValue());
 			}
@@ -680,8 +662,6 @@ public class ServicioNovaViajesDaoImpl implements ServicioNovaViajesDao {
 				servicioAgencia2.setMontoTotalComision(UtilJdbc.obtenerBigDecimal(rs, "montocomisiontotal"));
 				servicioAgencia2.setMontoTotalIGV(UtilJdbc.obtenerBigDecimal(rs, "montototaligv"));
 				servicioAgencia2.setMontoTotalFee(UtilJdbc.obtenerBigDecimal(rs, "montototalfee"));
-				servicioAgencia2.getDestino().setCodigoEntero(UtilJdbc.obtenerNumero(rs, "iddestino"));
-				servicioAgencia2.getDestino().setDescripcion(UtilJdbc.obtenerCadena(rs, "descdestino"));
 				servicioAgencia2.getFormaPago().setCodigoEntero(UtilJdbc.obtenerNumero(rs, "idformapago"));
 				servicioAgencia2.getFormaPago().setNombre(UtilJdbc.obtenerCadena(rs, "nommediopago"));
 				servicioAgencia2.getEstadoPago().setCodigoEntero(UtilJdbc.obtenerNumero(rs, "idestadopago"));
@@ -823,8 +803,6 @@ public class ServicioNovaViajesDaoImpl implements ServicioNovaViajesDao {
 				detalleServicio.getTipoServicio().setEsImpuesto(UtilJdbc.obtenerBoolean(rs, "esimpuesto"));
 				detalleServicio.getTipoServicio().setEsFee(UtilJdbc.obtenerBoolean(rs, "esfee"));
 				detalleServicio.setDescripcionServicio(UtilJdbc.obtenerCadena(rs, "descripcionservicio"));
-				detalleServicio.setDias(UtilJdbc.obtenerNumero(rs, "dias"));
-				detalleServicio.setNoches(UtilJdbc.obtenerNumero(rs, "noches"));
 				detalleServicio.setFechaIda(UtilJdbc.obtenerFecha(rs, "fechaida"));
 				detalleServicio.setFechaRegreso(UtilJdbc.obtenerFecha(rs, "fecharegreso"));
 				detalleServicio.setCantidad(UtilJdbc.obtenerNumero(rs, "cantidad"));
@@ -891,8 +869,6 @@ public class ServicioNovaViajesDaoImpl implements ServicioNovaViajesDao {
 				detalleServicio.getTipoServicio().setEsImpuesto(UtilJdbc.obtenerBoolean(rs, "esimpuesto"));
 				detalleServicio.getTipoServicio().setEsFee(UtilJdbc.obtenerBoolean(rs, "esfee"));
 				detalleServicio.setDescripcionServicio(UtilJdbc.obtenerCadena(rs, "descripcionservicio"));
-				detalleServicio.setDias(UtilJdbc.obtenerNumero(rs, "dias"));
-				detalleServicio.setNoches(UtilJdbc.obtenerNumero(rs, "noches"));
 				detalleServicio.setFechaIda(UtilJdbc.obtenerFecha(rs, "fechaida"));
 				detalleServicio.setFechaRegreso(UtilJdbc.obtenerFecha(rs, "fecharegreso"));
 				detalleServicio.setCantidad(UtilJdbc.obtenerNumero(rs, "cantidad"));
@@ -1424,6 +1400,152 @@ public class ServicioNovaViajesDaoImpl implements ServicioNovaViajesDao {
 			}
 		}
 
+		return resultado;
+	}
+
+	@Override
+	public void registrarSaldosServicio(ServicioAgencia servicioAgencia,
+			Connection conn) throws SQLException {
+		CallableStatement cs = null;
+		String sql = "{ ? = call negocio.fn_registrarsaldoservicio(?,?,?,?,?,?)}";
+		
+		try {
+			cs = conn.prepareCall(sql);
+			int i=1;
+			cs.registerOutParameter(i++, Types.INTEGER);
+			cs.setInt(i++, servicioAgencia.getCodigoEntero().intValue());
+			cs.setInt(i++, 0);
+			cs.setDate(i++, UtilJdbc.convertirUtilDateSQLDate(servicioAgencia.getFechaServicio()));
+			cs.setBigDecimal(i++, servicioAgencia.getMontoTotal());
+			cs.setString(i++, servicioAgencia.getUsuarioCreacion());
+			cs.setString(i++, servicioAgencia.getIpCreacion());
+			cs.execute();
+			
+		} catch (SQLException e) {
+			throw new SQLException(e);
+		} finally {
+			try {
+				if (cs != null) {
+					cs.close();
+				}
+			} catch (SQLException e) {
+				throw new SQLException(e);
+			}
+		}
+	}
+
+	@Override
+	public void registrarPagoServicio(PagoServicio pago) throws SQLException {
+		CallableStatement cs = null;
+		String sql = "{ ? = call negocio.fn_registrarpagoservicio(?,?,?,?,?,?)}";
+		Connection conn = null;
+		try {
+			conn = UtilConexion.obtenerConexion();
+			cs = conn.prepareCall(sql);
+			int i=1;
+			cs.registerOutParameter(i++, Types.INTEGER);
+			cs.setInt(i++, pago.getServicio().getCodigoEntero());
+			cs.setDate(i++, UtilJdbc.convertirUtilDateSQLDate(pago.getFechaPago()));
+			cs.setBigDecimal(i++, pago.getMontoPago());
+			if (pago.getSustentoPago()!=null){
+				cs.setBinaryStream(i++, pago.getSustentoPago());
+			}
+			else{
+				cs.setNull(i++, Types.VARBINARY);
+			}
+			cs.setString(i++, pago.getUsuarioCreacion());
+			cs.setString(i++, pago.getIpCreacion());
+			cs.execute();
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+			try {
+				cs.close();
+				cs = conn.prepareCall(sql);
+				int i=1;
+				cs.registerOutParameter(i++, Types.INTEGER);
+				cs.setInt(i++, pago.getServicio().getCodigoEntero());
+				cs.setDate(i++, UtilJdbc.convertirUtilDateSQLDate(pago.getFechaPago()));
+				cs.setBigDecimal(i++, pago.getMontoPago());
+				if (pago.getSustentoPagoByte()!=null){
+					cs.setBinaryStream(i++, new ByteArrayInputStream(pago.getSustentoPagoByte()));
+				}
+				else{
+					cs.setNull(i++, Types.VARBINARY);
+				}
+				cs.setString(i++, pago.getUsuarioCreacion());
+				cs.setString(i++, pago.getIpCreacion());
+				cs.execute();
+			} catch (SQLException e1) {
+				throw new SQLException(e);
+			}
+		} finally {
+			try {
+				if (cs != null) {
+					cs.close();
+				}
+				if (conn != null){
+					conn.close();
+				}
+			} catch (SQLException e) {
+				throw new SQLException(e);
+			}
+		}
+		
+	}
+
+	@Override
+	public List<PagoServicio> listarPagosServicio(Integer idServicio)
+			throws SQLException {
+		List<PagoServicio> resultado = null;
+		Connection conn = null;
+		CallableStatement cs = null;
+		ResultSet rs = null;
+		String sql = "{ ? = call negocio.fn_listarpagos(?)}";
+		
+		try {
+			conn = UtilConexion.obtenerConexion();
+			cs = conn.prepareCall(sql);
+			int i=1;
+			cs.registerOutParameter(i++, Types.OTHER);
+			if (idServicio != null){
+				cs.setInt(i++, idServicio);
+			}
+			else{
+				cs.setNull(i++, Types.INTEGER);
+			}
+			
+			cs.execute();
+			rs = (ResultSet)cs.getObject(1);
+			resultado = new ArrayList<PagoServicio>();
+			PagoServicio pago = null;
+			while (rs.next()){
+				pago = new PagoServicio();
+				pago.setCodigoEntero(UtilJdbc.obtenerNumero(rs, "idpago"));
+				pago.getServicio().setCodigoEntero(UtilJdbc.obtenerNumero(rs, "idservicio"));
+				pago.setFechaPago(UtilJdbc.obtenerFecha(rs, "fechapago"));
+				pago.setMontoPago(UtilJdbc.obtenerBigDecimal(rs, "montopagado"));
+				resultado.add(pago);
+			}
+			
+		} catch (SQLException e) {
+			throw new SQLException(e);
+		} finally {
+			try {
+				if (rs != null) {
+					rs.close();
+				}
+				if (cs != null) {
+					cs.close();
+				}
+				if (conn != null){
+					conn.close();
+				}
+			} catch (SQLException e) {
+				throw new SQLException(e);
+			}
+		}
+		
 		return resultado;
 	}
 }

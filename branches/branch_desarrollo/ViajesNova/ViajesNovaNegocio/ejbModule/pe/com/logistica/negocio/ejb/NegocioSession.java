@@ -32,6 +32,7 @@ import pe.com.logistica.bean.negocio.DetalleServicioAgencia;
 import pe.com.logistica.bean.negocio.Direccion;
 import pe.com.logistica.bean.negocio.Maestro;
 import pe.com.logistica.bean.negocio.MaestroServicio;
+import pe.com.logistica.bean.negocio.PagoServicio;
 import pe.com.logistica.bean.negocio.ProgramaNovios;
 import pe.com.logistica.bean.negocio.Proveedor;
 import pe.com.logistica.bean.negocio.ServicioAgencia;
@@ -1004,6 +1005,8 @@ public class NegocioSession implements NegocioSessionRemote,
 							"No se pudo generar el cronograma de pagos");
 				}
 			}
+			
+			servicioNovaViajesDao.registrarSaldosServicio(servicioAgencia, conexion);
 
 			return idServicio;
 		} catch (ErrorRegistroDataException e) {
@@ -1564,26 +1567,66 @@ public class NegocioSession implements NegocioSessionRemote,
 	public BigDecimal calculaPorcentajeComision(
 			DetalleServicioAgencia detalleServicio) throws SQLException, Exception {
 		DestinoDao destinoDao = new DestinoDaoImpl();
+		ProveedorDao proveedorDao = new ProveedorDaoImpl();
 		
-		if (detalleServicio.getDestino().getCodigoEntero()!= null && detalleServicio.getServicioProveedor().getProveedor().getCodigoEntero()!=null && detalleServicio.getAerolinea().getCodigoEntero()!=null){
-			Destino destinoConsultado = destinoDao.consultarDestino(detalleServicio.getDestino().getCodigoEntero());
-			
-			Locale localidad = Locale.getDefault();
-						
-			ProveedorDao proveedorDao = new ProveedorDaoImpl();
-			List<ServicioProveedor> lista = proveedorDao.consultarServicioProveedor(detalleServicio.getServicioProveedor().getProveedor().getCodigoEntero());
-			for (ServicioProveedor servicioProveedor : lista) {
-				if (servicioProveedor.getProveedorServicio().getCodigoEntero().intValue() == detalleServicio.getAerolinea().getCodigoEntero().intValue()){
-					if (localidad.getCountry().equals(destinoConsultado.getPais().getAbreviado())){
-						return servicioProveedor.getPorcentajeComision();
-					}
-					else {
-						return servicioProveedor.getPorcenComInternacional();
+		switch(detalleServicio.getTipoServicio().getCodigoEntero().intValue()){
+		case 11://BOLETO DE VIAJE
+			if (detalleServicio.getDestino().getCodigoEntero()!= null && detalleServicio.getServicioProveedor().getProveedor().getCodigoEntero()!=null && detalleServicio.getAerolinea().getCodigoEntero()!=null){
+				Destino destinoConsultado = destinoDao.consultarDestino(detalleServicio.getDestino().getCodigoEntero());
+				
+				Locale localidad = Locale.getDefault();
+							
+				List<ServicioProveedor> lista = proveedorDao.consultarServicioProveedor(detalleServicio.getServicioProveedor().getProveedor().getCodigoEntero());
+				for (ServicioProveedor servicioProveedor : lista) {
+					if (servicioProveedor.getProveedorServicio().getCodigoEntero().intValue() == detalleServicio.getAerolinea().getCodigoEntero().intValue()){
+						if (localidad.getCountry().equals(destinoConsultado.getPais().getAbreviado())){
+							return servicioProveedor.getPorcentajeComision();
+						}
+						else {
+							return servicioProveedor.getPorcenComInternacional();
+						}
 					}
 				}
 			}
+			break;
+		case 12://FEE
+			break;
+		case 13://IGV
+			break;
+		case 14://PROGRAMA
+			break;
+		case 15://PAQUETE
+			break;
+		case 16://IMPUESTO AEREO
+			break;
+		case 17://HOTEL
+			if (detalleServicio.getServicioProveedor().getProveedor().getCodigoEntero()!=null && detalleServicio.getHotel().getCodigoEntero()!=null){
+				List<ServicioProveedor> lista = proveedorDao.consultarServicioProveedor(detalleServicio.getServicioProveedor().getProveedor().getCodigoEntero());
+				for (ServicioProveedor servicioProveedor : lista) {
+					if (servicioProveedor.getProveedorServicio().getCodigoEntero().intValue() == detalleServicio.getHotel().getCodigoEntero().intValue()){
+						return servicioProveedor.getPorcentajeComision();
+					}
+				}
+			}
+			
+			break;
 		}
 		
 		return BigDecimal.ZERO;
+	}
+
+	@Override
+	public void registrarPago(PagoServicio pago) throws SQLException, Exception {
+		ServicioNovaViajesDao servicioNovaViajesDao = new ServicioNovaViajesDaoImpl();
+		
+		servicioNovaViajesDao.registrarPagoServicio(pago);
+	}
+
+	@Override
+	public List<PagoServicio> listarPagosServicio(Integer idServicio)
+			throws SQLException, Exception {
+		ServicioNovaViajesDao servicioNovaViajesDao = new ServicioNovaViajesDaoImpl();
+		
+		return servicioNovaViajesDao.listarPagosServicio(idServicio);
 	}
 }
