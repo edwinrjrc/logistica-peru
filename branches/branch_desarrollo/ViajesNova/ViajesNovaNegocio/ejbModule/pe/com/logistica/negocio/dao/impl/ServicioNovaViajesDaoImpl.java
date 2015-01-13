@@ -1548,4 +1548,54 @@ public class ServicioNovaViajesDaoImpl implements ServicioNovaViajesDao {
 		
 		return resultado;
 	}
+
+	@Override
+	public BigDecimal consultarSaldoServicio(Integer idServicio)
+			throws SQLException {
+		BigDecimal resultado = null;
+		Connection conn = null;
+		CallableStatement cs = null;
+		ResultSet rs = null;
+		String sql = "{ ? = call negocio.fn_consultarsaldosservicio(?)}";
+		
+		try {
+			conn = UtilConexion.obtenerConexion();
+			cs = conn.prepareCall(sql);
+			int i=1;
+			cs.registerOutParameter(i++, Types.OTHER);
+			if (idServicio != null){
+				cs.setInt(i++, idServicio);
+			}
+			else{
+				cs.setNull(i++, Types.INTEGER);
+			}
+			
+			cs.execute();
+			rs = (ResultSet)cs.getObject(1);
+			if (rs.next()){
+				
+				resultado = UtilJdbc.obtenerBigDecimal(rs, "montosaldoservicio");
+				
+			}
+			
+		} catch (SQLException e) {
+			throw new SQLException(e);
+		} finally {
+			try {
+				if (rs != null) {
+					rs.close();
+				}
+				if (cs != null) {
+					cs.close();
+				}
+				if (conn != null){
+					conn.close();
+				}
+			} catch (SQLException e) {
+				throw new SQLException(e);
+			}
+		}
+		
+		return resultado;
+	}
 }

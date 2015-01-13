@@ -357,5 +357,12 @@ public class NegocioServicioImpl implements NegocioServicio {
 		
 		return ejbSession.listarPagosServicio(idServicio);
 	}
+
+	@Override
+	public BigDecimal consultarSaldoServicio(Integer idServicio)
+			throws SQLException, Exception {
+
+		return ejbSession.consultarSaldoServicio(idServicio);
+	}
 }
 	
