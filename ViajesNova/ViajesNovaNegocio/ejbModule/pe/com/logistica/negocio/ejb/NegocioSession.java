@@ -1629,4 +1629,12 @@ public class NegocioSession implements NegocioSessionRemote,
 		
 		return servicioNovaViajesDao.listarPagosServicio(idServicio);
 	}
+
+	@Override
+	public BigDecimal consultarSaldoServicio(Integer idServicio)
+			throws SQLException, Exception {
+		ServicioNovaViajesDao servicioNovaViajesDao = new ServicioNovaViajesDaoImpl();
+		
+		return servicioNovaViajesDao.consultarSaldoServicio(idServicio);
+	}
 }

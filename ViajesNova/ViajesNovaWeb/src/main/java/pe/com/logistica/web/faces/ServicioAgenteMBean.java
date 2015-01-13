@@ -67,6 +67,8 @@ public class ServicioAgenteMBean extends BaseMBean {
 	private Destino destinoBusqueda;
 	private Destino origenBusqueda;
 	private PagoServicio pagoServicio;
+	
+	private BigDecimal saldoServicio;
 
 	private List<ServicioAgencia> listadoServicioAgencia;
 	private List<DetalleServicioAgencia> listadoDetalleServicio;
@@ -1379,6 +1381,31 @@ public class ServicioAgenteMBean extends BaseMBean {
 	 */
 	public void setListaPagosServicios(List<PagoServicio> listaPagosServicios) {
 		this.listaPagosServicios = listaPagosServicios;
+	}
+
+	/**
+	 * @return the saldoServicio
+	 */
+	public BigDecimal getSaldoServicio() {
+		
+		try {
+			saldoServicio = this.negocioServicio.consultarSaldoServicio(this.getServicioAgencia().getCodigoEntero());
+		} catch (SQLException e) {
+			saldoServicio = BigDecimal.ZERO;
+			e.printStackTrace();
+		} catch (Exception e) {
+			saldoServicio = BigDecimal.ZERO;
+			e.printStackTrace();
+		}
+		
+		return saldoServicio;
+	}
+
+	/**
+	 * @param saldoServicio the saldoServicio to set
+	 */
+	public void setSaldoServicio(BigDecimal saldoServicio) {
+		this.saldoServicio = saldoServicio;
 	}
 
 }

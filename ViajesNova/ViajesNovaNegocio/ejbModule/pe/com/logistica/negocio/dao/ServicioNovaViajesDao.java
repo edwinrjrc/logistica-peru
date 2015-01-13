@@ -3,6 +3,7 @@
  */
 package pe.com.logistica.negocio.dao;
 
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
@@ -76,4 +77,6 @@ public interface ServicioNovaViajesDao {
 	void registrarPagoServicio(PagoServicio pago) throws SQLException;
 	
 	List<PagoServicio> listarPagosServicio(Integer idServicio) throws SQLException;
+	
+	BigDecimal consultarSaldoServicio(Integer idServicio) throws SQLException;
 }
