@@ -169,4 +169,5 @@ public interface NegocioSessionRemote {
 	
 	public List<PagoServicio> listarPagosServicio(Integer idServicio) throws SQLException, Exception;
 	
+	public BigDecimal consultarSaldoServicio(Integer idServicio) throws SQLException, Exception;
 }

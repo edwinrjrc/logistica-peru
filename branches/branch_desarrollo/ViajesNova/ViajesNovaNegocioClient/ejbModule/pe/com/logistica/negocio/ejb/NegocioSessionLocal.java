@@ -168,4 +168,6 @@ public interface NegocioSessionLocal {
 	public void registrarPago(PagoServicio pago) throws SQLException, Exception;
 	
 	public List<PagoServicio> listarPagosServicio(Integer idServicio) throws SQLException, Exception;
+	
+	public BigDecimal consultarSaldoServicio(Integer idServicio) throws SQLException, Exception;	
 }

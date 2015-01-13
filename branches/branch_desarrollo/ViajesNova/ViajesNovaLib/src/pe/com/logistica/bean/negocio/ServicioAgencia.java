@@ -39,6 +39,7 @@ public class ServicioAgencia extends BaseNegocio{
 	private BigDecimal montoTotalFee;
 	private BigDecimal montoTotalComision;
 	private BigDecimal montoTotalIGV;
+	private BigDecimal montoSaldoServicio;
 	
 	private List<DetalleServicioAgencia> listaDetalleServicio;
 	private List<CuotaPago> cronogramaPago;
@@ -516,5 +517,23 @@ public class ServicioAgencia extends BaseNegocio{
 	 */
 	public void setAerolinea(BaseVO aerolinea) {
 		this.aerolinea = aerolinea;
+	}
+
+
+
+	/**
+	 * @return the montoSaldoServicio
+	 */
+	public BigDecimal getMontoSaldoServicio() {
+		return montoSaldoServicio;
+	}
+
+
+
+	/**
+	 * @param montoSaldoServicio the montoSaldoServicio to set
+	 */
+	public void setMontoSaldoServicio(BigDecimal montoSaldoServicio) {
+		this.montoSaldoServicio = montoSaldoServicio;
 	}
 }
