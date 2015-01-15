@@ -225,9 +225,9 @@
 								</h:panelGrid>
 								<h:panelGrid columns="4" cellpadding="0" cellspacing="0"
 									border="0" style="width:100%;"
-									columnClasses="col1fil1formulario,col2fil1formulario,col3fil1formulario,col4fil1formulario"
-									>
-									<h:outputText value="Origen" rendered="#{servicioAgenteMBean.detalleServicio.configuracionTipoServicio.muestraDestino}"/>
+									columnClasses="col1fil1formulario,col2fil1formulario,col3fil1formulario,col4fil1formulario">
+									<h:outputText value="Origen"
+										rendered="#{servicioAgenteMBean.detalleServicio.configuracionTipoServicio.muestraDestino}" />
 									<h:panelGrid columns="2" border="0" cellpadding="0"
 										cellspacing="0" id="idSelOrigen"
 										columnClasses="col1iconoformulario,col1iconoformulario"
@@ -245,8 +245,9 @@
 										<rich:message for="idTxtOrigen" showSummary="true"
 											showDetail="false" ajaxRendered="true" />
 									</h:panelGrid>
-									
-									<h:outputText value="Destino" rendered="#{servicioAgenteMBean.detalleServicio.configuracionTipoServicio.muestraDestino}"/>
+
+									<h:outputText value="Destino"
+										rendered="#{servicioAgenteMBean.detalleServicio.configuracionTipoServicio.muestraDestino}" />
 									<h:panelGrid columns="2" border="0" cellpadding="0"
 										cellspacing="0" id="idSelDestino"
 										columnClasses="col1iconoformulario,col1iconoformulario"
@@ -265,8 +266,8 @@
 											showDetail="false" ajaxRendered="true" />
 									</h:panelGrid>
 
-									<h:outputText value="Aerolinea" 
-									rendered="#{servicioAgenteMBean.detalleServicio.configuracionTipoServicio.muestraAerolinea}"/>
+									<h:outputText value="Aerolinea"
+										rendered="#{servicioAgenteMBean.detalleServicio.configuracionTipoServicio.muestraAerolinea}" />
 									<h:panelGrid columns="1" border="0" cellpadding="0"
 										cellspacing="0"
 										columnClasses="col1iconoformulario,col1iconoformulario"
@@ -281,9 +282,9 @@
 										<rich:message for="idSelAerolinea" showSummary="true"
 											showDetail="false" ajaxRendered="true" />
 									</h:panelGrid>
-									
-									<h:outputText value="Hotel" 
-									rendered="#{servicioAgenteMBean.detalleServicio.configuracionTipoServicio.muestraHotel}"/>
+
+									<h:outputText value="Hotel"
+										rendered="#{servicioAgenteMBean.detalleServicio.configuracionTipoServicio.muestraHotel}" />
 									<h:panelGrid columns="1" border="0" cellpadding="0"
 										cellspacing="0"
 										columnClasses="col1iconoformulario,col1iconoformulario"
@@ -299,9 +300,26 @@
 											showDetail="false" ajaxRendered="true" />
 									</h:panelGrid>
 									
+									<h:outputText value="Operadora"
+										rendered="#{servicioAgenteMBean.detalleServicio.configuracionTipoServicio.muestraOperadora}" />
+									<h:panelGrid columns="1" border="0" cellpadding="0"
+										cellspacing="0"
+										columnClasses="col1iconoformulario,col1iconoformulario"
+										rendered="#{servicioAgenteMBean.detalleServicio.configuracionTipoServicio.muestraOperadora}">
+										<h:selectOneMenu id="idSelHotel"
+											value="#{servicioAgenteMBean.detalleServicio.hotel.codigoEntero}"
+											valueChangeListener="#{servicioAgenteMBean.seleccionarHotel}">
+											<f:selectItem itemLabel="-Seleccione el hotel-" />
+											<f:selectItems value="#{catalogoMBean.catalogoHoteles}" />
+											<a4j:ajax event="valueChange" render="idGrComiPro" />
+										</h:selectOneMenu>
+										<rich:message for="idSelHotel" showSummary="true"
+											showDetail="false" ajaxRendered="true" />
+									</h:panelGrid>
+
 									<h:outputText value="" />
 									<h:outputText value="" />
-									
+
 								</h:panelGrid>
 								<h:panelGrid columns="2" cellpadding="0" cellspacing="0"
 									border="0" style="width:100%;"
@@ -377,24 +395,28 @@
 									            servicioAgenteMBean.detalleServicio.servicioProveedor.proveedor.codigoEntero != 0 and 
 									           servicioAgenteMBean.detalleServicio.configuracionTipoServicio.muestraComision}" />
 									<h:panelGrid columns="2" cellpadding="0" cellspacing="0"
-										border="0" id="idGrTxComi" rendered="#{servicioAgenteMBean.detalleServicio.servicioProveedor.proveedor.codigoEntero != null and
+										border="0" id="idGrTxComi"
+										rendered="#{servicioAgenteMBean.detalleServicio.servicioProveedor.proveedor.codigoEntero != null and
 									            servicioAgenteMBean.detalleServicio.servicioProveedor.proveedor.codigoEntero != 0 and 
 									           servicioAgenteMBean.detalleServicio.configuracionTipoServicio.muestraComision}">
 										<h:inputText onkeypress="return js_soloDecimal(event)"
 											maxlength="2" size="5"
 											readonly="#{!servicioAgenteMBean.editarComision}"
-											value="#{servicioAgenteMBean.detalleServicio.servicioProveedor.porcentajeComision}"
-											 />
+											value="#{servicioAgenteMBean.detalleServicio.servicioProveedor.porcentajeComision}" />
 										<h:selectBooleanCheckbox
 											value="#{servicioAgenteMBean.editarComision}">
 											<a4j:ajax event="valueChange" render="idGrTxComi" />
 										</h:selectBooleanCheckbox>
 									</h:panelGrid>
-									<h:outputText value="" />
-									<h:outputText value="" />
+									<h:outputText value="Tarifa Negociada" rendered="#{servicioAgenteMBean.detalleServicio.servicioProveedor.proveedor.codigoEntero != null and
+									            servicioAgenteMBean.detalleServicio.servicioProveedor.proveedor.codigoEntero != 0 and 
+									           servicioAgenteMBean.detalleServicio.configuracionTipoServicio.muestraComision}" />
+									<h:selectBooleanCheckbox rendered="#{servicioAgenteMBean.detalleServicio.servicioProveedor.proveedor.codigoEntero != null and
+									            servicioAgenteMBean.detalleServicio.servicioProveedor.proveedor.codigoEntero != 0 and 
+									           servicioAgenteMBean.detalleServicio.configuracionTipoServicio.muestraComision}"
+										value="#{servicioAgenteMBean.detalleServicio.tarifaNegociada}">
+									</h:selectBooleanCheckbox>
 								</h:panelGrid>
-
-
 
 								<f:facet name="footer">
 									<h:panelGrid cellpadding="0" cellspacing="0" border="0"

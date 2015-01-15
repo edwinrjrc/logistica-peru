@@ -97,4 +97,13 @@ public class UtilJdbc {
 		
 		return cadena;
 	}
+	
+	public static boolean comparaNumero(Integer numero1, Integer numero2){
+		try {
+			return (numero1.intValue() == numero2.intValue());
+		} catch (NullPointerException e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
 }

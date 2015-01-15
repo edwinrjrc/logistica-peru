@@ -73,6 +73,7 @@ public class CatalogoMBean implements Serializable{
 	private List<SelectItem> catalogoProveedores;
 	private List<SelectItem> catalogoAerolineas;
 	private List<SelectItem> catalogoHoteles;
+	private List<SelectItem> catalogoOperador;
 
 	private SeguridadServicio seguridadServicio;
 	private SoporteServicio soporteServicio;
@@ -712,6 +713,35 @@ public class CatalogoMBean implements Serializable{
 	 */
 	public void setCatalogoHoteles(List<SelectItem> catalogoHoteles) {
 		this.catalogoHoteles = catalogoHoteles;
+	}
+
+	/**
+	 * @return the catalogoOperador
+	 */
+	public List<SelectItem> getCatalogoOperador() {
+		try {
+			BaseVO tipoProveedor = new BaseVO();
+			tipoProveedor.setCodigoEntero(3);
+			List<Proveedor> lista = this.soporteServicio.listarComboProveedorTipo(tipoProveedor);
+			SelectItem si = null;
+			catalogoOperador = new ArrayList<SelectItem>();
+			for (Proveedor proveedor : lista) {
+				si = new SelectItem();
+				si.setLabel(proveedor.getNombreCompleto());
+				si.setValue(proveedor.getCodigoEntero());
+				catalogoOperador.add(si);
+			}
+		} catch (Exception e) {
+			logger.error(e.getMessage(), e);
+		}
+		return catalogoOperador;
+	}
+
+	/**
+	 * @param catalogoOperador the catalogoOperador to set
+	 */
+	public void setCatalogoOperador(List<SelectItem> catalogoOperador) {
+		this.catalogoOperador = catalogoOperador;
 	}
 
 }

@@ -14,6 +14,7 @@ public class ConfiguracionTipoServicio extends Base{
 	private boolean muestraEmpresaTransporte;
 	private boolean muestraHotel;
 	private boolean muestraProveedor;
+	private boolean muestraOperadora;
 	private boolean muestraDescServicio;
 	private boolean muestraFechaServicio;
 	private boolean muestraFechaRegreso;
@@ -21,6 +22,7 @@ public class ConfiguracionTipoServicio extends Base{
 	private boolean muestraPrecioBase;
 	private boolean muestraDestino;
 	private boolean muestraComision;
+	private boolean muestraTarifaNegociada;
 
 	public ConfiguracionTipoServicio() {
 		// TODO Auto-generated constructor stub
@@ -178,6 +180,34 @@ public class ConfiguracionTipoServicio extends Base{
 	 */
 	public void setMuestraComision(boolean muestraComision) {
 		this.muestraComision = muestraComision;
+	}
+
+	/**
+	 * @return the muestraOperadora
+	 */
+	public boolean isMuestraOperadora() {
+		return muestraOperadora;
+	}
+
+	/**
+	 * @param muestraOperadora the muestraOperadora to set
+	 */
+	public void setMuestraOperadora(boolean muestraOperadora) {
+		this.muestraOperadora = muestraOperadora;
+	}
+
+	/**
+	 * @return the muestraTarifaNegociada
+	 */
+	public boolean isMuestraTarifaNegociada() {
+		return muestraTarifaNegociada;
+	}
+
+	/**
+	 * @param muestraTarifaNegociada the muestraTarifaNegociada to set
+	 */
+	public void setMuestraTarifaNegociada(boolean muestraTarifaNegociada) {
+		this.muestraTarifaNegociada = muestraTarifaNegociada;
 	}
 
 }

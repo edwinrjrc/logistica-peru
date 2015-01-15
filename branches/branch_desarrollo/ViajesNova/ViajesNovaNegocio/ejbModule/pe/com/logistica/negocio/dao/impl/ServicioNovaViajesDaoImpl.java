@@ -666,6 +666,7 @@ public class ServicioNovaViajesDaoImpl implements ServicioNovaViajesDao {
 				servicioAgencia2.getFormaPago().setNombre(UtilJdbc.obtenerCadena(rs, "nommediopago"));
 				servicioAgencia2.getEstadoPago().setCodigoEntero(UtilJdbc.obtenerNumero(rs, "idestadopago"));
 				servicioAgencia2.getEstadoPago().setNombre(UtilJdbc.obtenerCadena(rs, "nomestpago"));
+				servicioAgencia2.setServicioPagado(UtilJdbc.comparaNumero(servicioAgencia2.getEstadoPago().getCodigoEntero().intValue(),2));
 				servicioAgencia2.setNroCuotas(UtilJdbc.obtenerNumero(rs, "nrocuotas"));
 				servicioAgencia2.setTea(UtilJdbc.obtenerBigDecimal(rs, "tea"));
 				servicioAgencia2.setValorCuota(UtilJdbc.obtenerBigDecimal(rs, "valorcuota"));

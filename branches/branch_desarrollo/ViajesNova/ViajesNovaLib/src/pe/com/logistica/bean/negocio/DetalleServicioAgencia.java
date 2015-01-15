@@ -45,6 +45,8 @@ public class DetalleServicioAgencia extends BaseNegocio {
 	private List<DetalleServicioAgencia> serviciosHijos;
 	
 	private ConfiguracionTipoServicio configuracionTipoServicio;
+	
+	private boolean tarifaNegociada;
 	/**
 	 * 
 	 */
@@ -400,6 +402,20 @@ public class DetalleServicioAgencia extends BaseNegocio {
 	 */
 	public void setHotel(BaseVO hotel) {
 		this.hotel = hotel;
+	}
+
+	/**
+	 * @return the tarifaNegociada
+	 */
+	public boolean isTarifaNegociada() {
+		return tarifaNegociada;
+	}
+
+	/**
+	 * @param tarifaNegociada the tarifaNegociada to set
+	 */
+	public void setTarifaNegociada(boolean tarifaNegociada) {
+		this.tarifaNegociada = tarifaNegociada;
 	}
 
 }
