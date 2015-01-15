@@ -48,6 +48,7 @@ public class ServicioAgencia extends BaseNegocio{
 	private String observaciones;
 	
 	private boolean esProgramaNovios;
+	private boolean servicioPagado;
 	
 	private BaseVO aerolinea;
 
@@ -535,5 +536,23 @@ public class ServicioAgencia extends BaseNegocio{
 	 */
 	public void setMontoSaldoServicio(BigDecimal montoSaldoServicio) {
 		this.montoSaldoServicio = montoSaldoServicio;
+	}
+
+
+
+	/**
+	 * @return the servicioPagado
+	 */
+	public boolean isServicioPagado() {
+		return servicioPagado;
+	}
+
+
+
+	/**
+	 * @param servicioPagado the servicioPagado to set
+	 */
+	public void setServicioPagado(boolean servicioPagado) {
+		this.servicioPagado = servicioPagado;
 	}
 }

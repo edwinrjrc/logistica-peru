@@ -92,6 +92,7 @@
 							<h:panelGrid border="0" style="width:100%;text-align:left;">
 								<a4j:commandButton render="idGrFrRegpagos"
 									value="Registrar Pago"
+									rendered="#{!servicioAgenteMBean.servicioAgencia.servicioPagado}"
 									oncomplete="#{rich:component('idModalregpagos')}.show();"
 									action="#{servicioAgenteMBean.registrarNuevoPago()}"></a4j:commandButton>
 							</h:panelGrid>
