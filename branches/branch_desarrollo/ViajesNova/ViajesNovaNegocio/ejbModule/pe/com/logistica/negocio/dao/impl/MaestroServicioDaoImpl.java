@@ -503,6 +503,63 @@ public class MaestroServicioDaoImpl implements MaestroServicioDao {
 	}
 	
 	@Override
+	public MaestroServicio consultarMaestroServicio(int idMaestroServicio, Connection conn)
+			throws SQLException {
+		CallableStatement cs = null;
+		String sql = "{ ? = call negocio.fn_consultarservicio(?) }";
+		ResultSet rs = null;
+		MaestroServicio resultado = null;
+
+		try {
+			cs = conn.prepareCall(sql);
+			int i = 1;
+			cs.registerOutParameter(i++, Types.OTHER);
+			cs.setInt(i++, idMaestroServicio);
+			cs.execute();
+
+			rs = (ResultSet) cs.getObject(1);
+			if (rs.next()) {
+				resultado = new MaestroServicio();
+				resultado.setCodigoEntero(UtilJdbc.obtenerNumero(rs, "id"));
+				resultado.setNombre(UtilJdbc.obtenerCadena(rs, "nombre"));
+				resultado.setDescripcionCorta(UtilJdbc.obtenerCadena(rs, "desccorta"));
+				resultado.setDescripcion(UtilJdbc.obtenerCadena(rs, "desclarga"));
+				resultado.setRequiereFee(UtilJdbc.obtenerBoolean(rs, "requierefee"));
+				resultado.getServicioFee().setCodigoEntero(UtilJdbc.obtenerNumero(rs, "idmaeserfee"));
+				resultado.setPagaImpto(UtilJdbc.obtenerBoolean(rs, "pagaimpto"));
+				resultado.getServicioImpto().setCodigoEntero(UtilJdbc.obtenerNumero(rs, "idmaeserimpto"));
+				resultado.setCargaComision(UtilJdbc.obtenerBoolean(rs, "cargacomision"));
+				resultado.setEsImpuesto(UtilJdbc.obtenerBoolean(rs, "esimpuesto"));
+				resultado.setEsFee(UtilJdbc.obtenerBoolean(rs, "esfee"));
+				resultado.getParametroAsociado().setCodigoEntero(UtilJdbc.obtenerNumero(rs, "idparametroasociado"));
+				resultado.setVisible(UtilJdbc.obtenerBoolean(rs, "visible"));
+			}
+		} catch (SQLException e) {
+			throw new SQLException(e);
+		} finally {
+			try {
+				if (rs != null) {
+					rs.close();
+				}
+				if (cs != null) {
+					cs.close();
+				}
+			} catch (SQLException e) {
+				try {
+					if (conn != null) {
+						conn.close();
+					}
+					throw new SQLException(e);
+				} catch (SQLException e1) {
+					throw new SQLException(e1);
+				}
+			}
+		}
+
+		return resultado;
+	}
+	
+	@Override
 	public List<MaestroServicio> listarMaestroServiciosIgv() throws SQLException {
 		Connection conn = null;
 		CallableStatement cs = null;

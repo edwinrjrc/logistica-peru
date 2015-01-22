@@ -92,7 +92,7 @@
   <navigation-case>
    <from-outcome>irAdministrarConsolidador</from-outcome>
    <to-view-id>/paginas/negocio/consolidador/administrar.xhtml</to-view-id>
-   <redirect></redirect>
+   <redirect/>
   </navigation-case>
  </navigation-rule>
  <navigation-rule>
@@ -119,6 +119,14 @@
   <navigation-case>
    <from-outcome>irPaises</from-outcome>
    <to-view-id>/paginas/soporte/destino/pais/administrar.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
+ </navigation-rule>
+ <navigation-rule>
+  <from-view-id>/paginas/negocio/servicios/administrar.xhtml</from-view-id>
+  <navigation-case>
+   <from-outcome>irRegistroVentaServicio</from-outcome>
+   <to-view-id>/paginas/negocio/servicios/registroventaservicio2.xhtml</to-view-id>
    <redirect/>
   </navigation-case>
  </navigation-rule>

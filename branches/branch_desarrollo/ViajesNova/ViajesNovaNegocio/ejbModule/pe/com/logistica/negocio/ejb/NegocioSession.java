@@ -860,45 +860,83 @@ public class NegocioSession implements NegocioSessionRemote,
 
 	@Override
 	public DetalleServicioAgencia agregarServicioVenta(
-			DetalleServicioAgencia detalleServicio) throws SQLException,
+			DetalleServicioAgencia detalleServicio) throws ErrorRegistroDataException, SQLException,
 			Exception {
-		MaestroServicioDao maestroServicioDao = new MaestroServicioDaoImpl();
 		
-		detalleServicio.setTipoServicio(maestroServicioDao.consultarMaestroServicio(detalleServicio.getTipoServicio().getCodigoEntero()));
+		Connection conn = UtilConexion.obtenerConexion();
 		
-		BigDecimal comision = BigDecimal.ZERO;
-		BigDecimal totalVenta = BigDecimal.ZERO;
-		
-		if (StringUtils.isBlank(detalleServicio.getDescripcionServicio())){
-			detalleServicio.setDescripcionServicio(StringUtils.upperCase(detalleServicio.getTipoServicio().getNombre()));
-		}
-		
-		detalleServicio.setDescripcionServicio(StringUtils.upperCase(detalleServicio.getDescripcionServicio()));
-		
-		if (detalleServicio.getCantidad() == 0){
-			detalleServicio.setCantidad(1);
-		}
-		
-		if (detalleServicio.getPrecioUnitario()!= null){
-			BigDecimal total = detalleServicio.getPrecioUnitario().multiply(UtilParse.parseIntABigDecimal(detalleServicio.getCantidad())); 
-			totalVenta = totalVenta.add(total);
-		}
-		
-		if (detalleServicio.getServicioProveedor().getPorcentajeComision()!=null){
-			comision = detalleServicio.getServicioProveedor().getPorcentajeComision().multiply(totalVenta);
-			comision = comision.divide(BigDecimal.valueOf(100.0));
-		}
-				
-		if (detalleServicio.getServicioProveedor().getProveedor().getCodigoEntero() != null ){
-			Proveedor proveedor = consultarProveedor(detalleServicio.getServicioProveedor().getProveedor().getCodigoEntero().intValue());
-			detalleServicio.getServicioProveedor().setProveedor(proveedor);
-		}
-		
-		detalleServicio.setMontoComision(comision);
-		
-		detalleServicio.setCodigoCadena(String.valueOf(System.currentTimeMillis()));
+		try {
+			MaestroServicioDao maestroServicioDao = new MaestroServicioDaoImpl();
+			
+			ProveedorDao proveedorDao = new ProveedorDaoImpl();
+			
+			detalleServicio.setTipoServicio(maestroServicioDao.consultarMaestroServicio(detalleServicio.getTipoServicio().getCodigoEntero(), conn));
+			
+			// obtener nombre empresa proveedor
+			if (detalleServicio.getServicioProveedor().getProveedor().getCodigoEntero() != null && detalleServicio.getServicioProveedor().getProveedor().getCodigoEntero().intValue()!=0){
+				detalleServicio.getServicioProveedor().setProveedor(proveedorDao.consultarProveedor(detalleServicio.getServicioProveedor().getProveedor().getCodigoEntero(), conn));
+			}
+			
+			// obtener nombre aerolinea
+			if (detalleServicio.getAerolinea().getCodigoEntero() != null && detalleServicio.getAerolinea().getCodigoEntero().intValue()!=0){
+				detalleServicio.getAerolinea().setNombre(proveedorDao.consultarProveedor(detalleServicio.getAerolinea().getCodigoEntero(),conn).getNombreCompleto());
+			}
+						
+			// obtener nombre empresa transporte
+			if (detalleServicio.getEmpresaTransporte().getCodigoEntero() != null && detalleServicio.getEmpresaTransporte().getCodigoEntero().intValue()!=0){
+				detalleServicio.getEmpresaTransporte().setNombre(proveedorDao.consultarProveedor(detalleServicio.getEmpresaTransporte().getCodigoEntero(),conn).getNombreCompleto());
+			}
+			
+			// obtener nombre operador
+			if (detalleServicio.getOperadora().getCodigoEntero() != null && detalleServicio.getOperadora().getCodigoEntero().intValue() != 0){
+				detalleServicio.getOperadora().setNombre(proveedorDao.consultarProveedor(detalleServicio.getOperadora().getCodigoEntero(),conn).getNombreCompleto());
+			}
+			
+			// obtener nombre hotel
+			if (detalleServicio.getHotel().getCodigoEntero() != null && detalleServicio.getHotel().getCodigoEntero().intValue() != 0){
+				detalleServicio.getHotel().setNombre(proveedorDao.consultarProveedor(detalleServicio.getHotel().getCodigoEntero(),conn).getNombreCompleto());
+			}
+			
+			BigDecimal comision = BigDecimal.ZERO;
+			BigDecimal totalVenta = BigDecimal.ZERO;
+			
+			if (StringUtils.isBlank(detalleServicio.getDescripcionServicio())){
+				detalleServicio.setDescripcionServicio(StringUtils.upperCase(detalleServicio.getTipoServicio().getNombre()));
+			}
+			
+			detalleServicio.setDescripcionServicio(StringUtils.upperCase(detalleServicio.getDescripcionServicio()));
+			
+			if (detalleServicio.getCantidad() == 0){
+				detalleServicio.setCantidad(1);
+			}
+			
+			if (detalleServicio.getPrecioUnitario()!= null){
+				BigDecimal total = detalleServicio.getPrecioUnitario().multiply(UtilParse.parseIntABigDecimal(detalleServicio.getCantidad())); 
+				totalVenta = totalVenta.add(total);
+			}
+			
+			if (detalleServicio.getServicioProveedor().getPorcentajeComision()!=null){
+				comision = detalleServicio.getServicioProveedor().getPorcentajeComision().multiply(totalVenta);
+				comision = comision.divide(BigDecimal.valueOf(100.0));
+			}
+					
+			if (detalleServicio.getServicioProveedor().getProveedor().getCodigoEntero() != null ){
+				Proveedor proveedor = consultarProveedor(detalleServicio.getServicioProveedor().getProveedor().getCodigoEntero().intValue());
+				detalleServicio.getServicioProveedor().setProveedor(proveedor);
+			}
+			
+			detalleServicio.setMontoComision(comision);
+			
+			detalleServicio.setCodigoCadena(String.valueOf(System.currentTimeMillis()));
 
-		return detalleServicio;
+			return detalleServicio;
+		} catch (Exception e) {
+			throw new ErrorRegistroDataException("No se pudo agregar el servicio al listado", e);
+		} finally{
+			if (conn != null){
+				conn.close();
+			}
+		}
 	}
 
 	@Override

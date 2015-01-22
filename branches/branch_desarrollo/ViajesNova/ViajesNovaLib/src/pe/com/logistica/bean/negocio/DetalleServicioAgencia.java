@@ -27,6 +27,7 @@ public class DetalleServicioAgencia extends BaseNegocio {
 	private Destino origen;
 	private Destino destino;
 	private BaseVO aerolinea;
+	private BaseVO operadora;
 	private int dias;
 	private int noches;
 	private Date fechaServicio;
@@ -416,6 +417,23 @@ public class DetalleServicioAgencia extends BaseNegocio {
 	 */
 	public void setTarifaNegociada(boolean tarifaNegociada) {
 		this.tarifaNegociada = tarifaNegociada;
+	}
+
+	/**
+	 * @return the operadora
+	 */
+	public BaseVO getOperadora() {
+		if (operadora == null){
+			operadora = new BaseVO();
+		}
+		return operadora;
+	}
+
+	/**
+	 * @param operadora the operadora to set
+	 */
+	public void setOperadora(BaseVO operadora) {
+		this.operadora = operadora;
 	}
 
 }

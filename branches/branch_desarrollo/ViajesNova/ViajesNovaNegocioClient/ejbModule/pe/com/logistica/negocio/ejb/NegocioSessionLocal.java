@@ -77,7 +77,7 @@ public interface NegocioSessionLocal {
 			throws SQLException, Exception;
 
 	DetalleServicioAgencia agregarServicioVenta(
-			DetalleServicioAgencia detalleServicio) throws SQLException,
+			DetalleServicioAgencia detalleServicio) throws ErrorRegistroDataException, SQLException,
 			Exception;
 
 	public List<DetalleServicioAgencia> ordenarServiciosVenta(
