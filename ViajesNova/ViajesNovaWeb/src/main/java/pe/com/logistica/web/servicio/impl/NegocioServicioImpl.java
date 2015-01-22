@@ -166,7 +166,8 @@ public class NegocioServicioImpl implements NegocioServicio {
 	
 	@Override
 	public DetalleServicioAgencia agregarServicioVenta(DetalleServicioAgencia detalleServicio)
-			throws SQLException, Exception {
+			throws ErrorRegistroDataException, SQLException,
+			Exception {
 		return ejbSession.agregarServicioVenta(detalleServicio);
 	}
 	

@@ -3,6 +3,7 @@
  */
 package pe.com.logistica.negocio.dao;
 
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -39,6 +40,9 @@ public interface MaestroServicioDao {
 			throws SQLException, Exception;
 
 	List<MaestroServicio> listarMaestroServiciosAdm() throws SQLException;
+
+	MaestroServicio consultarMaestroServicio(int idMaestroServicio,
+			Connection conn) throws SQLException;
 	
 
 }

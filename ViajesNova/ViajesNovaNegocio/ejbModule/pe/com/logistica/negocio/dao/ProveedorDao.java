@@ -50,4 +50,7 @@ public interface ProveedorDao {
 
 	void actualizarProveedorTipo(Proveedor proveedor, Connection conexion)
 			throws SQLException;
+
+	Proveedor consultarProveedor(int idProveedor, Connection conn)
+			throws SQLException;
 }

@@ -274,6 +274,62 @@ public class ProveedorDaoImpl implements ProveedorDao {
 		
 		return resultado;
 	}
+	
+	@Override
+	public Proveedor consultarProveedor(int idProveedor, Connection conn) throws SQLException {
+		Proveedor resultado = null;
+		CallableStatement cs = null;
+		ResultSet rs = null;
+		String sql = "select * " +
+				" from negocio.vw_consultaproveedor where id = ?";
+
+		try {
+			cs = conn.prepareCall(sql);
+			cs.setInt(1, idProveedor);
+			rs = cs.executeQuery();
+			
+			if (rs.next()){
+				resultado = new Proveedor();
+				resultado.setCodigoEntero(UtilJdbc.obtenerNumero(rs, "id"));
+				resultado.setNombres(UtilJdbc.obtenerCadena(rs, "nombres"));
+				resultado.setRazonSocial(resultado.getNombres());
+				resultado.setApellidoPaterno(UtilJdbc.obtenerCadena(rs, "apellidopaterno"));
+				resultado.setApellidoMaterno(UtilJdbc.obtenerCadena(rs, "apellidomaterno"));
+				resultado.getGenero().setCodigoEntero(UtilJdbc.obtenerNumero(rs, "idgenero"));
+				resultado.getEstadoCivil().setCodigoEntero(UtilJdbc.obtenerNumero(rs, "idestadocivil"));
+				resultado.getDocumentoIdentidad().getTipoDocumento().setCodigoEntero(UtilJdbc.obtenerNumero(rs, "idtipodocumento"));
+				resultado.getDocumentoIdentidad().setNumeroDocumento(UtilJdbc.obtenerCadena(rs, "numerodocumento"));
+				resultado.getRubro().setCodigoEntero(UtilJdbc.obtenerNumero(rs, "idrubro"));
+				resultado.setUsuarioCreacion(UtilJdbc.obtenerCadena(rs, "usuariocreacion"));
+				resultado.setFechaCreacion(UtilJdbc.obtenerFecha(rs, "fechacreacion"));
+				resultado.setIpCreacion(UtilJdbc.obtenerCadena(rs, "ipcreacion"));
+				resultado.getTipoProveedor().setCodigoEntero(UtilJdbc.obtenerNumero(rs, "idtipoproveedor"));
+			}
+		} catch (SQLException e) {
+			resultado = null;
+			throw new SQLException(e);
+		} finally{
+			try {
+				if (rs != null){
+					rs.close();
+				}
+				if (cs != null){
+					cs.close();
+				}
+			} catch (SQLException e) {
+				try {
+					if (conn != null){
+						conn.close();
+					}
+					throw new SQLException(e);
+				} catch (SQLException e1) {
+					throw new SQLException(e);
+				}
+			}
+		}
+		
+		return resultado;
+	}
 
 	@Override
 	public Contacto consultarContacto(int idPersona) throws SQLException {

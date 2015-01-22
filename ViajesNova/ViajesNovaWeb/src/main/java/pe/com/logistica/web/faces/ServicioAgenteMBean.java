@@ -273,6 +273,7 @@ public class ServicioAgenteMBean extends BaseMBean {
 		}
 
 		this.getServicioAgencia().setFechaServicio(new Date());
+		
 	}
 
 	public void agregarServicio() {
@@ -292,6 +293,7 @@ public class ServicioAgenteMBean extends BaseMBean {
 						.agregarServicioVenta(getDetalleServicio());
 
 				detalleServicioAgregar = agregarServicioInvisible(detalleServicioAgregar);
+				
 				this.getListadoDetalleServicio().add(detalleServicioAgregar);
 				this.getListadoDetalleServicioTotal().add(
 						detalleServicioAgregar);
@@ -306,7 +308,11 @@ public class ServicioAgenteMBean extends BaseMBean {
 				this.setServicioFee(false);
 				this.setListadoEmpresas(null);
 			}
-
+		} catch (ErrorRegistroDataException e){
+			logger.error(e.getMessage(), e);
+			this.setShowModal(true);
+			this.setMensajeModal(e.getMessage());
+			this.setTipoModal(TIPO_MODAL_ERROR);
 		} catch (SQLException e) {
 			logger.error(e.getMessage(), e);
 			this.setShowModal(true);
@@ -970,6 +976,11 @@ public class ServicioAgenteMBean extends BaseMBean {
 			logger.error(ex.getMessage(), ex);
 		}
 	}
+	
+	public void seleccionarOperadora(){
+		
+	}
+	
 	public void registrarNuevoPago(){
 		this.setPagoServicio(null);
 	}
