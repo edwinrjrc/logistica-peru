@@ -164,7 +164,18 @@
   model-entity="JSFProcessGroup" persistent="true"/>
  <PROCESS-ITEM NAME="rules:#paginas#negocio#servicios#administrar.xhtml"
   PATH="/paginas/negocio/servicios/administrar.xhtml"
-  SHAPE="304,1393,0,0" model-entity="JSFProcessGroup" persistent="true"/>
+  SHAPE="304,1393,0,0" model-entity="JSFProcessGroup">
+  <PROCESS-ITEM
+   ID="rules:#paginas#negocio#servicios#administrar.xhtml:0" NAME="item"
+   PATH="/paginas/negocio/servicios/administrar.xhtml" model-entity="JSFProcessItem">
+   <PROCESS-ITEM-OUTPUT
+    ID="irRegistroVentaServicio::#paginas#negocio#servicios#registroventaservicio2.xhtml"
+    NAME="output"
+    PATH="/paginas/negocio/servicios/registroventaservicio2.xhtml"
+    TARGET="rules:#paginas#negocio#servicios#registroventaservicio2.xhtml"
+    TITLE="irRegistroVentaServicio" model-entity="JSFProcessItemOutput"/>
+  </PROCESS-ITEM>
+ </PROCESS-ITEM>
  <PROCESS-ITEM
   NAME="rules:#paginas#soporte#correomasivo#administrar.xhtml"
   PATH="/paginas/soporte/correomasivo/administrar.xhtml"
@@ -181,4 +192,8 @@
   NAME="rules:#paginas#negocio#consolidador#administrar.xhtml"
   PATH="/paginas/negocio/consolidador/administrar.xhtml"
   SHAPE="674,67,0,0" model-entity="JSFProcessGroup" persistent="true"/>
+ <PROCESS-ITEM
+  NAME="rules:#paginas#negocio#servicios#registroventaservicio2.xhtml"
+  PATH="/paginas/negocio/servicios/registroventaservicio2.xhtml"
+  SHAPE="777,1375,0,0" model-entity="JSFProcessGroup" persistent="true"/>
 </PROCESS>

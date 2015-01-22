@@ -70,7 +70,7 @@
 						</f:facet>
 					</h:panelGrid>
 
-					<h:panelGrid columns="1" border="0" style="width:100%;">
+					<h:panelGrid columns="1" border="0" style="width:100%;" id="idGrTabVenServicios">
 						<rich:dataTable var="row" id="idTabla" rows="10"
 							value="#{servicioAgenteMBean.listadoServicioAgencia}"
 							style="width:100%;">
@@ -80,6 +80,13 @@
 							</f:facet>
 							<rich:column>
 								<f:facet name="header">
+									<h:outputText value="Id" />
+								</f:facet>
+								<h:outputText value="#{row.codigoEntero}" />
+							</rich:column>
+							
+							<rich:column>
+								<f:facet name="header">
 									<h:outputText value="Cliente" />
 								</f:facet>
 								<h:outputText value="#{row.cliente.nombreCompleto}" />
@@ -87,17 +94,19 @@
 
 							<rich:column>
 								<f:facet name="header">
-									<h:outputText value="Destino" />
-								</f:facet>
-								<h:outputText value="#{row.destino.descripcion}" />
-							</rich:column>
-
-							<rich:column>
-								<f:facet name="header">
-									<h:outputText value="Fecha Servicio" />
+									<h:outputText value="Fecha Compra" />
 								</f:facet>
 								<h:outputText value="#{row.fechaServicio}">
 									<f:convertDateTime pattern="dd/MM/yyyy" />
+								</h:outputText>
+							</rich:column>
+							
+							<rich:column>
+								<f:facet name="header">
+									<h:outputText value="Monto Compra" />
+								</f:facet>
+								<h:outputText value="#{row.montoTotalServicios}">
+									<f:convertNumber pattern="$ #,###,##0.00" locale="en_US"/>
 								</h:outputText>
 							</rich:column>
 							
