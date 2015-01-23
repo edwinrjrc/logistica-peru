@@ -94,12 +94,16 @@
 								<h:panelGrid columns="1" border="0" cellpadding="0"
 									cellspacing="0">
 									<h:selectOneMenu id="idSelVende"
+										rendered="#{!servicioAgenteMBean.vendedor}"
 										value="#{servicioAgenteMBean.servicioAgencia.vendedor.codigoEntero}">
 										<f:selectItem itemLabel="-Seleccione el agente-" />
 										<f:selectItems value="#{catalogoMBean.catalogoVendedores}" />
 									</h:selectOneMenu>
 									<rich:message for="idSelVende" showDetail="false"
-										showSummary="true" ajaxRendered="true" />
+										showSummary="true" ajaxRendered="true"
+										rendered="#{!servicioAgenteMBean.vendedor}" />
+									<h:outputText rendered="#{servicioAgenteMBean.vendedor}"
+										value="#{servicioAgenteMBean.servicioAgencia.vendedor.nombre}" />
 								</h:panelGrid>
 
 								<h:outputText value="" />
@@ -615,7 +619,8 @@
 
 						<a4j:commandButton value="Salir"
 							action="#{servicioAgenteMBean.buscarServicioRegistrado}"
-							rendered="#{servicioAgenteMBean.transaccionExito}" render="idGrTabVenServicios"
+							rendered="#{servicioAgenteMBean.transaccionExito}"
+							render="idGrTabVenServicios"
 							oncomplete="#{rich:component('idModalfrventaservicio')}.hide(); return false;" />
 
 					</h:panelGrid>
