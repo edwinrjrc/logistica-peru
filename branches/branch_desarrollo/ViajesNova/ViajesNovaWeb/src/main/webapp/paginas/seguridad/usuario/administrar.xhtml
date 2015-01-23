@@ -6,7 +6,8 @@
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:a4j="http://richfaces.org/a4j"
 	xmlns:rich="http://richfaces.org/rich"
-	xmlns:my="http://java.sun.com/jsf/composite/components">
+	xmlns:my="http://java.sun.com/jsf/composite/components"
+	xmlns:fc="http://novaviajes.com.pe/funciones">
 
 <h:head></h:head>
 <ui:composition template="/templates/plantillainicio.xhtml">
@@ -89,7 +90,8 @@
 										<a4j:commandLink
 											action="#{usuarioMBean.consultarCambioClave(row.codigoEntero)}"
 											oncomplete="#{rich:component('idModalfrcambioclaveusuario')}.show()"
-											render="idGrFrcambioclaveusu, idNomModalCCusu">
+											render="idGrFrcambioclaveusu, idNomModalCCusu"
+											rendered="#{fc:tienePermiso('1',sessionScope.usuarioSession.rol.codigoEntero)}">
 											<h:graphicImage height="25" width="20"
 												url="/resources/img/llaves2.gif" style="border:0" />
 										</a4j:commandLink>

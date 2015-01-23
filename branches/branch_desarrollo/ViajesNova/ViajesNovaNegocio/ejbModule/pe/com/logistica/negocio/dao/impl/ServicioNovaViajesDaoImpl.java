@@ -941,7 +941,7 @@ public class ServicioNovaViajesDaoImpl implements ServicioNovaViajesDao {
 		Connection conn = null;
 		CallableStatement cs = null;
 		ResultSet rs = null;
-		String sql = "{ ? = call negocio.fn_consultarservicioventa(?,?,?)}";
+		String sql = "{ ? = call negocio.fn_consultarservicioventa(?,?,?,?)}";
 		List<ServicioAgencia> listaVentaServicios = null;
 		try {	
 			conn = UtilConexion.obtenerConexion();
@@ -965,6 +965,12 @@ public class ServicioNovaViajesDaoImpl implements ServicioNovaViajesDao {
 			}
 			else{
 				cs.setNull(i++, Types.VARCHAR);
+			}
+			if (servicioAgencia.getVendedor().getCodigoEntero()!=null && servicioAgencia.getVendedor().getCodigoEntero().intValue()!=0){
+				cs.setInt(i++, servicioAgencia.getVendedor().getCodigoEntero().intValue());
+			}
+			else{
+				cs.setNull(i++, Types.INTEGER);
 			}
 			cs.execute();
 			
