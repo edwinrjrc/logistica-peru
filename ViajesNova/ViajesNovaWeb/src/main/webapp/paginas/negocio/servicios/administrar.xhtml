@@ -70,7 +70,8 @@
 						</f:facet>
 					</h:panelGrid>
 
-					<h:panelGrid columns="1" border="0" style="width:100%;" id="idGrTabVenServicios">
+					<h:panelGrid columns="1" border="0" style="width:100%;"
+						id="idGrTabVenServicios">
 						<rich:dataTable var="row" id="idTabla" rows="10"
 							value="#{servicioAgenteMBean.listadoServicioAgencia}"
 							style="width:100%;">
@@ -84,7 +85,7 @@
 								</f:facet>
 								<h:outputText value="#{row.codigoEntero}" />
 							</rich:column>
-							
+
 							<rich:column>
 								<f:facet name="header">
 									<h:outputText value="Cliente" />
@@ -100,16 +101,16 @@
 									<f:convertDateTime pattern="dd/MM/yyyy" />
 								</h:outputText>
 							</rich:column>
-							
+
 							<rich:column>
 								<f:facet name="header">
 									<h:outputText value="Monto Compra" />
 								</f:facet>
 								<h:outputText value="#{row.montoTotalServicios}">
-									<f:convertNumber pattern="$ #,###,##0.00" locale="en_US"/>
+									<f:convertNumber pattern="$ #,###,##0.00" locale="en_US" />
 								</h:outputText>
 							</rich:column>
-							
+
 							<rich:column>
 								<f:facet name="header">
 									<h:outputText value="Forma Pago" />
@@ -125,7 +126,7 @@
 								</f:facet>
 								<h:outputText value="#{row.estadoPago.nombre}" />
 							</rich:column>
-							
+
 							<rich:column>
 								<f:facet name="header">
 									<h:outputText value="Estado Servicio" />
@@ -140,15 +141,16 @@
 								<a4j:commandLink
 									action="#{servicioAgenteMBean.consultarServicioRegistrado(row.codigoEntero)}"
 									render="idGrFrAdmpagos"
+									rendered="#{sessionScope.usuarioSession.rol.codigoEntero == 3}"
 									oncomplete="#{rich:component('idModaladmpagos')}.show();">
-									<h:graphicImage
-										url="/resources/img/iconopagos.gif" style="border:0" />
+									<h:graphicImage url="/resources/img/iconopagos.gif"
+										style="border:0" />
 								</a4j:commandLink>
 								<a4j:commandLink
 									action="#{servicioAgenteMBean.consultarServicioRegistrado(row.codigoEntero)}"
 									render="idGrRegisVenServicio, idNomModal"
 									oncomplete="#{rich:component('idModalfrventaservicio')}.show();"
-									rendered="#{!row.esProgramaNovios}">
+									rendered="#{!row.esProgramaNovios and sessionScope.usuarioSession.rol.codigoEntero == 3}">
 									<h:graphicImage height="25" width="20"
 										url="/resources/img/editar2.png" style="border:0" />
 								</a4j:commandLink>
@@ -156,8 +158,8 @@
 									action="#{servicioAgenteMBean.consultarServicioRegistrado(row.codigoEntero)}"
 									render="idGrVentaServicio"
 									oncomplete="#{rich:component('idModalventaservicio')}.show();">
-									<h:graphicImage
-										url="/resources/img/vericono.gif" style="border:0" />
+									<h:graphicImage url="/resources/img/vericono.gif"
+										style="border:0" />
 								</a4j:commandLink>
 							</rich:column>
 
@@ -189,19 +191,21 @@
 
 			</h:panelGrid>
 		</h:form>
-		
+
 		<ui:include src="/paginas/negocio/servicios/modal/registrarpago.xhtml" />
 		<ui:include src="/paginas/negocio/servicios/modal/admpagos.xhtml" />
-		<ui:include src="/paginas/negocio/servicios/modal/busquedaclientes.xhtml" />
-		<ui:include src="/paginas/negocio/servicios/modal/busquedaorigen.xhtml" />
-		<ui:include src="/paginas/negocio/servicios/modal/busquedadestino.xhtml" />
+		<ui:include
+			src="/paginas/negocio/servicios/modal/busquedaclientes.xhtml" />
+		<ui:include
+			src="/paginas/negocio/servicios/modal/busquedaorigen.xhtml" />
+		<ui:include
+			src="/paginas/negocio/servicios/modal/busquedadestino.xhtml" />
 		<ui:include
 			src="/paginas/negocio/servicios/registroventaservicio.xhtml"></ui:include>
 		<ui:include src="/resources/includes/includemensajenovios.xhtml">
 			<ui:param name="backBean" value="#{servicioAgenteMBean}" />
 		</ui:include>
-		<ui:include
-			src="/paginas/negocio/servicios/ventaserviciovista.xhtml"></ui:include>
+		<ui:include src="/paginas/negocio/servicios/ventaserviciovista.xhtml"></ui:include>
 		<script type="text/javascript">
 		mostrarModal('idformadmservicios');
 		</script>

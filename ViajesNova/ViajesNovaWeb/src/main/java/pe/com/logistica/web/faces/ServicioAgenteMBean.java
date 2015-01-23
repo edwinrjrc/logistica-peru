@@ -85,6 +85,7 @@ public class ServicioAgenteMBean extends BaseMBean {
 	private boolean servicioFee;
 	private boolean busquedaRealizada;
 	private boolean editarComision;
+	private boolean vendedor;
 
 	private ParametroServicio parametroServicio;
 	private NegocioServicio negocioServicio;
@@ -206,6 +207,12 @@ public class ServicioAgenteMBean extends BaseMBean {
 
 	public void buscarServicioRegistrado() {
 		try {
+			HttpSession session = obtenerSession(false);
+			Usuario usuario = (Usuario) session.getAttribute(USUARIO_SESSION);
+			if (Integer.valueOf(2).equals(usuario.getRol().getCodigoEntero())) {
+				getServicioAgenciaBusqueda().getVendedor().setCodigoEntero(usuario.getCodigoEntero());
+			}
+			
 			listadoServicioAgencia = this.negocioServicio
 					.listarVentaServicio(getServicioAgenciaBusqueda());
 
@@ -263,13 +270,15 @@ public class ServicioAgenteMBean extends BaseMBean {
 		this.setListadoDetalleServicio(null);
 		this.setListadoDetalleServicioTotal(null);
 
+		this.setVendedor(false);
 		HttpSession session = obtenerSession(false);
 		Usuario usuario = (Usuario) session.getAttribute(USUARIO_SESSION);
-		if (!Integer.valueOf(1).equals(usuario.getRol().getCodigoEntero())) {
+		if (!Integer.valueOf(2).equals(usuario.getRol().getCodigoEntero())) {
 			this.getServicioAgencia().getVendedor()
 					.setCodigoEntero(usuario.getCodigoEntero());
 			this.getServicioAgencia().getVendedor()
 					.setNombre(usuario.getNombreCompleto());
+			this.setVendedor(true);
 		}
 
 		this.getServicioAgencia().setFechaServicio(new Date());
@@ -1050,6 +1059,12 @@ public class ServicioAgenteMBean extends BaseMBean {
 	public List<ServicioAgencia> getListadoServicioAgencia() {
 		try {
 			if (!busquedaRealizada) {
+				HttpSession session = obtenerSession(false);
+				Usuario usuario = (Usuario) session.getAttribute(USUARIO_SESSION);
+				if (Integer.valueOf(2).equals(usuario.getRol().getCodigoEntero())) {
+					getServicioAgenciaBusqueda().getVendedor().setCodigoEntero(usuario.getCodigoEntero());
+				}
+				
 				listadoServicioAgencia = this.negocioServicio
 						.listarVentaServicio(getServicioAgenciaBusqueda());
 			}
@@ -1417,6 +1432,20 @@ public class ServicioAgenteMBean extends BaseMBean {
 	 */
 	public void setSaldoServicio(BigDecimal saldoServicio) {
 		this.saldoServicio = saldoServicio;
+	}
+
+	/**
+	 * @return the vendedor
+	 */
+	public boolean isVendedor() {
+		return vendedor;
+	}
+
+	/**
+	 * @param vendedor the vendedor to set
+	 */
+	public void setVendedor(boolean vendedor) {
+		this.vendedor = vendedor;
 	}
 
 }
