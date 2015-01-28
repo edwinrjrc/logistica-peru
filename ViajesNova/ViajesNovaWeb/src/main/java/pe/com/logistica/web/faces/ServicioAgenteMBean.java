@@ -209,7 +209,7 @@ public class ServicioAgenteMBean extends BaseMBean {
 		try {
 			HttpSession session = obtenerSession(false);
 			Usuario usuario = (Usuario) session.getAttribute(USUARIO_SESSION);
-			if (Integer.valueOf(2).equals(usuario.getRol().getCodigoEntero())) {
+			if (Integer.valueOf(2).equals(usuario.getRol().getCodigoEntero()) || Integer.valueOf(4).equals(usuario.getRol().getCodigoEntero())) {
 				getServicioAgenciaBusqueda().getVendedor().setCodigoEntero(usuario.getCodigoEntero());
 			}
 			
@@ -273,7 +273,7 @@ public class ServicioAgenteMBean extends BaseMBean {
 		this.setVendedor(false);
 		HttpSession session = obtenerSession(false);
 		Usuario usuario = (Usuario) session.getAttribute(USUARIO_SESSION);
-		if (!Integer.valueOf(2).equals(usuario.getRol().getCodigoEntero())) {
+		if (Integer.valueOf(2).equals(usuario.getRol().getCodigoEntero())) {
 			this.getServicioAgencia().getVendedor()
 					.setCodigoEntero(usuario.getCodigoEntero());
 			this.getServicioAgencia().getVendedor()
