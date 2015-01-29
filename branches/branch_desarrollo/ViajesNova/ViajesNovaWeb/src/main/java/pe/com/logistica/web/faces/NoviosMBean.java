@@ -26,19 +26,11 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import net.sf.jasperreports.engine.JREmptyDataSource;
-import net.sf.jasperreports.engine.JRException;
-import net.sf.jasperreports.engine.JasperFillManager;
-import net.sf.jasperreports.engine.JasperPrint;
-import net.sf.jasperreports.engine.export.JRPdfExporter;
-import net.sf.jasperreports.export.SimpleExporterInput;
-import net.sf.jasperreports.export.SimpleOutputStreamExporterOutput;
-import net.sf.jasperreports.export.SimplePdfExporterConfiguration;
-
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 
 import pe.com.logistica.bean.negocio.Cliente;
+import pe.com.logistica.bean.negocio.Destino;
 import pe.com.logistica.bean.negocio.DetalleServicioAgencia;
 import pe.com.logistica.bean.negocio.MaestroServicio;
 import pe.com.logistica.bean.negocio.Parametro;
@@ -50,8 +42,10 @@ import pe.com.logistica.negocio.exception.ErrorRegistroDataException;
 import pe.com.logistica.negocio.exception.ValidacionException;
 import pe.com.logistica.web.servicio.NegocioServicio;
 import pe.com.logistica.web.servicio.ParametroServicio;
+import pe.com.logistica.web.servicio.SoporteServicio;
 import pe.com.logistica.web.servicio.impl.NegocioServicioImpl;
 import pe.com.logistica.web.servicio.impl.ParametroServicioImpl;
+import pe.com.logistica.web.servicio.impl.SoporteServicioImpl;
 import pe.com.logistica.web.util.UtilWeb;
 
 /**
@@ -73,6 +67,8 @@ public class NoviosMBean extends BaseMBean {
 	private ProgramaNovios programaNoviosBusqueda;
 	private Cliente clienteBusqueda;
 	private ServicioNovios servicioNovios;
+	private Destino destinoBusqueda;
+	private Destino origenBusqueda;
 
 	private int tipoBusqueda;
 
@@ -87,12 +83,15 @@ public class NoviosMBean extends BaseMBean {
 	private List<Cliente> listadoInvitados;
 	private List<SelectItem> listadoEmpresas;
 	private List<ServicioProveedor> listaProveedores;
+	private List<Destino> listaDestinosBusqueda;
+	private List<Destino> listaOrigenesBusqueda;
 
 	private String generoCliente;
 
 	// private SoporteServicio soporteServicio;
 	private NegocioServicio negocioServicio;
 	private ParametroServicio parametroServicio;
+	private SoporteServicio soporteServicio;
 
 	/**
 	 * 
@@ -101,7 +100,7 @@ public class NoviosMBean extends BaseMBean {
 		try {
 			ServletContext servletContext = (ServletContext) FacesContext
 					.getCurrentInstance().getExternalContext().getContext();
-			// soporteServicio = new SoporteServicioImpl(servletContext);
+			soporteServicio = new SoporteServicioImpl(servletContext);
 			negocioServicio = new NegocioServicioImpl(servletContext);
 			parametroServicio = new ParametroServicioImpl(servletContext);
 		} catch (NamingException e) {
@@ -821,6 +820,22 @@ public class NoviosMBean extends BaseMBean {
 		}
 		return resultado;
 	}
+	
+	public void consultarDestinos() {
+		try {
+			this.setListaDestinosBusqueda(null);
+			this.setDestinoBusqueda(null);
+
+			List<Destino> listaDestinos = this.soporteServicio.listarDestinos();
+
+			this.setListaDestinosBusqueda(listaDestinos);
+			this.setListaOrigenesBusqueda(listaDestinos);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 
 	/**
 	 * @return the programaNovios
@@ -1097,6 +1112,62 @@ public class NoviosMBean extends BaseMBean {
 	 */
 	public void setEditarNovios(boolean editarNovios) {
 		this.editarNovios = editarNovios;
+	}
+
+	/**
+	 * @return the listaDestinosBusqueda
+	 */
+	public List<Destino> getListaDestinosBusqueda() {
+		return listaDestinosBusqueda;
+	}
+
+	/**
+	 * @param listaDestinosBusqueda the listaDestinosBusqueda to set
+	 */
+	public void setListaDestinosBusqueda(List<Destino> listaDestinosBusqueda) {
+		this.listaDestinosBusqueda = listaDestinosBusqueda;
+	}
+
+	/**
+	 * @return the listaOrigenesBusqueda
+	 */
+	public List<Destino> getListaOrigenesBusqueda() {
+		return listaOrigenesBusqueda;
+	}
+
+	/**
+	 * @param listaOrigenesBusqueda the listaOrigenesBusqueda to set
+	 */
+	public void setListaOrigenesBusqueda(List<Destino> listaOrigenesBusqueda) {
+		this.listaOrigenesBusqueda = listaOrigenesBusqueda;
+	}
+
+	/**
+	 * @return the destinoBusqueda
+	 */
+	public Destino getDestinoBusqueda() {
+		return destinoBusqueda;
+	}
+
+	/**
+	 * @param destinoBusqueda the destinoBusqueda to set
+	 */
+	public void setDestinoBusqueda(Destino destinoBusqueda) {
+		this.destinoBusqueda = destinoBusqueda;
+	}
+
+	/**
+	 * @return the origenBusqueda
+	 */
+	public Destino getOrigenBusqueda() {
+		return origenBusqueda;
+	}
+
+	/**
+	 * @param origenBusqueda the origenBusqueda to set
+	 */
+	public void setOrigenBusqueda(Destino origenBusqueda) {
+		this.origenBusqueda = origenBusqueda;
 	}
 
 }
