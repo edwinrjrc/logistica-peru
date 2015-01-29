@@ -517,86 +517,96 @@ public class ServicioAgenteMBean extends BaseMBean {
 	private boolean validarServicioVenta() {
 		boolean resultado = true;
 		String idFormulario = "idFormVentaServi";
-		if (!this.isServicioFee()) {
-			if (this.getDetalleServicio().getTipoServicio().getCodigoEntero() == null
-					|| this.getDetalleServicio().getTipoServicio()
-							.getCodigoEntero().intValue() == 0) {
-				this.agregarMensaje(idFormulario + ":idSelTipoServicio",
-						"Seleccione el tipo de servicio", "",
-						FacesMessage.SEVERITY_ERROR);
-				resultado = false;
-			}
-			if (StringUtils.isBlank(this.getDetalleServicio()
-					.getDescripcionServicio())) {
-				this.agregarMensaje(idFormulario + ":idDescServicio",
-						"Ingrese la descripcion del servicio", "",
-						FacesMessage.SEVERITY_ERROR);
-				resultado = false;
-			}
-			if (this.getDetalleServicio().getCantidad() == 0) {
-				this.agregarMensaje(idFormulario + ":idCantidad",
-						"Ingrese la cantidad", "", FacesMessage.SEVERITY_ERROR);
-				resultado = false;
-			}
-			if (this.getDetalleServicio().getPrecioUnitario() == null
-					|| this.getDetalleServicio().getPrecioUnitario()
-							.doubleValue() == 0.0) {
-				this.agregarMensaje(idFormulario + ":idPrecUnitario",
-						"Ingrese el precio base del servicio", "",
-						FacesMessage.SEVERITY_ERROR);
-				resultado = false;
-			}
-			if (this.getDetalleServicio().getFechaIda() == null) {
-				this.agregarMensaje(idFormulario + ":idFecServicio",
-						"Ingrese la fecha del servicio", "",
-						FacesMessage.SEVERITY_ERROR);
-				resultado = false;
-			}
-			if (UtilWeb.fecha1EsMayorIgualFecha2(this.getDetalleServicio()
-					.getFechaIda(), new Date())) {
-				this.agregarMensaje(
-						idFormulario + ":idFecServicio",
-						"La fecha del servicio no puede ser menor que la fecha de actual",
-						"", FacesMessage.SEVERITY_ERROR);
-				resultado = false;
-			} else if (this.getDetalleServicio().getFechaRegreso() != null
-					&& this.getDetalleServicio().getFechaIda()
-							.after(this.getDetalleServicio().getFechaRegreso())) {
-				this.agregarMensaje(
-						idFormulario + ":idFecServicio",
-						"La fecha del servicio no puede ser mayor que la fecha de regreso",
-						"", FacesMessage.SEVERITY_ERROR);
-				resultado = false;
-			}
-			if (this.getDetalleServicio().getServicioProveedor().getProveedor()
-					.getCodigoEntero() == null
-					|| this.getDetalleServicio().getServicioProveedor()
-							.getProveedor().getCodigoEntero().intValue() == 0) {
-				this.agregarMensaje(idFormulario + ":idSelEmpServicio",
-						"Seleccione el proveedor del servicio", "",
-						FacesMessage.SEVERITY_ERROR);
-				resultado = false;
-			}
-			/*
-			 * if
-			 * (this.getDetalleServicio().getConsolidador().getCodigoEntero()==
-			 * null ||
-			 * this.getDetalleServicio().getConsolidador().getCodigoEntero
-			 * ().intValue()==0){ this.agregarMensaje(idFormulario +
-			 * ":idSelconsolidador", "Seleccione el consolidador del servicio",
-			 * "", FacesMessage.SEVERITY_ERROR); resultado = false; }
-			 */
-		} else {
-			if (this.getDetalleServicio().getPrecioUnitario() == null) {
-				this.agregarMensaje(idFormulario + ":idMonFee",
-						"Ingrese el Monto Fee", "", FacesMessage.SEVERITY_ERROR);
-				resultado = false;
-			}
-			if (this.getDetalleServicio().getFechaIda() == null) {
-				this.agregarMensaje(idFormulario + ":idFecServicioFee",
-						"Ingrese la fecha del servicio", "",
-						FacesMessage.SEVERITY_ERROR);
-				resultado = false;
+		if (this.getDetalleServicio().getTipoServicio().getCodigoEntero() == null
+				|| this.getDetalleServicio().getTipoServicio()
+						.getCodigoEntero().intValue() == 0) {
+			this.agregarMensaje(idFormulario + ":idSelTipoServicio",
+					"Seleccione el tipo de servicio", "",
+					FacesMessage.SEVERITY_ERROR);
+			resultado = false;
+		}
+		else {
+			if (!this.isServicioFee()) {
+				if (this.getDetalleServicio().getTipoServicio().getCodigoEntero() == null
+						|| this.getDetalleServicio().getTipoServicio()
+								.getCodigoEntero().intValue() == 0) {
+					this.agregarMensaje(idFormulario + ":idSelTipoServicio",
+							"Seleccione el tipo de servicio", "",
+							FacesMessage.SEVERITY_ERROR);
+					resultado = false;
+				}
+				if (StringUtils.isBlank(this.getDetalleServicio()
+						.getDescripcionServicio())) {
+					this.agregarMensaje(idFormulario + ":idDescServicio",
+							"Ingrese la descripcion del servicio", "",
+							FacesMessage.SEVERITY_ERROR);
+					resultado = false;
+				}
+				if (this.getDetalleServicio().getCantidad() == 0) {
+					this.agregarMensaje(idFormulario + ":idCantidad",
+							"Ingrese la cantidad", "", FacesMessage.SEVERITY_ERROR);
+					resultado = false;
+				}
+				if (this.getDetalleServicio().getPrecioUnitario() == null
+						|| this.getDetalleServicio().getPrecioUnitario()
+								.doubleValue() == 0.0) {
+					this.agregarMensaje(idFormulario + ":idPrecUnitario",
+							"Ingrese el precio base del servicio", "",
+							FacesMessage.SEVERITY_ERROR);
+					resultado = false;
+				}
+				if (this.getDetalleServicio().getFechaIda() == null) {
+					this.agregarMensaje(idFormulario + ":idFecServicio",
+							"Ingrese la fecha del servicio", "",
+							FacesMessage.SEVERITY_ERROR);
+					resultado = false;
+				}
+				if (UtilWeb.fecha1EsMayorIgualFecha2(this.getDetalleServicio()
+						.getFechaIda(), new Date())) {
+					this.agregarMensaje(
+							idFormulario + ":idFecServicio",
+							"La fecha del servicio no puede ser menor que la fecha de actual",
+							"", FacesMessage.SEVERITY_ERROR);
+					resultado = false;
+				} else if (this.getDetalleServicio().getFechaRegreso() != null
+						&& this.getDetalleServicio().getFechaIda()
+								.after(this.getDetalleServicio().getFechaRegreso())) {
+					this.agregarMensaje(
+							idFormulario + ":idFecServicio",
+							"La fecha del servicio no puede ser mayor que la fecha de regreso",
+							"", FacesMessage.SEVERITY_ERROR);
+					resultado = false;
+				}
+				if (this.getDetalleServicio().getServicioProveedor().getProveedor()
+						.getCodigoEntero() == null
+						|| this.getDetalleServicio().getServicioProveedor()
+								.getProveedor().getCodigoEntero().intValue() == 0) {
+					this.agregarMensaje(idFormulario + ":idSelEmpServicio",
+							"Seleccione el proveedor del servicio", "",
+							FacesMessage.SEVERITY_ERROR);
+					resultado = false;
+				}
+				/*
+				 * if
+				 * (this.getDetalleServicio().getConsolidador().getCodigoEntero()==
+				 * null ||
+				 * this.getDetalleServicio().getConsolidador().getCodigoEntero
+				 * ().intValue()==0){ this.agregarMensaje(idFormulario +
+				 * ":idSelconsolidador", "Seleccione el consolidador del servicio",
+				 * "", FacesMessage.SEVERITY_ERROR); resultado = false; }
+				 */
+			} else {
+				if (this.getDetalleServicio().getPrecioUnitario() == null) {
+					this.agregarMensaje(idFormulario + ":idMonFee",
+							"Ingrese el Monto Fee", "", FacesMessage.SEVERITY_ERROR);
+					resultado = false;
+				}
+				if (this.getDetalleServicio().getFechaIda() == null) {
+					this.agregarMensaje(idFormulario + ":idFecServicioFee",
+							"Ingrese la fecha del servicio", "",
+							FacesMessage.SEVERITY_ERROR);
+					resultado = false;
+				}
 			}
 		}
 
@@ -1061,7 +1071,7 @@ public class ServicioAgenteMBean extends BaseMBean {
 			if (!busquedaRealizada) {
 				HttpSession session = obtenerSession(false);
 				Usuario usuario = (Usuario) session.getAttribute(USUARIO_SESSION);
-				if (Integer.valueOf(2).equals(usuario.getRol().getCodigoEntero())) {
+				if (Integer.valueOf(2).equals(usuario.getRol().getCodigoEntero()) || Integer.valueOf(4).equals(usuario.getRol().getCodigoEntero())) {
 					getServicioAgenciaBusqueda().getVendedor().setCodigoEntero(usuario.getCodigoEntero());
 				}
 				
