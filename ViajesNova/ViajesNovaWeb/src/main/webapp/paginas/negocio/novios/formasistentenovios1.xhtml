@@ -207,18 +207,6 @@
 								<h:outputText value="" />
 
 							</h:panelGrid>
-							<h:panelGrid columns="4" border="0" cellpadding="0"
-								cellspacing="0" style="width:100%;"
-								columnClasses="col1fil1formulario,col2fil1formulario,col3fil1formulario,col4fil1formulario"
-								rendered="#{sessionScope.usuarioSession.rol.codigoEntero != 1}">
-								<h:outputText value="Agente Viajes" />
-								<h:outputText
-									value="#{noviosMBean.programaNovios.vendedor.nombre}" />
-
-								<h:outputText value="" />
-								<h:outputText value="" />
-
-							</h:panelGrid>
 							<h:panelGrid columns="1" border="0" cellpadding="0"
 								cellspacing="0" style="width:100%;">
 								<h:outputText value="Observaciones" />
@@ -302,7 +290,7 @@
 										border="0">
 										<h:selectOneMenu id="idSelTipoServicio"
 											value="#{noviosMBean.servicioNovios.tipoServicio.codigoEntero}"
-											valueChangeListener="#{servicioAgenteMBean.cargarDatosValores}">
+											valueChangeListener="#{noviosMBean.cargarDatosValores}">
 											<f:selectItem itemLabel="-Seleccione-" />
 											<f:selectItems value="#{catalogoMBean.catalogoTipoServicio}" />
 											<a4j:ajax event="valueChange"
@@ -354,16 +342,16 @@
 									</h:panelGrid>
 
 									<h:outputText value="Destino"
-										rendered="#{servicioAgenteMBean.detalleServicio.configuracionTipoServicio.muestraDestino}" />
+										rendered="#{noviosMBean.servicioNovios.configuracionTipoServicio.muestraDestino}" />
 									<h:panelGrid columns="2" border="0" cellpadding="0"
-										cellspacing="0" id="idSelDestino"
+										cellspacing="0" id="idSelDestino2"
 										columnClasses="col1iconoformulario,col1iconoformulario"
-										rendered="#{servicioAgenteMBean.detalleServicio.configuracionTipoServicio.muestraDestino}">
+										rendered="#{noviosMBean.servicioNovios.configuracionTipoServicio.muestraDestino}">
 										<h:inputText readonly="true"
-											value="#{servicioAgenteMBean.detalleServicio.destino.descripcion}"
+											value="#{noviosMBean.servicioNovios.destino.descripcion}"
 											id="idTxtDestino" />
 										<a4j:commandLink
-											action="#{servicioAgenteMBean.consultarDestinos()}"
+											action="#{noviosMBean.consultarDestinos()}"
 											oncomplete="#{rich:component('idModalbusqdestino')}.show();"
 											render="idGrFrBusqDestinos">
 											<h:graphicImage style="border:0px;"
@@ -380,14 +368,14 @@
 									columnClasses="col1fil1formulario,col2fil1formulario,col3fil1formulario,col4fil1formulario">
 
 									<h:outputText value="Aerolinea"
-										rendered="#{servicioAgenteMBean.detalleServicio.configuracionTipoServicio.muestraAerolinea}" />
+										rendered="#{noviosMBean.servicioNovios.configuracionTipoServicio.muestraAerolinea}" />
 									<h:panelGrid columns="1" border="0" cellpadding="0"
 										cellspacing="0"
 										columnClasses="col1iconoformulario,col1iconoformulario"
-										rendered="#{servicioAgenteMBean.detalleServicio.configuracionTipoServicio.muestraAerolinea}">
+										rendered="#{noviosMBean.servicioNovios.configuracionTipoServicio.muestraAerolinea}">
 										<h:selectOneMenu id="idSelAerolinea"
-											value="#{servicioAgenteMBean.detalleServicio.aerolinea.codigoEntero}"
-											valueChangeListener="#{servicioAgenteMBean.seleccionarAerolinea}">
+											value="#{noviosMBean.servicioNovios.aerolinea.codigoEntero}"
+											valueChangeListener="#{noviosMBean.seleccionarAerolinea}">
 											<f:selectItem itemLabel="-Seleccione la aerolinea-" />
 											<f:selectItems value="#{catalogoMBean.catalogoAerolineas}" />
 											<a4j:ajax event="valueChange" render="idGrComiPro" />
@@ -397,13 +385,13 @@
 									</h:panelGrid>
 
 									<h:outputText value="Hotel"
-										rendered="#{servicioAgenteMBean.detalleServicio.configuracionTipoServicio.muestraHotel}" />
+										rendered="#{noviosMBean.servicioNovios.configuracionTipoServicio.muestraHotel}" />
 									<h:panelGrid columns="1" border="0" cellpadding="0"
 										cellspacing="0"
 										columnClasses="col1iconoformulario,col1iconoformulario"
-										rendered="#{servicioAgenteMBean.detalleServicio.configuracionTipoServicio.muestraHotel}">
+										rendered="#{noviosMBean.servicioNovios.configuracionTipoServicio.muestraHotel}">
 										<h:selectOneMenu id="idSelHotel"
-											value="#{servicioAgenteMBean.detalleServicio.hotel.codigoEntero}"
+											value="#{noviosMBean.servicioNovios.hotel.codigoEntero}"
 											valueChangeListener="#{servicioAgenteMBean.seleccionarHotel}">
 											<f:selectItem itemLabel="-Seleccione el hotel-" />
 											<f:selectItems value="#{catalogoMBean.catalogoHoteles}" />
@@ -414,14 +402,14 @@
 									</h:panelGrid>
 
 									<h:outputText value="Operadora"
-										rendered="#{servicioAgenteMBean.detalleServicio.configuracionTipoServicio.muestraOperadora}" />
+										rendered="#{noviosMBean.servicioNovios.configuracionTipoServicio.muestraOperadora}" />
 									<h:panelGrid columns="1" border="0" cellpadding="0"
 										cellspacing="0"
 										columnClasses="col1iconoformulario,col1iconoformulario"
-										rendered="#{servicioAgenteMBean.detalleServicio.configuracionTipoServicio.muestraOperadora}">
+										rendered="#{noviosMBean.servicioNovios.configuracionTipoServicio.muestraOperadora}">
 										<h:selectOneMenu id="idSelOperadora"
-											value="#{servicioAgenteMBean.detalleServicio.operadora.codigoEntero}"
-											valueChangeListener="#{servicioAgenteMBean.seleccionarOperadora}">
+											value="#{noviosMBean.servicioNovios.operadora.codigoEntero}"
+											valueChangeListener="#{noviosMBean.seleccionarOperadora}">
 											<f:selectItem itemLabel="-Seleccione el Operadora-" />
 											<f:selectItems value="#{catalogoMBean.catalogoOperador}" />
 											<a4j:ajax event="valueChange" render="idGrComiPro" />
@@ -437,12 +425,12 @@
 								<h:panelGrid columns="2" cellpadding="0" cellspacing="0"
 									border="0" style="width:100%;"
 									columnClasses="col1fil2formulario,col2fil2formulario"
-									rendered="#{servicioAgenteMBean.detalleServicio.configuracionTipoServicio.muestraDescServicio}">
+									rendered="#{noviosMBean.servicioNovios.configuracionTipoServicio.muestraDescServicio}">
 									<h:outputText value="Descripcion Servicio" />
 									<h:panelGrid columns="1" cellpadding="0" cellspacing="0"
 										border="0">
 										<h:inputTextarea id="idDescServicio"
-											value="#{servicioAgenteMBean.detalleServicio.descripcionServicio}"
+											value="#{noviosMBean.servicioNovios.descripcionServicio}"
 											rows="5" cols="90" />
 										<rich:message for="idDescServicio" showDetail="false"
 											showSummary="true" ajaxRendered="true" />
@@ -452,12 +440,12 @@
 									border="0" style="width:100%;"
 									columnClasses="col1fil1formulario,col2fil1formulario,col3fil1formulario,col4fil1formulario">
 									<h:outputText value="Cantidad"
-										rendered="#{servicioAgenteMBean.detalleServicio.configuracionTipoServicio.muestraCantidad}" />
+										rendered="#{noviosMBean.servicioNovios.configuracionTipoServicio.muestraCantidad}" />
 									<h:panelGrid columns="1" cellpadding="0" cellspacing="0"
 										border="0"
-										rendered="#{servicioAgenteMBean.detalleServicio.configuracionTipoServicio.muestraCantidad}">
+										rendered="#{noviosMBean.servicioNovios.configuracionTipoServicio.muestraCantidad}">
 										<h:inputText id="idCantidad"
-											value="#{servicioAgenteMBean.detalleServicio.cantidad}"
+											value="#{noviosMBean.servicioNovios.cantidad}"
 											size="5" maxlength="2" style="text-align:right;"
 											onkeypress="return js_soloEntero(event)" />
 										<rich:message for="idCantidad" showDetail="false"
@@ -465,14 +453,14 @@
 									</h:panelGrid>
 
 									<h:outputText value="Precio Base"
-										rendered="#{servicioAgenteMBean.detalleServicio.configuracionTipoServicio.muestraPrecioBase}" />
+										rendered="#{noviosMBean.servicioNovios.configuracionTipoServicio.muestraPrecioBase}" />
 									<h:panelGrid columns="1" cellpadding="0" cellspacing="0"
 										border="0"
-										rendered="#{servicioAgenteMBean.detalleServicio.configuracionTipoServicio.muestraPrecioBase}">
+										rendered="#{noviosMBean.servicioNovios.configuracionTipoServicio.muestraPrecioBase}">
 										<h:inputText id="idPrecUnitario"
 											onkeypress="return js_soloDecimal(event)"
 											style="text-align:right;"
-											value="#{servicioAgenteMBean.detalleServicio.precioUnitario}"
+											value="#{noviosMBean.servicioNovios.precioUnitario}"
 											size="10" maxlength="8" />
 										<rich:message for="idPrecUnitario" showDetail="false"
 											showSummary="true" ajaxRendered="true" />
@@ -482,21 +470,21 @@
 								<h:panelGrid columns="4" cellpadding="0" cellspacing="0"
 									border="0" style="width:100%;"
 									columnClasses="col1fil1formulario,col2fil1formulario,col3fil1formulario,col4fil1formulario"
-									rendered="#{servicioAgenteMBean.detalleServicio.configuracionTipoServicio.muestraFechaServicio}">
+									rendered="#{noviosMBean.servicioNovios.configuracionTipoServicio.muestraFechaServicio}">
 
 									<h:outputText value="Fecha Servicio" />
 									<h:panelGrid columns="1" cellpadding="0" cellspacing="0"
 										border="0">
 										<rich:calendar datePattern="dd/MM/yyyy" id="idFecServicio"
-											value="#{servicioAgenteMBean.detalleServicio.fechaIda}"></rich:calendar>
+											value="#{noviosMBean.servicioNovios.fechaIda}"></rich:calendar>
 										<rich:message for="idFecServicio" showDetail="false"
 											showSummary="true" ajaxRendered="true"></rich:message>
 									</h:panelGrid>
 									<h:outputText value="Fecha Regreso"
-										rendered="#{servicioAgenteMBean.detalleServicio.configuracionTipoServicio.muestraFechaRegreso}" />
+										rendered="#{noviosMBean.servicioNovios.configuracionTipoServicio.muestraFechaRegreso}" />
 									<rich:calendar datePattern="dd/MM/yyyy"
-										rendered="#{servicioAgenteMBean.detalleServicio.configuracionTipoServicio.muestraFechaRegreso}"
-										value="#{servicioAgenteMBean.detalleServicio.fechaRegreso}"></rich:calendar>
+										rendered="#{noviosMBean.servicioNovios.configuracionTipoServicio.muestraFechaRegreso}"
+										value="#{noviosMBean.servicioNovios.fechaRegreso}"></rich:calendar>
 								</h:panelGrid>
 
 								<h:panelGrid columns="4" cellpadding="0" cellspacing="0"
@@ -504,32 +492,32 @@
 									columnClasses="col1fil1formulario,col2fil1formulario,col3fil1formulario,col4fil1formulario">
 
 									<h:outputText value="Comision"
-										rendered="#{servicioAgenteMBean.detalleServicio.servicioProveedor.proveedor.codigoEntero != null and
-									            servicioAgenteMBean.detalleServicio.servicioProveedor.proveedor.codigoEntero != 0 and 
-									           servicioAgenteMBean.detalleServicio.configuracionTipoServicio.muestraComision}" />
+										rendered="#{noviosMBean.servicioNovios.servicioProveedor.proveedor.codigoEntero != null and
+									            noviosMBean.servicioNovios.servicioProveedor.proveedor.codigoEntero != 0 and 
+									           noviosMBean.servicioNovios.configuracionTipoServicio.muestraComision}" />
 									<h:panelGrid columns="2" cellpadding="0" cellspacing="0"
 										border="0" id="idGrTxComi"
-										rendered="#{servicioAgenteMBean.detalleServicio.servicioProveedor.proveedor.codigoEntero != null and
-									            servicioAgenteMBean.detalleServicio.servicioProveedor.proveedor.codigoEntero != 0 and 
-									           servicioAgenteMBean.detalleServicio.configuracionTipoServicio.muestraComision}">
+										rendered="#{noviosMBean.servicioNovios.servicioProveedor.proveedor.codigoEntero != null and
+									            noviosMBean.servicioNovios.servicioProveedor.proveedor.codigoEntero != 0 and 
+									           noviosMBean.servicioNovios.configuracionTipoServicio.muestraComision}">
 										<h:inputText onkeypress="return js_soloDecimal(event)"
 											maxlength="2" size="5"
 											readonly="#{!servicioAgenteMBean.editarComision}"
-											value="#{servicioAgenteMBean.detalleServicio.servicioProveedor.porcentajeComision}" />
+											value="#{noviosMBean.servicioNovios.servicioProveedor.porcentajeComision}" />
 										<h:selectBooleanCheckbox
 											value="#{servicioAgenteMBean.editarComision}">
 											<a4j:ajax event="valueChange" render="idGrTxComi" />
 										</h:selectBooleanCheckbox>
 									</h:panelGrid>
 									<h:outputText value="Tarifa Negociada"
-										rendered="#{servicioAgenteMBean.detalleServicio.servicioProveedor.proveedor.codigoEntero != null and
-									            servicioAgenteMBean.detalleServicio.servicioProveedor.proveedor.codigoEntero != 0 and 
-									           servicioAgenteMBean.detalleServicio.configuracionTipoServicio.muestraComision}" />
+										rendered="#{noviosMBean.servicioNovios.servicioProveedor.proveedor.codigoEntero != null and
+									            noviosMBean.servicioNovios.servicioProveedor.proveedor.codigoEntero != 0 and 
+									           noviosMBean.servicioNovios.configuracionTipoServicio.muestraComision}" />
 									<h:selectBooleanCheckbox
-										rendered="#{servicioAgenteMBean.detalleServicio.servicioProveedor.proveedor.codigoEntero != null and
-									            servicioAgenteMBean.detalleServicio.servicioProveedor.proveedor.codigoEntero != 0 and 
-									           servicioAgenteMBean.detalleServicio.configuracionTipoServicio.muestraComision}"
-										value="#{servicioAgenteMBean.detalleServicio.tarifaNegociada}">
+										rendered="#{noviosMBean.servicioNovios.servicioProveedor.proveedor.codigoEntero != null and
+									            noviosMBean.servicioNovios.servicioProveedor.proveedor.codigoEntero != 0 and 
+									           noviosMBean.servicioNovios.configuracionTipoServicio.muestraComision}"
+										value="#{noviosMBean.servicioNovios.tarifaNegociada}">
 									</h:selectBooleanCheckbox>
 								</h:panelGrid>
 
@@ -538,7 +526,7 @@
 										style="width:100%;text-align:center;" columns="1">
 										<a4j:commandButton value="Agregar"
 											render="idServVenta,idFrNuevServicio,idTotalesServicios,idfrcred,idPanelHidden,idPanelBotones,idModalcorrecto,idModalError"
-											action="#{servicioAgenteMBean.agregarServicio()}"
+											action="#{noviosMBean.agregarServicio()}"
 											oncomplete="mostrarModal('idformadmservicios')" />
 									</h:panelGrid>
 								</f:facet>
@@ -546,7 +534,7 @@
 							<h:panelGrid columns="1" cellpadding="0" cellspacing="0"
 								border="0" style="width:100%;">
 								<rich:dataTable id="idServVenta" var="row"
-									value="#{servicioAgenteMBean.listadoDetalleServicio}"
+									value="#{noviosMBean.listadoDetalleServicio}"
 									style="width:100%;">
 									<rich:column style="text-align:right;width: 4%;">
 										<f:facet name="header">
