@@ -134,7 +134,7 @@
 								</f:facet>
 								<h:outputText value="#{row.fechaViaje}" />
 							</rich:column>
-							
+
 							<rich:column>
 								<f:facet name="header">
 									<h:outputText value="Opciones" />
@@ -177,6 +177,10 @@
 				</h:panelGrid>
 			</h:panelGrid>
 		</h:form>
+		<ui:include
+			src="/paginas/negocio/novios/modal/busquedaorigen.xhtml" />
+		<ui:include
+			src="/paginas/negocio/novios/modal/busquedadestino.xhtml" />
 		<ui:include src="/paginas/negocio/novios/modal/busquedanovios.xhtml" />
 		<ui:include src="/paginas/negocio/novios/formasistentenovios1.xhtml" />
 		<ui:include src="/resources/includes/includemensajenovios.xhtml">
