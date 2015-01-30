@@ -7,15 +7,15 @@
 	xmlns:a4j="http://richfaces.org/a4j"
 	xmlns:rich="http://richfaces.org/rich">
 
-	<rich:popupPanel id="idModalbusqdestino" modal="true" width="800"
+	<rich:popupPanel id="idModalbusqorigen" modal="true" width="800"
 		height="500">
 
 		<f:facet name="header">
-			<h:outputText value="Busqueda Destinos" />
+			<h:outputText value="Busqueda Origen" />
 		</f:facet>
 		<f:facet name="controls">
 			<h:outputLink value="#" style="border:0"
-				onclick="#{rich:component('idModalbusqdestino')}.hide(); return false;">
+				onclick="#{rich:component('idModalbusqorigen')}.hide(); return false;">
 				<h:graphicImage height="18" width="18"
 					url="/resources/img/close.png" style="border:0" />
 			</h:outputLink>
@@ -23,21 +23,21 @@
 
 		<h:form>
 			<h:panelGrid cellpadding="0" cellspacing="0" border="0" columns="1"
-				style="width:100%;" id="idGrFrBusqDestinos">
+				style="width:100%;" id="idGrFrBusqOrigen">
 				<h:panelGrid cellpadding="0" cellspacing="0" border="0" columns="1"
 					style="width:100%;">
 					<f:facet name="header">
 						<h:panelGrid cellpadding="0" cellspacing="0" border="0"
 							columns="1" style="width:100%;text-align:left;">
-							<h:outputText value="Busqueda Destinos" />
+							<h:outputText value="Busqueda Origen" />
 							<hr />
 						</h:panelGrid>
 					</f:facet>
 					<h:panelGrid cellpadding="0" cellspacing="0" border="0" columns="2"
 						style="width:100%;"
 						columnClasses="col1fil2formulario,col2fil2formulario">
-						<h:outputText value="Destino" />
-						<h:inputText value="#{noviosMBean.destinoBusqueda.descripcion}" maxlength="100"
+						<h:outputText value="Origen" />
+						<h:inputText value="#{noviosMBean.origenBusqueda.descripcion}" maxlength="100"
 							size="100" styleClass="estilocampo1" />
 					</h:panelGrid>
 
@@ -45,7 +45,7 @@
 						<h:panelGrid cellpadding="0" cellspacing="0" border="0"
 							columns="1" style="width:100%; text-align:center;">
 							<a4j:commandButton value="Buscar"
-								action="#{noviosMBean.buscarDestino()}" />
+								action="#{noviosMBean.buscarOrigen()}" />
 						</h:panelGrid>
 					</f:facet>
 				</h:panelGrid>
@@ -59,10 +59,10 @@
 							<hr />
 						</h:panelGrid>
 					</f:facet>
-					<rich:dataTable id="idTablaDestinos" var="row" rows="10"
-						value="#{noviosMBean.listaDestinosBusqueda}" style="width:100%;">
+					<rich:dataTable id="idTablaOrigens" var="row" rows="10"
+						value="#{noviosMBean.listaOrigenesBusqueda}" style="width:100%;">
 						<f:facet name="noData">
-							<h:outputText value="No se encontraron clientes" />
+							<h:outputText value="No se encontraron Origenes" />
 						</f:facet>
 						<rich:column style="width:30%;">
 							<f:facet name="header">
@@ -93,7 +93,7 @@
 						<f:facet name="footer">
 							<h:panelGrid cellpadding="0" cellspacing="0" border="0"
 								columns="1" style="width:100%;">
-								<rich:dataScroller for="idTablaDestinos" boundaryControls="auto" />
+								<rich:dataScroller for="idTablaOrigens" boundaryControls="auto" />
 							</h:panelGrid>
 						</f:facet>
 					</rich:dataTable>
@@ -103,9 +103,9 @@
 						style="height: 50px; width:100%;text-align:center;">
 
 						<a4j:commandButton value="Seleccionar"
-							action="#{noviosMBean.seleccionarDestino()}"
-							render="idSelDestino, idGrComiPro"
-							oncomplete="#{rich:component('idModalbusqdestino')}.hide(); return false;" />
+							action="#{noviosMBean.seleccionarOrigen()}"
+							render="idSelOrigen"
+							oncomplete="#{rich:component('idModalbusqorigen')}.hide(); return false;" />
 					</h:panelGrid>
 				</f:facet>
 			</h:panelGrid>
