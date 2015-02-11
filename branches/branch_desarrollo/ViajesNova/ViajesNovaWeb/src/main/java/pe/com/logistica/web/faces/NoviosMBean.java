@@ -10,6 +10,7 @@ import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -29,6 +30,7 @@ import javax.servlet.http.HttpSession;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 
+import pe.com.logistica.bean.base.BaseVO;
 import pe.com.logistica.bean.negocio.Cliente;
 import pe.com.logistica.bean.negocio.Destino;
 import pe.com.logistica.bean.negocio.DetalleServicioAgencia;
@@ -38,6 +40,7 @@ import pe.com.logistica.bean.negocio.ProgramaNovios;
 import pe.com.logistica.bean.negocio.ServicioNovios;
 import pe.com.logistica.bean.negocio.ServicioProveedor;
 import pe.com.logistica.bean.negocio.Usuario;
+import pe.com.logistica.negocio.exception.ErrorConsultaDataException;
 import pe.com.logistica.negocio.exception.ErrorRegistroDataException;
 import pe.com.logistica.negocio.exception.ValidacionException;
 import pe.com.logistica.web.servicio.NegocioServicio;
@@ -76,6 +79,7 @@ public class NoviosMBean extends BaseMBean {
 	private boolean editarNovios;
 	private boolean registroExito;
 	private boolean servicioFee;
+	private boolean editarComision;
 
 	private List<ProgramaNovios> listadoNovios;
 	private List<DetalleServicioAgencia> listadoDetalleServicio;
@@ -348,7 +352,7 @@ public class NoviosMBean extends BaseMBean {
 	}
 
 	private boolean validarNuevoNovios() throws ValidacionException,
-			ErrorRegistroDataException {
+			ErrorRegistroDataException, SQLException, Exception {
 		boolean resultado = true;
 		String idFormulario = "idFormNovios";
 		if (this.getProgramaNovios().getNovia() == null
@@ -438,37 +442,45 @@ public class NoviosMBean extends BaseMBean {
 			} else {
 
 				validarServicios();
-				/*
-				 * Parametro param =
-				 * this.parametroServicio.consultarParametro(UtilWeb
-				 * .obtenerEnteroPropertieMaestro( "codigoParametroFee",
-				 * "aplicacionDatos")); boolean servicioFee = false; for
-				 * (DetalleServicioAgencia detalleServicio :
-				 * this.getServicioAgencia().getListaDetalleServicio()){ if
-				 * (detalleServicio
-				 * .getTipoServicio().getCodigoEntero().toString(
-				 * ).equals(param.getValor())){ servicioFee = true; break; } }
-				 * 
-				 * if (!servicioFee){ throw new
-				 * ErrorRegistroDataException("No se agrego el Fee de Venta"); }
-				 */
+				
+				validarFee();
 			}
 		}
 
 		return resultado;
 	}
 
-	private void validarServicios() throws ErrorRegistroDataException {
+	private void validarServicios() throws ErrorRegistroDataException,
+	SQLException, Exception {
 
 		for (DetalleServicioAgencia detalle : this.getListadoDetalleServicio()) {
-			if (detalle.getTipoServicio().isRequiereFee()) {
-				validarFee();
+
+			List<BaseVO> listaDependientes = this.negocioServicio
+					.consultaServiciosDependientes(detalle.getTipoServicio()
+							.getCodigoEntero());
+
+			for (BaseVO baseVO : listaDependientes) {
+				if (!estaEnListaServicios(baseVO)) {
+					throw new ErrorRegistroDataException("No se agrego "
+							+ baseVO.getNombre());
+				}
 			}
-			if (detalle.getTipoServicio().isPagaImpto()) {
-				validarImpto();
+
+		}
+
+	}
+	
+	private boolean estaEnListaServicios(BaseVO baseVO) {
+		boolean resultado = false;
+
+		for (DetalleServicioAgencia detalle : this.getListadoDetalleServicio()) {
+			if (detalle.getTipoServicio().getCodigoEntero().intValue() == baseVO
+					.getCodigoEntero().intValue()) {
+				resultado = true;
 			}
 		}
 
+		return resultado;
 	}
 
 	private void validarImpto() throws ErrorRegistroDataException {
@@ -682,23 +694,29 @@ public class NoviosMBean extends BaseMBean {
 
 	public void agregarServicio() {
 		try {
-			if (validarServicioAgregar()) {
+			if (validarServicioVenta()) {
 				HttpSession session = obtenerSession(false);
 				Usuario usuario = (Usuario) session
 						.getAttribute("usuarioSession");
 				getServicioNovios().setUsuarioCreacion(usuario.getUsuario());
-				getServicioNovios()
-						.setUsuarioModificacion(usuario.getUsuario());
 				getServicioNovios().setIpCreacion(
 						obtenerRequest().getRemoteAddr());
-				getServicioNovios().setIpModificacion(
-						obtenerRequest().getRemoteAddr());
 
-				this.getListadoDetalleServicio().add(
-						this.negocioServicio
-								.agregarServicioNovios(getServicioNovios()));
+				getServicioNovios().getServicioProveedor().setEditoComision(
+						this.isEditarComision());
+
+				DetalleServicioAgencia detalleServicioAgregar = negocioServicio
+						.agregarServicioVenta(getServicioNovios());
+
+				detalleServicioAgregar = agregarServicioInvisible(detalleServicioAgregar);
+				
+				this.getListadoDetalleServicio().add(detalleServicioAgregar);
+				this.getListadoDetalleServicioTotal().add(
+						detalleServicioAgregar);
+
 				this.setListadoDetalleServicio(negocioServicio
 						.ordenarServiciosVenta(getListadoDetalleServicio()));
+
 				this.setServicioNovios(null);
 
 				calcularTotales();
@@ -706,23 +724,149 @@ public class NoviosMBean extends BaseMBean {
 				this.setServicioFee(false);
 				this.setListadoEmpresas(null);
 			}
+		} catch (ErrorRegistroDataException e){
+			logger.error(e.getMessage(), e);
+			this.setShowModal(true);
+			this.setMensajeModal(e.getMessage());
+			this.setTipoModal(TIPO_MODAL_ERROR);
 		} catch (SQLException e) {
+			logger.error(e.getMessage(), e);
 			this.setShowModal(true);
 			this.setMensajeModal(e.getMessage());
 			this.setTipoModal(TIPO_MODAL_ERROR);
-			logger.error(e.getMessage(), e);
 		} catch (Exception e) {
+			logger.error(e.getMessage(), e);
 			this.setShowModal(true);
 			this.setMensajeModal(e.getMessage());
 			this.setTipoModal(TIPO_MODAL_ERROR);
-			logger.error(e.getMessage(), e);
 		}
+	}
+	
+	private boolean validarServicioVenta() {
+		boolean resultado = true;
+		String idFormulario = "idFormNovios";
+		if (this.getServicioNovios().getTipoServicio().getCodigoEntero() == null
+				|| this.getServicioNovios().getTipoServicio()
+						.getCodigoEntero().intValue() == 0) {
+			this.agregarMensaje(idFormulario + ":idSelTipoServicio",
+					"Seleccione el tipo de servicio", "",
+					FacesMessage.SEVERITY_ERROR);
+			resultado = false;
+		}
+		else {
+			if (!this.isServicioFee()) {
+				if (this.getServicioNovios().getTipoServicio().getCodigoEntero() == null
+						|| this.getServicioNovios().getTipoServicio()
+								.getCodigoEntero().intValue() == 0) {
+					this.agregarMensaje(idFormulario + ":idSelTipoServicio",
+							"Seleccione el tipo de servicio", "",
+							FacesMessage.SEVERITY_ERROR);
+					resultado = false;
+				}
+				if (StringUtils.isBlank(this.getServicioNovios()
+						.getDescripcionServicio())) {
+					this.agregarMensaje(idFormulario + ":idDescServicio",
+							"Ingrese la descripcion del servicio", "",
+							FacesMessage.SEVERITY_ERROR);
+					resultado = false;
+				}
+				if (this.getServicioNovios().getCantidad() == 0) {
+					this.agregarMensaje(idFormulario + ":idCantidad",
+							"Ingrese la cantidad", "", FacesMessage.SEVERITY_ERROR);
+					resultado = false;
+				}
+				if (this.getServicioNovios().getPrecioUnitario() == null
+						|| this.getServicioNovios().getPrecioUnitario()
+								.doubleValue() == 0.0) {
+					this.agregarMensaje(idFormulario + ":idPrecUnitario",
+							"Ingrese el precio base del servicio", "",
+							FacesMessage.SEVERITY_ERROR);
+					resultado = false;
+				}
+				if (this.getServicioNovios().getFechaIda() == null) {
+					this.agregarMensaje(idFormulario + ":idFecServicio",
+							"Ingrese la fecha del servicio", "",
+							FacesMessage.SEVERITY_ERROR);
+					resultado = false;
+				}
+				else if (UtilWeb.fecha1EsMayorIgualFecha2(this.getServicioNovios()
+						.getFechaIda(), new Date())) {
+					this.agregarMensaje(
+							idFormulario + ":idFecServicio",
+							"La fecha del servicio no puede ser menor que la fecha de actual",
+							"", FacesMessage.SEVERITY_ERROR);
+					resultado = false;
+				} else if (this.getServicioNovios().getFechaRegreso() != null
+						&& this.getServicioNovios().getFechaIda()
+								.after(this.getServicioNovios().getFechaRegreso())) {
+					this.agregarMensaje(
+							idFormulario + ":idFecServicio",
+							"La fecha del servicio no puede ser mayor que la fecha de regreso",
+							"", FacesMessage.SEVERITY_ERROR);
+					resultado = false;
+				}
+				if (this.getServicioNovios().getServicioProveedor().getProveedor()
+						.getCodigoEntero() == null
+						|| this.getServicioNovios().getServicioProveedor()
+								.getProveedor().getCodigoEntero().intValue() == 0) {
+					this.agregarMensaje(idFormulario + ":idSelEmpServicio",
+							"Seleccione el proveedor del servicio", "",
+							FacesMessage.SEVERITY_ERROR);
+					resultado = false;
+				}
+			} else {
+				if (this.getServicioNovios().getPrecioUnitario() == null) {
+					this.agregarMensaje(idFormulario + ":idMonFee",
+							"Ingrese el Monto Fee", "", FacesMessage.SEVERITY_ERROR);
+					resultado = false;
+				}
+				if (this.getServicioNovios().getFechaIda() == null) {
+					this.agregarMensaje(idFormulario + ":idFecServicioFee",
+							"Ingrese la fecha del servicio", "",
+							FacesMessage.SEVERITY_ERROR);
+					resultado = false;
+				}
+			}
+		}
+
+		return resultado;
+	}
+	
+	private DetalleServicioAgencia agregarServicioInvisible(
+			DetalleServicioAgencia detalleServicio2)
+			throws ErrorConsultaDataException, Exception {
+		List<DetalleServicioAgencia> lista = negocioServicio
+				.agregarServicioVentaInvisible(detalleServicio2);
+		HttpSession session = obtenerSession(false);
+		Usuario usuario = (Usuario) session.getAttribute("usuarioSession");
+		for (DetalleServicioAgencia detalleServicioAgencia : lista) {
+			detalleServicioAgencia.setUsuarioCreacion(usuario.getUsuario());
+			detalleServicioAgencia.setUsuarioModificacion(usuario.getUsuario());
+			detalleServicioAgencia.setIpCreacion(obtenerRequest()
+					.getRemoteAddr());
+			detalleServicioAgencia.setIpModificacion(obtenerRequest()
+					.getRemoteAddr());
+		}
+		detalleServicio2.setServiciosHijos(lista);
+
+		return detalleServicio2;
 	}
 
 	public void eliminarServicio(ServicioNovios servicioNovios) {
 		try {
 			this.getListadoDetalleServicio().remove(servicioNovios);
 
+			calcularTotales();
+			
+			for (int i = 0; i < listadoDetalleServicioTotal.size(); i++) {
+				DetalleServicioAgencia detalle = listadoDetalleServicioTotal
+						.get(i);
+				if (servicioNovios.getCodigoCadena().equals(
+						detalle.getCodigoCadena())) {
+					this.listadoDetalleServicioTotal.remove(i);
+				}
+			}
+			
 			calcularTotales();
 		} catch (Exception e) {
 			this.setShowModal(true);
@@ -736,31 +880,45 @@ public class NoviosMBean extends BaseMBean {
 		BigDecimal montoTotal = BigDecimal.ZERO;
 		BigDecimal montoComision = BigDecimal.ZERO;
 		BigDecimal montoFee = BigDecimal.ZERO;
+		BigDecimal montoIgv = BigDecimal.ZERO;
 		try {
 
-			Parametro param = this.parametroServicio.consultarParametro(UtilWeb
-					.obtenerEnteroPropertieMaestro("codigoParametroFee",
-							"aplicacionDatos"));
+			/*
+			 * Parametro param =
+			 * this.parametroServicio.consultarParametro(UtilWeb
+			 * .obtenerEnteroPropertieMaestro( "codigoParametroFee",
+			 * "aplicacionDatos"));
+			 */
 
 			for (DetalleServicioAgencia detalleServicio : this
-					.getListadoDetalleServicio()) {
+					.getListadoDetalleServicioTotal()) {
 				montoTotal = montoTotal.add(detalleServicio.getTotalServicio());
 				montoComision = montoComision.add(detalleServicio
 						.getMontoComision());
+				for (DetalleServicioAgencia detalleServicio2 : detalleServicio
+						.getServiciosHijos()) {
+					montoIgv = montoIgv.add(detalleServicio2.getMontoIGV());
+				}
 
-				if (detalleServicio.getTipoServicio().getCodigoEntero()
-						.toString().equals(param.getValor())) {
+				if (detalleServicio.getTipoServicio().getCodigoEntero() != null
+						&& detalleServicio.getTipoServicio().isEsFee()) {
 					montoFee = montoFee.add(detalleServicio.getTotalServicio());
 				}
+
 			}
+
+			montoTotal = montoTotal.add(montoIgv);
 
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
 			montoTotal = BigDecimal.ZERO;
 		}
+
+		this.getProgramaNovios().setMontoTotalServicios(montoTotal);
 		this.getProgramaNovios().setMontoTotalServiciosPrograma(montoTotal);
 		this.getProgramaNovios().setMontoTotalComision(montoComision);
 		this.getProgramaNovios().setMontoTotalFee(montoFee);
+		this.getProgramaNovios().setMontoTotalIGV(montoIgv);
 	}
 
 	private boolean validarServicioAgregar() {
@@ -906,6 +1064,9 @@ public class NoviosMBean extends BaseMBean {
 						getListadoEmpresas().add(si);
 					}
 				}
+			}
+			else {
+				this.getServicioNovios().setConfiguracionTipoServicio(null);
 			}
 		} catch (SQLException ex) {
 			logger.error(ex.getMessage(), ex);
@@ -1290,6 +1451,9 @@ public class NoviosMBean extends BaseMBean {
 	 * @return the destinoBusqueda
 	 */
 	public Destino getDestinoBusqueda() {
+		if (destinoBusqueda == null){
+			destinoBusqueda = new Destino();
+		}
 		return destinoBusqueda;
 	}
 
@@ -1305,6 +1469,9 @@ public class NoviosMBean extends BaseMBean {
 	 * @return the origenBusqueda
 	 */
 	public Destino getOrigenBusqueda() {
+		if (origenBusqueda == null){
+			origenBusqueda = new Destino();
+		}
 		return origenBusqueda;
 	}
 
@@ -1320,6 +1487,9 @@ public class NoviosMBean extends BaseMBean {
 	 * @return the listadoDetalleServicio
 	 */
 	public List<DetalleServicioAgencia> getListadoDetalleServicio() {
+		if (listadoDetalleServicio == null){
+			listadoDetalleServicio = new ArrayList<DetalleServicioAgencia>();
+		}
 		return listadoDetalleServicio;
 	}
 
@@ -1336,6 +1506,9 @@ public class NoviosMBean extends BaseMBean {
 	 * @return the listadoDetalleServicioTotal
 	 */
 	public List<DetalleServicioAgencia> getListadoDetalleServicioTotal() {
+		if (listadoDetalleServicioTotal == null){
+			listadoDetalleServicioTotal = new ArrayList<DetalleServicioAgencia>();
+		}
 		return listadoDetalleServicioTotal;
 	}
 
@@ -1346,6 +1519,20 @@ public class NoviosMBean extends BaseMBean {
 	public void setListadoDetalleServicioTotal(
 			List<DetalleServicioAgencia> listadoDetalleServicioTotal) {
 		this.listadoDetalleServicioTotal = listadoDetalleServicioTotal;
+	}
+
+	/**
+	 * @return the editarComision
+	 */
+	public boolean isEditarComision() {
+		return editarComision;
+	}
+
+	/**
+	 * @param editarComision the editarComision to set
+	 */
+	public void setEditarComision(boolean editarComision) {
+		this.editarComision = editarComision;
 	}
 
 }
