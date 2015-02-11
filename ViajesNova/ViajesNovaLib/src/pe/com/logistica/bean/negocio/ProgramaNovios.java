@@ -42,7 +42,37 @@ public class ProgramaNovios extends BaseNegocio {
 	private BigDecimal montoTotalServiciosPrograma;
 	private BigDecimal montoTotalComision;
 	private BigDecimal montoTotalFee;
+	private BigDecimal montoTotalServicios;
+	private BigDecimal montoTotalIGV;
 	
+	/**
+	 * @return the montoTotalServicios
+	 */
+	public BigDecimal getMontoTotalServicios() {
+		return montoTotalServicios;
+	}
+
+	/**
+	 * @param montoTotalServicios the montoTotalServicios to set
+	 */
+	public void setMontoTotalServicios(BigDecimal montoTotalServicios) {
+		this.montoTotalServicios = montoTotalServicios;
+	}
+
+	/**
+	 * @return the montoTotalIGV
+	 */
+	public BigDecimal getMontoTotalIGV() {
+		return montoTotalIGV;
+	}
+
+	/**
+	 * @param montoTotalIGV the montoTotalIGV to set
+	 */
+	public void setMontoTotalIGV(BigDecimal montoTotalIGV) {
+		this.montoTotalIGV = montoTotalIGV;
+	}
+
 	private BaseVO vendedor;
 	
 	private Integer idServicio;

@@ -600,7 +600,7 @@
 									</rich:column>
 									<rich:column style="text-align:center;width: 1%;">
 										<a4j:commandLink
-											action="#{servicioAgenteMBean.eliminarServicio(row)}"
+											action="#{noviosMBean.eliminarServicio(row)}"
 											render="idServVenta,idFrNuevServicio,idTotalesServicios,idfrcred">
 											<h:graphicImage style="border:0px;"
 												value="#{facesContext.externalContext.requestContextPath}/../resources/img/tacho.gif" />
@@ -615,19 +615,19 @@
 									columnClasses="col1RSPN,col2RSPN">
 									<h:outputText value="Total Comision" />
 									<h:outputText
-										value="#{servicioAgenteMBean.servicioAgencia.montoTotalComision}">
+										value="#{noviosMBean.programaNovios.montoTotalComision}">
 										<f:convertNumber pattern="###,##0.00" locale="en_US" />
 									</h:outputText>
 
 									<h:outputText value="Total IGV" />
 									<h:outputText
-										value="#{servicioAgenteMBean.servicioAgencia.montoTotalIGV}">
+										value="#{noviosMBean.programaNovios.montoTotalIGV}">
 										<f:convertNumber pattern="###,##0.00" locale="en_US" />
 									</h:outputText>
 
 									<h:outputText value="Total Servicios" />
 									<h:outputText
-										value="#{servicioAgenteMBean.servicioAgencia.montoTotalServicios}">
+										value="#{noviosMBean.programaNovios.montoTotalServicios}">
 										<f:convertNumber pattern="###,##0.00" locale="en_US" />
 									</h:outputText>
 								</h:panelGrid>
