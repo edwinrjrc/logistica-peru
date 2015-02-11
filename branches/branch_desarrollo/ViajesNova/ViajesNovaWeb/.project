@@ -3,6 +3,7 @@
 	<name>ViajesNovaWeb</name>
 	<comment></comment>
 	<projects>
+		<project>FacilLogger</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

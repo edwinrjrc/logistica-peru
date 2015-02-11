@@ -740,6 +740,7 @@ public class NegocioSession implements NegocioSessionRemote,
 			servicioAgencia.setMontoTotalComision(programaNovios.getMontoTotalComision());
 			servicioAgencia.setMontoTotalServicios(programaNovios.getMontoTotalServiciosPrograma());
 			servicioAgencia.setMontoTotalFee(programaNovios.getMontoTotalFee());
+			servicioAgencia.setMontoTotalIGV(programaNovios.getMontoTotalIGV());
 			servicioAgencia.setUsuarioCreacion(programaNovios.getUsuarioCreacion());
 			servicioAgencia.setIpCreacion(programaNovios.getIpCreacion());
 			servicioAgencia.setUsuarioModificacion(programaNovios.getUsuarioModificacion());
@@ -820,42 +821,83 @@ public class NegocioSession implements NegocioSessionRemote,
 	}
 
 	@Override
-	public ServicioNovios agregarServicio(ServicioNovios servicioNovios)
+	public ServicioNovios agregarServicio(ServicioNovios detalleServicio)
 			throws SQLException, Exception {
-		MaestroServicioDao maestroServicioDao = new MaestroServicioDaoImpl();
 		
-		servicioNovios.setTipoServicio(maestroServicioDao.consultarMaestroServicio(servicioNovios.getTipoServicio().getCodigoEntero()));
-		BigDecimal comision = BigDecimal.ZERO;
-		BigDecimal totalVenta = BigDecimal.ZERO;
+		Connection conn = UtilConexion.obtenerConexion();
 		
-		if (StringUtils.isBlank(servicioNovios.getDescripcionServicio())){
-			servicioNovios.setDescripcionServicio(StringUtils.upperCase(servicioNovios.getTipoServicio().getNombre()));
-		}
-		
-		servicioNovios.setDescripcionServicio(StringUtils.upperCase(servicioNovios.getDescripcionServicio()));
-		
-		if (servicioNovios.getCantidad() == 0){
-			servicioNovios.setCantidad(1);
-		}
-		
-		if (servicioNovios.getPrecioUnitario()!= null){
-			BigDecimal total = servicioNovios.getPrecioUnitario().multiply(UtilParse.parseIntABigDecimal(servicioNovios.getCantidad())); 
-			totalVenta = totalVenta.add(total);
-		}
-		
-		if (servicioNovios.getServicioProveedor().getPorcentajeComision()!=null){
-			comision = servicioNovios.getServicioProveedor().getPorcentajeComision().multiply(totalVenta);
-			comision = comision.divide(BigDecimal.valueOf(100.0));
-		}
-				
-		if (servicioNovios.getServicioProveedor().getProveedor().getCodigoEntero() != null ){
-			Proveedor proveedor = consultarProveedor(servicioNovios.getServicioProveedor().getProveedor().getCodigoEntero().intValue());
-			servicioNovios.getServicioProveedor().setProveedor(proveedor);
-		}
-		
-		servicioNovios.setMontoComision(comision);
+		try {
+			MaestroServicioDao maestroServicioDao = new MaestroServicioDaoImpl();
+			
+			ProveedorDao proveedorDao = new ProveedorDaoImpl();
+			
+			detalleServicio.setTipoServicio(maestroServicioDao.consultarMaestroServicio(detalleServicio.getTipoServicio().getCodigoEntero(), conn));
+			
+			// obtener nombre empresa proveedor
+			if (detalleServicio.getServicioProveedor().getProveedor().getCodigoEntero() != null && detalleServicio.getServicioProveedor().getProveedor().getCodigoEntero().intValue()!=0){
+				detalleServicio.getServicioProveedor().setProveedor(proveedorDao.consultarProveedor(detalleServicio.getServicioProveedor().getProveedor().getCodigoEntero(), conn));
+			}
+			
+			// obtener nombre aerolinea
+			if (detalleServicio.getAerolinea().getCodigoEntero() != null && detalleServicio.getAerolinea().getCodigoEntero().intValue()!=0){
+				detalleServicio.getAerolinea().setNombre(proveedorDao.consultarProveedor(detalleServicio.getAerolinea().getCodigoEntero(),conn).getNombreCompleto());
+			}
+						
+			// obtener nombre empresa transporte
+			if (detalleServicio.getEmpresaTransporte().getCodigoEntero() != null && detalleServicio.getEmpresaTransporte().getCodigoEntero().intValue()!=0){
+				detalleServicio.getEmpresaTransporte().setNombre(proveedorDao.consultarProveedor(detalleServicio.getEmpresaTransporte().getCodigoEntero(),conn).getNombreCompleto());
+			}
+			
+			// obtener nombre operador
+			if (detalleServicio.getOperadora().getCodigoEntero() != null && detalleServicio.getOperadora().getCodigoEntero().intValue() != 0){
+				detalleServicio.getOperadora().setNombre(proveedorDao.consultarProveedor(detalleServicio.getOperadora().getCodigoEntero(),conn).getNombreCompleto());
+			}
+			
+			// obtener nombre hotel
+			if (detalleServicio.getHotel().getCodigoEntero() != null && detalleServicio.getHotel().getCodigoEntero().intValue() != 0){
+				detalleServicio.getHotel().setNombre(proveedorDao.consultarProveedor(detalleServicio.getHotel().getCodigoEntero(),conn).getNombreCompleto());
+			}
+			
+			BigDecimal comision = BigDecimal.ZERO;
+			BigDecimal totalVenta = BigDecimal.ZERO;
+			
+			if (StringUtils.isBlank(detalleServicio.getDescripcionServicio())){
+				detalleServicio.setDescripcionServicio(StringUtils.upperCase(detalleServicio.getTipoServicio().getNombre()));
+			}
+			
+			detalleServicio.setDescripcionServicio(StringUtils.upperCase(detalleServicio.getDescripcionServicio()));
+			
+			if (detalleServicio.getCantidad() == 0){
+				detalleServicio.setCantidad(1);
+			}
+			
+			if (detalleServicio.getPrecioUnitario()!= null){
+				BigDecimal total = detalleServicio.getPrecioUnitario().multiply(UtilParse.parseIntABigDecimal(detalleServicio.getCantidad())); 
+				totalVenta = totalVenta.add(total);
+			}
+			
+			if (detalleServicio.getServicioProveedor().getPorcentajeComision()!=null){
+				comision = detalleServicio.getServicioProveedor().getPorcentajeComision().multiply(totalVenta);
+				comision = comision.divide(BigDecimal.valueOf(100.0));
+			}
+					
+			if (detalleServicio.getServicioProveedor().getProveedor().getCodigoEntero() != null ){
+				Proveedor proveedor = consultarProveedor(detalleServicio.getServicioProveedor().getProveedor().getCodigoEntero().intValue());
+				detalleServicio.getServicioProveedor().setProveedor(proveedor);
+			}
+			
+			detalleServicio.setMontoComision(comision);
+			
+			detalleServicio.setCodigoCadena(String.valueOf(System.currentTimeMillis()));
 
-		return servicioNovios;
+			return detalleServicio;
+		} catch (Exception e) {
+			throw new ErrorRegistroDataException("No se pudo agregar el servicio al listado", e);
+		} finally{
+			if (conn != null){
+				conn.close();
+			}
+		}
 	}
 
 	@Override
