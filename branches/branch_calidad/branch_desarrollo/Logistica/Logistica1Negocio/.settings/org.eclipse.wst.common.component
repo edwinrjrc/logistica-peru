@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?><project-modules id="moduleCoreId" project-version="1.5.0">
-    <wb-module deploy-name="Logistica1Negocio">
-        <wb-resource deploy-path="/" source-path="/ejbModule" tag="defaultRootSource"/>
-        <property name="java-output-path" value="/Logistica1Negocio/build/classes"/>
-        <property name="ClientProject" value="Logistica1NegocioClient"/>
-        <property name="ClientJARURI" value="Logistica1NegocioClient.jar"/>
-    </wb-module>
-</project-modules>
