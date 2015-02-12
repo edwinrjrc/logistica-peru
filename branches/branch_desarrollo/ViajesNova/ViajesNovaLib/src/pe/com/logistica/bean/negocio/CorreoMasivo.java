@@ -3,7 +3,6 @@
  */
 package pe.com.logistica.bean.negocio;
 
-import java.io.InputStream;
 import java.util.List;
 
 import pe.com.logistica.bean.base.BaseNegocio;
