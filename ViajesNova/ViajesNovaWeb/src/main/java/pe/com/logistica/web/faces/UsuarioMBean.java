@@ -61,6 +61,8 @@ public class UsuarioMBean extends BaseMBean {
 			ServletContext servletContext = (ServletContext) FacesContext
 					.getCurrentInstance().getExternalContext().getContext();
 			seguridadServicio = new SeguridadServicioImpl(servletContext);
+			
+			logger.info("Inicio UsuarioMBEan");
 		} catch (NamingException e) {
 			logger.error(e.getMessage(), e);
 		}
