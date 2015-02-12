@@ -27,6 +27,15 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import net.sf.jasperreports.engine.JREmptyDataSource;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.export.JRPdfExporter;
+import net.sf.jasperreports.export.SimpleExporterInput;
+import net.sf.jasperreports.export.SimpleOutputStreamExporterOutput;
+import net.sf.jasperreports.export.SimplePdfExporterConfiguration;
+
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 
@@ -35,7 +44,6 @@ import pe.com.logistica.bean.negocio.Cliente;
 import pe.com.logistica.bean.negocio.Destino;
 import pe.com.logistica.bean.negocio.DetalleServicioAgencia;
 import pe.com.logistica.bean.negocio.MaestroServicio;
-import pe.com.logistica.bean.negocio.Parametro;
 import pe.com.logistica.bean.negocio.ProgramaNovios;
 import pe.com.logistica.bean.negocio.ServicioNovios;
 import pe.com.logistica.bean.negocio.ServicioProveedor;
@@ -442,7 +450,7 @@ public class NoviosMBean extends BaseMBean {
 			} else {
 
 				validarServicios();
-				
+
 				validarFee();
 			}
 		}
@@ -451,7 +459,7 @@ public class NoviosMBean extends BaseMBean {
 	}
 
 	private void validarServicios() throws ErrorRegistroDataException,
-	SQLException, Exception {
+			SQLException, Exception {
 
 		for (DetalleServicioAgencia detalle : this.getListadoDetalleServicio()) {
 
@@ -469,7 +477,7 @@ public class NoviosMBean extends BaseMBean {
 		}
 
 	}
-	
+
 	private boolean estaEnListaServicios(BaseVO baseVO) {
 		boolean resultado = false;
 
@@ -553,13 +561,15 @@ public class NoviosMBean extends BaseMBean {
 				jasperStream[i] = facesContext.getExternalContext()
 						.getResourceAsStream(rutaJasper[i]);
 			}
-			// imprimirPDF(enviarParametros(), stream, jasperStream);
+			imprimirPDF(enviarParametros(), stream, jasperStream);
 
 			facesContext.responseComplete();
 
 		} catch (IOException e) {
+			e.printStackTrace();
 			logger.error(e.getMessage(), e);
 		} catch (Exception e) {
+			e.printStackTrace();
 			logger.error(e.getMessage(), e);
 		}
 	}
@@ -673,24 +683,26 @@ public class NoviosMBean extends BaseMBean {
 		return null;
 	}
 
-	/*
-	 * private void imprimirPDF(Map<String, Object> map, OutputStream
-	 * outputStream, InputStream[] jasperStream) throws JRException {
-	 * 
-	 * List<JasperPrint> printList = new ArrayList<JasperPrint>();
-	 * 
-	 * for (int i = 0; i < jasperStream.length; i++) {
-	 * printList.add(JasperFillManager.fillReport(jasperStream[i], map, new
-	 * JREmptyDataSource())); }
-	 * 
-	 * JRPdfExporter exporter = new JRPdfExporter();
-	 * exporter.setExporterInput(SimpleExporterInput.getInstance(printList));
-	 * exporter.setExporterOutput(new SimpleOutputStreamExporterOutput(
-	 * outputStream)); SimplePdfExporterConfiguration configuration = new
-	 * SimplePdfExporterConfiguration();
-	 * configuration.setCreatingBatchModeBookmarks(true);
-	 * exporter.setConfiguration(configuration); exporter.exportReport(); }
-	 */
+	private void imprimirPDF(Map<String, Object> map,
+			OutputStream outputStream, InputStream[] jasperStream)
+			throws JRException {
+
+		List<JasperPrint> printList = new ArrayList<JasperPrint>();
+
+		for (int i = 0; i < jasperStream.length; i++) {
+			printList.add(JasperFillManager.fillReport(jasperStream[i], map,
+					new JREmptyDataSource()));
+		}
+
+		JRPdfExporter exporter = new JRPdfExporter();
+		exporter.setExporterInput(SimpleExporterInput.getInstance(printList));
+		exporter.setExporterOutput(new SimpleOutputStreamExporterOutput(
+				outputStream));
+		SimplePdfExporterConfiguration configuration = new SimplePdfExporterConfiguration();
+		configuration.setCreatingBatchModeBookmarks(true);
+		exporter.setConfiguration(configuration);
+		exporter.exportReport();
+	}
 
 	public void agregarServicio() {
 		try {
@@ -709,7 +721,7 @@ public class NoviosMBean extends BaseMBean {
 						.agregarServicioVenta(getServicioNovios());
 
 				detalleServicioAgregar = agregarServicioInvisible(detalleServicioAgregar);
-				
+
 				this.getListadoDetalleServicio().add(detalleServicioAgregar);
 				this.getListadoDetalleServicioTotal().add(
 						detalleServicioAgregar);
@@ -724,7 +736,7 @@ public class NoviosMBean extends BaseMBean {
 				this.setServicioFee(false);
 				this.setListadoEmpresas(null);
 			}
-		} catch (ErrorRegistroDataException e){
+		} catch (ErrorRegistroDataException e) {
 			logger.error(e.getMessage(), e);
 			this.setShowModal(true);
 			this.setMensajeModal(e.getMessage());
@@ -741,21 +753,21 @@ public class NoviosMBean extends BaseMBean {
 			this.setTipoModal(TIPO_MODAL_ERROR);
 		}
 	}
-	
+
 	private boolean validarServicioVenta() {
 		boolean resultado = true;
 		String idFormulario = "idFormNovios";
 		if (this.getServicioNovios().getTipoServicio().getCodigoEntero() == null
-				|| this.getServicioNovios().getTipoServicio()
-						.getCodigoEntero().intValue() == 0) {
+				|| this.getServicioNovios().getTipoServicio().getCodigoEntero()
+						.intValue() == 0) {
 			this.agregarMensaje(idFormulario + ":idSelTipoServicio",
 					"Seleccione el tipo de servicio", "",
 					FacesMessage.SEVERITY_ERROR);
 			resultado = false;
-		}
-		else {
+		} else {
 			if (!this.isServicioFee()) {
-				if (this.getServicioNovios().getTipoServicio().getCodigoEntero() == null
+				if (this.getServicioNovios().getTipoServicio()
+						.getCodigoEntero() == null
 						|| this.getServicioNovios().getTipoServicio()
 								.getCodigoEntero().intValue() == 0) {
 					this.agregarMensaje(idFormulario + ":idSelTipoServicio",
@@ -772,7 +784,8 @@ public class NoviosMBean extends BaseMBean {
 				}
 				if (this.getServicioNovios().getCantidad() == 0) {
 					this.agregarMensaje(idFormulario + ":idCantidad",
-							"Ingrese la cantidad", "", FacesMessage.SEVERITY_ERROR);
+							"Ingrese la cantidad", "",
+							FacesMessage.SEVERITY_ERROR);
 					resultado = false;
 				}
 				if (this.getServicioNovios().getPrecioUnitario() == null
@@ -788,25 +801,26 @@ public class NoviosMBean extends BaseMBean {
 							"Ingrese la fecha del servicio", "",
 							FacesMessage.SEVERITY_ERROR);
 					resultado = false;
-				}
-				else if (UtilWeb.fecha1EsMayorIgualFecha2(this.getServicioNovios()
-						.getFechaIda(), new Date())) {
+				} else if (UtilWeb.fecha1EsMayorIgualFecha2(this
+						.getServicioNovios().getFechaIda(), new Date())) {
 					this.agregarMensaje(
 							idFormulario + ":idFecServicio",
 							"La fecha del servicio no puede ser menor que la fecha de actual",
 							"", FacesMessage.SEVERITY_ERROR);
 					resultado = false;
 				} else if (this.getServicioNovios().getFechaRegreso() != null
-						&& this.getServicioNovios().getFechaIda()
-								.after(this.getServicioNovios().getFechaRegreso())) {
+						&& this.getServicioNovios()
+								.getFechaIda()
+								.after(this.getServicioNovios()
+										.getFechaRegreso())) {
 					this.agregarMensaje(
 							idFormulario + ":idFecServicio",
 							"La fecha del servicio no puede ser mayor que la fecha de regreso",
 							"", FacesMessage.SEVERITY_ERROR);
 					resultado = false;
 				}
-				if (this.getServicioNovios().getServicioProveedor().getProveedor()
-						.getCodigoEntero() == null
+				if (this.getServicioNovios().getServicioProveedor()
+						.getProveedor().getCodigoEntero() == null
 						|| this.getServicioNovios().getServicioProveedor()
 								.getProveedor().getCodigoEntero().intValue() == 0) {
 					this.agregarMensaje(idFormulario + ":idSelEmpServicio",
@@ -817,7 +831,8 @@ public class NoviosMBean extends BaseMBean {
 			} else {
 				if (this.getServicioNovios().getPrecioUnitario() == null) {
 					this.agregarMensaje(idFormulario + ":idMonFee",
-							"Ingrese el Monto Fee", "", FacesMessage.SEVERITY_ERROR);
+							"Ingrese el Monto Fee", "",
+							FacesMessage.SEVERITY_ERROR);
 					resultado = false;
 				}
 				if (this.getServicioNovios().getFechaIda() == null) {
@@ -831,7 +846,7 @@ public class NoviosMBean extends BaseMBean {
 
 		return resultado;
 	}
-	
+
 	private DetalleServicioAgencia agregarServicioInvisible(
 			DetalleServicioAgencia detalleServicio2)
 			throws ErrorConsultaDataException, Exception {
@@ -857,7 +872,7 @@ public class NoviosMBean extends BaseMBean {
 			this.getListadoDetalleServicio().remove(servicioNovios);
 
 			calcularTotales();
-			
+
 			for (int i = 0; i < listadoDetalleServicioTotal.size(); i++) {
 				DetalleServicioAgencia detalle = listadoDetalleServicioTotal
 						.get(i);
@@ -866,7 +881,7 @@ public class NoviosMBean extends BaseMBean {
 					this.listadoDetalleServicioTotal.remove(i);
 				}
 			}
-			
+
 			calcularTotales();
 		} catch (Exception e) {
 			this.setShowModal(true);
@@ -1020,7 +1035,7 @@ public class NoviosMBean extends BaseMBean {
 	public void seleccionarOperadora() {
 
 	}
-	
+
 	public void cargarDatosValores(ValueChangeEvent e) {
 		Object oe = e.getNewValue();
 		try {
@@ -1064,8 +1079,7 @@ public class NoviosMBean extends BaseMBean {
 						getListadoEmpresas().add(si);
 					}
 				}
-			}
-			else {
+			} else {
 				this.getServicioNovios().setConfiguracionTipoServicio(null);
 			}
 		} catch (SQLException ex) {
@@ -1074,7 +1088,7 @@ public class NoviosMBean extends BaseMBean {
 			logger.error(ex.getMessage(), ex);
 		}
 	}
-	
+
 	public void seleccionarDestino() {
 		try {
 			this.getServicioNovios().setDestino(obtenerDestinoListado());
@@ -1113,7 +1127,7 @@ public class NoviosMBean extends BaseMBean {
 		}
 		return null;
 	}
-	
+
 	public void buscarDestino() {
 
 	}
@@ -1149,9 +1163,10 @@ public class NoviosMBean extends BaseMBean {
 		}
 		return null;
 	}
-	
+
 	/**
-	 * ==========================================================================
+	 * ========================================================================
+	 * ==
 	 */
 
 	/**
@@ -1415,7 +1430,7 @@ public class NoviosMBean extends BaseMBean {
 	 * @return the listaDestinosBusqueda
 	 */
 	public List<Destino> getListaDestinosBusqueda() {
-		if (listaDestinosBusqueda == null){
+		if (listaDestinosBusqueda == null) {
 			listaDestinosBusqueda = new ArrayList<Destino>();
 		}
 		return listaDestinosBusqueda;
@@ -1433,7 +1448,7 @@ public class NoviosMBean extends BaseMBean {
 	 * @return the listaOrigenesBusqueda
 	 */
 	public List<Destino> getListaOrigenesBusqueda() {
-		if (listaOrigenesBusqueda == null){
+		if (listaOrigenesBusqueda == null) {
 			listaOrigenesBusqueda = new ArrayList<Destino>();
 		}
 		return listaOrigenesBusqueda;
@@ -1451,7 +1466,7 @@ public class NoviosMBean extends BaseMBean {
 	 * @return the destinoBusqueda
 	 */
 	public Destino getDestinoBusqueda() {
-		if (destinoBusqueda == null){
+		if (destinoBusqueda == null) {
 			destinoBusqueda = new Destino();
 		}
 		return destinoBusqueda;
@@ -1469,7 +1484,7 @@ public class NoviosMBean extends BaseMBean {
 	 * @return the origenBusqueda
 	 */
 	public Destino getOrigenBusqueda() {
-		if (origenBusqueda == null){
+		if (origenBusqueda == null) {
 			origenBusqueda = new Destino();
 		}
 		return origenBusqueda;
@@ -1487,7 +1502,7 @@ public class NoviosMBean extends BaseMBean {
 	 * @return the listadoDetalleServicio
 	 */
 	public List<DetalleServicioAgencia> getListadoDetalleServicio() {
-		if (listadoDetalleServicio == null){
+		if (listadoDetalleServicio == null) {
 			listadoDetalleServicio = new ArrayList<DetalleServicioAgencia>();
 		}
 		return listadoDetalleServicio;
@@ -1506,7 +1521,7 @@ public class NoviosMBean extends BaseMBean {
 	 * @return the listadoDetalleServicioTotal
 	 */
 	public List<DetalleServicioAgencia> getListadoDetalleServicioTotal() {
-		if (listadoDetalleServicioTotal == null){
+		if (listadoDetalleServicioTotal == null) {
 			listadoDetalleServicioTotal = new ArrayList<DetalleServicioAgencia>();
 		}
 		return listadoDetalleServicioTotal;
@@ -1529,7 +1544,8 @@ public class NoviosMBean extends BaseMBean {
 	}
 
 	/**
-	 * @param editarComision the editarComision to set
+	 * @param editarComision
+	 *            the editarComision to set
 	 */
 	public void setEditarComision(boolean editarComision) {
 		this.editarComision = editarComision;
