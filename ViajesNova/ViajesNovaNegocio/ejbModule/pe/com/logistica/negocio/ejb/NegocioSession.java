@@ -754,14 +754,25 @@ public class NegocioSession implements NegocioSessionRemote,
 			}
 			if (programaNovios.getListaServicios() != null
 					&& !programaNovios.getListaServicios().isEmpty()) {
-				for (DetalleServicioAgencia servicioNovios : programaNovios
-						.getListaServicios()) {
-					Integer exitoRegistro = servicioNovaViajesDao
-							.ingresarDetalleServicio(servicioNovios,
-									idServicio, conexion);;
-					if (exitoRegistro==null || exitoRegistro.intValue()==0) {
+				for (DetalleServicioAgencia detalleServicio : programaNovios.getListaServicios()) {
+					Integer resultado = servicioNovaViajesDao
+							.ingresarDetalleServicio(detalleServicio,
+									idServicio, conexion);
+					if (resultado == null || resultado.intValue() ==0) {
 						throw new ErrorRegistroDataException(
-								"No se pudo registrar los servicios de los novios");
+								"No se pudo registrar los servicios v");
+					}
+					else{
+						for (DetalleServicioAgencia detalleServicio2 : detalleServicio.getServiciosHijos()){
+							detalleServicio2.getServicioPadre().setCodigoEntero(resultado);
+							resultado = servicioNovaViajesDao
+									.ingresarDetalleServicio(detalleServicio2,
+											idServicio, conexion);
+							if (resultado == null || resultado.intValue() ==0) {
+								throw new ErrorRegistroDataException(
+										"No se pudo registrar los servicios de los novios");
+							}
+						}
 					}
 				}
 			}
@@ -1192,7 +1203,11 @@ public class NegocioSession implements NegocioSessionRemote,
 			servicioAgencia.setListaDetalleServicio(servicioNovaViajesDao.consultaServicioDetalle(servicioAgencia.getCodigoEntero(), conn));
 			
 			for (DetalleServicioAgencia detalle : servicioAgencia.getListaDetalleServicio()) {
-				detalle.setServiciosHijos(servicioNovaViajesDao.consultaServicioDetalleHijos(idServicio, detalle.getCodigoEntero(), conn));
+				System.out.println("idservicio ::"+idServicio);
+				System.out.println("codigoentero ::"+detalle.getCodigoEntero());
+				List<DetalleServicioAgencia> listaHijos = servicioNovaViajesDao.consultaServicioDetalleHijos(idServicio, detalle.getCodigoEntero(), conn);
+				System.out.println("hijos ::"+listaHijos.size());
+				detalle.setServiciosHijos(listaHijos);
 			}
 			
 			if (servicioAgencia.getFormaPago().getCodigoEntero().intValue() == 2) {
@@ -1338,7 +1353,6 @@ public class NegocioSession implements NegocioSessionRemote,
 	public ProgramaNovios consultarProgramaNovios(int idProgramaNovios)
 			throws ValidacionException, SQLException, Exception {
 		ServicioNoviosDao servicioNoviosDao = new ServicioNoviosDaoImpl();
-		ServicioNovaViajesDao servicioNovaViajesDao = new ServicioNovaViajesDaoImpl();
 		
 		ProgramaNovios programa = new ProgramaNovios();
 		programa.setCodigoEntero(idProgramaNovios);
@@ -1357,10 +1371,6 @@ public class NegocioSession implements NegocioSessionRemote,
 			programa = listaProgramaNovios.get(0);
 			
 			programa.setListaInvitados(servicioNoviosDao.consultarInvitasosNovios(idProgramaNovios, conn));
-			
-			List<DetalleServicioAgencia> listaServicios = servicioNovaViajesDao.consultaServicioDetalle(programa.getIdServicio(), conn);
-			
-			programa.setListaServicios(listaServicios);
 			
 		} catch (SQLException e) {
 			throw new SQLException(e);

@@ -45,6 +45,7 @@ import pe.com.logistica.bean.negocio.Destino;
 import pe.com.logistica.bean.negocio.DetalleServicioAgencia;
 import pe.com.logistica.bean.negocio.MaestroServicio;
 import pe.com.logistica.bean.negocio.ProgramaNovios;
+import pe.com.logistica.bean.negocio.ServicioAgencia;
 import pe.com.logistica.bean.negocio.ServicioNovios;
 import pe.com.logistica.bean.negocio.ServicioProveedor;
 import pe.com.logistica.bean.negocio.Usuario;
@@ -645,12 +646,22 @@ public class NoviosMBean extends BaseMBean {
 			this.setNombreFormulario("Edicion de Novios");
 			this.setNuevoNovios(false);
 			this.setEditarNovios(true);
+			this.setProgramaNovios(null);
+			this.setListadoDetalleServicio(null);
+			this.setListadoDetalleServicioTotal(null);
 			this.setProgramaNovios(this.negocioServicio
 					.consultarProgramaNovios(idProgramaNovios));
 			this.setListadoInvitados(this.getProgramaNovios()
 					.getListaInvitados());
-			this.setListadoDetalleServicio(this.getProgramaNovios()
-					.getListaServicios());
+			
+			ServicioAgencia consultaServicioNovios = this.negocioServicio.consultarVentaServicio(this.getProgramaNovios().getIdServicio());
+			
+			this.setListadoDetalleServicioTotal(consultaServicioNovios.getListaDetalleServicio());
+			for (DetalleServicioAgencia detServicio : consultaServicioNovios.getListaDetalleServicio()) {
+				if (detServicio.getTipoServicio().isVisible()){
+					this.getListadoDetalleServicio().add(detServicio);
+				}
+			}
 
 			this.calcularTotales();
 		} catch (SQLException e) {
@@ -912,7 +923,9 @@ public class NoviosMBean extends BaseMBean {
 						.getMontoComision());
 				for (DetalleServicioAgencia detalleServicio2 : detalleServicio
 						.getServiciosHijos()) {
-					montoIgv = montoIgv.add(detalleServicio2.getMontoIGV());
+					if (detalleServicio2.getTipoServicio().isEsImpuesto()){
+						montoIgv = montoIgv.add(detalleServicio2.getPrecioUnitario());
+					}
 				}
 
 				if (detalleServicio.getTipoServicio().getCodigoEntero() != null
