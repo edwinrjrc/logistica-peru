@@ -240,6 +240,8 @@ public class ServicioAgenteMBean extends BaseMBean {
 					.getListadoDetalleServicio());
 
 			borrarInvisibles();
+			
+			calcularTotales();
 
 		} catch (SQLException e) {
 			logger.error(e.getMessage(), e);
@@ -634,7 +636,9 @@ public class ServicioAgenteMBean extends BaseMBean {
 						.getMontoComision());
 				for (DetalleServicioAgencia detalleServicio2 : detalleServicio
 						.getServiciosHijos()) {
-					montoIgv = montoIgv.add(detalleServicio2.getMontoIGV());
+					if (detalleServicio2.getTipoServicio().isEsImpuesto()){
+						montoIgv = montoIgv.add(detalleServicio2.getPrecioUnitario());
+					}
 				}
 
 				if (detalleServicio.getTipoServicio().getCodigoEntero() != null
