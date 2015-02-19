@@ -63,6 +63,7 @@ public class UsuarioMBean extends BaseMBean {
 			seguridadServicio = new SeguridadServicioImpl(servletContext);
 			
 			logger.info("Inicio UsuarioMBEan");
+			System.out.println("Logger::"+logger);
 		} catch (NamingException e) {
 			logger.error(e.getMessage(), e);
 		}

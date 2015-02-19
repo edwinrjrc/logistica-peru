@@ -373,7 +373,7 @@ public class ServicioNoviosDaoImpl implements ServicioNoviosDao {
 				String nombre = UtilJdbc.obtenerCadena(rs, "nomvendedor")+" "+UtilJdbc.obtenerCadena(rs, "apepatvendedor")+" "+UtilJdbc.obtenerCadena(rs, "apematvendedor");
 				programaNovios2.getVendedor().setNombre(nombre);
 				programaNovios2.setMontoTotalComision(UtilJdbc.obtenerBigDecimal(rs, "montocomisiontotal"));
-				programaNovios2.setMontoTotalComision(UtilJdbc.obtenerBigDecimal(rs, "montototal"));
+				programaNovios2.setMontoTotalServicios(UtilJdbc.obtenerBigDecimal(rs, "montototal"));
 				programaNovios2.setMontoTotalFee(UtilJdbc.obtenerBigDecimal(rs, "montototalfee"));
 				resultado.add(programaNovios2);
 			}
