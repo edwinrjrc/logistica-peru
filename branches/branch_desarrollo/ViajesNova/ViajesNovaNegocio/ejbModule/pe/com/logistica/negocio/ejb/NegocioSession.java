@@ -1154,9 +1154,21 @@ public class NegocioSession implements NegocioSessionRemote,
 					Integer resultado = servicioNovaViajesDao
 							.ingresarDetalleServicio(detalleServicio,
 									idServicio, conexion);
-					if (resultado==null || resultado.intValue()==0) {
+					if (resultado == null || resultado.intValue() ==0) {
 						throw new ErrorRegistroDataException(
 								"No se pudo registrar los servicios de la venta");
+					}
+					else{
+						for (DetalleServicioAgencia detalleServicio2 : detalleServicio.getServiciosHijos()){
+							detalleServicio2.getServicioPadre().setCodigoEntero(resultado);
+							resultado = servicioNovaViajesDao
+									.ingresarDetalleServicio(detalleServicio2,
+											idServicio, conexion);
+							if (resultado == null || resultado.intValue() ==0) {
+								throw new ErrorRegistroDataException(
+										"No se pudo registrar los servicios de la venta");
+							}
+						}
 					}
 				}
 			}
@@ -1203,10 +1215,7 @@ public class NegocioSession implements NegocioSessionRemote,
 			servicioAgencia.setListaDetalleServicio(servicioNovaViajesDao.consultaServicioDetalle(servicioAgencia.getCodigoEntero(), conn));
 			
 			for (DetalleServicioAgencia detalle : servicioAgencia.getListaDetalleServicio()) {
-				System.out.println("idservicio ::"+idServicio);
-				System.out.println("codigoentero ::"+detalle.getCodigoEntero());
 				List<DetalleServicioAgencia> listaHijos = servicioNovaViajesDao.consultaServicioDetalleHijos(idServicio, detalle.getCodigoEntero(), conn);
-				System.out.println("hijos ::"+listaHijos.size());
 				detalle.setServiciosHijos(listaHijos);
 			}
 			
