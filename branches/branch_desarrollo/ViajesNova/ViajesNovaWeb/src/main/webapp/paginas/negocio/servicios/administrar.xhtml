@@ -158,7 +158,7 @@
 									action="#{servicioAgenteMBean.consultarServicioRegistrado(row.codigoEntero)}"
 									render="idGrRegisVenServicio, idNomModal"
 									oncomplete="#{rich:component('idModalfrventaservicio')}.show();"
-									rendered="#{!row.esProgramaNovios and sessionScope.usuarioSession.rol.codigoEntero == 3}">
+									rendered="#{!row.esProgramaNovios and row.editable}">
 									<h:graphicImage height="25" width="20"
 										url="/resources/img/editar2.png" style="border:0" />
 								</a4j:commandLink>

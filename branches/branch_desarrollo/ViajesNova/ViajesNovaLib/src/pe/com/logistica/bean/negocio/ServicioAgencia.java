@@ -49,6 +49,7 @@ public class ServicioAgencia extends BaseNegocio{
 	
 	private boolean esProgramaNovios;
 	private boolean servicioPagado;
+	private boolean editable;
 	
 	private BaseVO aerolinea;
 
@@ -554,5 +555,23 @@ public class ServicioAgencia extends BaseNegocio{
 	 */
 	public void setServicioPagado(boolean servicioPagado) {
 		this.servicioPagado = servicioPagado;
+	}
+
+
+
+	/**
+	 * @return the editable
+	 */
+	public boolean isEditable() {
+		return editable;
+	}
+
+
+
+	/**
+	 * @param editable the editable to set
+	 */
+	public void setEditable(boolean editable) {
+		this.editable = editable;
 	}
 }

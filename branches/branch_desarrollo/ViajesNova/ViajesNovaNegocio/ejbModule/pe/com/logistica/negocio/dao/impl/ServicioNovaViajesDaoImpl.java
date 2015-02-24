@@ -704,6 +704,7 @@ public class ServicioNovaViajesDaoImpl implements ServicioNovaViajesDao {
 				servicioAgencia2.setValorCuota(UtilJdbc.obtenerBigDecimal(rs, "valorcuota"));
 				servicioAgencia2.setFechaPrimerCuota(UtilJdbc.obtenerFecha(rs, "fechaprimercuota"));
 				servicioAgencia2.setFechaUltimaCuota(UtilJdbc.obtenerFecha(rs, "fechaultcuota"));
+				servicioAgencia2.getVendedor().setCodigoEntero(UtilJdbc.obtenerNumero(rs, "idusuario"));
 				String nombreVendedor = UtilJdbc.obtenerCadena(rs, "nombresvendedor")+" "+UtilJdbc.obtenerCadena(rs, "apepaterno")+" "+UtilJdbc.obtenerCadena(rs, "apematerno");
 				nombreVendedor = StringUtils.normalizeSpace(nombreVendedor);
 				servicioAgencia2.getVendedor().setNombre(nombreVendedor);
@@ -1004,6 +1005,11 @@ public class ServicioNovaViajesDaoImpl implements ServicioNovaViajesDao {
 				servicioAgencia2.getEstadoServicio().setNombre(UtilJdbc.obtenerCadena(rs, "nomestservicio"));
 				int novios = UtilJdbc.obtenerNumero(rs, "cantidadNovios");
 				servicioAgencia2.setEsProgramaNovios((novios>0));
+				int idvendedor = UtilJdbc.obtenerNumero(rs, "idvendedor");
+				servicioAgencia2.setEditable(false);
+				if (servicioAgencia.getVendedor().getCodigoEntero()!=null && servicioAgencia.getVendedor().getCodigoEntero().intValue()!=0){
+					servicioAgencia2.setEditable(idvendedor == servicioAgencia.getVendedor().getCodigoEntero().intValue());
+				}
 				listaVentaServicios.add(servicioAgencia2);
 			}
 		} catch (SQLException e) {
@@ -1174,7 +1180,7 @@ public class ServicioNovaViajesDaoImpl implements ServicioNovaViajesDao {
 			throws SQLException {
 		Integer idservicio = 0;
 		CallableStatement cs = null;
-		String sql = "{ ? = call negocio.fn_actualizarserviciocabecera1(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}";
+		String sql = "{ ? = call negocio.fn_actualizarserviciocabecera1(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}";
 		
 		try {
 			cs = conn.prepareCall(sql);
@@ -1209,6 +1215,12 @@ public class ServicioNovaViajesDaoImpl implements ServicioNovaViajesDao {
 			}
 			if (servicioAgencia.getMontoTotalComision() != null && !servicioAgencia.getMontoTotalComision().equals(BigDecimal.ZERO)){
 				cs.setBigDecimal(i++, servicioAgencia.getMontoTotalComision());
+			}
+			else{
+				cs.setNull(i++, Types.DECIMAL);
+			}
+			if (servicioAgencia.getMontoTotalIGV() != null && !servicioAgencia.getMontoTotalIGV().equals(BigDecimal.ZERO)){
+				cs.setBigDecimal(i++, servicioAgencia.getMontoTotalIGV());
 			}
 			else{
 				cs.setNull(i++, Types.DECIMAL);
