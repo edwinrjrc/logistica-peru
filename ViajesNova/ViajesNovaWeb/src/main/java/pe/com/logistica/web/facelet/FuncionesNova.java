@@ -3,12 +3,13 @@
  */
 package pe.com.logistica.web.facelet;
 
+import org.codehaus.plexus.util.StringUtils;
+
 /**
  * @author Edwin
  *
  */
 public class FuncionesNova {
-
 	/**
 	 * 
 	 */
@@ -17,7 +18,7 @@ public class FuncionesNova {
 	}
 	
 	public static boolean tienePermiso(String codigoOpcion, String codigoRol) {
-        return false;
+        return (StringUtils.equals(codigoOpcion, codigoRol));
     }
 
 }
