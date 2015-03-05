@@ -622,6 +622,16 @@
 							rendered="#{servicioAgenteMBean.transaccionExito}"
 							render="idGrTabVenServicios"
 							oncomplete="#{rich:component('idModalfrventaservicio')}.hide(); return false;" />
+							
+						<a4j:commandButton value="Cerrar Venta" render="idGrConfir"
+							actionListener="#{servicioAgenteMBean.preCerrarVenta()}" 
+							rendered="#{servicioAgenteMBean.servicioAgencia.codigoEntero!=null and servicioAgenteMBean.servicioAgencia.estadoServicio.codigoEntero==1}"
+							oncomplete="#{rich:component('idModalConfirma')}.show(); return false;" />
+							
+						<a4j:commandButton value="Cerrar Venta" style="display:none;" id="idBtnCerrarVenta"
+							actionListener="#{servicioAgenteMBean.cerrarVenta()}"
+							render="idFormHidden,idPanelHidden,idPanelBotones,idModalcorrecto,idModalError,idGrRegisVenServicio"
+							oncomplete="mostrarModal('idformadmservicios')" />
 
 					</h:panelGrid>
 				</f:facet>

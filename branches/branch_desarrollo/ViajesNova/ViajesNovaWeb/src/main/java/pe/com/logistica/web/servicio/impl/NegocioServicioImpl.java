@@ -365,5 +365,10 @@ public class NegocioServicioImpl implements NegocioServicio {
 
 		return ejbSession.consultarSaldoServicio(idServicio);
 	}
+	
+	@Override
+	public void cerrarVenta(ServicioAgencia servicioAgencia) throws SQLException, Exception{
+		ejbSession.cerrarVenta(servicioAgencia);
+	}
 }
 	
