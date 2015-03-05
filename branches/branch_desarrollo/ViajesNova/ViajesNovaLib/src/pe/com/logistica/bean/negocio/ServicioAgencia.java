@@ -52,6 +52,10 @@ public class ServicioAgencia extends BaseNegocio{
 	private boolean editable;
 	
 	private BaseVO aerolinea;
+	
+	public static final Integer ESTADO_PENDIENTE_CIERRE = 1;
+	public static final Integer ESTADO_CERRADO          = 2;
+	public static final Integer ESTADO_ANULADO          = 3;
 
 	/**
 	 * 

@@ -59,6 +59,9 @@ public class ConsolidadorDaoImpl implements ConsolidadorDao {
 				if (cs != null){
 					cs.close();
 				}
+				if (conn != null){
+					conn.close();
+				}
 			} catch (SQLException e) {
 				throw new SQLException(e);
 			}
@@ -97,6 +100,9 @@ public class ConsolidadorDaoImpl implements ConsolidadorDao {
 			try {
 				if (cs != null){
 					cs.close();
+				}
+				if (conn != null){
+					conn.close();
 				}
 			} catch (SQLException e) {
 				throw new SQLException(e);
@@ -141,6 +147,9 @@ public class ConsolidadorDaoImpl implements ConsolidadorDao {
 				if (cs != null){
 					cs.close();
 				}
+				if (conn != null){
+					conn.close();
+				}
 			} catch (SQLException e) {
 				throw new SQLException(e);
 			}
@@ -182,6 +191,9 @@ public class ConsolidadorDaoImpl implements ConsolidadorDao {
 			try {
 				if (cs != null){
 					cs.close();
+				}
+				if (conn != null){
+					conn.close();
 				}
 			} catch (SQLException e) {
 				throw new SQLException(e);

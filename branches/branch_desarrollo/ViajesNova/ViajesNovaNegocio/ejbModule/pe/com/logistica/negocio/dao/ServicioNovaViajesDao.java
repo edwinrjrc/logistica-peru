@@ -79,4 +79,7 @@ public interface ServicioNovaViajesDao {
 	List<PagoServicio> listarPagosServicio(Integer idServicio) throws SQLException;
 	
 	BigDecimal consultarSaldoServicio(Integer idServicio) throws SQLException;
+
+	void actualizarServicioVenta(ServicioAgencia servicioAgencia)
+			throws SQLException, Exception;
 }

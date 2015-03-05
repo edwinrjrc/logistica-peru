@@ -200,6 +200,14 @@
 			</h:panelGrid>
 		</h:form>
 
+		<h:panelGrid id="idConfirm" style="display:none;">
+			<ui:include src="/resources/modal/modalconfirmacion.xhtml">
+				<ui:param name="pregunta" value="#{servicioAgenteMBean.pregunta}" />
+				<ui:param name="idBotonEjecutar"
+					value="idFormVentaServi:idBtnCerrarVenta" />
+				<ui:param name="renderizar" value="idBotVenServicio" />
+			</ui:include>
+		</h:panelGrid>
 		<ui:include src="/paginas/negocio/servicios/modal/registrarpago.xhtml" />
 		<ui:include src="/paginas/negocio/servicios/modal/admpagos.xhtml" />
 		<ui:include

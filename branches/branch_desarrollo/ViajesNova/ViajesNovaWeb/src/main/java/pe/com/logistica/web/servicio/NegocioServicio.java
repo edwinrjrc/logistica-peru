@@ -162,4 +162,7 @@ public interface NegocioServicio {
 	public List<PagoServicio> listarPagosServicio(Integer idServicio) throws SQLException, Exception;
 	
 	public BigDecimal consultarSaldoServicio(Integer idServicio) throws SQLException, Exception;
+
+	void cerrarVenta(ServicioAgencia servicioAgencia) throws SQLException,
+			Exception;
 }
