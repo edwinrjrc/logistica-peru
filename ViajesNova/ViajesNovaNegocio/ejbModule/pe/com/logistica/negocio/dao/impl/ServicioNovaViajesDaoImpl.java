@@ -704,6 +704,7 @@ public class ServicioNovaViajesDaoImpl implements ServicioNovaViajesDao {
 				servicioAgencia2.setValorCuota(UtilJdbc.obtenerBigDecimal(rs, "valorcuota"));
 				servicioAgencia2.setFechaPrimerCuota(UtilJdbc.obtenerFecha(rs, "fechaprimercuota"));
 				servicioAgencia2.setFechaUltimaCuota(UtilJdbc.obtenerFecha(rs, "fechaultcuota"));
+				servicioAgencia2.getEstadoServicio().setCodigoEntero(UtilJdbc.obtenerNumero(rs, "idestadoservicio"));
 				servicioAgencia2.getVendedor().setCodigoEntero(UtilJdbc.obtenerNumero(rs, "idusuario"));
 				String nombreVendedor = UtilJdbc.obtenerCadena(rs, "nombresvendedor")+" "+UtilJdbc.obtenerCadena(rs, "apepaterno")+" "+UtilJdbc.obtenerCadena(rs, "apematerno");
 				nombreVendedor = StringUtils.normalizeSpace(nombreVendedor);
@@ -1008,7 +1009,12 @@ public class ServicioNovaViajesDaoImpl implements ServicioNovaViajesDao {
 				int idvendedor = UtilJdbc.obtenerNumero(rs, "idvendedor");
 				servicioAgencia2.setEditable(false);
 				if (servicioAgencia.getVendedor().getCodigoEntero()!=null && servicioAgencia.getVendedor().getCodigoEntero().intValue()!=0){
-					servicioAgencia2.setEditable(idvendedor == servicioAgencia.getVendedor().getCodigoEntero().intValue());
+					
+					boolean editable = false; 
+					editable = ((idvendedor == servicioAgencia.getVendedor().getCodigoEntero().intValue()) && servicioAgencia2.getEstadoServicio().getCodigoEntero().equals(ServicioAgencia.ESTADO_PENDIENTE_CIERRE));
+					
+					servicioAgencia2.setEditable(editable);
+					
 				}
 				listaVentaServicios.add(servicioAgencia2);
 			}
@@ -1654,5 +1660,39 @@ public class ServicioNovaViajesDaoImpl implements ServicioNovaViajesDao {
 		}
 		
 		return resultado;
+	}
+	
+	@Override
+	public void actualizarServicioVenta(ServicioAgencia servicioAgencia) throws SQLException, Exception{
+		Connection conn = null;
+		CallableStatement cs = null;
+		String sql = "{ ? = call negocio.fn_actualizarestadoservicio(?,?,?,?)}";
+		
+		try {
+			conn = UtilConexion.obtenerConexion();
+			cs = conn.prepareCall(sql);
+			int i=1;
+			cs.registerOutParameter(i++, Types.BOOLEAN);
+			cs.setInt(i++, servicioAgencia.getCodigoEntero().intValue());
+			cs.setInt(i++, servicioAgencia.getEstadoServicio().getCodigoEntero().intValue());
+			cs.setString(i++, servicioAgencia.getUsuarioModificacion());
+			cs.setString(i++, servicioAgencia.getIpModificacion());
+			
+			cs.execute();
+			
+		} catch (SQLException e) {
+			throw new SQLException(e);
+		} finally {
+			try {
+				if (cs != null) {
+					cs.close();
+				}
+				if (conn != null){
+					conn.close();
+				}
+			} catch (SQLException e) {
+				throw new SQLException(e);
+			}
+		}
 	}
 }

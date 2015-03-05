@@ -41,6 +41,7 @@ import pe.com.logistica.bean.negocio.ServicioProveedor;
 import pe.com.logistica.bean.negocio.Telefono;
 import pe.com.logistica.bean.negocio.Ubigeo;
 import pe.com.logistica.negocio.dao.ClienteDao;
+import pe.com.logistica.negocio.dao.ComunDao;
 import pe.com.logistica.negocio.dao.ConsolidadorDao;
 import pe.com.logistica.negocio.dao.ContactoDao;
 import pe.com.logistica.negocio.dao.CorreoMasivoDao;
@@ -56,6 +57,7 @@ import pe.com.logistica.negocio.dao.ServicioNoviosDao;
 import pe.com.logistica.negocio.dao.TelefonoDao;
 import pe.com.logistica.negocio.dao.UbigeoDao;
 import pe.com.logistica.negocio.dao.impl.ClienteDaoImpl;
+import pe.com.logistica.negocio.dao.impl.ComunDaoImpl;
 import pe.com.logistica.negocio.dao.impl.ConsolidadorDaoImpl;
 import pe.com.logistica.negocio.dao.impl.ContactoDaoImpl;
 import pe.com.logistica.negocio.dao.impl.CorreoMasivoDaoImpl;
@@ -835,9 +837,11 @@ public class NegocioSession implements NegocioSessionRemote,
 	public ServicioNovios agregarServicio(ServicioNovios detalleServicio)
 			throws SQLException, Exception {
 		
-		Connection conn = UtilConexion.obtenerConexion();
+		Connection conn = null;
 		
 		try {
+			conn = UtilConexion.obtenerConexion();
+			
 			MaestroServicioDao maestroServicioDao = new MaestroServicioDaoImpl();
 			
 			ProveedorDao proveedorDao = new ProveedorDaoImpl();
@@ -916,9 +920,11 @@ public class NegocioSession implements NegocioSessionRemote,
 			DetalleServicioAgencia detalleServicio) throws ErrorRegistroDataException, SQLException,
 			Exception {
 		
-		Connection conn = UtilConexion.obtenerConexion();
+		Connection conn = null;
 		
 		try {
+			conn = UtilConexion.obtenerConexion();
+			
 			MaestroServicioDao maestroServicioDao = new MaestroServicioDaoImpl();
 			
 			ProveedorDao proveedorDao = new ProveedorDaoImpl();
@@ -980,7 +986,8 @@ public class NegocioSession implements NegocioSessionRemote,
 			
 			detalleServicio.setMontoComision(comision);
 			
-			detalleServicio.setCodigoCadena(String.valueOf(System.currentTimeMillis()));
+			ComunDao comunDao = new ComunDaoImpl();
+			detalleServicio.setCodigoEntero(comunDao.obtenerSiguienteSecuencia(conn));
 
 			return detalleServicio;
 		} catch (Exception e) {
@@ -1052,7 +1059,7 @@ public class NegocioSession implements NegocioSessionRemote,
 				servicioAgencia.setCantidadServicios(servicioAgencia.getListaDetalleServicio().size());
 			}
 
-			servicioAgencia.getEstadoServicio().setCodigoEntero(2);
+			servicioAgencia.getEstadoServicio().setCodigoEntero(ServicioAgencia.ESTADO_PENDIENTE_CIERRE);
 			idServicio = servicioNovaViajesDao.ingresarCabeceraServicio(
 					servicioAgencia, conexion);
 
@@ -1086,6 +1093,10 @@ public class NegocioSession implements NegocioSessionRemote,
 						}
 					}
 				}
+			}
+			else{
+				throw new ErrorRegistroDataException(
+						"No se agregaron servicios a la venta");
 			}
 
 			if (servicioAgencia.getFormaPago().getCodigoEntero().intValue() == 2) {
@@ -1735,5 +1746,14 @@ public class NegocioSession implements NegocioSessionRemote,
 		ServicioNovaViajesDao servicioNovaViajesDao = new ServicioNovaViajesDaoImpl();
 		
 		return servicioNovaViajesDao.consultarSaldoServicio(idServicio);
+	}
+	
+	@Override
+	public void cerrarVenta(ServicioAgencia servicioAgencia) throws SQLException, Exception{
+		ServicioNovaViajesDao servicioNovaViajesDao = new ServicioNovaViajesDaoImpl();
+		
+		servicioAgencia.getEstadoServicio().setCodigoEntero(ServicioAgencia.ESTADO_CERRADO);
+		
+		servicioNovaViajesDao.actualizarServicioVenta(servicioAgencia);
 	}
 }

@@ -72,7 +72,6 @@ public class ServicioAgenteMBean extends BaseMBean {
 
 	private List<ServicioAgencia> listadoServicioAgencia;
 	private List<DetalleServicioAgencia> listadoDetalleServicio;
-	private List<DetalleServicioAgencia> listadoDetalleServicioTotal;
 	private List<Cliente> listadoClientes;
 	private List<SelectItem> listadoEmpresas;
 	private List<ServicioProveedor> listaProveedores;
@@ -90,6 +89,8 @@ public class ServicioAgenteMBean extends BaseMBean {
 	private ParametroServicio parametroServicio;
 	private NegocioServicio negocioServicio;
 	private SoporteServicio soporteServicio;
+	
+	private String pregunta;
 
 	/**
 	 * 
@@ -236,12 +237,11 @@ public class ServicioAgenteMBean extends BaseMBean {
 					.getListaDetalleServicio());
 			this.setDetalleServicio(null);
 
-			this.setListadoDetalleServicioTotal(this
-					.getListadoDetalleServicio());
-
 			borrarInvisibles();
 			
 			calcularTotales();
+			
+			this.setTransaccionExito(false);
 
 		} catch (SQLException e) {
 			logger.error(e.getMessage(), e);
@@ -270,7 +270,6 @@ public class ServicioAgenteMBean extends BaseMBean {
 		consultarTasaPredeterminada();
 		this.setListadoEmpresas(null);
 		this.setListadoDetalleServicio(null);
-		this.setListadoDetalleServicioTotal(null);
 
 		this.setVendedor(false);
 		HttpSession session = obtenerSession(false);
@@ -306,8 +305,6 @@ public class ServicioAgenteMBean extends BaseMBean {
 				detalleServicioAgregar = agregarServicioInvisible(detalleServicioAgregar);
 				
 				this.getListadoDetalleServicio().add(detalleServicioAgregar);
-				this.getListadoDetalleServicioTotal().add(
-						detalleServicioAgregar);
 
 				this.setListadoDetalleServicio(negocioServicio
 						.ordenarServiciosVenta(getListadoDetalleServicio()));
@@ -335,6 +332,8 @@ public class ServicioAgenteMBean extends BaseMBean {
 			this.setMensajeModal(e.getMessage());
 			this.setTipoModal(TIPO_MODAL_ERROR);
 		}
+		
+		System.out.println("servicios: "+this.getListadoDetalleServicio().size());
 	}
 
 	private DetalleServicioAgencia agregarServicioInvisible(
@@ -476,9 +475,11 @@ public class ServicioAgenteMBean extends BaseMBean {
 		boolean resultado = false;
 
 		for (DetalleServicioAgencia detalle : this.getListadoDetalleServicio()) {
-			if (detalle.getTipoServicio().getCodigoEntero().intValue() == baseVO
-					.getCodigoEntero().intValue()) {
-				resultado = true;
+			for(DetalleServicioAgencia detalle2 : detalle.getServiciosHijos()){
+				if (detalle2.getTipoServicio().getCodigoEntero().intValue() == baseVO
+						.getCodigoEntero().intValue()) {
+					resultado = true;
+				}
 			}
 		}
 
@@ -630,7 +631,7 @@ public class ServicioAgenteMBean extends BaseMBean {
 			 */
 
 			for (DetalleServicioAgencia detalleServicio : this
-					.getListadoDetalleServicioTotal()) {
+					.getListadoDetalleServicio()) {
 				montoTotal = montoTotal.add(detalleServicio.getTotalServicio());
 				montoComision = montoComision.add(detalleServicio
 						.getMontoComision());
@@ -674,8 +675,8 @@ public class ServicioAgenteMBean extends BaseMBean {
 							obtenerRequest().getRemoteAddr());
 
 					this.getServicioAgencia().setListaDetalleServicio(
-							getListadoDetalleServicioTotal());
-
+							getListadoDetalleServicio());
+					
 					Integer idServicio = this.negocioServicio
 							.registrarVentaServicio(getServicioAgencia());
 
@@ -710,6 +711,15 @@ public class ServicioAgenteMBean extends BaseMBean {
 						detalle.setUsuarioModificacion(usuario.getUsuario());
 						detalle.setIpModificacion(obtenerRequest()
 								.getRemoteAddr());
+						if (detalle.getServiciosHijos()!=null){
+							for (DetalleServicioAgencia detalle2 : detalle.getServiciosHijos()) {
+								detalle2.setUsuarioCreacion(usuario.getUsuario());
+								detalle2.setIpCreacion(obtenerRequest().getRemoteAddr());
+								detalle2.setUsuarioModificacion(usuario.getUsuario());
+								detalle2.setIpModificacion(obtenerRequest()
+										.getRemoteAddr());
+							}
+						}
 					}
 
 					this.getServicioAgencia().setListaDetalleServicio(
@@ -748,6 +758,45 @@ public class ServicioAgenteMBean extends BaseMBean {
 			this.setTipoModal(TIPO_MODAL_ERROR);
 			logger.error(e.getMessage(), e);
 		}
+	}
+	
+	public void cerrarVenta(){
+		try {
+			
+			HttpSession session = obtenerSession(false);
+			Usuario usuario = (Usuario) session
+					.getAttribute("usuarioSession");
+			getServicioAgencia().setUsuarioCreacion(
+					usuario.getUsuario());
+			getServicioAgencia().setIpCreacion(
+					obtenerRequest().getRemoteAddr());
+			getServicioAgencia().setUsuarioModificacion(
+					usuario.getUsuario());
+			getServicioAgencia().setIpModificacion(
+					obtenerRequest().getRemoteAddr());
+			
+			this.negocioServicio.cerrarVenta(getServicioAgencia());
+			
+			this.setTransaccionExito(true);
+			this.setShowModal(true);
+			this.setMensajeModal("Servicio Venta se cerro satisfactoriamente");
+			this.setTipoModal(TIPO_MODAL_EXITO);
+			
+		} catch (SQLException e) {
+			this.setShowModal(true);
+			this.setMensajeModal(e.getMessage());
+			this.setTipoModal(TIPO_MODAL_ERROR);
+			logger.error(e.getMessage(), e);
+		} catch (Exception e) {
+			this.setShowModal(true);
+			this.setMensajeModal(e.getMessage());
+			this.setTipoModal(TIPO_MODAL_ERROR);
+			logger.error(e.getMessage(), e);
+		}
+	}
+	
+	public void preCerrarVenta(){
+		this.setPregunta("¿Esta seguro de cerrar el servicio de venta?");
 	}
 
 	public void calcularCuota() {
@@ -922,17 +971,9 @@ public class ServicioAgenteMBean extends BaseMBean {
 		if (listadoDetalleServicio != null) {
 			for (int i = 0; i < listadoDetalleServicio.size(); i++) {
 				DetalleServicioAgencia detalle = listadoDetalleServicio.get(i);
-				if (detalleServicio.getCodigoCadena().equals(
-						detalle.getCodigoCadena())) {
+				if (detalleServicio.getCodigoEntero().equals(
+						detalle.getCodigoEntero())) {
 					this.listadoDetalleServicio.remove(i);
-				}
-			}
-			for (int i = 0; i < listadoDetalleServicioTotal.size(); i++) {
-				DetalleServicioAgencia detalle = listadoDetalleServicioTotal
-						.get(i);
-				if (detalleServicio.getCodigoCadena().equals(
-						detalle.getCodigoCadena())) {
-					this.listadoDetalleServicioTotal.remove(i);
 				}
 			}
 		}
@@ -1284,25 +1325,6 @@ public class ServicioAgenteMBean extends BaseMBean {
 	}
 
 	/**
-	 * @return the listadoDetalleServicioTotal
-	 */
-	public List<DetalleServicioAgencia> getListadoDetalleServicioTotal() {
-		if (listadoDetalleServicioTotal == null) {
-			listadoDetalleServicioTotal = new ArrayList<DetalleServicioAgencia>();
-		}
-		return listadoDetalleServicioTotal;
-	}
-
-	/**
-	 * @param listadoDetalleServicioTotal
-	 *            the listadoDetalleServicioTotal to set
-	 */
-	public void setListadoDetalleServicioTotal(
-			List<DetalleServicioAgencia> listadoDetalleServicioTotal) {
-		this.listadoDetalleServicioTotal = listadoDetalleServicioTotal;
-	}
-
-	/**
 	 * @return the destinoBusqueda
 	 */
 	public Destino getDestinoBusqueda() {
@@ -1460,6 +1482,20 @@ public class ServicioAgenteMBean extends BaseMBean {
 	 */
 	public void setVendedor(boolean vendedor) {
 		this.vendedor = vendedor;
+	}
+
+	/**
+	 * @return the pregunta
+	 */
+	public String getPregunta() {
+		return pregunta;
+	}
+
+	/**
+	 * @param pregunta the pregunta to set
+	 */
+	public void setPregunta(String pregunta) {
+		this.pregunta = pregunta;
 	}
 
 }

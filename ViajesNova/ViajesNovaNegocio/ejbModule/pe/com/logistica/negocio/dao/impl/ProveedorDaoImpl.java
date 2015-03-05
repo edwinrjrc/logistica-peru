@@ -638,6 +638,9 @@ public class ProveedorDaoImpl implements ProveedorDao {
 				if (cs != null){
 					cs.close();
 				}
+				if (conn != null){
+					conn.close();
+				}
 			} catch (SQLException e) {
 				throw new SQLException(e);
 			}
