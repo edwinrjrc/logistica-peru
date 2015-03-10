@@ -12,6 +12,7 @@ import java.util.List;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.SelectItem;
@@ -22,6 +23,7 @@ import javax.servlet.http.HttpSession;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
+import org.hibernate.validator.util.privilegedactions.GetConstructor;
 import org.richfaces.event.FileUploadEvent;
 import org.richfaces.model.UploadedFile;
 
@@ -30,6 +32,7 @@ import pe.com.logistica.bean.base.BaseVO;
 import pe.com.logistica.bean.negocio.Cliente;
 import pe.com.logistica.bean.negocio.Destino;
 import pe.com.logistica.bean.negocio.DetalleServicioAgencia;
+import pe.com.logistica.bean.negocio.EventoObsAnu;
 import pe.com.logistica.bean.negocio.MaestroServicio;
 import pe.com.logistica.bean.negocio.PagoServicio;
 import pe.com.logistica.bean.negocio.ServicioAgencia;
@@ -67,6 +70,7 @@ public class ServicioAgenteMBean extends BaseMBean {
 	private Destino destinoBusqueda;
 	private Destino origenBusqueda;
 	private PagoServicio pagoServicio;
+	private EventoObsAnu eventoObsAnu;
 	
 	private BigDecimal saldoServicio;
 
@@ -91,6 +95,10 @@ public class ServicioAgenteMBean extends BaseMBean {
 	private SoporteServicio soporteServicio;
 	
 	private String pregunta;
+	private String nombreCampoTexto;
+	private String nombreTitulo;
+	private Integer tipoEvento;
+	private String idModales;
 
 	/**
 	 * 
@@ -795,8 +803,109 @@ public class ServicioAgenteMBean extends BaseMBean {
 		}
 	}
 	
+	public void anularVenta(){
+try {
+			
+			HttpSession session = obtenerSession(false);
+			Usuario usuario = (Usuario) session
+					.getAttribute("usuarioSession");
+			getServicioAgencia().setUsuarioCreacion(
+					usuario.getUsuario());
+			getServicioAgencia().setIpCreacion(
+					obtenerRequest().getRemoteAddr());
+			getServicioAgencia().setUsuarioModificacion(
+					usuario.getUsuario());
+			getServicioAgencia().setIpModificacion(
+					obtenerRequest().getRemoteAddr());
+			
+			this.negocioServicio.anularVenta(getServicioAgencia());
+			
+			this.setTransaccionExito(true);
+			this.setShowModal(true);
+			this.setMensajeModal("Servicio Venta se cerro satisfactoriamente");
+			this.setTipoModal(TIPO_MODAL_EXITO);
+			
+		} catch (SQLException e) {
+			this.setShowModal(true);
+			this.setMensajeModal(e.getMessage());
+			this.setTipoModal(TIPO_MODAL_ERROR);
+			logger.error(e.getMessage(), e);
+		} catch (Exception e) {
+			this.setShowModal(true);
+			this.setMensajeModal(e.getMessage());
+			this.setTipoModal(TIPO_MODAL_ERROR);
+			logger.error(e.getMessage(), e);
+		}
+	}
+	
 	public void preCerrarVenta(){
 		this.setPregunta("¿Esta seguro de cerrar el servicio de venta?");
+	}
+	
+	public void preAnularVenta(){
+		this.setNombreTitulo("Anular Venta");
+		this.setNombreCampoTexto("Comentario Anulación");
+		this.setTipoEvento(EventoObsAnu.EVENTO_ANU);
+	}
+	
+	public void preObservarVenta(){
+		this.setNombreTitulo("Observar Venta");
+		this.setNombreCampoTexto("Comentario Observación");
+		this.setTipoEvento(EventoObsAnu.EVENTO_OBS);
+	}
+	
+	public void preEvento2(){
+		this.setIdModales("idModalventaservicio,idModalObsAnu");
+		
+		if (EventoObsAnu.EVENTO_OBS.equals(this.getTipoEvento())){
+			this.setPregunta("¿Esta seguro de observar la venta?");
+		}
+		else {
+			this.setPregunta("¿Esta seguro de anular la venta?");
+		}
+	}	
+	
+	public void registrarEvento(){
+		try {
+			this.getEventoObsAnu().setIdServicio(this.getServicioAgencia().getCodigoEntero());
+			HttpSession session = obtenerSession(false);
+			Usuario usuario = (Usuario) session
+					.getAttribute("usuarioSession");
+			this.getEventoObsAnu().setUsuarioCreacion(
+					usuario.getUsuario());
+			this.getEventoObsAnu().setIpCreacion(
+					obtenerRequest().getRemoteAddr());
+			this.getEventoObsAnu().setUsuarioModificacion(
+					usuario.getUsuario());
+			this.getEventoObsAnu().setIpModificacion(
+					obtenerRequest().getRemoteAddr());
+			
+			if (EventoObsAnu.EVENTO_OBS.equals(this.getTipoEvento())){
+				this.negocioServicio.registrarEventoObservacion(this.getEventoObsAnu());
+				
+				this.setShowModal(true);
+				this.setMensajeModal("Observación registrada satisfactoriamente");
+				this.setTipoModal(TIPO_MODAL_EXITO);
+			}
+			else{
+				this.negocioServicio.registrarEventoAnulacion(this.getEventoObsAnu());
+				
+				this.setShowModal(true);
+				this.setMensajeModal("Servicio Venta anulada satisfactoriamente");
+				this.setTipoModal(TIPO_MODAL_EXITO);
+			}
+		} catch (SQLException e) {
+			logger.error(e.getMessage(), e);
+			this.setShowModal(true);
+			this.setMensajeModal(e.getMessage());
+			this.setTipoModal(TIPO_MODAL_ERROR);
+		} catch (Exception e) {
+			logger.error(e.getMessage(), e);
+			this.setShowModal(true);
+			this.setMensajeModal(e.getMessage());
+			this.setTipoModal(TIPO_MODAL_ERROR);
+		}
+		
 	}
 
 	public void calcularCuota() {
@@ -1496,6 +1605,79 @@ public class ServicioAgenteMBean extends BaseMBean {
 	 */
 	public void setPregunta(String pregunta) {
 		this.pregunta = pregunta;
+	}
+
+	/**
+	 * @return the nombreCampoTexto
+	 */
+	public String getNombreCampoTexto() {
+		return nombreCampoTexto;
+	}
+
+	/**
+	 * @param nombreCampoTexto the nombreCampoTexto to set
+	 */
+	public void setNombreCampoTexto(String nombreCampoTexto) {
+		this.nombreCampoTexto = nombreCampoTexto;
+	}
+
+	/**
+	 * @return the nombreTitulo
+	 */
+	public String getNombreTitulo() {
+		return nombreTitulo;
+	}
+
+	/**
+	 * @param nombreTitulo the nombreTitulo to set
+	 */
+	public void setNombreTitulo(String nombreTitulo) {
+		this.nombreTitulo = nombreTitulo;
+	}
+
+	/**
+	 * @return the eventoObsAnu
+	 */
+	public EventoObsAnu getEventoObsAnu() {
+		if (eventoObsAnu == null){
+			eventoObsAnu = new EventoObsAnu();
+		}
+		return eventoObsAnu;
+	}
+
+	/**
+	 * @param eventoObsAnu the eventoObsAnu to set
+	 */
+	public void setEventoObsAnu(EventoObsAnu eventoObsAnu) {
+		this.eventoObsAnu = eventoObsAnu;
+	}
+
+	/**
+	 * @return the tipoEvento
+	 */
+	public Integer getTipoEvento() {
+		return tipoEvento;
+	}
+
+	/**
+	 * @param tipoEvento the tipoEvento to set
+	 */
+	public void setTipoEvento(Integer tipoEvento) {
+		this.tipoEvento = tipoEvento;
+	}
+
+	/**
+	 * @return the idModales
+	 */
+	public String getIdModales() {
+		return idModales;
+	}
+
+	/**
+	 * @param idModales the idModales to set
+	 */
+	public void setIdModales(String idModales) {
+		this.idModales = idModales;
 	}
 
 }

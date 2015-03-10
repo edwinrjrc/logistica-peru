@@ -10,6 +10,7 @@ import java.util.List;
 
 import pe.com.logistica.bean.negocio.CuotaPago;
 import pe.com.logistica.bean.negocio.DetalleServicioAgencia;
+import pe.com.logistica.bean.negocio.EventoObsAnu;
 import pe.com.logistica.bean.negocio.PagoServicio;
 import pe.com.logistica.bean.negocio.ServicioAgencia;
 
@@ -82,4 +83,7 @@ public interface ServicioNovaViajesDao {
 
 	void actualizarServicioVenta(ServicioAgencia servicioAgencia)
 			throws SQLException, Exception;
+
+	boolean registrarEventoObsAnu(EventoObsAnu evento) throws SQLException,
+			Exception;
 }

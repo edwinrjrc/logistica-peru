@@ -7,6 +7,7 @@ function mostrarModal(idform){
 	var tipoModal = document.getElementById('idFormHidden:idTipoModal').value;
 	
 	if (tipoModal == "1" && eval(mostrarModal)){
+		
 		document.getElementById(idform+':idBotonModalCorrecto').click();
 	}
 	else if (tipoModal == "2" && eval(mostrarModal)){
@@ -59,4 +60,24 @@ function dataTableSelectOneRadio(radio) {
 		}
 	}
 	radio.checked = true;
+}
+
+function cerrarModales(modales){
+	var modal = modales.split(",");
+	Richfaces.hideModalPanel(modal[0]);
+}
+
+function mostrarModal2(idform){
+	var mostrarModal = document.getElementById('idFormHidden:idShowModal').value;
+	var tipoModal = document.getElementById('idFormHidden:idTipoModal').value;
+	
+	if (tipoModal == "1" && eval(mostrarModal)){
+		document.getElementById(idform+':idBotonModalCorrecto').click();
+	}
+	else if (tipoModal == "2" && eval(mostrarModal)){
+		document.getElementById(idform+':idBotonModalError').click();
+	}
+	
+	document.getElementById(idform+':idBotonCierraVista').click();
+	document.getElementById(idform+':idBotonCierraObsAnu').click();
 }
