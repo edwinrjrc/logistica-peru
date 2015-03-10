@@ -30,6 +30,7 @@ import pe.com.logistica.bean.negocio.CuotaPago;
 import pe.com.logistica.bean.negocio.Destino;
 import pe.com.logistica.bean.negocio.DetalleServicioAgencia;
 import pe.com.logistica.bean.negocio.Direccion;
+import pe.com.logistica.bean.negocio.EventoObsAnu;
 import pe.com.logistica.bean.negocio.Maestro;
 import pe.com.logistica.bean.negocio.MaestroServicio;
 import pe.com.logistica.bean.negocio.PagoServicio;
@@ -1755,5 +1756,33 @@ public class NegocioSession implements NegocioSessionRemote,
 		servicioAgencia.getEstadoServicio().setCodigoEntero(ServicioAgencia.ESTADO_CERRADO);
 		
 		servicioNovaViajesDao.actualizarServicioVenta(servicioAgencia);
+	}
+
+	@Override
+	public void anularVenta(ServicioAgencia servicioAgencia)
+			throws SQLException, Exception {
+		ServicioNovaViajesDao servicioNovaViajesDao = new ServicioNovaViajesDaoImpl();
+		
+		servicioAgencia.getEstadoServicio().setCodigoEntero(ServicioAgencia.ESTADO_ANULADO);
+		
+		servicioNovaViajesDao.actualizarServicioVenta(servicioAgencia);
+	}
+	
+	@Override
+	public void registrarEventoObservacion(EventoObsAnu evento) throws SQLException, Exception{
+		ServicioNovaViajesDao servicioNovaViajesDao = new ServicioNovaViajesDaoImpl();
+		
+		evento.getTipoEvento().setCodigoEntero(EventoObsAnu.EVENTO_OBS);
+		
+		servicioNovaViajesDao.registrarEventoObsAnu(evento);
+	}
+	
+	@Override
+	public void registrarEventoAnulacion(EventoObsAnu evento) throws SQLException, Exception{
+		ServicioNovaViajesDao servicioNovaViajesDao = new ServicioNovaViajesDaoImpl();
+		
+		evento.getTipoEvento().setCodigoEntero(EventoObsAnu.EVENTO_ANU);
+		
+		servicioNovaViajesDao.registrarEventoObsAnu(evento);
 	}
 }
