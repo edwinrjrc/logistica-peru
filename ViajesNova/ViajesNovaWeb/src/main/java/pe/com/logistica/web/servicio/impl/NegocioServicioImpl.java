@@ -22,6 +22,7 @@ import pe.com.logistica.bean.negocio.CorreoMasivo;
 import pe.com.logistica.bean.negocio.CuotaPago;
 import pe.com.logistica.bean.negocio.DetalleServicioAgencia;
 import pe.com.logistica.bean.negocio.Direccion;
+import pe.com.logistica.bean.negocio.EventoObsAnu;
 import pe.com.logistica.bean.negocio.MaestroServicio;
 import pe.com.logistica.bean.negocio.PagoServicio;
 import pe.com.logistica.bean.negocio.ProgramaNovios;
@@ -369,6 +370,21 @@ public class NegocioServicioImpl implements NegocioServicio {
 	@Override
 	public void cerrarVenta(ServicioAgencia servicioAgencia) throws SQLException, Exception{
 		ejbSession.cerrarVenta(servicioAgencia);
+	}
+
+	@Override
+	public void anularVenta(ServicioAgencia servicioAgencia) throws SQLException, Exception{
+		ejbSession.anularVenta(servicioAgencia);
+	}
+	
+	@Override
+	public void registrarEventoObservacion(EventoObsAnu evento) throws SQLException, Exception{
+		ejbSession.registrarEventoObservacion(evento);
+	}
+	
+	@Override
+	public void registrarEventoAnulacion(EventoObsAnu evento) throws SQLException, Exception{
+		ejbSession.registrarEventoAnulacion(evento);
 	}
 }
 	

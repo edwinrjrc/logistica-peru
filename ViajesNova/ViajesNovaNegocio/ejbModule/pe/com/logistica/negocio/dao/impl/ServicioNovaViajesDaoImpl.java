@@ -18,6 +18,7 @@ import org.apache.commons.lang3.StringUtils;
 import pe.com.logistica.bean.Util.UtilParse;
 import pe.com.logistica.bean.negocio.CuotaPago;
 import pe.com.logistica.bean.negocio.DetalleServicioAgencia;
+import pe.com.logistica.bean.negocio.EventoObsAnu;
 import pe.com.logistica.bean.negocio.PagoServicio;
 import pe.com.logistica.bean.negocio.ServicioAgencia;
 import pe.com.logistica.negocio.dao.ServicioNovaViajesDao;
@@ -1680,6 +1681,48 @@ public class ServicioNovaViajesDaoImpl implements ServicioNovaViajesDao {
 			
 			cs.execute();
 			
+		} catch (SQLException e) {
+			throw new SQLException(e);
+		} finally {
+			try {
+				if (cs != null) {
+					cs.close();
+				}
+				if (conn != null){
+					conn.close();
+				}
+			} catch (SQLException e) {
+				throw new SQLException(e);
+			}
+		}
+	}
+
+	@Override
+	public boolean registrarEventoObsAnu(EventoObsAnu evento) throws SQLException, Exception {
+		Connection conn = null;
+		CallableStatement cs = null;
+		String sql = "{ ? = call negocio.fn_registrareventoservicio(?,?,?,?,?,?)}";
+		
+		try {
+			conn = UtilConexion.obtenerConexion();
+			cs = conn.prepareCall(sql);
+			int i=1;
+			cs.registerOutParameter(i++, Types.BOOLEAN);
+			cs.setInt(i++, evento.getTipoEvento().getCodigoEntero().intValue());
+			cs.setString(i++, evento.getComentario());
+			cs.setInt(i++, evento.getIdServicio().intValue());
+			if (evento.getTipoEvento().getCodigoEntero().equals(EventoObsAnu.EVENTO_ANU)){
+				cs.setInt(i++, ServicioAgencia.ESTADO_ANULADO);
+			}
+			else{
+				cs.setInt(i++, ServicioAgencia.ESTADO_OBSERVADO);
+			}
+			cs.setString(i++, evento.getUsuarioCreacion());
+			cs.setString(i++, evento.getIpCreacion());
+			
+			cs.execute();
+			
+			return true;
 		} catch (SQLException e) {
 			throw new SQLException(e);
 		} finally {
