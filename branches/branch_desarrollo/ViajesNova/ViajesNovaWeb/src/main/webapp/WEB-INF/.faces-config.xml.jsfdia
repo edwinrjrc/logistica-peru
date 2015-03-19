@@ -90,6 +90,11 @@
     PATH="/paginas/negocio/consolidador/administrar.xhtml"
     TARGET="rules:#paginas#negocio#consolidador#administrar.xhtml"
     TITLE="irAdministrarConsolidador" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT
+    ID="irConfigurarServicios::#paginas#soporte#servicios#configurar.xhtml"
+    NAME="output16" PATH="/paginas/soporte/servicios/configurar.xhtml"
+    TARGET="rules:#paginas#soporte#servicios#configurar.xhtml"
+    TITLE="irConfigurarServicios" model-entity="JSFProcessItemOutput"/>
   </PROCESS-ITEM>
  </PROCESS-ITEM>
  <PROCESS-ITEM NAME="rules:#paginas#seguridad#usuario#administrar.xhtml"
@@ -196,4 +201,7 @@
   NAME="rules:#paginas#negocio#servicios#registroventaservicio2.xhtml"
   PATH="/paginas/negocio/servicios/registroventaservicio2.xhtml"
   SHAPE="777,1375,0,0" model-entity="JSFProcessGroup" persistent="true"/>
+ <PROCESS-ITEM NAME="rules:#paginas#soporte#servicios#configurar.xhtml"
+  PATH="/paginas/soporte/servicios/configurar.xhtml"
+  SHAPE="592,-96,50,25" model-entity="JSFProcessGroup" persistent="true"/>
 </PROCESS>
