@@ -706,6 +706,7 @@ public class ServicioNovaViajesDaoImpl implements ServicioNovaViajesDao {
 				servicioAgencia2.setFechaPrimerCuota(UtilJdbc.obtenerFecha(rs, "fechaprimercuota"));
 				servicioAgencia2.setFechaUltimaCuota(UtilJdbc.obtenerFecha(rs, "fechaultcuota"));
 				servicioAgencia2.getEstadoServicio().setCodigoEntero(UtilJdbc.obtenerNumero(rs, "idestadoservicio"));
+				servicioAgencia2.setTienePagos(UtilJdbc.obtenerNumero(rs, "tienepagos"));
 				servicioAgencia2.getVendedor().setCodigoEntero(UtilJdbc.obtenerNumero(rs, "idusuario"));
 				String nombreVendedor = UtilJdbc.obtenerCadena(rs, "nombresvendedor")+" "+UtilJdbc.obtenerCadena(rs, "apepaterno")+" "+UtilJdbc.obtenerCadena(rs, "apematerno");
 				nombreVendedor = StringUtils.normalizeSpace(nombreVendedor);

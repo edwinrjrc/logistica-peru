@@ -48,6 +48,7 @@ public class DetalleServicioAgencia extends BaseNegocio {
 	private ConfiguracionTipoServicio configuracionTipoServicio;
 	
 	private boolean tarifaNegociada;
+	private boolean conIGV;
 	/**
 	 * 
 	 */
@@ -434,6 +435,20 @@ public class DetalleServicioAgencia extends BaseNegocio {
 	 */
 	public void setOperadora(BaseVO operadora) {
 		this.operadora = operadora;
+	}
+
+	/**
+	 * @return the conIGV
+	 */
+	public boolean isConIGV() {
+		return conIGV;
+	}
+
+	/**
+	 * @param conIGV the conIGV to set
+	 */
+	public void setConIGV(boolean conIGV) {
+		this.conIGV = conIGV;
 	}
 
 }

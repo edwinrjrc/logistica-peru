@@ -53,6 +53,8 @@ public class ServicioAgencia extends BaseNegocio{
 	
 	private BaseVO aerolinea;
 	
+	private int tienePagos;
+	
 	public static final Integer ESTADO_PENDIENTE_CIERRE = 1;
 	public static final Integer ESTADO_CERRADO          = 2;
 	public static final Integer ESTADO_ANULADO          = 3;
@@ -578,5 +580,23 @@ public class ServicioAgencia extends BaseNegocio{
 	 */
 	public void setEditable(boolean editable) {
 		this.editable = editable;
+	}
+
+
+
+	/**
+	 * @return the tienePagos
+	 */
+	public int getTienePagos() {
+		return tienePagos;
+	}
+
+
+
+	/**
+	 * @param tienePagos the tienePagos to set
+	 */
+	public void setTienePagos(int tienePagos) {
+		this.tienePagos = tienePagos;
 	}
 }

@@ -1,8 +1,8 @@
 package pe.com.logistica.bean.negocio;
 
-import pe.com.logistica.bean.base.Base;
+import pe.com.logistica.bean.base.BaseNegocio;
 
-public class ConfiguracionTipoServicio extends Base{
+public class ConfiguracionTipoServicio extends BaseNegocio{
 	
 	/**
 	 * 
