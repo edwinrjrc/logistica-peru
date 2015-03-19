@@ -176,4 +176,22 @@ public class SoporteServicioImpl implements SoporteServicio {
 	public boolean esDestinoNacional(Integer destino) throws ErrorConsultaDataException, SQLException, Exception {
 		return ejbSession.esDestinoNacional(destino);
 	}
+
+	@Override
+	public List<ConfiguracionTipoServicio> listarConfiguracionServicios()
+			throws SQLException, Exception {
+		return ejbSession.listarConfiguracionServicios();
+	}
+	
+	@Override
+	public List<BaseVO> listarTiposServicios()
+			throws SQLException, Exception {
+		return ejbSession.listarTipoServicios();
+	}
+
+	@Override
+	public boolean guardarConfiguracionServicio(
+			List<ConfiguracionTipoServicio> listaConfigServicios) throws SQLException, Exception{
+		return ejbSession.guardarConfiguracionServicio(listaConfigServicios);
+	}
 }

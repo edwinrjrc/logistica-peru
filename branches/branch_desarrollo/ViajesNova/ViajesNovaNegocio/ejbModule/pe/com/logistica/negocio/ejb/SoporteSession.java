@@ -1,5 +1,6 @@
 package pe.com.logistica.negocio.ejb;
 
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,6 +25,7 @@ import pe.com.logistica.negocio.dao.impl.DestinoDaoImpl;
 import pe.com.logistica.negocio.dao.impl.MaestroDaoImpl;
 import pe.com.logistica.negocio.dao.impl.ProveedorDaoImpl;
 import pe.com.logistica.negocio.exception.ErrorConsultaDataException;
+import pe.com.logistica.negocio.util.UtilConexion;
 
 /**
  * Session Bean implementation class SoporteSession
@@ -184,5 +186,52 @@ public class SoporteSession implements SoporteRemote, SoporteLocal {
 		} catch (Exception e) {
 			throw new ErrorConsultaDataException("Error al determinar la nacionalidad del destino");
 		}
+	}
+
+	@Override
+	public List<ConfiguracionTipoServicio> listarConfiguracionServicios()
+			throws SQLException, Exception {
+		ConfiguracionServicioDao configuracionServicioDao = new ConfiguracionServicioDaoImpl();
+		
+		return configuracionServicioDao.listarConfiguracionServicios();
+	}
+	
+	@Override
+	public List<BaseVO> listarTipoServicios()
+			throws SQLException, Exception {
+		ConfiguracionServicioDao configuracionServicioDao = new ConfiguracionServicioDaoImpl();
+		
+		return configuracionServicioDao.listarTipoServicios();
+	}
+
+	@Override
+	public boolean guardarConfiguracionServicio(
+			List<ConfiguracionTipoServicio> listaConfigServicios)
+			throws ErrorConsultaDataException, SQLException, Exception {
+		ConfiguracionServicioDao configuracionServicioDao = new ConfiguracionServicioDaoImpl();
+		
+		Connection conn = null;
+		
+		try {
+			conn = UtilConexion.obtenerConexion();
+			
+			configuracionServicioDao.eliminarConfiguracion(listaConfigServicios.get(0), conn);
+			
+			for(ConfiguracionTipoServicio configuracion : listaConfigServicios){
+				configuracionServicioDao.registrarConfiguracionServicio(configuracion, conn);
+			}
+			
+			return true;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new ErrorConsultaDataException("Error al grabar configuracion");
+		} catch (Exception e) {
+			throw new ErrorConsultaDataException("Error al grabar configuracion");
+		} finally{
+			if (conn != null){
+				conn.close();
+			}
+		}
+		
 	}
 }

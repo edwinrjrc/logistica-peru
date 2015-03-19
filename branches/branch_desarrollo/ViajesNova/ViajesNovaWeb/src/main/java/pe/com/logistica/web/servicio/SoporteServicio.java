@@ -60,4 +60,11 @@ public interface SoporteServicio {
 	public List<Proveedor> listarComboProveedorTipo(BaseVO proveedor) throws SQLException, Exception;
 
 	public boolean esDestinoNacional(Integer destino) throws ErrorConsultaDataException, SQLException, Exception;
+
+	public List<ConfiguracionTipoServicio> listarConfiguracionServicios() throws SQLException, Exception;
+
+	List<BaseVO> listarTiposServicios() throws SQLException, Exception;
+
+	public boolean guardarConfiguracionServicio(
+			List<ConfiguracionTipoServicio> listaConfigServicios) throws SQLException, Exception;
 }

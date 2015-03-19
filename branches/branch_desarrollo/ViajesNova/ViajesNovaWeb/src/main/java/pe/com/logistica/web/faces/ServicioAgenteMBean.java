@@ -12,7 +12,6 @@ import java.util.List;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
-import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.SelectItem;
@@ -23,7 +22,6 @@ import javax.servlet.http.HttpSession;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
-import org.hibernate.validator.util.privilegedactions.GetConstructor;
 import org.richfaces.event.FileUploadEvent;
 import org.richfaces.model.UploadedFile;
 
@@ -35,6 +33,7 @@ import pe.com.logistica.bean.negocio.DetalleServicioAgencia;
 import pe.com.logistica.bean.negocio.EventoObsAnu;
 import pe.com.logistica.bean.negocio.MaestroServicio;
 import pe.com.logistica.bean.negocio.PagoServicio;
+import pe.com.logistica.bean.negocio.Parametro;
 import pe.com.logistica.bean.negocio.ServicioAgencia;
 import pe.com.logistica.bean.negocio.ServicioProveedor;
 import pe.com.logistica.bean.negocio.Usuario;
@@ -572,7 +571,8 @@ public class ServicioAgenteMBean extends BaseMBean {
 							FacesMessage.SEVERITY_ERROR);
 					resultado = false;
 				}
-				if (UtilWeb.fecha1EsMayorIgualFecha2(this.getDetalleServicio()
+				
+				if (this.getDetalleServicio().getFechaIda()!=null && UtilWeb.fecha1EsMayorIgualFecha2(this.getDetalleServicio()
 						.getFechaIda(), new Date())) {
 					this.agregarMensaje(
 							idFormulario + ":idFecServicio",
@@ -631,12 +631,11 @@ public class ServicioAgenteMBean extends BaseMBean {
 		BigDecimal montoIgv = BigDecimal.ZERO;
 		try {
 
-			/*
-			 * Parametro param =
-			 * this.parametroServicio.consultarParametro(UtilWeb
-			 * .obtenerEnteroPropertieMaestro( "codigoParametroFee",
-			 * "aplicacionDatos"));
-			 */
+			  Parametro param =
+			  this.parametroServicio.consultarParametro(UtilWeb
+			  .obtenerEnteroPropertieMaestro( "codigoParametroIGV",
+			  "aplicacionDatos"));
+			 
 
 			for (DetalleServicioAgencia detalleServicio : this
 					.getListadoDetalleServicio()) {
@@ -645,7 +644,7 @@ public class ServicioAgenteMBean extends BaseMBean {
 						.getMontoComision());
 				for (DetalleServicioAgencia detalleServicio2 : detalleServicio
 						.getServiciosHijos()) {
-					if (detalleServicio2.getTipoServicio().isEsImpuesto()){
+					if (detalleServicio2.getTipoServicio().getCodigoEntero().toString().equals(param.getValor())){
 						montoIgv = montoIgv.add(detalleServicio2.getPrecioUnitario());
 					}
 				}

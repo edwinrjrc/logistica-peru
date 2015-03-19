@@ -56,7 +56,14 @@ public interface SoporteRemote {
 			int convertirCadenaEntero) throws SQLException, Exception;
 	
 	public List<Proveedor> listarProveedorTipo(
-			BaseVO tipoProveedor) throws SQLException, Exception;
+			BaseVO tipoProveedor)  throws SQLException, Exception;
 
 	public boolean esDestinoNacional(Integer destino) throws ErrorConsultaDataException, SQLException, Exception;
+
+	public List<ConfiguracionTipoServicio> listarConfiguracionServicios() throws SQLException, Exception;
+	
+	List<BaseVO> listarTipoServicios() throws SQLException, Exception;
+
+	public boolean guardarConfiguracionServicio(
+			List<ConfiguracionTipoServicio> listaConfigServicios) throws SQLException, Exception;
 }

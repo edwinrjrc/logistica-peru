@@ -269,7 +269,7 @@
 
 				<f:facet name="footer">
 					<h:panelGrid cellpadding="0" cellspacing="0" border="0" columns="3"
-						rendered="#{sessionScope.usuarioSession.rol.codigoEntero == 3 and servicioAgenteMBean.servicioAgencia.estadoServicio.codigoEntero==2}">
+						rendered="#{sessionScope.usuarioSession.rol.codigoEntero == 3 and servicioAgenteMBean.servicioAgencia.estadoServicio.codigoEntero==2 and servicioAgenteMBean.servicioAgencia.tienePagos==0}">
 						<a4j:commandButton value="Anular Venta" render="idTxtNomTitulo, idTxtSubTitulo, idGrFrObsAnu"
 							action="#{servicioAgenteMBean.preAnularVenta()}"
 							oncomplete="#{rich:component('idModalObsAnu')}.show(); return false;"></a4j:commandButton>

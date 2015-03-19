@@ -58,4 +58,11 @@ public interface SoporteLocal {
 			BaseVO tipoProveedor) throws SQLException, Exception;
 	
 	public boolean esDestinoNacional(Integer destino) throws ErrorConsultaDataException, SQLException, Exception;
+	
+	public List<ConfiguracionTipoServicio> listarConfiguracionServicios() throws SQLException, Exception;
+
+	List<BaseVO> listarTipoServicios() throws SQLException, Exception;
+	
+	public boolean guardarConfiguracionServicio(
+			List<ConfiguracionTipoServicio> listaConfigServicios) throws SQLException, Exception;
 }
