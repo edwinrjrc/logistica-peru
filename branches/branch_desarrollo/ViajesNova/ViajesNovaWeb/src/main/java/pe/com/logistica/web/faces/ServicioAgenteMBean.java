@@ -486,7 +486,13 @@ public class ServicioAgenteMBean extends BaseMBean {
 				if (detalle2.getTipoServicio().getCodigoEntero().intValue() == baseVO
 						.getCodigoEntero().intValue()) {
 					resultado = true;
+					break;
 				}
+			}
+			if (detalle.getTipoServicio().getCodigoEntero().intValue() == baseVO
+					.getCodigoEntero().intValue()){
+				resultado = true;
+				break;
 			}
 		}
 
