@@ -3,6 +3,7 @@
  */
 package pe.com.logistica.negocio.util;
 
+import java.math.BigDecimal;
 import java.util.ResourceBundle;
 
 import org.apache.commons.lang3.StringUtils;
@@ -59,5 +60,12 @@ public class UtilEjb {
 			e.printStackTrace();
 		}
 		return 0;
+	}
+	
+	public static BigDecimal convertirCadenaDecimal(String numero){
+		if (StringUtils.isNotBlank(numero)){
+			return BigDecimal.valueOf(Double.valueOf(numero));
+		}
+		return BigDecimal.ZERO;
 	}
 }

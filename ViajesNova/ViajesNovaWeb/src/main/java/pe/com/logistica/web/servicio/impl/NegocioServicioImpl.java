@@ -28,6 +28,7 @@ import pe.com.logistica.bean.negocio.PagoServicio;
 import pe.com.logistica.bean.negocio.ProgramaNovios;
 import pe.com.logistica.bean.negocio.Proveedor;
 import pe.com.logistica.bean.negocio.ServicioAgencia;
+import pe.com.logistica.bean.negocio.ServicioAgenciaBusqueda;
 import pe.com.logistica.bean.negocio.ServicioNovios;
 import pe.com.logistica.bean.negocio.ServicioProveedor;
 import pe.com.logistica.negocio.ejb.NegocioSessionRemote;
@@ -204,7 +205,7 @@ public class NegocioServicioImpl implements NegocioServicio {
 	}
 	
 	@Override
-	public List<ServicioAgencia> listarVentaServicio(ServicioAgencia servicioAgencia) throws SQLException, Exception{
+	public List<ServicioAgencia> listarVentaServicio(ServicioAgenciaBusqueda servicioAgencia) throws SQLException, Exception{
 		return ejbSession.listarServicioVenta(servicioAgencia);
 	}
 
@@ -386,5 +387,6 @@ public class NegocioServicioImpl implements NegocioServicio {
 	public void registrarEventoAnulacion(EventoObsAnu evento) throws SQLException, Exception{
 		ejbSession.registrarEventoAnulacion(evento);
 	}
+
 }
 	

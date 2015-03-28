@@ -66,4 +66,6 @@ public interface SoporteRemote {
 
 	public boolean guardarConfiguracionServicio(
 			List<ConfiguracionTipoServicio> listaConfigServicios) throws SQLException, Exception;
+
+	public List<Destino> buscarDestinos(String descripcion) throws SQLException, Exception;
 }

@@ -194,4 +194,16 @@ public class SoporteServicioImpl implements SoporteServicio {
 			List<ConfiguracionTipoServicio> listaConfigServicios) throws SQLException, Exception{
 		return ejbSession.guardarConfiguracionServicio(listaConfigServicios);
 	}
+
+	@Override
+	public List<Destino> consultarOrigen(String descripcion)
+			throws SQLException, Exception {
+		return ejbSession.buscarDestinos(descripcion);
+	}
+
+	@Override
+	public List<Destino> consultarDestino(String descripcion)
+			throws SQLException, Exception {
+		return ejbSession.buscarDestinos(descripcion);
+	}
 }

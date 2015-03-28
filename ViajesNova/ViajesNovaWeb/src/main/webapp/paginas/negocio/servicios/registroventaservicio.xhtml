@@ -371,8 +371,8 @@
 											style="text-align:right;"
 											value="#{servicioAgenteMBean.detalleServicio.precioUnitario}"
 											size="10" maxlength="8" />
-										<h:selectBooleanCheckbox value="#{servicioAgenteMBean.detalleServicio.conIGV}" />
-										<h:outputText value="(Con IGV)" />
+										<h:selectBooleanCheckbox rendered="#{servicioAgenteMBean.calculadorIGV}" value="#{servicioAgenteMBean.detalleServicio.conIGV}" />
+										<h:outputText value="(Con IGV)" rendered="#{servicioAgenteMBean.calculadorIGV}"	 />
 										<rich:message for="idPrecUnitario" showDetail="false"
 											showSummary="true" ajaxRendered="true" />
 									</h:panelGrid>

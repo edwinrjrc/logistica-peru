@@ -4,6 +4,7 @@
 package pe.com.logistica.bean.negocio;
 
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -25,7 +26,12 @@ public class PagoServicio extends BaseNegocio {
 	private Date fechaPago;
 	private BigDecimal montoPago;
 	private InputStream sustentoPago;
+	private OutputStream sustentoPagoSalida;
 	private byte[] sustentoPagoByte;
+	private String nombreArchivo;
+	private String extensionArchivo;
+	private String tipoContenido;
+	
 	/**
 	 * 
 	 */
@@ -104,6 +110,62 @@ public class PagoServicio extends BaseNegocio {
 	 */
 	public void setSustentoPagoByte(byte[] sustentoPagoByte) {
 		this.sustentoPagoByte = sustentoPagoByte;
+	}
+
+	/**
+	 * @return the nombreArchivo
+	 */
+	public String getNombreArchivo() {
+		return nombreArchivo;
+	}
+
+	/**
+	 * @param nombreArchivo the nombreArchivo to set
+	 */
+	public void setNombreArchivo(String nombreArchivo) {
+		this.nombreArchivo = nombreArchivo;
+	}
+
+	/**
+	 * @return the extensionArchivo
+	 */
+	public String getExtensionArchivo() {
+		return extensionArchivo;
+	}
+
+	/**
+	 * @param extensionArchivo the extensionArchivo to set
+	 */
+	public void setExtensionArchivo(String extensionArchivo) {
+		this.extensionArchivo = extensionArchivo;
+	}
+
+	/**
+	 * @return the sustentoPagoSalida
+	 */
+	public OutputStream getSustentoPagoSalida() {
+		return sustentoPagoSalida;
+	}
+
+	/**
+	 * @param sustentoPagoSalida the sustentoPagoSalida to set
+	 */
+	public void setSustentoPagoSalida(OutputStream sustentoPagoSalida) {
+		this.sustentoPagoSalida = sustentoPagoSalida;
+	}
+
+	/**
+	 * @return the tipoContenido
+	 */
+	public String getTipoContenido() {
+		return tipoContenido;
+	}
+
+	/**
+	 * @param tipoContenido the tipoContenido to set
+	 */
+	public void setTipoContenido(String tipoContenido) {
+		this.tipoContenido = tipoContenido;
 	}
 
 }

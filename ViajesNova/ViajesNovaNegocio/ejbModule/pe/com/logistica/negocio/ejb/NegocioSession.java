@@ -3,6 +3,7 @@ package pe.com.logistica.negocio.ejb;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -34,9 +35,11 @@ import pe.com.logistica.bean.negocio.EventoObsAnu;
 import pe.com.logistica.bean.negocio.Maestro;
 import pe.com.logistica.bean.negocio.MaestroServicio;
 import pe.com.logistica.bean.negocio.PagoServicio;
+import pe.com.logistica.bean.negocio.Parametro;
 import pe.com.logistica.bean.negocio.ProgramaNovios;
 import pe.com.logistica.bean.negocio.Proveedor;
 import pe.com.logistica.bean.negocio.ServicioAgencia;
+import pe.com.logistica.bean.negocio.ServicioAgenciaBusqueda;
 import pe.com.logistica.bean.negocio.ServicioNovios;
 import pe.com.logistica.bean.negocio.ServicioProveedor;
 import pe.com.logistica.bean.negocio.Telefono;
@@ -50,6 +53,7 @@ import pe.com.logistica.negocio.dao.DestinoDao;
 import pe.com.logistica.negocio.dao.DireccionDao;
 import pe.com.logistica.negocio.dao.MaestroDao;
 import pe.com.logistica.negocio.dao.MaestroServicioDao;
+import pe.com.logistica.negocio.dao.ParametroDao;
 import pe.com.logistica.negocio.dao.PersonaDao;
 import pe.com.logistica.negocio.dao.ProveedorDao;
 import pe.com.logistica.negocio.dao.ServicioNegocioDao;
@@ -66,6 +70,7 @@ import pe.com.logistica.negocio.dao.impl.DestinoDaoImpl;
 import pe.com.logistica.negocio.dao.impl.DireccionDaoImpl;
 import pe.com.logistica.negocio.dao.impl.MaestroDaoImpl;
 import pe.com.logistica.negocio.dao.impl.MaestroServicioDaoImpl;
+import pe.com.logistica.negocio.dao.impl.ParametroDaoImpl;
 import pe.com.logistica.negocio.dao.impl.PersonaDaoImpl;
 import pe.com.logistica.negocio.dao.impl.ProveedorDaoImpl;
 import pe.com.logistica.negocio.dao.impl.ServicioNegocioDaoImpl;
@@ -81,6 +86,7 @@ import pe.com.logistica.negocio.exception.ValidacionException;
 import pe.com.logistica.negocio.util.UtilConexion;
 import pe.com.logistica.negocio.util.UtilCorreo;
 import pe.com.logistica.negocio.util.UtilDatos;
+import pe.com.logistica.negocio.util.UtilEjb;
 import pe.com.logistica.negocio.util.UtilJdbc;
 
 /**
@@ -971,7 +977,26 @@ public class NegocioSession implements NegocioSessionRemote,
 			}
 			
 			if (detalleServicio.getPrecioUnitario()!= null){
-				BigDecimal total = detalleServicio.getPrecioUnitario().multiply(UtilParse.parseIntABigDecimal(detalleServicio.getCantidad())); 
+				BigDecimal total = detalleServicio.getPrecioUnitario().multiply(UtilParse.parseIntABigDecimal(detalleServicio.getCantidad()));
+				if (detalleServicio.isConIGV()){
+					ParametroDao parametroDao = new ParametroDaoImpl();
+					BigDecimal valorParametro = BigDecimal.ZERO;
+					Parametro param =
+							  parametroDao.consultarParametro(UtilEjb
+							  .obtenerEnteroPropertieMaestro( "codigoParametroIGV",
+							  "aplicacionDatosEjb"));
+					List<MaestroServicio> lista = maestroServicioDao.consultarServiciosInvisibles(detalleServicio.getTipoServicio().getCodigoEntero());
+					for (MaestroServicio maestroServicio : lista) {
+						if (maestroServicio.getCodigoEntero().intValue() == UtilEjb.convertirCadenaEntero(param.getValor())){
+							valorParametro = UtilEjb.convertirCadenaDecimal(maestroServicio.getValorParametro());
+							break;
+						}
+					}
+					valorParametro = valorParametro.add(BigDecimal.ONE);
+					BigDecimal precioBase = detalleServicio.getPrecioUnitario().divide(valorParametro, 4, RoundingMode.HALF_DOWN);
+					total = precioBase.multiply(UtilParse.parseIntABigDecimal(detalleServicio.getCantidad()));
+					detalleServicio.setPrecioUnitario(precioBase);
+				}
 				totalVenta = totalVenta.add(total);
 			}
 			
@@ -1249,7 +1274,7 @@ public class NegocioSession implements NegocioSessionRemote,
 	}
 	
 	@Override
-	public List<ServicioAgencia> listarServicioVenta(ServicioAgencia servicioAgencia) throws SQLException, Exception{
+	public List<ServicioAgencia> listarServicioVenta(ServicioAgenciaBusqueda servicioAgencia) throws SQLException, Exception{
 		ServicioNovaViajesDao servicioNovaViajesDao = new ServicioNovaViajesDaoImpl();
 		return servicioNovaViajesDao.consultarServiciosVenta(servicioAgencia);
 	}
@@ -1613,9 +1638,10 @@ public class NegocioSession implements NegocioSessionRemote,
 				
 				try {
 					BigDecimal cantidad = BigDecimal.valueOf(Double.valueOf(String.valueOf(detalleServicio2.getCantidad())));
-					BigDecimal totalServicioPrecede = detalleServicio2.getPrecioUnitario().multiply(cantidad);
-					
+					BigDecimal precioBase = detalleServicio2.getPrecioUnitario();
 					BigDecimal porcenIGV = BigDecimal.valueOf(Double.valueOf(maestroServicio.getValorParametro()));
+					BigDecimal totalServicioPrecede = precioBase.multiply(cantidad);
+					
 					BigDecimal igvServicio = totalServicioPrecede.multiply(porcenIGV);
 					
 					detalle.setMontoIGV(igvServicio);
@@ -1785,4 +1811,5 @@ public class NegocioSession implements NegocioSessionRemote,
 		
 		servicioNovaViajesDao.registrarEventoObsAnu(evento);
 	}
+
 }

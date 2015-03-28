@@ -13,6 +13,7 @@ import pe.com.logistica.bean.negocio.DetalleServicioAgencia;
 import pe.com.logistica.bean.negocio.EventoObsAnu;
 import pe.com.logistica.bean.negocio.PagoServicio;
 import pe.com.logistica.bean.negocio.ServicioAgencia;
+import pe.com.logistica.bean.negocio.ServicioAgenciaBusqueda;
 
 /**
  * @author edwreb
@@ -43,7 +44,7 @@ public interface ServicioNovaViajesDao {
 	public List<DetalleServicioAgencia> consultaServicioDetalle(int idServicio) throws SQLException;
 
 	List<ServicioAgencia> consultarServiciosVenta(
-			ServicioAgencia servicioAgencia) throws SQLException;
+			ServicioAgenciaBusqueda servicioAgencia) throws SQLException;
 
 	List<DetalleServicioAgencia> consultaServicioDetalle(int idServicio,
 			Connection conn) throws SQLException;
