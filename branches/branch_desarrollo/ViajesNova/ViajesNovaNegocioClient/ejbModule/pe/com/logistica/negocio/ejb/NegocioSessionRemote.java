@@ -21,6 +21,7 @@ import pe.com.logistica.bean.negocio.PagoServicio;
 import pe.com.logistica.bean.negocio.ProgramaNovios;
 import pe.com.logistica.bean.negocio.Proveedor;
 import pe.com.logistica.bean.negocio.ServicioAgencia;
+import pe.com.logistica.bean.negocio.ServicioAgenciaBusqueda;
 import pe.com.logistica.bean.negocio.ServicioNovios;
 import pe.com.logistica.bean.negocio.ServicioProveedor;
 import pe.com.logistica.negocio.exception.EnvioCorreoException;
@@ -96,7 +97,7 @@ public interface NegocioSessionRemote {
 			throws SQLException, Exception;
 
 	public List<ServicioAgencia> listarServicioVenta(
-			ServicioAgencia servicioAgencia) throws SQLException, Exception;
+			ServicioAgenciaBusqueda servicioAgencia) throws SQLException, Exception;
 
 	public ServicioAgencia consultarServicioVenta(int idServicio)
 			throws SQLException, Exception;
@@ -180,4 +181,5 @@ public interface NegocioSessionRemote {
 	public void registrarEventoObservacion(EventoObsAnu evento) throws SQLException, Exception;
 	
 	public void registrarEventoAnulacion(EventoObsAnu evento) throws SQLException, Exception;
+
 }

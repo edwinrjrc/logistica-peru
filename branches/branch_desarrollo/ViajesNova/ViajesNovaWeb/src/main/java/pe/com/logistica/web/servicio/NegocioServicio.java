@@ -22,6 +22,7 @@ import pe.com.logistica.bean.negocio.PagoServicio;
 import pe.com.logistica.bean.negocio.ProgramaNovios;
 import pe.com.logistica.bean.negocio.Proveedor;
 import pe.com.logistica.bean.negocio.ServicioAgencia;
+import pe.com.logistica.bean.negocio.ServicioAgenciaBusqueda;
 import pe.com.logistica.bean.negocio.ServicioNovios;
 import pe.com.logistica.bean.negocio.ServicioProveedor;
 import pe.com.logistica.negocio.exception.EnvioCorreoException;
@@ -98,7 +99,7 @@ public interface NegocioServicio {
 	List<ServicioProveedor> proveedoresXServicio(int idServicio)
 			throws SQLException, Exception;
 
-	List<ServicioAgencia> listarVentaServicio(ServicioAgencia servicioAgencia)
+	List<ServicioAgencia> listarVentaServicio(ServicioAgenciaBusqueda servicioAgencia)
 			throws SQLException, Exception;
 
 	ServicioAgencia consultarVentaServicio(int idServicio) throws SQLException,
@@ -174,4 +175,5 @@ public interface NegocioServicio {
 
 	void registrarEventoAnulacion(EventoObsAnu evento) throws SQLException,
 			Exception;
+
 }

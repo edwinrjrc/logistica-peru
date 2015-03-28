@@ -44,7 +44,7 @@
 					<f:facet name="footer">
 						<h:panelGrid cellpadding="0" cellspacing="0" border="0"
 							columns="1" style="width:100%; text-align:center;">
-							<a4j:commandButton value="Buscar"
+							<a4j:commandButton value="Buscar" render="idTablaDestinos"
 								action="#{servicioAgenteMBean.buscarDestino()}" />
 						</h:panelGrid>
 					</f:facet>
@@ -62,7 +62,7 @@
 					<rich:dataTable id="idTablaDestinos" var="row" rows="10"
 						value="#{servicioAgenteMBean.listaDestinosBusqueda}" style="width:100%;">
 						<f:facet name="noData">
-							<h:outputText value="No se encontraron clientes" />
+							<h:outputText value="No se encontraron destinos" />
 						</f:facet>
 						<rich:column style="width:30%;">
 							<f:facet name="header">

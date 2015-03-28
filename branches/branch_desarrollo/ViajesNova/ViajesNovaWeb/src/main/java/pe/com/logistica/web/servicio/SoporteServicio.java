@@ -67,4 +67,9 @@ public interface SoporteServicio {
 
 	public boolean guardarConfiguracionServicio(
 			List<ConfiguracionTipoServicio> listaConfigServicios) throws SQLException, Exception;
+
+	public List<Destino> consultarOrigen(String descripcion) throws SQLException, Exception;
+
+	List<Destino> consultarDestino(String descripcion) throws SQLException,
+			Exception;
 }

@@ -67,6 +67,16 @@
 									value="#{servicioAgenteMBean.servicioAgenciaBusqueda.cliente.nombres}"
 									size="100" maxlength="100" styleClass="estilocampo1" />
 							</h:panelGrid>
+							<h:panelGrid columns="4" border="0" cellpadding="0"
+								cellspacing="0" style="width:100%;text-align:left;"
+								columnClasses="col1fil1proveedor,col2fil1proveedor,col3fil1proveedor,col4fil1proveedor">
+								<h:outputText value="Fecha desde" />
+								<rich:calendar datePattern="dd/MM/yyyy"
+									value="#{servicioAgenteMBean.servicioAgenciaBusqueda.fechaDesde}" />
+								<h:outputText value="Fecha hasta" />
+								<rich:calendar datePattern="dd/MM/yyyy"
+									value="#{servicioAgenteMBean.servicioAgenciaBusqueda.fechaHasta}" />
+							</h:panelGrid>
 						</h:panelGrid>
 						<f:facet name="footer">
 							<h:panelGrid columns="1" border="0" cellpadding="0"
@@ -194,9 +204,12 @@
 								<a4j:commandButton id="idBotonCierraVista" style="display:none;"
 									type="button"
 									oncomplete="#{rich:component('idModalventaservicio')}.hide();" />
-								<a4j:commandButton id="idBotonCierraObsAnu" style="display:none;"
-									type="button"
+								<a4j:commandButton id="idBotonCierraObsAnu"
+									style="display:none;" type="button"
 									oncomplete="#{rich:component('idModalObsAnu')}.hide();" />
+								<h:commandButton value="Exportar"
+									style="display:none" id="idbtnExportarArchivo"
+									action="#{servicioAgenteMBean.exportarArchivo()}" />
 							</h:panelGrid>
 						</h:panelGroup>
 					</f:facet>

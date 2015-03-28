@@ -3,11 +3,15 @@
  */
 package pe.com.logistica.web.faces;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.StringTokenizer;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
@@ -17,6 +21,8 @@ import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.SelectItem;
 import javax.naming.NamingException;
 import javax.servlet.ServletContext;
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.io.IOUtils;
@@ -35,6 +41,7 @@ import pe.com.logistica.bean.negocio.MaestroServicio;
 import pe.com.logistica.bean.negocio.PagoServicio;
 import pe.com.logistica.bean.negocio.Parametro;
 import pe.com.logistica.bean.negocio.ServicioAgencia;
+import pe.com.logistica.bean.negocio.ServicioAgenciaBusqueda;
 import pe.com.logistica.bean.negocio.ServicioProveedor;
 import pe.com.logistica.bean.negocio.Usuario;
 import pe.com.logistica.negocio.exception.ErrorConsultaDataException;
@@ -63,12 +70,13 @@ public class ServicioAgenteMBean extends BaseMBean {
 	private static final long serialVersionUID = 3451688997471435575L;
 
 	private ServicioAgencia servicioAgencia;
-	private ServicioAgencia servicioAgenciaBusqueda;
+	private ServicioAgenciaBusqueda servicioAgenciaBusqueda;
 	private DetalleServicioAgencia detalleServicio;
 	private Cliente clienteBusqueda;
 	private Destino destinoBusqueda;
 	private Destino origenBusqueda;
 	private PagoServicio pagoServicio;
+	private PagoServicio pagoServicio2;
 	private EventoObsAnu eventoObsAnu;
 	
 	private BigDecimal saldoServicio;
@@ -88,6 +96,7 @@ public class ServicioAgenteMBean extends BaseMBean {
 	private boolean busquedaRealizada;
 	private boolean editarComision;
 	private boolean vendedor;
+	private boolean calculadorIGV;
 
 	private ParametroServicio parametroServicio;
 	private NegocioServicio negocioServicio;
@@ -984,6 +993,7 @@ try {
 
 	public void cargarDatosValores(ValueChangeEvent e) {
 		Object oe = e.getNewValue();
+		this.setCalculadorIGV(false);
 		try {
 			setListadoEmpresas(null);
 			this.getDetalleServicio().getServicioProveedor().setProveedor(null);
@@ -991,13 +1001,13 @@ try {
 			if (oe != null) {
 				String valor = oe.toString();
 
-				/*
-				 * Parametro param =
-				 * this.parametroServicio.consultarParametro(UtilWeb
-				 * .obtenerEnteroPropertieMaestro( "codigoParametroFee",
-				 * "aplicacionDatos"));
-				 * this.setServicioFee(valor.equals(param.getValor()));
-				 */
+				
+				  Parametro param =
+				  this.parametroServicio.consultarParametro(UtilWeb
+				  .obtenerEnteroPropertieMaestro( "codigoParametroIGV",
+				  "aplicacionDatos"));
+				  this.setServicioFee(valor.equals(param.getValor()));
+				 
 
 				MaestroServicio maestroServicio = this.negocioServicio
 						.consultarMaestroServicio(UtilWeb
@@ -1007,6 +1017,17 @@ try {
 						this.soporteServicio
 								.consultarConfiguracionServicio(UtilWeb
 										.convertirCadenaEntero(valor)));
+				
+				List<BaseVO> listaServicios = this.negocioServicio.consultaServiciosDependientes(UtilWeb
+						.convertirCadenaEntero(valor));
+				
+				this.setCalculadorIGV(false);
+				for (BaseVO baseVO : listaServicios) {
+					if (baseVO.getCodigoEntero().intValue() == UtilWeb.convertirCadenaEntero(param.getValor()) ){
+						this.setCalculadorIGV(true);
+						break;
+					}
+				}
 
 				this.setServicioFee(maestroServicio.isEsFee()
 						|| maestroServicio.isEsImpuesto());
@@ -1096,11 +1117,23 @@ try {
 	}
 
 	public void buscarDestino() {
-
+		try {
+			this.setListaDestinosBusqueda(this.soporteServicio.consultarDestino(this.getDestinoBusqueda().getDescripcion()));
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	public void buscarOrigen() {
-
+		try {
+			this.setListaOrigenesBusqueda(this.soporteServicio.consultarOrigen(this.getOrigenBusqueda().getDescripcion()));
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	public void seleccionarOrigen() {
@@ -1200,8 +1233,17 @@ try {
 	public void listener(FileUploadEvent event) throws Exception {
 		UploadedFile item = event.getUploadedFile();
 
-		this.getPagoServicio().setSustentoPago(item.getInputStream());
-		this.getPagoServicio().setSustentoPagoByte(IOUtils.toByteArray(item.getInputStream()));
+		String nombre = item.getName();
+		StringTokenizer stk = new StringTokenizer(nombre,".");
+		String archivoNombre = stk.nextToken();
+		if (stk.hasMoreTokens()){
+			archivoNombre = stk.nextToken();
+		}
+		byte[] arregloDatos = IOUtils.toByteArray(item.getInputStream());
+		this.getPagoServicio().setNombreArchivo(nombre);
+		this.getPagoServicio().setExtensionArchivo(archivoNombre);
+		this.getPagoServicio().setSustentoPagoByte(arregloDatos);
+		this.getPagoServicio().setTipoContenido(item.getContentType());
 	}
 
 	/**
@@ -1228,6 +1270,7 @@ try {
 	public List<ServicioAgencia> getListadoServicioAgencia() {
 		try {
 			if (!busquedaRealizada) {
+				
 				HttpSession session = obtenerSession(false);
 				Usuario usuario = (Usuario) session.getAttribute(USUARIO_SESSION);
 				if (Integer.valueOf(2).equals(usuario.getRol().getCodigoEntero()) || Integer.valueOf(4).equals(usuario.getRol().getCodigoEntero())) {
@@ -1245,6 +1288,39 @@ try {
 			logger.error(ex.getMessage(), ex);
 		}
 		return listadoServicioAgencia;
+	}
+	
+	public void verArchivo(Integer codigoPago){
+		for (PagoServicio pago : this.listaPagosServicios){
+			if (pago.getCodigoEntero().intValue() == codigoPago.intValue()){
+				this.setPagoServicio2(pago);
+				break;
+			}
+		}
+	}
+	
+	public void exportarArchivo(){
+		try {
+			HttpServletResponse response = obtenerResponse();
+			response.setContentType(pagoServicio2.getTipoContenido());
+			response.setHeader("Content-disposition",
+					"attachment;filename="+this.getPagoServicio2().getNombreArchivo()+"."+this.getPagoServicio2().getExtensionArchivo());
+			response.setHeader("Content-Transfer-Encoding", "binary");
+			
+			FacesContext facesContext = obtenerContexto();
+			
+			ServletOutputStream respuesta = response.getOutputStream();
+			if (this.getPagoServicio2()!=null && this.getPagoServicio2().getSustentoPagoByte()!=null){
+				respuesta.write(this.getPagoServicio2().getSustentoPagoByte());
+			}
+			
+			respuesta.close();
+			respuesta.flush();
+			
+			facesContext.responseComplete();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	/**
@@ -1359,10 +1435,16 @@ try {
 	/**
 	 * @return the servicioAgenciaBusqueda
 	 */
-	public ServicioAgencia getServicioAgenciaBusqueda() {
+	public ServicioAgenciaBusqueda getServicioAgenciaBusqueda() {
 		if (servicioAgenciaBusqueda == null) {
-			servicioAgenciaBusqueda = new ServicioAgencia();
+			servicioAgenciaBusqueda = new ServicioAgenciaBusqueda();
+			
+			Calendar cal = Calendar.getInstance();
+			servicioAgenciaBusqueda.setFechaHasta(cal.getTime());
+			cal.add(Calendar.DATE, -7);
+			servicioAgenciaBusqueda.setFechaDesde(cal.getTime());
 		}
+		
 		return servicioAgenciaBusqueda;
 	}
 
@@ -1371,7 +1453,7 @@ try {
 	 *            the servicioAgenciaBusqueda to set
 	 */
 	public void setServicioAgenciaBusqueda(
-			ServicioAgencia servicioAgenciaBusqueda) {
+			ServicioAgenciaBusqueda servicioAgenciaBusqueda) {
 		this.servicioAgenciaBusqueda = servicioAgenciaBusqueda;
 	}
 
@@ -1683,6 +1765,34 @@ try {
 	 */
 	public void setIdModales(String idModales) {
 		this.idModales = idModales;
+	}
+
+	/**
+	 * @return the calculadorIGV
+	 */
+	public boolean isCalculadorIGV() {
+		return calculadorIGV;
+	}
+
+	/**
+	 * @param calculadorIGV the calculadorIGV to set
+	 */
+	public void setCalculadorIGV(boolean calculadorIGV) {
+		this.calculadorIGV = calculadorIGV;
+	}
+
+	/**
+	 * @return the pagoServicio2
+	 */
+	public PagoServicio getPagoServicio2() {
+		return pagoServicio2;
+	}
+
+	/**
+	 * @param pagoServicio2 the pagoServicio2 to set
+	 */
+	public void setPagoServicio2(PagoServicio pagoServicio2) {
+		this.pagoServicio2 = pagoServicio2;
 	}
 
 }
