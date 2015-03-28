@@ -25,4 +25,6 @@ public interface DestinoDao {
 
 	Destino consultarDestino(int idDestino, Connection conn)
 			throws SQLException;
+
+	List<Destino> buscarDestinos(String nombreDestino) throws SQLException;
 }

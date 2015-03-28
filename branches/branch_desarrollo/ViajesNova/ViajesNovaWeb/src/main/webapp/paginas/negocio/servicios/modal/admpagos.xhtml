@@ -88,6 +88,14 @@
 								<f:convertNumber pattern="$ #,###,##0.00" locale="en_US" />
 							</h:outputText>
 						</rich:column>
+						<rich:column>
+							<f:facet name="header">
+								<h:outputText value="Sustento" />
+							</f:facet>
+							<a4j:commandButton value="Ver" action="#{servicioAgenteMBean.verArchivo(fila.codigoEntero)}"
+							oncomplete="document.getElementById('idformadmservicios:idbtnExportarArchivo').click();">
+							</a4j:commandButton>
+						</rich:column>
 						<f:facet name="header">
 							<h:panelGrid border="0" style="width:100%;text-align:left;">
 								<a4j:commandButton render="idGrFrRegpagos"

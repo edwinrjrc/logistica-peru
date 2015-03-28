@@ -234,4 +234,13 @@ public class SoporteSession implements SoporteRemote, SoporteLocal {
 		}
 		
 	}
+
+	@Override
+	public List<Destino> buscarDestinos(String descripcion)
+			throws SQLException, Exception {
+		
+		destinoDao = new DestinoDaoImpl();
+		
+		return destinoDao.buscarDestinos(descripcion);
+	}
 }

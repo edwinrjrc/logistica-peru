@@ -4,6 +4,8 @@
 package pe.com.logistica.negocio.dao.impl;
 
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.sql.CallableStatement;
 import java.sql.Connection;
@@ -13,6 +15,7 @@ import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import pe.com.logistica.bean.Util.UtilParse;
@@ -21,6 +24,7 @@ import pe.com.logistica.bean.negocio.DetalleServicioAgencia;
 import pe.com.logistica.bean.negocio.EventoObsAnu;
 import pe.com.logistica.bean.negocio.PagoServicio;
 import pe.com.logistica.bean.negocio.ServicioAgencia;
+import pe.com.logistica.bean.negocio.ServicioAgenciaBusqueda;
 import pe.com.logistica.negocio.dao.ServicioNovaViajesDao;
 import pe.com.logistica.negocio.util.UtilConexion;
 import pe.com.logistica.negocio.util.UtilJdbc;
@@ -940,12 +944,12 @@ public class ServicioNovaViajesDaoImpl implements ServicioNovaViajesDao {
 	}
 	
 	@Override
-	public List<ServicioAgencia> consultarServiciosVenta(ServicioAgencia servicioAgencia)
+	public List<ServicioAgencia> consultarServiciosVenta(ServicioAgenciaBusqueda servicioAgencia)
 			throws SQLException {
 		Connection conn = null;
 		CallableStatement cs = null;
 		ResultSet rs = null;
-		String sql = "{ ? = call negocio.fn_consultarservicioventa(?,?,?,?,?)}";
+		String sql = "{ ? = call negocio.fn_consultarservicioventa(?,?,?,?,?,?,?)}";
 		List<ServicioAgencia> listaVentaServicios = null;
 		try {	
 			conn = UtilConexion.obtenerConexion();
@@ -982,6 +986,9 @@ public class ServicioNovaViajesDaoImpl implements ServicioNovaViajesDao {
 			else{
 				cs.setNull(i++, Types.INTEGER);
 			}
+			cs.setDate(i++, UtilJdbc.convertirUtilDateSQLDate(servicioAgencia.getFechaDesde()));
+			cs.setDate(i++, UtilJdbc.convertirUtilDateSQLDate(servicioAgencia.getFechaHasta()));
+			
 			cs.execute();
 			
 			rs = (ResultSet)cs.getObject(1);
@@ -1502,7 +1509,7 @@ public class ServicioNovaViajesDaoImpl implements ServicioNovaViajesDao {
 	@Override
 	public void registrarPagoServicio(PagoServicio pago) throws SQLException {
 		CallableStatement cs = null;
-		String sql = "{ ? = call negocio.fn_registrarpagoservicio(?,?,?,?,?,?)}";
+		String sql = "{ ? = call negocio.fn_registrarpagoservicio(?,?,?,?,?,?,?,?,?)}";
 		Connection conn = null;
 		try {
 			conn = UtilConexion.obtenerConexion();
@@ -1512,11 +1519,29 @@ public class ServicioNovaViajesDaoImpl implements ServicioNovaViajesDao {
 			cs.setInt(i++, pago.getServicio().getCodigoEntero());
 			cs.setDate(i++, UtilJdbc.convertirUtilDateSQLDate(pago.getFechaPago()));
 			cs.setBigDecimal(i++, pago.getMontoPago());
-			if (pago.getSustentoPago()!=null){
-				cs.setBinaryStream(i++, pago.getSustentoPago());
+			if (pago.getSustentoPagoByte()!=null){
+				cs.setBinaryStream(i++, new ByteArrayInputStream(pago.getSustentoPagoByte()), pago.getSustentoPagoByte().length);
 			}
 			else{
 				cs.setNull(i++, Types.VARBINARY);
+			}
+			if (StringUtils.isNotBlank(pago.getNombreArchivo())){
+				cs.setString(i++, pago.getNombreArchivo());
+			}
+			else {
+				cs.setNull(i++, Types.VARCHAR);
+			}
+			if (StringUtils.isNotBlank(pago.getExtensionArchivo())){
+				cs.setString(i++, pago.getExtensionArchivo());
+			}
+			else {
+				cs.setNull(i++, Types.VARCHAR);
+			}
+			if (StringUtils.isNotBlank(pago.getTipoContenido())){
+				cs.setString(i++, pago.getTipoContenido());
+			}
+			else {
+				cs.setNull(i++, Types.VARCHAR);
 			}
 			cs.setString(i++, pago.getUsuarioCreacion());
 			cs.setString(i++, pago.getIpCreacion());
@@ -1590,6 +1615,10 @@ public class ServicioNovaViajesDaoImpl implements ServicioNovaViajesDao {
 				pago.getServicio().setCodigoEntero(UtilJdbc.obtenerNumero(rs, "idservicio"));
 				pago.setFechaPago(UtilJdbc.obtenerFecha(rs, "fechapago"));
 				pago.setMontoPago(UtilJdbc.obtenerBigDecimal(rs, "montopagado"));
+				pago.setSustentoPagoByte(rs.getBytes("sustentopago"));
+				pago.setNombreArchivo(UtilJdbc.obtenerCadena(rs, "nombrearchivo"));
+				pago.setExtensionArchivo(UtilJdbc.obtenerCadena(rs, "extensionarchivo"));
+				pago.setTipoContenido(UtilJdbc.obtenerCadena(rs, "tipocontenido"));
 				resultado.add(pago);
 			}
 			
