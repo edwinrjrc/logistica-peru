@@ -5,9 +5,10 @@
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:a4j="http://richfaces.org/a4j"
-	xmlns:rich="http://richfaces.org/rich">
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:nova="http://novaviajes.com.pe/funciones">
 
-	<rich:popupPanel id="idModalventaservicio" modal="true" width="900"
+	<rich:popupPanel id="idModalventaservicio" modal="true" width="1100"
 		height="600">
 
 		<f:facet name="header">
@@ -21,7 +22,7 @@
 			</h:outputLink>
 		</f:facet>
 
-		<h:form>
+		<h:form id="idFrVistaVenta">
 			<h:panelGrid columns="2" border="0" cellpadding="0" cellspacing="0"
 				style="width:100%;" id="idGrVentaServicio">
 
@@ -204,6 +205,134 @@
 							</h:panelGrid>
 						</h:panelGrid>
 					</rich:tab>
+
+					<rich:tab
+						rendered="#{sessionScope.usuarioSession.rol.codigoEntero == 3}">
+						<f:facet name="header">
+							<h:outputText value="Comprobantes" />
+						</f:facet>
+						<h:panelGrid cellpadding="0" cellspacing="0" border="0"
+							style="width:100%;" columns="1">
+							<h:panelGrid columns="1" cellpadding="0" cellspacing="0"
+								border="0" style="width:100%;">
+								<rich:dataTable id="idServVentaVista2" var="row"
+									value="#{servicioAgenteMBean.servicioAgencia.listaDetalleServicio}"
+									style="width:100%;">
+									<rich:column style="text-align:right;width: 4%;">
+										<f:facet name="header">
+											<h:panelGrid cellpadding="0" cellspacing="0" border="0"
+												style="text-align:center;">
+												<h:outputText value="Unid." />
+											</h:panelGrid>
+										</f:facet>
+										<h:outputText value="#{row.cantidad}" />
+									</rich:column>
+									<rich:column style="text-align:right;width: 4%;">
+										<f:facet name="header">
+											<h:panelGrid cellpadding="0" cellspacing="0" border="0"
+												style="text-align:center;">
+												<h:outputText value="Fecha Servicio" />
+											</h:panelGrid>
+										</f:facet>
+										<h:outputText value="#{row.fechaIda}">
+											<f:convertDateTime pattern="dd/MM/yyyy" />
+										</h:outputText>
+									</rich:column>
+									<rich:column style="text-align:left;width: 75%;">
+										<f:facet name="header">
+											<h:panelGrid cellpadding="0" cellspacing="0" border="0"
+												style="width:100%; text-align:center;">
+												<h:outputText value="Servicio - Descripcion" />
+											</h:panelGrid>
+										</f:facet>
+										<h:outputText
+											value="#{row.tipoServicio.nombre} - #{row.descripcionServicio}" />
+									</rich:column>
+									<rich:column style="text-align:left;width: 75%;">
+										<f:facet name="header">
+											<h:panelGrid cellpadding="0" cellspacing="0" border="0"
+												style="width:100%; text-align:center;">
+												<h:outputText value="Proveedor" />
+											</h:panelGrid>
+										</f:facet>
+										<h:outputText
+											value="#{row.servicioProveedor.proveedor.nombres}" />
+									</rich:column>
+									<rich:column style="text-align:right;width: 10%;">
+										<f:facet name="header">
+											<h:panelGrid cellpadding="0" cellspacing="0" border="0"
+												style="width:100%; text-align:center;">
+												<h:outputText value="Precio Unitario" />
+											</h:panelGrid>
+										</f:facet>
+										<h:outputText value="#{row.precioUnitario}">
+											<f:convertNumber pattern="###,##0.00" locale="en_US" />
+										</h:outputText>
+									</rich:column>
+									<rich:column style="text-align:right;width: 10%;">
+										<f:facet name="header">
+											<h:panelGrid cellpadding="0" cellspacing="0" border="0"
+												style="width:100%; text-align:center;">
+												<h:outputText value="Total" />
+											</h:panelGrid>
+										</f:facet>
+										<h:outputText value="#{row.totalServicio}">
+											<f:convertNumber pattern="###,##0.00" locale="en_US" />
+										</h:outputText>
+									</rich:column>
+
+									<rich:column style="text-align:right;width: 10%;">
+										<f:facet name="header">
+											<h:panelGrid cellpadding="0" cellspacing="0" border="0"
+												style="width:100%; text-align:center;">
+												<h:outputText value="Tipo Comprobante" />
+											</h:panelGrid>
+										</f:facet>
+										<h:selectOneMenu
+											readonly="#{servicioAgenteMBean.guardoComprobantes}"
+											value="#{row.tipoComprobante.codigoEntero}"
+											rendered="#{!servicioAgenteMBean.servicioAgencia.guardoComprobante}">
+											<f:selectItems
+												value="#{catalogoMBean.catalogoTipoComprobante}" />
+										</h:selectOneMenu>
+										<h:outputText value="#{row.tipoComprobante.nombre}" rendered="#{servicioAgenteMBean.servicioAgencia.guardoComprobante}" />
+									</rich:column>
+
+									<rich:column style="text-align:right;width: 10%;">
+										<f:facet name="header">
+											<h:panelGrid cellpadding="0" cellspacing="0" border="0"
+												style="width:100%; text-align:center;">
+												<h:outputText value="Numero Comprobante" />
+											</h:panelGrid>
+										</f:facet>
+										<h:inputText rendered="#{!servicioAgenteMBean.servicioAgencia.guardoComprobante}"
+											readonly="#{servicioAgenteMBean.guardoComprobantes}"
+											value="#{row.nroComprobante}" maxlength="20" />
+										<h:outputText value="#{row.nroComprobante}" rendered="#{servicioAgenteMBean.servicioAgencia.guardoComprobante}" />
+									</rich:column>
+								</rich:dataTable>
+								<h:panelGrid columns="2" cellpadding="0" cellspacing="0"
+									border="0" style="width:100%;"
+									columnClasses="col1RSPN,col2RSPN">
+									<h:outputText value="Total Comision" />
+									<h:outputText
+										value="#{servicioAgenteMBean.servicioAgencia.montoTotalComision}">
+										<f:convertNumber pattern="###,##0.00" locale="en_US" />
+									</h:outputText>
+									<h:outputText value="Total IGV" />
+									<h:outputText
+										value="#{servicioAgenteMBean.servicioAgencia.montoTotalIGV}">
+										<f:convertNumber pattern="###,##0.00" locale="en_US" />
+									</h:outputText>
+									<h:outputText value="Total Servicios" />
+									<h:outputText
+										value="#{servicioAgenteMBean.servicioAgencia.montoTotalServicios}">
+										<f:convertNumber pattern="###,##0.00" locale="en_US" />
+									</h:outputText>
+								</h:panelGrid>
+							</h:panelGrid>
+						</h:panelGrid>
+					</rich:tab>
 					<rich:tab
 						rendered="#{servicioAgenteMBean.servicioAgencia.formaPago.codigoEntero == 2}">
 						<f:facet name="header">
@@ -269,19 +398,23 @@
 
 				<f:facet name="footer">
 					<h:panelGrid cellpadding="0" cellspacing="0" border="0" columns="3"
-						rendered="#{sessionScope.usuarioSession.rol.codigoEntero == 3 and servicioAgenteMBean.servicioAgencia.estadoServicio.codigoEntero==2 and servicioAgenteMBean.servicioAgencia.tienePagos==0}">
-						<a4j:commandButton value="Anular Venta" render="idTxtNomTitulo, idTxtSubTitulo, idGrFrObsAnu"
+						rendered="#{nova:mostrarBotonesVenta1(sessionScope.usuarioSession.rol.codigoEntero,servicioAgenteMBean.servicioAgencia.estadoServicio.codigoEntero,servicioAgenteMBean.servicioAgencia.tienePagos,servicioAgenteMBean.guardoComprobantes)}">
+						<a4j:commandButton value="Anular Venta"
+							render="idTxtNomTitulo, idTxtSubTitulo, idGrFrObsAnu"
 							action="#{servicioAgenteMBean.preAnularVenta()}"
 							oncomplete="#{rich:component('idModalObsAnu')}.show(); return false;"></a4j:commandButton>
 						<a4j:commandButton value="Anular Venta" style="display:none;"
 							action="#{servicioAgenteMBean.preAnularVenta()}"
 							oncomplete="#{rich:component('idModalConfirma')}.show(); return false;"></a4j:commandButton>
-						<a4j:commandButton value="Observar Venta" render="idTxtNomTitulo, idTxtSubTitulo, idGrFrObsAnu"
-							action="#{servicioAgenteMBean.preObservarVenta()}"
-							oncomplete="#{rich:component('idModalObsAnu')}.show(); return false;"></a4j:commandButton>
-						<a4j:commandButton value="Observar Venta" style="display:none;"
-							action="#{servicioAgenteMBean.preAnularVenta()}"
-							oncomplete="#{rich:component('idModalConfirma')}.show(); return false;"></a4j:commandButton>
+						<a4j:commandButton value="Grabar Comprobantes"
+							action="#{servicioAgenteMBean.preRegistrarComponente()}"
+							oncomplete="#{rich:component('idModConfimrComp')}.show(); return false;"
+							render="idGrConfirID2" />
+						<a4j:commandButton value="Grabar Comprobantes"
+							style="display:none;" id="idBtnGraComponentes"
+							oncomplete="mostrarModal('idformadmservicios')"
+							action="#{servicioAgenteMBean.registrarComprobante()}"
+							render="idFormHidden,idPanelHidden,idPanelBotones,idModalcorrecto,idModalError,idGrVentaServicio" />
 					</h:panelGrid>
 				</f:facet>
 			</h:panelGrid>

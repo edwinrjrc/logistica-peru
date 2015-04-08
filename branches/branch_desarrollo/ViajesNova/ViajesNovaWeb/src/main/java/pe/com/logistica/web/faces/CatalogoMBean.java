@@ -74,6 +74,7 @@ public class CatalogoMBean implements Serializable{
 	private List<SelectItem> catalogoAerolineas;
 	private List<SelectItem> catalogoHoteles;
 	private List<SelectItem> catalogoOperador;
+	private List<SelectItem> catalogoTipoComprobante;
 
 	private SeguridadServicio seguridadServicio;
 	private SoporteServicio soporteServicio;
@@ -742,6 +743,30 @@ public class CatalogoMBean implements Serializable{
 	 */
 	public void setCatalogoOperador(List<SelectItem> catalogoOperador) {
 		this.catalogoOperador = catalogoOperador;
+	}
+
+	/**
+	 * @return the catalogoTipoComprobante
+	 */
+	public List<SelectItem> getCatalogoTipoComprobante() {
+		int idmaestro = UtilWeb.obtenerEnteroPropertieMaestro(
+				"maestroTipoComprobante", "aplicacionDatos");
+
+		try {
+			List<BaseVO> lista = soporteServicio
+					.listarCatalogoMaestro(idmaestro);
+			catalogoTipoComprobante = UtilWeb.convertirSelectItem(lista);
+		} catch (Exception e) {
+			logger.error(e.getMessage(), e);
+		}
+		return catalogoTipoComprobante;
+	}
+
+	/**
+	 * @param catalogoTipoComprobante the catalogoTipoComprobante to set
+	 */
+	public void setCatalogoTipoComprobante(List<SelectItem> catalogoTipoComprobante) {
+		this.catalogoTipoComprobante = catalogoTipoComprobante;
 	}
 
 }

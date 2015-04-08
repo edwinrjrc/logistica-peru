@@ -176,4 +176,11 @@ public interface NegocioServicio {
 	void registrarEventoAnulacion(EventoObsAnu evento) throws SQLException,
 			Exception;
 
+	public boolean registrarComprobantes(
+			ServicioAgencia servicioAgencia)throws SQLException,
+			Exception;
+
+	List<DetalleServicioAgencia> consultarDetalleComprobantes(Integer idServicio)
+			throws SQLException, Exception;
+
 }

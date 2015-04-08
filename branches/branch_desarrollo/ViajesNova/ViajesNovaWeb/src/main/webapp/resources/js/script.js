@@ -81,3 +81,7 @@ function mostrarModal2(idform){
 	document.getElementById(idform+':idBotonCierraVista').click();
 	document.getElementById(idform+':idBotonCierraObsAnu').click();
 }
+
+function cerrarModal(idmodal){
+	RichFaces.$(idmodal).hide();
+}

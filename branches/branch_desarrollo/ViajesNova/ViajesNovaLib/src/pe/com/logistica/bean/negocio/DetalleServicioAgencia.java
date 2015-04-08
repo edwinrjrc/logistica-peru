@@ -49,6 +49,9 @@ public class DetalleServicioAgencia extends BaseNegocio {
 	
 	private boolean tarifaNegociada;
 	private boolean conIGV;
+	
+	private String nroComprobante;
+	private BaseVO tipoComprobante;
 	/**
 	 * 
 	 */
@@ -449,6 +452,37 @@ public class DetalleServicioAgencia extends BaseNegocio {
 	 */
 	public void setConIGV(boolean conIGV) {
 		this.conIGV = conIGV;
+	}
+
+	/**
+	 * @return the nroComprobante
+	 */
+	public String getNroComprobante() {
+		return nroComprobante;
+	}
+
+	/**
+	 * @param nroComprobante the nroComprobante to set
+	 */
+	public void setNroComprobante(String nroComprobante) {
+		this.nroComprobante = nroComprobante;
+	}
+
+	/**
+	 * @return the tipoComprobante
+	 */
+	public BaseVO getTipoComprobante() {
+		if (tipoComprobante == null){
+			tipoComprobante = new BaseVO();
+		}
+		return tipoComprobante;
+	}
+
+	/**
+	 * @param tipoComprobante the tipoComprobante to set
+	 */
+	public void setTipoComprobante(BaseVO tipoComprobante) {
+		this.tipoComprobante = tipoComprobante;
 	}
 
 }
