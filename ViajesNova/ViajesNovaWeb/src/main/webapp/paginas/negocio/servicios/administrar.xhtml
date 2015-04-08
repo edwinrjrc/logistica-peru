@@ -77,6 +77,16 @@
 								<rich:calendar datePattern="dd/MM/yyyy"
 									value="#{servicioAgenteMBean.servicioAgenciaBusqueda.fechaHasta}" />
 							</h:panelGrid>
+							<h:panelGrid columns="2" border="0" cellpadding="0"
+								cellspacing="0" style="width:100%;text-align:left;"
+								columnClasses="col1fil2proveedor,col2fil2proveedor" rendered="#{sessionScope.usuarioSession.rol.codigoEntero == 3}">
+								<h:outputText value="Agente Viajes" />
+								<h:selectOneMenu
+									value="#{servicioAgenteMBean.servicioAgenciaBusqueda.vendedor.codigoEntero}">
+									<f:selectItem itemLabel="-Seleccione el agente-" />
+									<f:selectItems value="#{catalogoMBean.catalogoVendedores}" />
+								</h:selectOneMenu>
+							</h:panelGrid>
 						</h:panelGrid>
 						<f:facet name="footer">
 							<h:panelGrid columns="1" border="0" cellpadding="0"
@@ -90,7 +100,7 @@
 
 					<h:panelGrid columns="1" border="0" style="width:100%;"
 						id="idGrTabVenServicios">
-						<rich:dataTable var="row" id="idTabla" rows="10"
+						<rich:dataTable var="row" id="idTabla" rows="5"
 							value="#{servicioAgenteMBean.listadoServicioAgencia}"
 							style="width:100%;">
 
@@ -180,9 +190,11 @@
 										style="border:0" />
 								</a4j:commandLink>
 							</rich:column>
+							<f:facet name="footer">
+								<rich:dataScroller for="idTabla" maxPages="5" fastStep="2" />
+							</f:facet>
 
 						</rich:dataTable>
-						<rich:dataScroller for="idTabla" />
 					</h:panelGrid>
 
 					<f:facet name="footer">
@@ -207,8 +219,8 @@
 								<a4j:commandButton id="idBotonCierraObsAnu"
 									style="display:none;" type="button"
 									oncomplete="#{rich:component('idModalObsAnu')}.hide();" />
-								<h:commandButton value="Exportar"
-									style="display:none" id="idbtnExportarArchivo"
+								<h:commandButton value="Exportar" style="display:none"
+									id="idbtnExportarArchivo"
 									action="#{servicioAgenteMBean.exportarArchivo()}" />
 							</h:panelGrid>
 						</h:panelGroup>
@@ -233,6 +245,7 @@
 				<ui:param name="idBotonEjecutar" value="idFrObsAnu:idBtnRegObsAnu" />
 				<ui:param name="renderizar" value="" />
 				<ui:param name="idModal" value="idModConfimr" />
+				<ui:param name="idGridPanel" value="idGrConfirID" />
 			</ui:include>
 		</h:panelGrid>
 		<h:panelGrid id="idConfirm" style="display:none;">
@@ -241,6 +254,16 @@
 				<ui:param name="idBotonEjecutar"
 					value="idFormVentaServi:idBtnCerrarVenta" />
 				<ui:param name="renderizar" value="idBotVenServicio" />
+			</ui:include>
+		</h:panelGrid>
+		<h:panelGrid id="idConfirmCompro" style="display:none;">
+			<ui:include src="/resources/modal/modalconfirmacionId.xhtml">
+				<ui:param name="pregunta" value="#{servicioAgenteMBean.pregunta}" />
+				<ui:param name="idBotonEjecutar"
+					value="idFrVistaVenta:idBtnGraComponentes" />
+				<ui:param name="renderizar" value="#{null}" />
+				<ui:param name="idModal" value="idModConfimrComp" />
+				<ui:param name="idGridPanel" value="idGrConfirID2" />
 			</ui:include>
 		</h:panelGrid>
 		<ui:include src="/paginas/negocio/servicios/modal/registrarpago.xhtml" />

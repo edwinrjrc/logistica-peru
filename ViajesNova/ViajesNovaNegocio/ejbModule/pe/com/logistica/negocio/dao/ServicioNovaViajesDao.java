@@ -8,7 +8,9 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 
+import pe.com.logistica.bean.negocio.Comprobante;
 import pe.com.logistica.bean.negocio.CuotaPago;
+import pe.com.logistica.bean.negocio.DetalleComprobante;
 import pe.com.logistica.bean.negocio.DetalleServicioAgencia;
 import pe.com.logistica.bean.negocio.EventoObsAnu;
 import pe.com.logistica.bean.negocio.PagoServicio;
@@ -87,4 +89,16 @@ public interface ServicioNovaViajesDao {
 
 	boolean registrarEventoObsAnu(EventoObsAnu evento) throws SQLException,
 			Exception;
+
+	Integer registrarComprobante(Comprobante comprobante, Connection conn)
+			throws SQLException, Exception;
+	
+	public Integer registrarDetalleComprobante(List<DetalleComprobante> listaDetalle, Integer idComprobante, Connection conn) throws SQLException, Exception;
+
+	void actualizarComprobantesServicio(boolean generoComprobantes,
+			ServicioAgencia servicio, Connection conn) throws SQLException,
+			Exception;
+
+	List<DetalleServicioAgencia> consultaServicioDetalleComprobante(
+			int idServicio) throws SQLException;
 }

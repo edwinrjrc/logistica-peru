@@ -32,6 +32,8 @@ public class PagoServicio extends BaseNegocio {
 	private String extensionArchivo;
 	private String tipoContenido;
 	
+	private boolean tieneSustento;
+	
 	/**
 	 * 
 	 */
@@ -166,6 +168,20 @@ public class PagoServicio extends BaseNegocio {
 	 */
 	public void setTipoContenido(String tipoContenido) {
 		this.tipoContenido = tipoContenido;
+	}
+
+	/**
+	 * @return the tieneSustento
+	 */
+	public boolean isTieneSustento() {
+		return tieneSustento;
+	}
+
+	/**
+	 * @param tieneSustento the tieneSustento to set
+	 */
+	public void setTieneSustento(boolean tieneSustento) {
+		this.tieneSustento = tieneSustento;
 	}
 
 }

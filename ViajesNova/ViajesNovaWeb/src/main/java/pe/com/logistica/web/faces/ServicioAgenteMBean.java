@@ -3,7 +3,6 @@
  */
 package pe.com.logistica.web.faces;
 
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.sql.SQLException;
@@ -46,6 +45,7 @@ import pe.com.logistica.bean.negocio.ServicioProveedor;
 import pe.com.logistica.bean.negocio.Usuario;
 import pe.com.logistica.negocio.exception.ErrorConsultaDataException;
 import pe.com.logistica.negocio.exception.ErrorRegistroDataException;
+import pe.com.logistica.negocio.exception.ValidacionException;
 import pe.com.logistica.web.servicio.NegocioServicio;
 import pe.com.logistica.web.servicio.ParametroServicio;
 import pe.com.logistica.web.servicio.SoporteServicio;
@@ -97,6 +97,7 @@ public class ServicioAgenteMBean extends BaseMBean {
 	private boolean editarComision;
 	private boolean vendedor;
 	private boolean calculadorIGV;
+	private boolean guardoComprobantes;
 
 	private ParametroServicio parametroServicio;
 	private NegocioServicio negocioServicio;
@@ -251,6 +252,12 @@ public class ServicioAgenteMBean extends BaseMBean {
 			this.setEditarVenta(true);
 			this.setListadoDetalleServicio(this.getServicioAgencia()
 					.getListaDetalleServicio());
+			
+			if (this.getServicioAgencia().isGuardoComprobante()){
+				this.setGuardoComprobantes(true);
+				this.getServicioAgencia().setListaDetalleServicio(this.negocioServicio.consultarDetalleComprobantes(this.getServicioAgencia().getCodigoEntero()));
+			}
+			
 			this.setDetalleServicio(null);
 
 			borrarInvisibles();
@@ -1304,7 +1311,7 @@ try {
 			HttpServletResponse response = obtenerResponse();
 			response.setContentType(pagoServicio2.getTipoContenido());
 			response.setHeader("Content-disposition",
-					"attachment;filename="+this.getPagoServicio2().getNombreArchivo()+"."+this.getPagoServicio2().getExtensionArchivo());
+					"attachment;filename="+this.getPagoServicio2().getNombreArchivo());
 			response.setHeader("Content-Transfer-Encoding", "binary");
 			
 			FacesContext facesContext = obtenerContexto();
@@ -1319,6 +1326,55 @@ try {
 			
 			facesContext.responseComplete();
 		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void preRegistrarComponente(){
+		this.setPregunta("¿Esta seguro de registrar los comprobantes?");
+	}
+	
+	public void registrarComprobante(){
+		try {
+			this.getServicioAgencia().setListaDetalleServicio(this.getListadoDetalleServicio());
+			
+			HttpSession session = obtenerSession(false);
+			Usuario usuario = (Usuario) session
+					.getAttribute("usuarioSession");
+			getServicioAgencia().setUsuarioCreacion(
+					usuario.getUsuario());
+			getServicioAgencia().setIpCreacion(
+					obtenerRequest().getRemoteAddr());
+			getServicioAgencia().setUsuarioModificacion(
+					usuario.getUsuario());
+			getServicioAgencia().setIpModificacion(
+					obtenerRequest().getRemoteAddr());
+			
+			boolean guardo = this.negocioServicio.registrarComprobantes(this.getServicioAgencia());
+			this.setGuardoComprobantes(guardo);
+			this.getServicioAgencia().setGuardoComprobante(guardo);
+			
+			if (guardo){
+				this.getServicioAgencia().setListaDetalleServicio(this.negocioServicio.consultarDetalleComprobantes(this.getServicioAgencia().getCodigoEntero()));
+			}
+			
+			this.setShowModal(true);
+			this.setMensajeModal("Pago Registrado Satisfactoriamente");
+			this.setTipoModal(TIPO_MODAL_EXITO);
+		} catch (ValidacionException e) {
+			this.setShowModal(true);
+			this.setMensajeModal(e.getMessage());
+			this.setTipoModal(TIPO_MODAL_ERROR);
+			e.printStackTrace();
+		} catch (SQLException e) {
+			this.setShowModal(true);
+			this.setMensajeModal(e.getMessage());
+			this.setTipoModal(TIPO_MODAL_ERROR);
+			e.printStackTrace();
+		} catch (Exception e) {
+			this.setShowModal(true);
+			this.setMensajeModal(e.getMessage());
+			this.setTipoModal(TIPO_MODAL_ERROR);
 			e.printStackTrace();
 		}
 	}
@@ -1793,6 +1849,20 @@ try {
 	 */
 	public void setPagoServicio2(PagoServicio pagoServicio2) {
 		this.pagoServicio2 = pagoServicio2;
+	}
+
+	/**
+	 * @return the guardoComprobantes
+	 */
+	public boolean isGuardoComprobantes() {
+		return guardoComprobantes;
+	}
+
+	/**
+	 * @param guardoComprobantes the guardoComprobantes to set
+	 */
+	public void setGuardoComprobantes(boolean guardoComprobantes) {
+		this.guardoComprobantes = guardoComprobantes;
 	}
 
 }
