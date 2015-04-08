@@ -23,6 +23,7 @@ import org.apache.commons.lang3.StringUtils;
 import pe.com.logistica.bean.Util.UtilParse;
 import pe.com.logistica.bean.base.BaseVO;
 import pe.com.logistica.bean.negocio.Cliente;
+import pe.com.logistica.bean.negocio.Comprobante;
 import pe.com.logistica.bean.negocio.Consolidador;
 import pe.com.logistica.bean.negocio.Contacto;
 import pe.com.logistica.bean.negocio.CorreoClienteMasivo;
@@ -1812,4 +1813,54 @@ public class NegocioSession implements NegocioSessionRemote,
 		servicioNovaViajesDao.registrarEventoObsAnu(evento);
 	}
 
+	@Override
+	public boolean registrarComprobantes(ServicioAgencia servicioAgencia)
+			throws ValidacionException, SQLException, Exception {
+		try {
+			List<Comprobante> listaComprobantes = UtilEjb.obtenerNumeroComprobante(servicioAgencia.getListaDetalleServicio());
+			for (Comprobante comprobante : listaComprobantes) {
+				for (DetalleServicioAgencia detalle : servicioAgencia.getListaDetalleServicio()){
+					if (comprobante.getTipoComprobante().getCodigoEntero().intValue() != detalle.getTipoComprobante().getCodigoEntero().intValue() && comprobante.getNumeroComprobante().equals(detalle.getNroComprobante())){
+						throw new ValidacionException("Tipo y numero de comprobante diferente");
+					}
+				}
+			}
+			
+			List<Comprobante> listaComprobantes2 = new ArrayList<Comprobante>();
+			for (Comprobante comprobante : listaComprobantes) {
+				comprobante = UtilEjb.obtenerNumeroComprobante(comprobante.getNumeroComprobante(), servicioAgencia);
+				listaComprobantes2.add(comprobante);
+			}
+			ServicioNovaViajesDao servicioNovaViajesDao = new ServicioNovaViajesDaoImpl();
+			Connection conn = null;
+			
+			try {
+				conn = UtilConexion.obtenerConexion();
+				for (Comprobante comprobante : listaComprobantes2) {
+					Integer idComprobante = servicioNovaViajesDao.registrarComprobante(comprobante, conn);
+					servicioNovaViajesDao.registrarDetalleComprobante(comprobante.getDetalleComprobante(), idComprobante, conn);
+				}
+				
+				servicioNovaViajesDao.actualizarComprobantesServicio(true, servicioAgencia, conn);
+			} catch (Exception e) {
+				throw new ValidacionException("Excepcion no controlada",e);
+			} finally{
+				if (conn != null){
+					conn.close();
+				}
+			}
+			
+			return true;
+		} catch (ValidacionException e){
+			throw new ValidacionException(e.getMessage(), e);
+		} catch (Exception e) {
+			throw new ValidacionException("Excepcion no controlada",e);
+		}
+	}
+	
+	@Override
+	public List<DetalleServicioAgencia> consultarDetalleServicioComprobante(Integer idServicio) throws SQLException, Exception{
+		ServicioNovaViajesDao servicioNovaViajesDao = new ServicioNovaViajesDaoImpl();
+		return servicioNovaViajesDao.consultaServicioDetalleComprobante(idServicio);
+	}
 }

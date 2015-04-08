@@ -50,6 +50,7 @@ public class ServicioAgencia extends BaseNegocio{
 	private boolean esProgramaNovios;
 	private boolean servicioPagado;
 	private boolean editable;
+	private boolean guardoComprobante;
 	
 	private BaseVO aerolinea;
 	
@@ -598,5 +599,23 @@ public class ServicioAgencia extends BaseNegocio{
 	 */
 	public void setTienePagos(int tienePagos) {
 		this.tienePagos = tienePagos;
+	}
+
+
+
+	/**
+	 * @return the guardoComprobante
+	 */
+	public boolean isGuardoComprobante() {
+		return guardoComprobante;
+	}
+
+
+
+	/**
+	 * @param guardoComprobante the guardoComprobante to set
+	 */
+	public void setGuardoComprobante(boolean guardoComprobante) {
+		this.guardoComprobante = guardoComprobante;
 	}
 }

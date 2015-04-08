@@ -388,5 +388,16 @@ public class NegocioServicioImpl implements NegocioServicio {
 		ejbSession.registrarEventoAnulacion(evento);
 	}
 
+	@Override
+	public boolean registrarComprobantes(ServicioAgencia servicioAgencia)
+			throws SQLException, Exception {
+		return ejbSession.registrarComprobantes(servicioAgencia);
+	}
+	
+	@Override
+	public List<DetalleServicioAgencia> consultarDetalleComprobantes(Integer idServicio) throws SQLException, Exception{
+		return ejbSession.consultarDetalleServicioComprobante(idServicio);
+	}
+
 }
 	

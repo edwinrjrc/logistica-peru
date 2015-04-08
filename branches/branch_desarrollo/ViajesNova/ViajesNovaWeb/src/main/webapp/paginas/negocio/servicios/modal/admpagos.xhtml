@@ -93,6 +93,7 @@
 								<h:outputText value="Sustento" />
 							</f:facet>
 							<a4j:commandButton value="Ver" action="#{servicioAgenteMBean.verArchivo(fila.codigoEntero)}"
+							rendered="#{fila.tieneSustento}"
 							oncomplete="document.getElementById('idformadmservicios:idbtnExportarArchivo').click();">
 							</a4j:commandButton>
 						</rich:column>

@@ -28,6 +28,7 @@ import pe.com.logistica.negocio.exception.EnvioCorreoException;
 import pe.com.logistica.negocio.exception.ErrorConsultaDataException;
 import pe.com.logistica.negocio.exception.ErrorRegistroDataException;
 import pe.com.logistica.negocio.exception.ResultadoCeroDaoException;
+import pe.com.logistica.negocio.exception.ValidacionException;
 
 @Local
 public interface NegocioSessionLocal {
@@ -181,5 +182,11 @@ public interface NegocioSessionLocal {
 	public void registrarEventoObservacion(EventoObsAnu evento) throws SQLException, Exception;
 	
 	public void registrarEventoAnulacion(EventoObsAnu evento) throws SQLException, Exception;
+	
+	public boolean registrarComprobantes(
+			ServicioAgencia servicioAgencia) throws ValidacionException, SQLException, Exception;
+	
+	List<DetalleServicioAgencia> consultarDetalleServicioComprobante(
+			Integer idServicio) throws SQLException, Exception;
 	
 }
