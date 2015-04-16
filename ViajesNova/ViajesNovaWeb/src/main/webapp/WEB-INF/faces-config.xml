@@ -97,11 +97,13 @@
 		<navigation-case>
 			<from-outcome>irConfigurarServicios</from-outcome>
 			<to-view-id>/paginas/soporte/servicios/configurar.xhtml</to-view-id>
+			<redirect />
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>irAdministracionObliXPagar</from-outcome>
+			<to-view-id>/paginas/negocio/obligaciones/administrar.xhtml</to-view-id>
 			<redirect></redirect>
 		</navigation-case>
-	</navigation-rule>
-	<navigation-rule>
-		<from-view-id>/paginas/soporte/parametro/administrar.xhtml</from-view-id>
 	</navigation-rule>
 	<navigation-rule>
 		<from-view-id>/paginas/soporte/maestro/administrar.xhtml</from-view-id>

@@ -21,6 +21,8 @@ public class Proveedor extends Persona {
 	private List<CuentaBancaria> listaCuentas;
 	private List<ServicioProveedor> listaServicioProveedor;
 	private BaseVO tipoProveedor;
+	
+	private Integer codigoSeleccionado;
 
 	public Proveedor() {
 
@@ -98,6 +100,20 @@ public class Proveedor extends Persona {
 	 */
 	public void setTipoProveedor(BaseVO tipoProveedor) {
 		this.tipoProveedor = tipoProveedor;
+	}
+
+	/**
+	 * @return the codigoSeleccionado
+	 */
+	public Integer getCodigoSeleccionado() {
+		return codigoSeleccionado;
+	}
+
+	/**
+	 * @param codigoSeleccionado the codigoSeleccionado to set
+	 */
+	public void setCodigoSeleccionado(Integer codigoSeleccionado) {
+		this.codigoSeleccionado = codigoSeleccionado;
 	}
 
 }

@@ -101,4 +101,9 @@ public interface ServicioNovaViajesDao {
 
 	List<DetalleServicioAgencia> consultaServicioDetalleComprobante(
 			int idServicio) throws SQLException;
+
+	List<Comprobante> consultaObligacionXPagar(Comprobante comprobante)
+			throws SQLException;
+
+	boolean registrarObligacionXPagar(Comprobante comprobante) throws SQLException;
 }

@@ -95,17 +95,19 @@
     NAME="output16" PATH="/paginas/soporte/servicios/configurar.xhtml"
     TARGET="rules:#paginas#soporte#servicios#configurar.xhtml"
     TITLE="irConfigurarServicios" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT
+    ID="irAdministracionObliXPagar::#paginas#negocio#obligaciones#administrar.xhtml"
+    NAME="output17"
+    PATH="/paginas/negocio/obligaciones/administrar.xhtml"
+    TARGET="rules:#paginas#negocio#obligaciones#administrar.xhtml"
+    TITLE="irAdministracionObliXPagar" model-entity="JSFProcessItemOutput"/>
   </PROCESS-ITEM>
  </PROCESS-ITEM>
  <PROCESS-ITEM NAME="rules:#paginas#seguridad#usuario#administrar.xhtml"
   PATH="/paginas/seguridad/usuario/administrar.xhtml" SHAPE="304,33,0,0" model-entity="JSFProcessGroup"/>
  <PROCESS-ITEM NAME="rules:#paginas#soporte#parametro#administrar.xhtml"
   PATH="/paginas/soporte/parametro/administrar.xhtml"
-  SHAPE="304,497,0,0" model-entity="JSFProcessGroup">
-  <PROCESS-ITEM
-   ID="rules:#paginas#soporte#parametro#administrar.xhtml:0" NAME="item"
-   PATH="/paginas/soporte/parametro/administrar.xhtml" model-entity="JSFProcessItem"/>
- </PROCESS-ITEM>
+  SHAPE="304,497,0,0" model-entity="JSFProcessGroup"/>
  <PROCESS-ITEM NAME="rules:#paginas#soporte#maestro#administrar.xhtml"
   PATH="/paginas/soporte/maestro/administrar.xhtml" SHAPE="304,609,0,0"
   model-entity="JSFProcessGroup" persistent="true">
@@ -204,4 +206,8 @@
  <PROCESS-ITEM NAME="rules:#paginas#soporte#servicios#configurar.xhtml"
   PATH="/paginas/soporte/servicios/configurar.xhtml"
   SHAPE="592,-96,50,25" model-entity="JSFProcessGroup" persistent="true"/>
+ <PROCESS-ITEM
+  NAME="rules:#paginas#negocio#obligaciones#administrar.xhtml"
+  PATH="/paginas/negocio/obligaciones/administrar.xhtml"
+  SHAPE="680,-288,50,25" model-entity="JSFProcessGroup" persistent="true"/>
 </PROCESS>

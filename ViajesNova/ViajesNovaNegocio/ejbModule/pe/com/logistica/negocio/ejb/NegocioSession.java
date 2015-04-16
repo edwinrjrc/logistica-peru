@@ -1863,4 +1863,16 @@ public class NegocioSession implements NegocioSessionRemote,
 		ServicioNovaViajesDao servicioNovaViajesDao = new ServicioNovaViajesDaoImpl();
 		return servicioNovaViajesDao.consultaServicioDetalleComprobante(idServicio);
 	}
+	
+	@Override
+	public boolean registrarObligacionXPagar(Comprobante comprobante) throws SQLException, Exception{
+		ServicioNovaViajesDao servicioNovaViajesDao = new ServicioNovaViajesDaoImpl();
+		return servicioNovaViajesDao.registrarObligacionXPagar(comprobante);
+	}
+	
+	@Override
+	public List<Comprobante> listarObligacionXPagar(Comprobante comprobante) throws SQLException, Exception{
+		ServicioNovaViajesDao servicioNovaViajesDao = new ServicioNovaViajesDaoImpl();
+		return servicioNovaViajesDao.consultaObligacionXPagar(comprobante);
+	}
 }

@@ -8,6 +8,7 @@ import javax.ejb.Remote;
 
 import pe.com.logistica.bean.base.BaseVO;
 import pe.com.logistica.bean.negocio.Cliente;
+import pe.com.logistica.bean.negocio.Comprobante;
 import pe.com.logistica.bean.negocio.Consolidador;
 import pe.com.logistica.bean.negocio.Contacto;
 import pe.com.logistica.bean.negocio.CorreoClienteMasivo;
@@ -188,5 +189,11 @@ public interface NegocioSessionRemote {
 
 	List<DetalleServicioAgencia> consultarDetalleServicioComprobante(
 			Integer idServicio) throws SQLException, Exception;
+
+	boolean registrarObligacionXPagar(Comprobante comprobante)
+			throws SQLException, Exception;
+
+	List<Comprobante> listarObligacionXPagar(Comprobante comprobante)
+			throws SQLException, Exception;
 
 }
