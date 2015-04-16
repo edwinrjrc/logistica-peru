@@ -33,6 +33,7 @@ import org.richfaces.model.UploadedFile;
 import pe.com.logistica.bean.Util.UtilParse;
 import pe.com.logistica.bean.base.BaseVO;
 import pe.com.logistica.bean.negocio.Cliente;
+import pe.com.logistica.bean.negocio.Comprobante;
 import pe.com.logistica.bean.negocio.Destino;
 import pe.com.logistica.bean.negocio.DetalleServicioAgencia;
 import pe.com.logistica.bean.negocio.EventoObsAnu;
@@ -78,6 +79,8 @@ public class ServicioAgenteMBean extends BaseMBean {
 	private PagoServicio pagoServicio;
 	private PagoServicio pagoServicio2;
 	private EventoObsAnu eventoObsAnu;
+	private Comprobante comprobante;
+	private BaseVO tipoServicio;
 	
 	private BigDecimal saldoServicio;
 
@@ -89,6 +92,7 @@ public class ServicioAgenteMBean extends BaseMBean {
 	private List<Destino> listaDestinosBusqueda;
 	private List<Destino> listaOrigenesBusqueda;
 	private List<PagoServicio> listaPagosServicios;
+	private List<PagoServicio> listaPagosComprobante;
 
 	public boolean nuevaVenta;
 	public boolean editarVenta;
@@ -1236,6 +1240,40 @@ try {
 			this.setTipoModal(TIPO_MODAL_ERROR);
 		}
 	}
+	
+	public void registrarPagoComprobante() {
+		try {
+			this.getPagoServicio().getServicio().setCodigoEntero(this.getServicioAgencia().getCodigoEntero());
+			
+			HttpSession session = obtenerSession(false);
+			Usuario usuario = (Usuario) session
+					.getAttribute("usuarioSession");
+			this.getPagoServicio().setUsuarioCreacion(
+					usuario.getUsuario());
+			this.getPagoServicio().setIpCreacion(
+					obtenerRequest().getRemoteAddr());
+			this.getPagoServicio().setUsuarioModificacion(
+					usuario.getUsuario());
+			this.getPagoServicio().setIpModificacion(
+					obtenerRequest().getRemoteAddr());
+			
+			this.negocioServicio.registrarPago(getPagoServicio());
+
+			this.setShowModal(true);
+			this.setMensajeModal("Pago Registrado Satisfactoriamente");
+			this.setTipoModal(TIPO_MODAL_EXITO);
+		} catch (SQLException e) {
+			e.printStackTrace();
+			this.setShowModal(true);
+			this.setMensajeModal(e.getMessage());
+			this.setTipoModal(TIPO_MODAL_ERROR);
+		} catch (Exception e) {
+			e.printStackTrace();
+			this.setShowModal(true);
+			this.setMensajeModal(e.getMessage());
+			this.setTipoModal(TIPO_MODAL_ERROR);
+		}
+	}
 
 	public void listener(FileUploadEvent event) throws Exception {
 		UploadedFile item = event.getUploadedFile();
@@ -1377,6 +1415,13 @@ try {
 			this.setTipoModal(TIPO_MODAL_ERROR);
 			e.printStackTrace();
 		}
+	}
+	
+	public void consultarPagosComprobantes(DetalleServicioAgencia detalle){
+		MaestroServicio maestro = detalle.getTipoServicio();
+		this.getTipoServicio().setNombre(maestro.getDescripcion());
+		this.getComprobante().getTipoComprobante().setNombre(detalle.getTipoComprobante().getNombre());
+		this.getComprobante().setNumeroComprobante(detalle.getNroComprobante());
 	}
 
 	/**
@@ -1841,6 +1886,9 @@ try {
 	 * @return the pagoServicio2
 	 */
 	public PagoServicio getPagoServicio2() {
+		if (pagoServicio2 == null){
+			pagoServicio2 = new PagoServicio();
+		}
 		return pagoServicio2;
 	}
 
@@ -1863,6 +1911,54 @@ try {
 	 */
 	public void setGuardoComprobantes(boolean guardoComprobantes) {
 		this.guardoComprobantes = guardoComprobantes;
+	}
+
+	/**
+	 * @return the comprobante
+	 */
+	public Comprobante getComprobante() {
+		if (comprobante == null){
+			comprobante = new Comprobante();
+		}
+		return comprobante;
+	}
+
+	/**
+	 * @param comprobante the comprobante to set
+	 */
+	public void setComprobante(Comprobante comprobante) {
+		this.comprobante = comprobante;
+	}
+
+	/**
+	 * @return the tipoServicio
+	 */
+	public BaseVO getTipoServicio() {
+		if (tipoServicio == null){
+			tipoServicio = new BaseVO();
+		}
+		return tipoServicio;
+	}
+
+	/**
+	 * @param tipoServicio the tipoServicio to set
+	 */
+	public void setTipoServicio(BaseVO tipoServicio) {
+		this.tipoServicio = tipoServicio;
+	}
+
+	/**
+	 * @return the listaPagosComprobante
+	 */
+	public List<PagoServicio> getListaPagosComprobante() {
+		return listaPagosComprobante;
+	}
+
+	/**
+	 * @param listaPagosComprobante the listaPagosComprobante to set
+	 */
+	public void setListaPagosComprobante(List<PagoServicio> listaPagosComprobante) {
+		this.listaPagosComprobante = listaPagosComprobante;
 	}
 
 }

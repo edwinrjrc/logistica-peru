@@ -20,12 +20,16 @@ public class Comprobante extends BaseNegocio {
 	private BaseVO tipoComprobante;
 	private String numeroComprobante;
 	private Cliente titular;
+	private Proveedor proveedor;
 	private Date fechaComprobante;
 	private BigDecimal totalIGV;
 	private BigDecimal totalComprobante;
 	private Integer idServicio;
 	
+	private Date fechaPago;
+	
 	private List<DetalleComprobante> detalleComprobante;
+	private String detalleTextoComprobante;
 	/**
 	 * 
 	 */
@@ -42,6 +46,9 @@ public class Comprobante extends BaseNegocio {
 	 * @return the tipoComprobante
 	 */
 	public BaseVO getTipoComprobante() {
+		if (tipoComprobante == null){
+			tipoComprobante = new BaseVO();
+		}
 		return tipoComprobante;
 	}
 
@@ -70,6 +77,9 @@ public class Comprobante extends BaseNegocio {
 	 * @return the titular
 	 */
 	public Cliente getTitular() {
+		if (titular == null){
+			titular = new Cliente();
+		}
 		return titular;
 	}
 
@@ -151,6 +161,51 @@ public class Comprobante extends BaseNegocio {
 	 */
 	public void setIdServicio(Integer idServicio) {
 		this.idServicio = idServicio;
+	}
+
+	/**
+	 * @return the proveedor
+	 */
+	public Proveedor getProveedor() {
+		if (proveedor == null){
+			proveedor = new Proveedor();
+		}
+		return proveedor;
+	}
+
+	/**
+	 * @param proveedor the proveedor to set
+	 */
+	public void setProveedor(Proveedor proveedor) {
+		this.proveedor = proveedor;
+	}
+
+	/**
+	 * @return the fechaPago
+	 */
+	public Date getFechaPago() {
+		return fechaPago;
+	}
+
+	/**
+	 * @param fechaPago the fechaPago to set
+	 */
+	public void setFechaPago(Date fechaPago) {
+		this.fechaPago = fechaPago;
+	}
+
+	/**
+	 * @return the detalleTextoComprobante
+	 */
+	public String getDetalleTextoComprobante() {
+		return detalleTextoComprobante;
+	}
+
+	/**
+	 * @param detalleTextoComprobante the detalleTextoComprobante to set
+	 */
+	public void setDetalleTextoComprobante(String detalleTextoComprobante) {
+		this.detalleTextoComprobante = detalleTextoComprobante;
 	}
 
 }

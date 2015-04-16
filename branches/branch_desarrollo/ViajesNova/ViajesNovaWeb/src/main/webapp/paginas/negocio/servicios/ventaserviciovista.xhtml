@@ -295,7 +295,8 @@
 											<f:selectItems
 												value="#{catalogoMBean.catalogoTipoComprobante}" />
 										</h:selectOneMenu>
-										<h:outputText value="#{row.tipoComprobante.nombre}" rendered="#{servicioAgenteMBean.servicioAgencia.guardoComprobante}" />
+										<h:outputText value="#{row.tipoComprobante.nombre}"
+											rendered="#{servicioAgenteMBean.servicioAgencia.guardoComprobante}" />
 									</rich:column>
 
 									<rich:column style="text-align:right;width: 10%;">
@@ -305,10 +306,24 @@
 												<h:outputText value="Numero Comprobante" />
 											</h:panelGrid>
 										</f:facet>
-										<h:inputText rendered="#{!servicioAgenteMBean.servicioAgencia.guardoComprobante}"
+										<h:inputText
+											rendered="#{!servicioAgenteMBean.servicioAgencia.guardoComprobante}"
 											readonly="#{servicioAgenteMBean.guardoComprobantes}"
 											value="#{row.nroComprobante}" maxlength="20" />
-										<h:outputText value="#{row.nroComprobante}" rendered="#{servicioAgenteMBean.servicioAgencia.guardoComprobante}" />
+										<h:outputText value="#{row.nroComprobante}"
+											rendered="#{servicioAgenteMBean.servicioAgencia.guardoComprobante}" />
+									</rich:column>
+									<rich:column style="text-align:right;"
+										rendered="#{servicioAgenteMBean.servicioAgencia.guardoComprobante}">
+										<f:facet name="header">
+											<h:panelGrid cellpadding="0" cellspacing="0" border="0"
+												style="width:100%; text-align:center;">
+												<h:outputText value="Pagos" />
+											</h:panelGrid>
+										</f:facet>
+										<a4j:commandButton value="Ver" render="idGrFrAdmpagoscomprobante"
+											oncomplete="mostrarModal('idModaladmpagoscomprobante');"
+											action="#{servicioAgenteMBean.consultarPagosComprobantes(row)}" />
 									</rich:column>
 								</rich:dataTable>
 								<h:panelGrid columns="2" cellpadding="0" cellspacing="0"
