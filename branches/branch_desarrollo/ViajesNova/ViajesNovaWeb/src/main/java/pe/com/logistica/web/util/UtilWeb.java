@@ -3,6 +3,7 @@
  */
 package pe.com.logistica.web.util;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -193,9 +194,24 @@ public class UtilWeb {
 		else{
 			if (fecha1.before(fecha2)){
 				return true;
-			}
+			}	
 		}
 		
 		return false;
+	}
+	
+	public static Date fechaHoy(){
+		try {
+			SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+			String fecha = "";
+			
+			Calendar cal = Calendar.getInstance();
+			fecha = cal.get(Calendar.DATE)+"/"+(cal.get(Calendar.MONTH)+1)+"/"+cal.get(Calendar.YEAR);
+			
+			return sdf.parse(fecha);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 }

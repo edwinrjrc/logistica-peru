@@ -15,6 +15,7 @@ import javax.servlet.ServletContext;
 
 import pe.com.logistica.bean.base.BaseVO;
 import pe.com.logistica.bean.negocio.Cliente;
+import pe.com.logistica.bean.negocio.Comprobante;
 import pe.com.logistica.bean.negocio.Consolidador;
 import pe.com.logistica.bean.negocio.Contacto;
 import pe.com.logistica.bean.negocio.CorreoClienteMasivo;
@@ -398,6 +399,15 @@ public class NegocioServicioImpl implements NegocioServicio {
 	public List<DetalleServicioAgencia> consultarDetalleComprobantes(Integer idServicio) throws SQLException, Exception{
 		return ejbSession.consultarDetalleServicioComprobante(idServicio);
 	}
-
+	
+	@Override
+	public boolean registrarObligacionXPagar(Comprobante comprobante) throws SQLException, Exception{
+		return ejbSession.registrarObligacionXPagar(comprobante);
+	}
+	
+	@Override
+	public List<Comprobante> listarObligacionXPagar(Comprobante comprobante) throws SQLException, Exception{
+		return ejbSession.listarObligacionXPagar(comprobante);
+	}
 }
 	

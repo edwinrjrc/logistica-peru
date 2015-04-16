@@ -9,6 +9,7 @@ import java.util.List;
 
 import pe.com.logistica.bean.base.BaseVO;
 import pe.com.logistica.bean.negocio.Cliente;
+import pe.com.logistica.bean.negocio.Comprobante;
 import pe.com.logistica.bean.negocio.Consolidador;
 import pe.com.logistica.bean.negocio.Contacto;
 import pe.com.logistica.bean.negocio.CorreoClienteMasivo;
@@ -181,6 +182,12 @@ public interface NegocioServicio {
 			Exception;
 
 	List<DetalleServicioAgencia> consultarDetalleComprobantes(Integer idServicio)
+			throws SQLException, Exception;
+
+	boolean registrarObligacionXPagar(Comprobante comprobante)
+			throws SQLException, Exception;
+
+	List<Comprobante> listarObligacionXPagar(Comprobante comprobante)
 			throws SQLException, Exception;
 
 }

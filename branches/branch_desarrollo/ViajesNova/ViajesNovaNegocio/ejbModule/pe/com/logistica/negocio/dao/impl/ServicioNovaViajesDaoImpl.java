@@ -1953,4 +1953,128 @@ public class ServicioNovaViajesDaoImpl implements ServicioNovaViajesDao {
 		
 		return resultado;
 	}
+	
+	@Override
+	public List<Comprobante> consultaObligacionXPagar(Comprobante comprobante)
+			throws SQLException {
+		Connection conn = null;
+		List<Comprobante> resultado = null;
+		CallableStatement cs = null;
+		ResultSet rs = null;
+		String sql = "{ ? = call negocio.fn_consultarobligacionxpagar(?,?,?)}";
+		
+		try {
+			conn = UtilConexion.obtenerConexion();
+			cs = conn.prepareCall(sql);
+			int i=1;
+			cs.registerOutParameter(i++, Types.OTHER);
+			if (comprobante.getTipoComprobante().getCodigoEntero() != null && comprobante.getTipoComprobante().getCodigoEntero().intValue() != 0){
+				cs.setInt(i++, comprobante.getTipoComprobante().getCodigoEntero().intValue());
+			}
+			else {
+				cs.setNull(i++, Types.INTEGER);
+			}
+			if (StringUtils.isNotBlank(comprobante.getNumeroComprobante())){
+				cs.setString(i++, comprobante.getNumeroComprobante());
+			}
+			else {
+				cs.setNull(i++, Types.VARCHAR);
+			}
+			if (comprobante.getProveedor().getCodigoEntero() != null && comprobante.getProveedor().getCodigoEntero().intValue()!=0){
+				cs.setInt(i++, comprobante.getProveedor().getCodigoEntero().intValue());
+			}
+			else{
+				cs.setNull(i++, Types.INTEGER);
+			}
+			cs.execute();
+			
+			rs = (ResultSet)cs.getObject(1);
+			Comprobante comprobante2 = null;
+			resultado = new ArrayList<Comprobante>();
+			while (rs.next()){
+				comprobante2 = new Comprobante();
+				comprobante2.setCodigoEntero(UtilJdbc.obtenerNumero(rs, "id"));
+				comprobante2.getTipoComprobante().setCodigoEntero(UtilJdbc.obtenerNumero(rs, "idtipocomprobante"));
+				comprobante2.getTipoComprobante().setNombre(UtilJdbc.obtenerCadena(rs, "nombrecomprobante"));
+				comprobante2.setNumeroComprobante(UtilJdbc.obtenerCadena(rs, "numerocomprobante"));
+				comprobante2.getProveedor().setCodigoEntero(UtilJdbc.obtenerNumero(rs, "idproveedor"));
+				comprobante2.getProveedor().setNombres(UtilJdbc.obtenerCadena(rs, "nombres"));
+				comprobante2.setFechaComprobante(UtilJdbc.obtenerFecha(rs, "fechacomprobante"));
+				comprobante2.setFechaPago(UtilJdbc.obtenerFecha(rs, "fechapago"));
+				comprobante2.setDetalleTextoComprobante(UtilJdbc.obtenerCadena(rs, "detallecomprobante"));
+				comprobante2.setTotalIGV(UtilJdbc.obtenerBigDecimal(rs, "totaligv"));
+				comprobante2.setTotalComprobante(UtilJdbc.obtenerBigDecimal(rs, "totalcomprobante"));
+				
+				resultado.add(comprobante2);
+			}
+		} catch (SQLException e) {
+			throw new SQLException(e);
+		} finally {
+			try {
+				if (rs != null) {
+					rs.close();
+				}
+				if (cs != null) {
+					cs.close();
+				}
+				if (conn != null){
+					conn.close();
+				}
+				
+			} catch (SQLException e) {
+				throw new SQLException(e);
+				
+			}
+		}
+		
+		return resultado;
+	}
+	
+	@Override
+	public boolean registrarObligacionXPagar(Comprobante comprobante)
+			throws SQLException {
+		boolean resultado = false;
+		Connection conn = null;
+		CallableStatement cs = null;
+		ResultSet rs = null;
+		String sql = "{ ? = call negocio.fn_ingresarobligacionxpagar(?,?,?,?,?,?,?,?,?,?)}";
+		
+		try {
+			conn = UtilConexion.obtenerConexion();
+			cs = conn.prepareCall(sql);
+			int i=1;
+			cs.registerOutParameter(i++, Types.BOOLEAN);
+			cs.setInt(i++, comprobante.getTipoComprobante().getCodigoEntero().intValue());
+			cs.setString(i++, comprobante.getNumeroComprobante());
+			cs.setInt(i++, comprobante.getProveedor().getCodigoEntero().intValue());
+			cs.setDate(i++, UtilJdbc.convertirUtilDateSQLDate(comprobante.getFechaComprobante()));
+			cs.setDate(i++, UtilJdbc.convertirUtilDateSQLDate(comprobante.getFechaPago()));
+			cs.setString(i++, comprobante.getDetalleTextoComprobante());
+			cs.setBigDecimal(i++, comprobante.getTotalIGV());
+			cs.setBigDecimal(i++, comprobante.getTotalComprobante());
+			cs.setString(i++, comprobante.getUsuarioCreacion());
+			cs.setString(i++, comprobante.getIpCreacion());
+			cs.execute();
+			
+			resultado = cs.getBoolean(1);
+			
+		} catch (SQLException e) {
+			throw new SQLException(e);
+		} finally {
+			try {
+				if (cs != null) {
+					cs.close();
+				}
+				if (conn != null){
+					conn.close();
+				}
+				
+			} catch (SQLException e) {
+				throw new SQLException(e);
+				
+			}
+		}
+		
+		return resultado;
+	}
 }

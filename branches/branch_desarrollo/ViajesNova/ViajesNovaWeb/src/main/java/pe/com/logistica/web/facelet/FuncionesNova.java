@@ -3,7 +3,7 @@
  */
 package pe.com.logistica.web.facelet;
 
-import org.codehaus.plexus.util.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * @author Edwin
