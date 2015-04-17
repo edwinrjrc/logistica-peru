@@ -318,12 +318,17 @@
 										<f:facet name="header">
 											<h:panelGrid cellpadding="0" cellspacing="0" border="0"
 												style="width:100%; text-align:center;">
-												<h:outputText value="Pagos" />
+												<h:outputText value="Obligacion por Pagar" />
 											</h:panelGrid>
 										</f:facet>
-										<a4j:commandButton value="Ver" render="idGrFrAdmpagoscomprobante"
-											oncomplete="mostrarModal('idModaladmpagoscomprobante');"
-											action="#{servicioAgenteMBean.consultarPagosComprobantes(row)}" />
+										<h:panelGrid cellpadding="0" cellspacing="0" border="0"
+											columns="2">
+											<h:inputText value="#{row.comprobanteAsociado.numeroComprobante}" readonly="true" />
+											<a4j:commandLink action="#{servicioAgenteMBean.enviaDetalle(row)}" oncomplete="mostrarModal3('idModalbusqobligacion')">
+												<h:graphicImage style="border:0px;"
+													value="#{facesContext.externalContext.requestContextPath}/../resources/img/iconoLupa.gif" />
+											</a4j:commandLink>
+										</h:panelGrid>
 									</rich:column>
 								</rich:dataTable>
 								<h:panelGrid columns="2" cellpadding="0" cellspacing="0"

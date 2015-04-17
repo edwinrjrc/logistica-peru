@@ -52,6 +52,8 @@ public class DetalleServicioAgencia extends BaseNegocio {
 	
 	private String nroComprobante;
 	private BaseVO tipoComprobante;
+	
+	private Comprobante comprobanteAsociado;
 	/**
 	 * 
 	 */
@@ -483,6 +485,20 @@ public class DetalleServicioAgencia extends BaseNegocio {
 	 */
 	public void setTipoComprobante(BaseVO tipoComprobante) {
 		this.tipoComprobante = tipoComprobante;
+	}
+
+	/**
+	 * @return the comprobanteAsociado
+	 */
+	public Comprobante getComprobanteAsociado() {
+		return comprobanteAsociado;
+	}
+
+	/**
+	 * @param comprobanteAsociado the comprobanteAsociado to set
+	 */
+	public void setComprobanteAsociado(Comprobante comprobanteAsociado) {
+		this.comprobanteAsociado = comprobanteAsociado;
 	}
 
 }
