@@ -40,6 +40,7 @@ import pe.com.logistica.bean.negocio.EventoObsAnu;
 import pe.com.logistica.bean.negocio.MaestroServicio;
 import pe.com.logistica.bean.negocio.PagoServicio;
 import pe.com.logistica.bean.negocio.Parametro;
+import pe.com.logistica.bean.negocio.Proveedor;
 import pe.com.logistica.bean.negocio.ServicioAgencia;
 import pe.com.logistica.bean.negocio.ServicioAgenciaBusqueda;
 import pe.com.logistica.bean.negocio.ServicioProveedor;
@@ -73,6 +74,7 @@ public class ServicioAgenteMBean extends BaseMBean {
 	private ServicioAgencia servicioAgencia;
 	private ServicioAgenciaBusqueda servicioAgenciaBusqueda;
 	private DetalleServicioAgencia detalleServicio;
+	private DetalleServicioAgencia detalleServicio2;
 	private Cliente clienteBusqueda;
 	private Destino destinoBusqueda;
 	private Destino origenBusqueda;
@@ -80,7 +82,9 @@ public class ServicioAgenteMBean extends BaseMBean {
 	private PagoServicio pagoServicio2;
 	private EventoObsAnu eventoObsAnu;
 	private Comprobante comprobante;
+	private Comprobante comprobanteBusqueda;
 	private BaseVO tipoServicio;
+	private Proveedor proveedorBusqueda;
 	
 	private BigDecimal saldoServicio;
 
@@ -93,7 +97,9 @@ public class ServicioAgenteMBean extends BaseMBean {
 	private List<Destino> listaOrigenesBusqueda;
 	private List<PagoServicio> listaPagosServicios;
 	private List<PagoServicio> listaPagosComprobante;
-
+	private List<Comprobante> listaComprobantes;
+	private List<Proveedor> listadoProveedores;
+	
 	public boolean nuevaVenta;
 	public boolean editarVenta;
 	private boolean servicioFee;
@@ -102,6 +108,7 @@ public class ServicioAgenteMBean extends BaseMBean {
 	private boolean vendedor;
 	private boolean calculadorIGV;
 	private boolean guardoComprobantes;
+	private boolean consultoProveedor;
 
 	private ParametroServicio parametroServicio;
 	private NegocioServicio negocioServicio;
@@ -1423,6 +1430,66 @@ try {
 		this.getComprobante().getTipoComprobante().setNombre(detalle.getTipoComprobante().getNombre());
 		this.getComprobante().setNumeroComprobante(detalle.getNroComprobante());
 	}
+	
+	public void buscarProveedor(){
+		try {
+			this.setListadoProveedores(this.negocioServicio
+					.buscarProveedor(getProveedorBusqueda()));
+			
+			this.setConsultoProveedor(true);
+		} catch (SQLException e) {
+			logger.error(e.getMessage(), e);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void seleccionarProveedor(){
+		for (Proveedor proveedor : this.listadoProveedores){
+			if (proveedor.getCodigoEntero().equals(proveedor.getCodigoSeleccionado())){
+				this.getComprobanteBusqueda().setProveedor(proveedor);
+				break;
+			}
+		}
+	}
+	
+	public void buscarComprobante(){
+		try {
+			this.setListaComprobantes(this.negocioServicio.listarObligacionXPagar(getComprobanteBusqueda()));
+			
+		} catch (SQLException e) {
+			this.setShowModal(true);
+			this.setMensajeModal(e.getMessage());
+			this.setTipoModal(TIPO_MODAL_ERROR);
+			e.printStackTrace();
+		} catch (Exception e) {
+			this.setShowModal(true);
+			this.setMensajeModal(e.getMessage());
+			this.setTipoModal(TIPO_MODAL_ERROR);
+			e.printStackTrace();
+		}
+	}
+	
+	public void enviaDetalle(DetalleServicioAgencia detalle){
+		this.setDetalleServicio2(detalle);
+	}
+	
+	public void seleccionarComprobante(){
+		Comprobante comprobante1 = null;
+		for (Comprobante comprobante : this.listaComprobantes){
+			if (comprobante.getCodigoEntero().equals(comprobante.getCodigoSeleccionado())){
+				comprobante1 = comprobante;
+				break;
+			}
+		}
+		
+		for (DetalleServicioAgencia deta : this.getServicioAgencia().getListaDetalleServicio()){
+			if (deta.equals(this.getDetalleServicio2())){
+				deta.setComprobanteAsociado(comprobante1);
+				break;
+			}
+		}
+	}
 
 	/**
 	 * @param listadoServicioAgencia
@@ -1959,6 +2026,96 @@ try {
 	 */
 	public void setListaPagosComprobante(List<PagoServicio> listaPagosComprobante) {
 		this.listaPagosComprobante = listaPagosComprobante;
+	}
+
+	/**
+	 * @return the comprobanteBusqueda
+	 */
+	public Comprobante getComprobanteBusqueda() {
+		if (comprobanteBusqueda == null){
+			comprobanteBusqueda = new Comprobante();
+		}
+		return comprobanteBusqueda;
+	}
+
+	/**
+	 * @param comprobanteBusqueda the comprobanteBusqueda to set
+	 */
+	public void setComprobanteBusqueda(Comprobante comprobanteBusqueda) {
+		this.comprobanteBusqueda = comprobanteBusqueda;
+	}
+
+	/**
+	 * @return the listaComprobantes
+	 */
+	public List<Comprobante> getListaComprobantes() {
+		return listaComprobantes;
+	}
+
+	/**
+	 * @param listaComprobantes the listaComprobantes to set
+	 */
+	public void setListaComprobantes(List<Comprobante> listaComprobantes) {
+		this.listaComprobantes = listaComprobantes;
+	}
+
+	/**
+	 * @return the proveedorBusqueda
+	 */
+	public Proveedor getProveedorBusqueda() {
+		if (proveedorBusqueda == null){
+			proveedorBusqueda = new Proveedor();
+		}
+		return proveedorBusqueda;
+	}
+
+	/**
+	 * @param proveedorBusqueda the proveedorBusqueda to set
+	 */
+	public void setProveedorBusqueda(Proveedor proveedorBusqueda) {
+		this.proveedorBusqueda = proveedorBusqueda;
+	}
+
+	/**
+	 * @return the listadoProveedores
+	 */
+	public List<Proveedor> getListadoProveedores() {
+		return listadoProveedores;
+	}
+
+	/**
+	 * @param listadoProveedores the listadoProveedores to set
+	 */
+	public void setListadoProveedores(List<Proveedor> listadoProveedores) {
+		this.listadoProveedores = listadoProveedores;
+	}
+
+	/**
+	 * @return the consultoProveedor
+	 */
+	public boolean isConsultoProveedor() {
+		return consultoProveedor;
+	}
+
+	/**
+	 * @param consultoProveedor the consultoProveedor to set
+	 */
+	public void setConsultoProveedor(boolean consultoProveedor) {
+		this.consultoProveedor = consultoProveedor;
+	}
+
+	/**
+	 * @return the detalleServicio2
+	 */
+	public DetalleServicioAgencia getDetalleServicio2() {
+		return detalleServicio2;
+	}
+
+	/**
+	 * @param detalleServicio2 the detalleServicio2 to set
+	 */
+	public void setDetalleServicio2(DetalleServicioAgencia detalleServicio2) {
+		this.detalleServicio2 = detalleServicio2;
 	}
 
 }

@@ -30,6 +30,7 @@ public class Comprobante extends BaseNegocio {
 	
 	private List<DetalleComprobante> detalleComprobante;
 	private String detalleTextoComprobante;
+	private Integer codigoSeleccionado;
 	/**
 	 * 
 	 */
@@ -206,6 +207,20 @@ public class Comprobante extends BaseNegocio {
 	 */
 	public void setDetalleTextoComprobante(String detalleTextoComprobante) {
 		this.detalleTextoComprobante = detalleTextoComprobante;
+	}
+
+	/**
+	 * @return the codigoSeleccionado
+	 */
+	public Integer getCodigoSeleccionado() {
+		return codigoSeleccionado;
+	}
+
+	/**
+	 * @param codigoSeleccionado the codigoSeleccionado to set
+	 */
+	public void setCodigoSeleccionado(Integer codigoSeleccionado) {
+		this.codigoSeleccionado = codigoSeleccionado;
 	}
 
 }
