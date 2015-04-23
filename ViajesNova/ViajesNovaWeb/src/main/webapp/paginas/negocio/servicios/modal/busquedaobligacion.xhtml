@@ -133,7 +133,7 @@
 						</rich:column>
 						
 						<rich:column>
-							<h:selectOneRadio value="#{row.codigoSeleccionado}">
+							<h:selectOneRadio id="idRadioObligacion" onclick="dataTableSelectOneRadio(this);" value="#{row.codigoSeleccionado}">
 								<f:selectItem itemValue="#{row.codigoEntero}"/>
 							</h:selectOneRadio>
 						</rich:column>

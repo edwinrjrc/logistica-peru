@@ -86,7 +86,7 @@
 							<f:facet name="header">
 								<h:outputText value="Seleccionar" />
 							</f:facet>
-							<h:selectOneRadio id="idRadioDestino" value="#{row.codigoSeleccionado}" >
+							<h:selectOneRadio id="idRadioDestino" onclick="dataTableSelectOneRadio(this);" value="#{row.codigoSeleccionado}" >
 								<f:selectItem itemValue="#{row.codigoEntero}" />
 							</h:selectOneRadio>
 						</rich:column>

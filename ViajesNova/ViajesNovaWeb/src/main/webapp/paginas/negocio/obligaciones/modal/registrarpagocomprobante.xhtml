@@ -7,23 +7,23 @@
 	xmlns:a4j="http://richfaces.org/a4j"
 	xmlns:rich="http://richfaces.org/rich">
 
-	<rich:popupPanel id="idModalregpagos" modal="true" width="800"
-		height="500">
+	<rich:popupPanel id="idModalregpagoscomprobante" modal="true"
+		width="800" height="500">
 
 		<f:facet name="header">
-			<h:outputText value="Registrar Pago" />
+			<h:outputText value="Registrar Pago Comprobante" />
 		</f:facet>
 		<f:facet name="controls">
 			<h:outputLink value="#" style="border:0"
-				onclick="#{rich:component('idModalregpagos')}.hide(); return false;">
+				onclick="#{rich:component('idModalregpagoscomprobante')}.hide(); return false;">
 				<h:graphicImage height="18" width="18"
 					url="/resources/img/close.png" style="border:0" />
 			</h:outputLink>
 		</f:facet>
 
-		<h:form id="idFormRegisPago" enctype="multipart/form-data">
+		<h:form id="idFrRegiPagoComp" enctype="multipart/form-data">
 			<h:panelGrid cellpadding="0" cellspacing="0" border="0" columns="1"
-				style="width:100%;" id="idGrFrRegpagos">
+				style="width:100%;" id="idGrFrRegpagoscomp">
 				<h:panelGrid cellpadding="0" cellspacing="0" border="0" columns="2"
 					style="width:100%;" columnClasses="col1fil2Negrita,col2fil2Negrita">
 					<f:facet name="header">
@@ -34,38 +34,39 @@
 							<hr width="100%" />
 						</h:panelGrid>
 					</f:facet>
-					<h:outputText value="Id Servicio" />
+					<h:outputText value="Id Obligacion" />
 					<h:outputText
-						value="#{servicioAgenteMBean.servicioAgencia.codigoEntero}" />
-					<h:outputText value="Cliente" />
+						value="#{obligacionPorPagarMBean.comprobante.codigoEntero}" />
+					<h:outputText value="Proveedor" />
 					<h:outputText
-						value="#{servicioAgenteMBean.servicioAgencia.cliente.nombreCompleto}" />
-					<h:outputText value="Monto Total de Pago" />
+						value="#{obligacionPorPagarMBean.comprobante.proveedor.nombres}" />
+					<h:outputText value="Tipo Comprobante" />
 					<h:outputText
-						value="#{servicioAgenteMBean.servicioAgencia.montoTotalServicios}">
-						<f:convertNumber pattern="$ #,###,##0.00" locale="en_US" />
-					</h:outputText>
+						value="#{obligacionPorPagarMBean.comprobante.tipoComprobante.nombre}" />
+					<h:outputText value="Número Comprobante" />
+					<h:outputText
+						value="#{obligacionPorPagarMBean.comprobante.numeroComprobante}" />
 					<h:outputText value="Fecha Pago" />
-					<h:panelGrid cellpadding="0" cellspacing="0" border="0" columns="1">
+					<h:panelGrid cellpadding="0" cellspacing="0" border="0">
 						<rich:calendar datePattern="dd/MM/yyyy" id="idSelFecSer"
-							value="#{servicioAgenteMBean.pagoServicio.fechaPago}"></rich:calendar>
+							value="#{obligacionPorPagarMBean.pagoComprobante.fechaPago}"></rich:calendar>
 						<rich:message for="idSelFecSer" ajaxRendered="true"
 							showSummary="true" showDetail="false" />
 					</h:panelGrid>
 					<h:outputText value="Monto Pago" />
-					<h:panelGrid cellpadding="0" cellspacing="0" border="0" columns="1">
+					<h:panelGrid cellpadding="0" cellspacing="0" border="0">
 						<h:inputText id="idMontoPago"
 							onkeypress="return js_soloDecimal(event)"
 							style="text-align:right;"
-							value="#{servicioAgenteMBean.pagoServicio.montoPago}" size="10"
+							value="#{obligacionPorPagarMBean.pagoComprobante.montoPago}" size="10"
 							maxlength="8" />
 						<rich:message for="idMontoPago" ajaxRendered="true"
 							showSummary="true" showDetail="false" />
 					</h:panelGrid>
 					<h:outputText value="Comentario" />
-					<h:panelGrid cellpadding="0" cellspacing="0" border="0" columns="1">
-						<h:inputTextarea id="idTxtComentario"
-							value="#{servicioAgenteMBean.pagoServicio.comentario}" />
+					<h:panelGrid cellpadding="0" cellspacing="0" border="0">
+						<h:inputTextarea id="idTxtComentario" rows="5" cols="50"
+							value="#{obligacionPorPagarMBean.pagoComprobante.comentario}" />
 						<rich:message for="idTxtComentario" ajaxRendered="true"
 							showSummary="true" showDetail="false" />
 					</h:panelGrid>
@@ -81,9 +82,9 @@
 
 				<f:facet name="footer">
 					<a4j:commandButton value="Grabar"
-						action="#{servicioAgenteMBean.registrarPago()}"
-						render="idFormHidden,idPanelHidden,idPanelBotones,idModalcorrecto,idModalError,idGrRegisVenServicio,idDatapagos,idGrSaldoServicio"
-						oncomplete="mostrarModal('idformadmservicios'); #{rich:component('idModalregpagos')}.hide(); return false;"></a4j:commandButton>
+						action="#{obligacionPorPagarMBean.registrarPagoComprobante()}"
+						render="idFormHidden,idPanelHidden,idPanelBotones,idModalcorrecto,idModalError,idDatapagoscomp"
+						oncomplete="mostrarModal('idformadmobligatorios'); #{rich:component('idModalregpagoscomprobante')}.hide(); return false;"></a4j:commandButton>
 				</f:facet>
 			</h:panelGrid>
 		</h:form>

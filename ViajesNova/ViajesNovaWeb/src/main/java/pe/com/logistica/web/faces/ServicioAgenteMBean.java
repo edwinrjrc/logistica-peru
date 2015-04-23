@@ -1216,25 +1216,28 @@ try {
 
 	public void registrarPago() {
 		try {
-			this.getPagoServicio().getServicio().setCodigoEntero(this.getServicioAgencia().getCodigoEntero());
-			
-			HttpSession session = obtenerSession(false);
-			Usuario usuario = (Usuario) session
-					.getAttribute("usuarioSession");
-			this.getPagoServicio().setUsuarioCreacion(
-					usuario.getUsuario());
-			this.getPagoServicio().setIpCreacion(
-					obtenerRequest().getRemoteAddr());
-			this.getPagoServicio().setUsuarioModificacion(
-					usuario.getUsuario());
-			this.getPagoServicio().setIpModificacion(
-					obtenerRequest().getRemoteAddr());
-			
-			this.negocioServicio.registrarPago(getPagoServicio());
+			if (validarRegistroPago()){
+				this.getPagoServicio().getServicio().setCodigoEntero(this.getServicioAgencia().getCodigoEntero());
+				
+				HttpSession session = obtenerSession(false);
+				Usuario usuario = (Usuario) session
+						.getAttribute("usuarioSession");
+				this.getPagoServicio().setUsuarioCreacion(
+						usuario.getUsuario());
+				this.getPagoServicio().setIpCreacion(
+						obtenerRequest().getRemoteAddr());
+				this.getPagoServicio().setUsuarioModificacion(
+						usuario.getUsuario());
+				this.getPagoServicio().setIpModificacion(
+						obtenerRequest().getRemoteAddr());
+				
+				this.negocioServicio.registrarPago(getPagoServicio());
 
-			this.setShowModal(true);
-			this.setMensajeModal("Pago Registrado Satisfactoriamente");
-			this.setTipoModal(TIPO_MODAL_EXITO);
+				this.setShowModal(true);
+				this.setMensajeModal("Pago Registrado Satisfactoriamente");
+				this.setTipoModal(TIPO_MODAL_EXITO);
+			}
+			
 		} catch (SQLException e) {
 			e.printStackTrace();
 			this.setShowModal(true);
@@ -1248,38 +1251,29 @@ try {
 		}
 	}
 	
-	public void registrarPagoComprobante() {
-		try {
-			this.getPagoServicio().getServicio().setCodigoEntero(this.getServicioAgencia().getCodigoEntero());
-			
-			HttpSession session = obtenerSession(false);
-			Usuario usuario = (Usuario) session
-					.getAttribute("usuarioSession");
-			this.getPagoServicio().setUsuarioCreacion(
-					usuario.getUsuario());
-			this.getPagoServicio().setIpCreacion(
-					obtenerRequest().getRemoteAddr());
-			this.getPagoServicio().setUsuarioModificacion(
-					usuario.getUsuario());
-			this.getPagoServicio().setIpModificacion(
-					obtenerRequest().getRemoteAddr());
-			
-			this.negocioServicio.registrarPago(getPagoServicio());
-
-			this.setShowModal(true);
-			this.setMensajeModal("Pago Registrado Satisfactoriamente");
-			this.setTipoModal(TIPO_MODAL_EXITO);
-		} catch (SQLException e) {
-			e.printStackTrace();
-			this.setShowModal(true);
-			this.setMensajeModal(e.getMessage());
-			this.setTipoModal(TIPO_MODAL_ERROR);
-		} catch (Exception e) {
-			e.printStackTrace();
-			this.setShowModal(true);
-			this.setMensajeModal(e.getMessage());
-			this.setTipoModal(TIPO_MODAL_ERROR);
+	private boolean validarRegistroPago() {
+		boolean resultado = true;
+		String idFormulario = "idFormRegisPago";
+		if (this.getPagoServicio().getMontoPago() == null || BigDecimal.ZERO.equals(this.getPagoServicio().getMontoPago())){
+			this.agregarMensaje(idFormulario + ":idMontoPago",
+					"Ingrese el monto a pagar", "",
+					FacesMessage.SEVERITY_ERROR);
+			resultado = false;
 		}
+		if (this.getPagoServicio().getFechaPago() == null){
+			this.agregarMensaje(idFormulario + ":idSelFecSer",
+					"Ingrese la fecha de pago", "",
+					FacesMessage.SEVERITY_ERROR);
+			resultado = false;
+		}
+		if (StringUtils.length(this.getPagoServicio().getComentario()) > 300){
+			this.agregarMensaje(idFormulario + ":idTxtComentario",
+					"El comentario no debe ser mayor a 300 caracteres", "",
+					FacesMessage.SEVERITY_ERROR);
+			resultado = false;
+		}
+		
+		return resultado;
 	}
 
 	public void listener(FileUploadEvent event) throws Exception {
@@ -1404,7 +1398,7 @@ try {
 			}
 			
 			this.setShowModal(true);
-			this.setMensajeModal("Pago Registrado Satisfactoriamente");
+			this.setMensajeModal("Comprobante Registrado Satisfactoriamente");
 			this.setTipoModal(TIPO_MODAL_EXITO);
 		} catch (ValidacionException e) {
 			this.setShowModal(true);
@@ -1488,6 +1482,35 @@ try {
 				deta.setComprobanteAsociado(comprobante1);
 				break;
 			}
+		}
+	}
+	
+	public void guardarRelacionComprobanteObligacion(){
+		try {
+			HttpSession session = obtenerSession(false);
+			Usuario usuario = (Usuario) session
+					.getAttribute("usuarioSession");
+			
+			for (DetalleServicioAgencia detalle : this.getServicioAgencia().getListaDetalleServicio()){
+				detalle.setUsuarioCreacion(usuario.getUsuario());
+				detalle.setIpCreacion(obtenerRequest().getRemoteAddr());
+			}
+			
+			this.negocioServicio.registrarComprobanteObligacion(this.getServicioAgencia());
+			
+			this.setShowModal(true);
+			this.setMensajeModal("Se guardo la relacion entre comprobantes satisfactoriamente");
+			this.setTipoModal(TIPO_MODAL_EXITO);
+		} catch (SQLException e) {
+			this.setShowModal(true);
+			this.setMensajeModal(e.getMessage());
+			this.setTipoModal(TIPO_MODAL_ERROR);
+			e.printStackTrace();
+		} catch (Exception e) {
+			this.setShowModal(true);
+			this.setMensajeModal(e.getMessage());
+			this.setTipoModal(TIPO_MODAL_ERROR);
+			e.printStackTrace();
 		}
 	}
 
