@@ -190,4 +190,14 @@ public interface NegocioServicio {
 	List<Comprobante> listarObligacionXPagar(Comprobante comprobante)
 			throws SQLException, Exception;
 
+	void registrarPagoObligacion(PagoServicio pago)
+			throws SQLException, Exception;
+
+	List<PagoServicio> listarPagosObligacion(Integer idObligacion)
+			throws SQLException, Exception;
+
+	void registrarComprobanteObligacion(
+			ServicioAgencia servicioAgencia) throws SQLException,
+			Exception;
+
 }

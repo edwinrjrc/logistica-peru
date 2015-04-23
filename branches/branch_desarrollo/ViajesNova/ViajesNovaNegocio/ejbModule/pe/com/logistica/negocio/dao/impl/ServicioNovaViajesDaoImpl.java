@@ -1509,7 +1509,7 @@ public class ServicioNovaViajesDaoImpl implements ServicioNovaViajesDao {
 	@Override
 	public void registrarPagoServicio(PagoServicio pago) throws SQLException {
 		CallableStatement cs = null;
-		String sql = "{ ? = call negocio.fn_registrarpagoservicio(?,?,?,?,?,?,?,?,?)}";
+		String sql = "{ ? = call negocio.fn_registrarpagoservicio(?,?,?,?,?,?,?,?,?,?)}";
 		Connection conn = null;
 		try {
 			conn = UtilConexion.obtenerConexion();
@@ -1543,6 +1543,12 @@ public class ServicioNovaViajesDaoImpl implements ServicioNovaViajesDao {
 			else {
 				cs.setNull(i++, Types.VARCHAR);
 			}
+			if (StringUtils.isNotBlank(pago.getComentario())){
+				cs.setString(i++, pago.getComentario());
+			}
+			else {
+				cs.setNull(i++, Types.VARCHAR);
+			}
 			cs.setString(i++, pago.getUsuarioCreacion());
 			cs.setString(i++, pago.getIpCreacion());
 			cs.execute();
@@ -1562,6 +1568,12 @@ public class ServicioNovaViajesDaoImpl implements ServicioNovaViajesDao {
 				}
 				else{
 					cs.setNull(i++, Types.VARBINARY);
+				}
+				if (StringUtils.isNotBlank(pago.getComentario())){
+					cs.setString(i++, pago.getComentario());
+				}
+				else {
+					cs.setNull(i++, Types.VARCHAR);
 				}
 				cs.setString(i++, pago.getUsuarioCreacion());
 				cs.setString(i++, pago.getIpCreacion());
@@ -1613,6 +1625,67 @@ public class ServicioNovaViajesDaoImpl implements ServicioNovaViajesDao {
 				pago = new PagoServicio();
 				pago.setCodigoEntero(UtilJdbc.obtenerNumero(rs, "idpago"));
 				pago.getServicio().setCodigoEntero(UtilJdbc.obtenerNumero(rs, "idservicio"));
+				pago.setFechaPago(UtilJdbc.obtenerFecha(rs, "fechapago"));
+				pago.setMontoPago(UtilJdbc.obtenerBigDecimal(rs, "montopagado"));
+				byte[] sustento = rs.getBytes("sustentopago");
+				pago.setSustentoPagoByte(sustento);
+				pago.setTieneSustento((sustento != null));
+				pago.setNombreArchivo(UtilJdbc.obtenerCadena(rs, "nombrearchivo"));
+				pago.setExtensionArchivo(UtilJdbc.obtenerCadena(rs, "extensionarchivo"));
+				pago.setTipoContenido(UtilJdbc.obtenerCadena(rs, "tipocontenido"));
+				resultado.add(pago);
+			}
+			
+		} catch (SQLException e) {
+			throw new SQLException(e);
+		} finally {
+			try {
+				if (rs != null) {
+					rs.close();
+				}
+				if (cs != null) {
+					cs.close();
+				}
+				if (conn != null){
+					conn.close();
+				}
+			} catch (SQLException e) {
+				throw new SQLException(e);
+			}
+		}
+		
+		return resultado;
+	}
+	
+	@Override
+	public List<PagoServicio> listarPagosObligacion(Integer idObligacion)
+			throws SQLException {
+		List<PagoServicio> resultado = null;
+		Connection conn = null;
+		CallableStatement cs = null;
+		ResultSet rs = null;
+		String sql = "{ ? = call negocio.fn_listarpagosobligaciones(?)}";
+		
+		try {
+			conn = UtilConexion.obtenerConexion();
+			cs = conn.prepareCall(sql);
+			int i=1;
+			cs.registerOutParameter(i++, Types.OTHER);
+			if (idObligacion != null){
+				cs.setInt(i++, idObligacion);
+			}
+			else{
+				cs.setNull(i++, Types.INTEGER);
+			}
+			
+			cs.execute();
+			rs = (ResultSet)cs.getObject(1);
+			resultado = new ArrayList<PagoServicio>();
+			PagoServicio pago = null;
+			while (rs.next()){
+				pago = new PagoServicio();
+				pago.setCodigoEntero(UtilJdbc.obtenerNumero(rs, "idpago"));
+				pago.setIdObligacion(UtilJdbc.obtenerNumero(rs, "idobligacion"));
 				pago.setFechaPago(UtilJdbc.obtenerFecha(rs, "fechapago"));
 				pago.setMontoPago(UtilJdbc.obtenerBigDecimal(rs, "montopagado"));
 				byte[] sustento = rs.getBytes("sustentopago");
@@ -1925,6 +1998,7 @@ public class ServicioNovaViajesDaoImpl implements ServicioNovaViajesDao {
 				detalleServicio.getServicioProveedor().getProveedor().setApellidoPaterno(UtilJdbc.obtenerCadena(rs, "apellidopaterno"));
 				detalleServicio.getServicioProveedor().getProveedor().setApellidoMaterno(UtilJdbc.obtenerCadena(rs, "apellidomaterno"));
 				detalleServicio.getTipoServicio().setVisible(UtilJdbc.obtenerBoolean(rs, "visible"));
+				detalleServicio.setIdComprobanteGenerado(UtilJdbc.obtenerNumero(rs, "idComprobante"));
 				detalleServicio.getTipoComprobante().setCodigoEntero(UtilJdbc.obtenerNumero(rs, "tipoComprobante"));
 				detalleServicio.getTipoComprobante().setNombre(UtilJdbc.obtenerCadena(rs, "tipoComprobanteNombre"));
 				detalleServicio.setNroComprobante(UtilJdbc.obtenerCadena(rs, "numeroComprobante"));
@@ -2077,4 +2151,158 @@ public class ServicioNovaViajesDaoImpl implements ServicioNovaViajesDao {
 		
 		return resultado;
 	}
+	
+	@Override
+	public void registrarPagoObligacion(PagoServicio pago) throws SQLException {
+		CallableStatement cs = null;
+		String sql = "{ ? = call negocio.fn_registrarpagoobligacion(?,?,?,?,?,?,?,?,?,?)}";
+		Connection conn = null;
+		try {
+			conn = UtilConexion.obtenerConexion();
+			cs = conn.prepareCall(sql);
+			int i=1;
+			cs.registerOutParameter(i++, Types.INTEGER);
+			cs.setInt(i++, pago.getIdObligacion().intValue());
+			cs.setDate(i++, UtilJdbc.convertirUtilDateSQLDate(pago.getFechaPago()));
+			cs.setBigDecimal(i++, pago.getMontoPago());
+			if (pago.getSustentoPagoByte()!=null){
+				cs.setBinaryStream(i++, new ByteArrayInputStream(pago.getSustentoPagoByte()), pago.getSustentoPagoByte().length);
+			}
+			else{
+				cs.setNull(i++, Types.VARBINARY);
+			}
+			if (StringUtils.isNotBlank(pago.getNombreArchivo())){
+				cs.setString(i++, pago.getNombreArchivo());
+			}
+			else {
+				cs.setNull(i++, Types.VARCHAR);
+			}
+			if (StringUtils.isNotBlank(pago.getExtensionArchivo())){
+				cs.setString(i++, pago.getExtensionArchivo());
+			}
+			else {
+				cs.setNull(i++, Types.VARCHAR);
+			}
+			if (StringUtils.isNotBlank(pago.getTipoContenido())){
+				cs.setString(i++, pago.getTipoContenido());
+			}
+			else {
+				cs.setNull(i++, Types.VARCHAR);
+			}
+			if (StringUtils.isNotBlank(pago.getComentario())){
+				cs.setString(i++, pago.getComentario());
+			}
+			else {
+				cs.setNull(i++, Types.VARCHAR);
+			}
+			cs.setString(i++, pago.getUsuarioCreacion());
+			cs.setString(i++, pago.getIpCreacion());
+			cs.execute();
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+			try {
+				cs.close();
+				cs = conn.prepareCall(sql);
+				int i=1;
+				cs.registerOutParameter(i++, Types.INTEGER);
+				cs.setInt(i++, pago.getIdObligacion().intValue());
+				cs.setDate(i++, UtilJdbc.convertirUtilDateSQLDate(pago.getFechaPago()));
+				cs.setBigDecimal(i++, pago.getMontoPago());
+				if (pago.getSustentoPagoByte()!=null){
+					cs.setBinaryStream(i++, new ByteArrayInputStream(pago.getSustentoPagoByte()));
+				}
+				else{
+					cs.setNull(i++, Types.VARBINARY);
+				}
+				if (StringUtils.isNotBlank(pago.getComentario())){
+					cs.setString(i++, pago.getComentario());
+				}
+				else {
+					cs.setNull(i++, Types.VARCHAR);
+				}
+				cs.setString(i++, pago.getUsuarioCreacion());
+				cs.setString(i++, pago.getIpCreacion());
+				cs.execute();
+			} catch (SQLException e1) {
+				throw new SQLException(e);
+			}
+		} finally {
+			try {
+				if (cs != null) {
+					cs.close();
+				}
+				if (conn != null){
+					conn.close();
+				}
+			} catch (SQLException e) {
+				throw new SQLException(e);
+			}
+		}
+		
+	}
+	
+	@Override
+	public boolean guardarRelacionComproObligacion(DetalleServicioAgencia detalle, Connection conn) throws SQLException, Exception{
+		CallableStatement cs = null;
+		String sql = "";
+		boolean resultado = false;
+		try{
+			sql = "{ ? = call negocio.fn_registrarcomprobanteobligacion(?,?,?,?)}";
+			cs = conn.prepareCall(sql);
+			int i=1;
+			cs.registerOutParameter(i++, Types.BOOLEAN);
+			cs.setInt(i++, detalle.getIdComprobanteGenerado().intValue());
+			cs.setInt(i++, detalle.getComprobanteAsociado().getCodigoEntero().intValue());
+			cs.setString(i++, detalle.getUsuarioCreacion());
+			cs.setString(i++, detalle.getIpCreacion());
+			
+			cs.execute();
+			
+			resultado = true;
+		}
+		catch (SQLException e){
+			throw new SQLException(e);
+		}
+		finally{
+			if (cs != null){
+				cs.close();
+			}
+		}
+		
+		return resultado;
+	}
+	
+	@Override
+	public void actualizarRelacionComprobantes(boolean relacionComprobantes, ServicioAgencia servicio, Connection conn) throws SQLException, Exception{
+		CallableStatement cs = null;
+		String sql = "{ ? = call negocio.fn_actualizarrelacioncomprobantes(?,?,?,?)}";
+		int resultado = 0;
+		try {
+			
+			cs = conn.prepareCall(sql);
+			int i=1;
+			cs.registerOutParameter(i++, Types.BOOLEAN);
+			cs.setInt(i++, servicio.getCodigoEntero().intValue());
+			cs.setBoolean(i++, relacionComprobantes);
+			cs.setString(i++, servicio.getUsuarioCreacion());
+			cs.setString(i++, servicio.getIpCreacion());
+			
+			cs.execute();
+			
+		} catch (SQLException e) {
+			throw new SQLException(e);
+		} finally {
+			try {
+				if (cs != null) {
+					cs.close();
+				}
+			} catch (SQLException e) {
+				throw new SQLException(e);
+			}
+		}
+		
+	}
 }
+
+
