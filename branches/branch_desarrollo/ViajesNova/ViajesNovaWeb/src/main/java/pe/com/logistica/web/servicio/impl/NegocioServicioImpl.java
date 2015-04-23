@@ -361,6 +361,13 @@ public class NegocioServicioImpl implements NegocioServicio {
 		
 		return ejbSession.listarPagosServicio(idServicio);
 	}
+	
+	@Override
+	public List<PagoServicio> listarPagosObligacion(Integer idObligacion)
+			throws SQLException, Exception {
+		
+		return ejbSession.listarPagosObligacion(idObligacion);
+	}
 
 	@Override
 	public BigDecimal consultarSaldoServicio(Integer idServicio)
@@ -408,6 +415,16 @@ public class NegocioServicioImpl implements NegocioServicio {
 	@Override
 	public List<Comprobante> listarObligacionXPagar(Comprobante comprobante) throws SQLException, Exception{
 		return ejbSession.listarObligacionXPagar(comprobante);
+	}
+	
+	@Override
+	public void registrarPagoObligacion(PagoServicio pago) throws SQLException, Exception{
+		ejbSession.registrarPagoObligacion(pago);
+	}
+	
+	@Override
+	public void registrarComprobanteObligacion(ServicioAgencia servicioAgencia) throws SQLException, Exception{
+		ejbSession.registrarRelacionComproObligacion(servicioAgencia);
 	}
 }
 	

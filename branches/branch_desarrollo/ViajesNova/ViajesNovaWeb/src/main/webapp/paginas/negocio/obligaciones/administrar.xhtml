@@ -60,8 +60,7 @@
 										size="100" maxlength="100" styleClass="estilocampo1" />
 									<a4j:commandLink
 										action="#{obligacionPorPagarMBean.defineSalida()}"
-										oncomplete="mostrarModal3('idModalbusqproveedor')"
-										>
+										oncomplete="mostrarModal3('idModalbusqproveedor')">
 										<h:graphicImage style="border:0px;"
 											value="#{facesContext.externalContext.requestContextPath}/../resources/img/iconoLupa.gif" />
 									</a4j:commandLink>
@@ -85,6 +84,12 @@
 							<f:facet name="noData">
 								<h:outputText value="No se encontraron registros" />
 							</f:facet>
+							<rich:column>
+								<f:facet name="header">
+									<h:outputText value="Id" />
+								</f:facet>
+								<h:outputText value="#{row.codigoEntero}" />
+							</rich:column>
 							<rich:column>
 								<f:facet name="header">
 									<h:outputText value="Tipo Comprobante" />
@@ -127,6 +132,10 @@
 								<h:outputText value="#{row.totalComprobante}" />
 							</rich:column>
 
+							<rich:column>
+								<a4j:commandButton render="idGrFrAdmpagoscomprobante" value="Pagos" action="#{obligacionPorPagarMBean.verPagos(row)}"
+									oncomplete="mostrarModal3('idModaladmpagoscomprobante')"></a4j:commandButton>
+							</rich:column>
 
 						</rich:dataTable>
 						<rich:dataScroller for="idTabla" />
@@ -157,10 +166,14 @@
 		<ui:include
 			src="/paginas/negocio/obligaciones/modal/busquedaproveedor.xhtml" />
 		<ui:include src="/paginas/negocio/obligaciones/formobligacion.xhtml" />
+		<ui:include
+			src="/paginas/negocio/obligaciones/modal/registrarpagocomprobante.xhtml" />
+		<ui:include
+			src="/paginas/negocio/obligaciones/modal/admpagoscomprobante.xhtml" />
 		<ui:include src="/resources/includes/includemensaje.xhtml">
 			<ui:param name="backBean" value="#{obligacionPorPagarMBean}" />
-			<ui:param name="idModalForm" value="idModalformobligacion" />
-			<ui:param name="idrender" value="idTabla" />
+			<ui:param name="idModalForm" value="#{null}" />
+			<ui:param name="idrender" value="#{null}" />
 		</ui:include>
 		<script type="text/javascript">
 		mostrarModal('idformadmobligatorios');

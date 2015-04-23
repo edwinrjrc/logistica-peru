@@ -53,6 +53,8 @@ public class DetalleServicioAgencia extends BaseNegocio {
 	private String nroComprobante;
 	private BaseVO tipoComprobante;
 	
+	private Integer idComprobanteGenerado;
+	
 	private Comprobante comprobanteAsociado;
 	/**
 	 * 
@@ -499,6 +501,20 @@ public class DetalleServicioAgencia extends BaseNegocio {
 	 */
 	public void setComprobanteAsociado(Comprobante comprobanteAsociado) {
 		this.comprobanteAsociado = comprobanteAsociado;
+	}
+
+	/**
+	 * @return the idComprobanteGenerado
+	 */
+	public Integer getIdComprobanteGenerado() {
+		return idComprobanteGenerado;
+	}
+
+	/**
+	 * @param idComprobanteGenerado the idComprobanteGenerado to set
+	 */
+	public void setIdComprobanteGenerado(Integer idComprobanteGenerado) {
+		this.idComprobanteGenerado = idComprobanteGenerado;
 	}
 
 }

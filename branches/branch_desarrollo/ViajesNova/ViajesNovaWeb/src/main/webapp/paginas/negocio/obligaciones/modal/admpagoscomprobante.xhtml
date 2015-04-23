@@ -34,22 +34,17 @@
 							<hr width="100%" />
 						</h:panelGrid>
 					</f:facet>
-					<h:outputText value="Id Servicio" />
-					<h:outputText
-						value="#{servicioAgenteMBean.servicioAgencia.codigoEntero}" />
-					<h:outputText value="Cliente" />
-					<h:outputText
-						value="#{servicioAgenteMBean.servicioAgencia.cliente.nombreCompleto}" />
-					<h:outputText value="Tipo Servicio" />
-					<h:outputText
-						value="#{servicioAgenteMBean.tipoServicio.nombre}" />
 					<h:outputText value="Tipo Comprobante" />
 					<h:outputText
-						value="#{servicioAgenteMBean.comprobante.tipoComprobante.nombre}">
+						value="#{obligacionPorPagarMBean.comprobante.tipoComprobante.nombre}">
 					</h:outputText>
 					<h:outputText value="Numero Comprobante" />
 					<h:outputText
-						value="#{servicioAgenteMBean.comprobante.numeroComprobante}">
+						value="#{obligacionPorPagarMBean.comprobante.numeroComprobante}">
+					</h:outputText>
+					<h:outputText value="Fecha Comprobante" />
+					<h:outputText
+						value="#{obligacionPorPagarMBean.comprobante.fechaComprobante}">
 					</h:outputText>
 					<br />
 				</h:panelGrid>
@@ -65,7 +60,7 @@
 					</f:facet>
 					<h:outputText value="" />
 					<rich:dataTable style="width:100%;" id="idDatapagoscomp"
-						value="#{servicioAgenteMBean.listaPagosComprobante}" var="fila">
+						value="#{obligacionPorPagarMBean.listaPagos}" var="fila">
 						<f:facet name="noData">
 							<h:panelGrid border="0" style="width:100%;text-align:center;">
 								<h:outputText value="No se realizaron pagos" />
@@ -106,8 +101,8 @@
 							<h:panelGrid border="0" style="width:100%;text-align:left;">
 								<a4j:commandButton render="idGrFrRegpagoscomp"
 									value="Registrar Pago"
-									oncomplete="mostrarModal('idModalregpagoscomprobante');"
-									action="#{servicioAgenteMBean.registrarNuevoPago()}"></a4j:commandButton>
+									oncomplete="mostrarModal3('idModalregpagoscomprobante');"
+									action="#{obligacionPorPagarMBean.registrarNuevoPago()}"></a4j:commandButton>
 							</h:panelGrid>
 						</f:facet>
 					</rich:dataTable>

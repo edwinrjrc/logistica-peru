@@ -1086,7 +1086,7 @@ public class NegocioSession implements NegocioSessionRemote,
 				servicioAgencia.setCantidadServicios(servicioAgencia.getListaDetalleServicio().size());
 			}
 
-			servicioAgencia.getEstadoServicio().setCodigoEntero(ServicioAgencia.ESTADO_PENDIENTE_CIERRE);
+			servicioAgencia.getEstadoServicio().setCodigoEntero(ServicioAgencia.ESTADO_CERRADO);
 			idServicio = servicioNovaViajesDao.ingresarCabeceraServicio(
 					servicioAgencia, conexion);
 
@@ -1767,6 +1767,14 @@ public class NegocioSession implements NegocioSessionRemote,
 		
 		return servicioNovaViajesDao.listarPagosServicio(idServicio);
 	}
+	
+	@Override
+	public List<PagoServicio> listarPagosObligacion(Integer idObligacion)
+			throws SQLException, Exception {
+		ServicioNovaViajesDao servicioNovaViajesDao = new ServicioNovaViajesDaoImpl();
+		
+		return servicioNovaViajesDao.listarPagosObligacion(idObligacion);
+	}
 
 	@Override
 	public BigDecimal consultarSaldoServicio(Integer idServicio)
@@ -1874,5 +1882,38 @@ public class NegocioSession implements NegocioSessionRemote,
 	public List<Comprobante> listarObligacionXPagar(Comprobante comprobante) throws SQLException, Exception{
 		ServicioNovaViajesDao servicioNovaViajesDao = new ServicioNovaViajesDaoImpl();
 		return servicioNovaViajesDao.consultaObligacionXPagar(comprobante);
+	}
+	
+	@Override
+	public void registrarPagoObligacion(PagoServicio pago) throws SQLException, Exception {
+		ServicioNovaViajesDao servicioNovaViajesDao = new ServicioNovaViajesDaoImpl();
+		
+		servicioNovaViajesDao.registrarPagoObligacion(pago);
+	}
+	
+	@Override
+	public void registrarRelacionComproObligacion(ServicioAgencia servicioAgencia) throws SQLException, Exception{
+		Connection conn = null;
+		ServicioNovaViajesDao servicioNovaViajesDao = new ServicioNovaViajesDaoImpl();
+		
+		try{
+			conn = UtilConexion.obtenerConexion();
+			for (DetalleServicioAgencia detalleServicioAgencia : servicioAgencia.getListaDetalleServicio()) {
+				servicioNovaViajesDao.guardarRelacionComproObligacion(detalleServicioAgencia, conn);
+			}
+			
+			servicioNovaViajesDao.actualizarRelacionComprobantes(true, servicioAgencia, conn);
+		}
+		catch (SQLException e){
+			throw new SQLException(e);
+		}
+		catch (Exception e){
+			throw new Exception(e);
+		}
+		finally{
+			if (conn != null){
+				conn.close();
+			}
+		}
 	}
 }

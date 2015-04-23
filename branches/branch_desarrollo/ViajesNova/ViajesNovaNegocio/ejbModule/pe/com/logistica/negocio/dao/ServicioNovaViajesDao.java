@@ -106,4 +106,16 @@ public interface ServicioNovaViajesDao {
 			throws SQLException;
 
 	boolean registrarObligacionXPagar(Comprobante comprobante) throws SQLException;
+
+	void registrarPagoObligacion(PagoServicio pago) throws SQLException;
+
+	List<PagoServicio> listarPagosObligacion(Integer idObligacion)
+			throws SQLException;
+
+	boolean guardarRelacionComproObligacion(DetalleServicioAgencia detalle,
+			Connection conn) throws SQLException, Exception;
+
+	void actualizarRelacionComprobantes(boolean relacionComprobantes,
+			ServicioAgencia servicio, Connection conn) throws SQLException,
+			Exception;
 }

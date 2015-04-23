@@ -3,6 +3,7 @@
  */
 package pe.com.logistica.web.faces;
 
+import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.util.Date;
 import java.util.List;
@@ -19,6 +20,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 
 import pe.com.logistica.bean.negocio.Comprobante;
+import pe.com.logistica.bean.negocio.PagoServicio;
 import pe.com.logistica.bean.negocio.Proveedor;
 import pe.com.logistica.bean.negocio.Usuario;
 import pe.com.logistica.web.servicio.NegocioServicio;
@@ -43,9 +45,11 @@ public class ObligacionPorPagarMBean extends BaseMBean {
 	private Comprobante comprobante;
 	private Comprobante comprobanteBusqueda;
 	private Proveedor proveedorBusqueda;
+	private PagoServicio pagoComprobante;
 	
 	private List<Comprobante> listaComprobantes;
 	private List<Proveedor> listadoProveedores;
+	private List<PagoServicio> listaPagos;
 	
 	private boolean nuevaObligacion;
 	private boolean editarObligacion;
@@ -178,6 +182,76 @@ public class ObligacionPorPagarMBean extends BaseMBean {
 	
 	public void defineSalida(){
 		this.setBusquedaProveedor(true);
+	}
+	
+	public void registrarPagoComprobante() {
+		try {
+			if (validarRegistroPago()){
+				this.getPagoComprobante().setIdObligacion(getComprobante().getCodigoEntero());
+				
+				HttpSession session = obtenerSession(false);
+				Usuario usuario = (Usuario) session
+						.getAttribute("usuarioSession");
+				this.getPagoComprobante().setUsuarioCreacion(
+						usuario.getUsuario());
+				this.getPagoComprobante().setIpCreacion(
+						obtenerRequest().getRemoteAddr());
+				this.getPagoComprobante().setUsuarioModificacion(
+						usuario.getUsuario());
+				this.getPagoComprobante().setIpModificacion(
+						obtenerRequest().getRemoteAddr());
+				
+				this.negocioServicio.registrarPagoObligacion(getPagoComprobante());
+
+				this.setShowModal(true);
+				this.setMensajeModal("Pago Registrado Satisfactoriamente");
+				this.setTipoModal(TIPO_MODAL_EXITO);
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+			this.setShowModal(true);
+			this.setMensajeModal(e.getMessage());
+			this.setTipoModal(TIPO_MODAL_ERROR);
+		} catch (Exception e) {
+			e.printStackTrace();
+			this.setShowModal(true);
+			this.setMensajeModal(e.getMessage());
+			this.setTipoModal(TIPO_MODAL_ERROR);
+		}
+	}
+	
+	private boolean validarRegistroPago() {
+		boolean resultado = true;
+		String idFormulario = "idFrRegiPagoComp";
+		if (this.getPagoComprobante().getMontoPago() == null || BigDecimal.ZERO.equals(this.getPagoComprobante().getMontoPago())){
+			this.agregarMensaje(idFormulario + ":idMontoPago",
+					"Ingrese el monto a pagar", "",
+					FacesMessage.SEVERITY_ERROR);
+			resultado = false;
+		}
+		if (this.getPagoComprobante().getFechaPago() == null){
+			this.agregarMensaje(idFormulario + ":idSelFecSer",
+					"Ingrese la fecha de pago", "",
+					FacesMessage.SEVERITY_ERROR);
+			resultado = false;
+		}
+		if (StringUtils.length(this.getPagoComprobante().getComentario()) > 300){
+			this.agregarMensaje(idFormulario + ":idTxtComentario",
+					"El comentario no debe ser mayor a 300 caracteres", "",
+					FacesMessage.SEVERITY_ERROR);
+			resultado = false;
+		}
+		
+		return resultado;
+	}
+	
+	public void verPagos(Comprobante comprobante){
+		this.setComprobante(comprobante);
+	}
+	
+	public void registrarNuevoPago(){
+		this.setPagoComprobante(null);
 	}
 
 	/**
@@ -357,6 +431,44 @@ public class ObligacionPorPagarMBean extends BaseMBean {
 	 */
 	public void setBusquedaProveedor(boolean busquedaProveedor) {
 		this.busquedaProveedor = busquedaProveedor;
+	}
+
+	/**
+	 * @return the pagoComprobante
+	 */
+	public PagoServicio getPagoComprobante() {
+		if (pagoComprobante == null){
+			pagoComprobante = new PagoServicio();
+		}
+		return pagoComprobante;
+	}
+
+	/**
+	 * @param pagoComprobante the pagoComprobante to set
+	 */
+	public void setPagoComprobante(PagoServicio pagoComprobante) {
+		this.pagoComprobante = pagoComprobante;
+	}
+
+	/**
+	 * @return the listaPagos
+	 */
+	public List<PagoServicio> getListaPagos() {
+		try {
+			listaPagos = this.negocioServicio.listarPagosObligacion(this.getComprobante().getCodigoEntero());
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return listaPagos;
+	}
+
+	/**
+	 * @param listaPagos the listaPagos to set
+	 */
+	public void setListaPagos(List<PagoServicio> listaPagos) {
+		this.listaPagos = listaPagos;
 	}
 
 }

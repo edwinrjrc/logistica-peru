@@ -33,7 +33,8 @@ public class PagoServicio extends BaseNegocio {
 	private String tipoContenido;
 	
 	private boolean tieneSustento;
-	
+	private Integer idObligacion;
+	private String comentario;
 	/**
 	 * 
 	 */
@@ -182,6 +183,34 @@ public class PagoServicio extends BaseNegocio {
 	 */
 	public void setTieneSustento(boolean tieneSustento) {
 		this.tieneSustento = tieneSustento;
+	}
+
+	/**
+	 * @return the idObligacion
+	 */
+	public Integer getIdObligacion() {
+		return idObligacion;
+	}
+
+	/**
+	 * @param idObligacion the idObligacion to set
+	 */
+	public void setIdObligacion(Integer idObligacion) {
+		this.idObligacion = idObligacion;
+	}
+
+	/**
+	 * @return the comentario
+	 */
+	public String getComentario() {
+		return comentario;
+	}
+
+	/**
+	 * @param comentario the comentario to set
+	 */
+	public void setComentario(String comentario) {
+		this.comentario = comentario;
 	}
 
 }
