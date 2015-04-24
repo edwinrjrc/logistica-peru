@@ -35,6 +35,8 @@ public class PagoServicio extends BaseNegocio {
 	private boolean tieneSustento;
 	private Integer idObligacion;
 	private String comentario;
+	
+	private BaseVO tipoPago;
 	/**
 	 * 
 	 */
@@ -211,6 +213,23 @@ public class PagoServicio extends BaseNegocio {
 	 */
 	public void setComentario(String comentario) {
 		this.comentario = comentario;
+	}
+
+	/**
+	 * @return the tipoPago
+	 */
+	public BaseVO getTipoPago() {
+		if (tipoPago == null){
+			tipoPago = new BaseVO();
+		}
+		return tipoPago;
+	}
+
+	/**
+	 * @param tipoPago the tipoPago to set
+	 */
+	public void setTipoPago(BaseVO tipoPago) {
+		this.tipoPago = tipoPago;
 	}
 
 }

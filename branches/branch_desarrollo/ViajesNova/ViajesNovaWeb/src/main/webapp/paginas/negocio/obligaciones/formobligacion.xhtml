@@ -125,6 +125,12 @@
 					<h:panelGrid columns="4" border="0" cellpadding="0" cellspacing="0"
 						style="width:100%;"
 						columnClasses="col1fil1proveedor,col2fil1proveedor,col3fil1proveedor,col4fil1proveedor">
+						<h:outputText value="Tiene Detracción" />
+						<h:selectBooleanCheckbox value="#{obligacionPorPagarMBean.comprobante.tieneDetraccion}" />
+						
+						<h:outputText value="Tiene Detracción" />
+						<h:selectBooleanCheckbox value="#{obligacionPorPagarMBean.comprobante.tieneRetencion}" />
+						
 						<h:outputText value="Total IGV" />
 						<h:panelGrid columns="1" border="0" cellpadding="0"
 							cellspacing="0">

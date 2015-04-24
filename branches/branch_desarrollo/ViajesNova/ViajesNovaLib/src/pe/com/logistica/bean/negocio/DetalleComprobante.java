@@ -24,7 +24,8 @@ public class DetalleComprobante extends BaseNegocio {
 	private BigDecimal totalDetalle;
 	private Integer idServicioDetalle;
 	
-
+	private boolean tieneDetraccion;
+	private boolean tieneRetencion;
 	/**
 	 * 
 	 */
@@ -126,6 +127,38 @@ public class DetalleComprobante extends BaseNegocio {
 	 */
 	public void setIdServicioDetalle(Integer idServicioDetalle) {
 		this.idServicioDetalle = idServicioDetalle;
+	}
+
+
+	/**
+	 * @return the tieneDetraccion
+	 */
+	public boolean isTieneDetraccion() {
+		return tieneDetraccion;
+	}
+
+
+	/**
+	 * @param tieneDetraccion the tieneDetraccion to set
+	 */
+	public void setTieneDetraccion(boolean tieneDetraccion) {
+		this.tieneDetraccion = tieneDetraccion;
+	}
+
+
+	/**
+	 * @return the tieneRetencion
+	 */
+	public boolean isTieneRetencion() {
+		return tieneRetencion;
+	}
+
+
+	/**
+	 * @param tieneRetencion the tieneRetencion to set
+	 */
+	public void setTieneRetencion(boolean tieneRetencion) {
+		this.tieneRetencion = tieneRetencion;
 	}
 
 }

@@ -1847,7 +1847,7 @@ public class ServicioNovaViajesDaoImpl implements ServicioNovaViajesDao {
 	@Override
 	public Integer registrarComprobante(Comprobante comprobante, Connection conn) throws SQLException, Exception{
 		CallableStatement cs = null;
-		String sql = "{ ? = call negocio.fn_ingresarcomprobantegenerado(?,?,?,?,?,?,?,?,?)}";
+		String sql = "{ ? = call negocio.fn_ingresarcomprobantegenerado(?,?,?,?,?,?,?,?,?,?,?)}";
 		int resultado = 0;
 		try {
 			cs = conn.prepareCall(sql);
@@ -1860,6 +1860,8 @@ public class ServicioNovaViajesDaoImpl implements ServicioNovaViajesDao {
 			cs.setDate(i++, UtilJdbc.convertirUtilDateSQLDate(comprobante.getFechaComprobante()));
 			cs.setBigDecimal(i++, comprobante.getTotalIGV());
 			cs.setBigDecimal(i++, comprobante.getTotalComprobante());
+			cs.setBoolean(i++, comprobante.isTieneDetraccion());
+			cs.setBoolean(i++, comprobante.isTieneRetencion());
 			
 			cs.setString(i++, comprobante.getUsuarioCreacion());
 			cs.setString(i++, comprobante.getIpCreacion());
@@ -2110,8 +2112,7 @@ public class ServicioNovaViajesDaoImpl implements ServicioNovaViajesDao {
 		boolean resultado = false;
 		Connection conn = null;
 		CallableStatement cs = null;
-		ResultSet rs = null;
-		String sql = "{ ? = call negocio.fn_ingresarobligacionxpagar(?,?,?,?,?,?,?,?,?,?)}";
+		String sql = "{ ? = call negocio.fn_ingresarobligacionxpagar(?,?,?,?,?,?,?,?,?,?,?,?)}";
 		
 		try {
 			conn = UtilConexion.obtenerConexion();
@@ -2126,6 +2127,8 @@ public class ServicioNovaViajesDaoImpl implements ServicioNovaViajesDao {
 			cs.setString(i++, comprobante.getDetalleTextoComprobante());
 			cs.setBigDecimal(i++, comprobante.getTotalIGV());
 			cs.setBigDecimal(i++, comprobante.getTotalComprobante());
+			cs.setBoolean(i++, comprobante.isTieneDetraccion());
+			cs.setBoolean(i++, comprobante.isTieneRetencion());
 			cs.setString(i++, comprobante.getUsuarioCreacion());
 			cs.setString(i++, comprobante.getIpCreacion());
 			cs.execute();
@@ -2155,7 +2158,7 @@ public class ServicioNovaViajesDaoImpl implements ServicioNovaViajesDao {
 	@Override
 	public void registrarPagoObligacion(PagoServicio pago) throws SQLException {
 		CallableStatement cs = null;
-		String sql = "{ ? = call negocio.fn_registrarpagoobligacion(?,?,?,?,?,?,?,?,?,?)}";
+		String sql = "{ ? = call negocio.fn_registrarpagoobligacion(?,?,?,?,?,?,?,?,?,?,?,?)}";
 		Connection conn = null;
 		try {
 			conn = UtilConexion.obtenerConexion();
@@ -2195,6 +2198,8 @@ public class ServicioNovaViajesDaoImpl implements ServicioNovaViajesDao {
 			else {
 				cs.setNull(i++, Types.VARCHAR);
 			}
+			cs.setBoolean(i++, "D".equals(pago.getTipoPago().getCodigoCadena()));
+			cs.setBoolean(i++, "R".equals(pago.getTipoPago().getCodigoCadena()));
 			cs.setString(i++, pago.getUsuarioCreacion());
 			cs.setString(i++, pago.getIpCreacion());
 			cs.execute();
@@ -2221,6 +2226,8 @@ public class ServicioNovaViajesDaoImpl implements ServicioNovaViajesDao {
 				else {
 					cs.setNull(i++, Types.VARCHAR);
 				}
+				cs.setBoolean(i++, pago.getTipoPago().getCodigoCadena().equals("D"));
+				cs.setBoolean(i++, pago.getTipoPago().getCodigoCadena().equals("R"));
 				cs.setString(i++, pago.getUsuarioCreacion());
 				cs.setString(i++, pago.getIpCreacion());
 				cs.execute();
