@@ -1836,7 +1836,7 @@ public class NegocioSession implements NegocioSessionRemote,
 			
 			List<Comprobante> listaComprobantes2 = new ArrayList<Comprobante>();
 			for (Comprobante comprobante : listaComprobantes) {
-				comprobante = UtilEjb.obtenerNumeroComprobante(comprobante.getNumeroComprobante(), servicioAgencia);
+				comprobante = UtilEjb.obtenerNumeroComprobante(comprobante, servicioAgencia);
 				listaComprobantes2.add(comprobante);
 			}
 			ServicioNovaViajesDao servicioNovaViajesDao = new ServicioNovaViajesDaoImpl();

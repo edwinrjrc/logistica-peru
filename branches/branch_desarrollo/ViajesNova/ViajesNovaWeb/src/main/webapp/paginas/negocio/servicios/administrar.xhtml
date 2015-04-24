@@ -239,6 +239,15 @@
 					value="#{servicioAgenteMBean.nombreCampoTexto}" />
 			</ui:include>
 		</h:panelGrid>
+		<h:panelGrid id="idConfirmModalRelacion" style="display:none;">
+			<ui:include src="/resources/modal/modalconfirmacionId.xhtml">
+				<ui:param name="pregunta" value="#{servicioAgenteMBean.pregunta}" />
+				<ui:param name="idBotonEjecutar" value="idFrVistaVenta:idBtnRelaComp" />
+				<ui:param name="renderizar" value="" />
+				<ui:param name="idModal" value="idModConfimrRelacion" />
+				<ui:param name="idGridPanel" value="idGrPreguntaID" />
+			</ui:include>
+		</h:panelGrid>
 		<h:panelGrid id="idConfirmModal" style="display:none;">
 			<ui:include src="/resources/modal/modalconfirmacionId.xhtml">
 				<ui:param name="pregunta" value="#{servicioAgenteMBean.pregunta}" />

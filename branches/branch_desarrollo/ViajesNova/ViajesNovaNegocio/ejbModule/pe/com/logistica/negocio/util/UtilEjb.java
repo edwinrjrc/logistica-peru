@@ -88,6 +88,8 @@ public class UtilEjb {
 			Comprobante comprobante = new Comprobante();
 			comprobante.setNumeroComprobante(bean.getNroComprobante());
 			comprobante.setTipoComprobante(bean.getTipoComprobante());
+			comprobante.setTieneDetraccion(bean.isTieneDetraccion());
+			comprobante.setTieneRetencion(bean.isTieneRetencion());
 			lista.add(comprobante);
 			comprobante = null;
 			for (int j=i; j<listaDetalle.size(); j++){
@@ -106,11 +108,8 @@ public class UtilEjb {
 		return lista;
 	}
 	
-	public static Comprobante obtenerNumeroComprobante(String numeroComprobante, ServicioAgencia servicioAgencia){
-		Comprobante comp = null;
+	public static Comprobante obtenerNumeroComprobante(Comprobante comp, ServicioAgencia servicioAgencia){
 		try {
-			comp = new Comprobante();
-			comp.setNumeroComprobante(numeroComprobante);
 			BigDecimal total = BigDecimal.ZERO;
 			BigDecimal totalIGV = BigDecimal.ZERO;
 			ParametroDao parametroDao = new ParametroDaoImpl();
@@ -122,7 +121,7 @@ public class UtilEjb {
 			DetalleComprobante detalle = null;
 			for (int i=0; i<servicioAgencia.getListaDetalleServicio().size(); i++){
 				DetalleServicioAgencia bean = servicioAgencia.getListaDetalleServicio().get(i);
-				if (bean.getNroComprobante().equals(numeroComprobante)) {
+				if (bean.getNroComprobante().equals(comp.getNumeroComprobante())) {
 					detalle = new DetalleComprobante();
 					total = total.add(bean.getTotalServicio());
 					tipoComprobante = bean.getTipoComprobante();

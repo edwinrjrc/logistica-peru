@@ -53,6 +53,9 @@ public class DetalleServicioAgencia extends BaseNegocio {
 	private String nroComprobante;
 	private BaseVO tipoComprobante;
 	
+	private boolean tieneDetraccion;
+	private boolean tieneRetencion;
+	
 	private Integer idComprobanteGenerado;
 	
 	private Comprobante comprobanteAsociado;
@@ -515,6 +518,34 @@ public class DetalleServicioAgencia extends BaseNegocio {
 	 */
 	public void setIdComprobanteGenerado(Integer idComprobanteGenerado) {
 		this.idComprobanteGenerado = idComprobanteGenerado;
+	}
+
+	/**
+	 * @return the tieneDetraccion
+	 */
+	public boolean isTieneDetraccion() {
+		return tieneDetraccion;
+	}
+
+	/**
+	 * @param tieneDetraccion the tieneDetraccion to set
+	 */
+	public void setTieneDetraccion(boolean tieneDetraccion) {
+		this.tieneDetraccion = tieneDetraccion;
+	}
+
+	/**
+	 * @return the tieneRetencion
+	 */
+	public boolean isTieneRetencion() {
+		return tieneRetencion;
+	}
+
+	/**
+	 * @param tieneRetencion the tieneRetencion to set
+	 */
+	public void setTieneRetencion(boolean tieneRetencion) {
+		this.tieneRetencion = tieneRetencion;
 	}
 
 }

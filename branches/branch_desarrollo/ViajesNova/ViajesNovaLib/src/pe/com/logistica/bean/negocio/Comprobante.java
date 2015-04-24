@@ -16,7 +16,11 @@ import pe.com.logistica.bean.base.BaseVO;
  *
  */
 public class Comprobante extends BaseNegocio {
-
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -4234081010839284200L;
+	
 	private BaseVO tipoComprobante;
 	private String numeroComprobante;
 	private Cliente titular;
@@ -31,11 +35,9 @@ public class Comprobante extends BaseNegocio {
 	private List<DetalleComprobante> detalleComprobante;
 	private String detalleTextoComprobante;
 	private Integer codigoSeleccionado;
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -4234081010839284200L;
 
+	private boolean tieneDetraccion;
+	private boolean tieneRetencion;
 	/**
 	 * 
 	 */
@@ -221,6 +223,34 @@ public class Comprobante extends BaseNegocio {
 	 */
 	public void setCodigoSeleccionado(Integer codigoSeleccionado) {
 		this.codigoSeleccionado = codigoSeleccionado;
+	}
+
+	/**
+	 * @return the tieneDetraccion
+	 */
+	public boolean isTieneDetraccion() {
+		return tieneDetraccion;
+	}
+
+	/**
+	 * @param tieneDetraccion the tieneDetraccion to set
+	 */
+	public void setTieneDetraccion(boolean tieneDetraccion) {
+		this.tieneDetraccion = tieneDetraccion;
+	}
+
+	/**
+	 * @return the tieneRetencion
+	 */
+	public boolean isTieneRetencion() {
+		return tieneRetencion;
+	}
+
+	/**
+	 * @param tieneRetencion the tieneRetencion to set
+	 */
+	public void setTieneRetencion(boolean tieneRetencion) {
+		this.tieneRetencion = tieneRetencion;
 	}
 
 }
