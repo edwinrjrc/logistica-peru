@@ -1291,6 +1291,10 @@ try {
 		this.getPagoServicio().setSustentoPagoByte(arregloDatos);
 		this.getPagoServicio().setTipoContenido(item.getContentType());
 	}
+	
+	public void preGuardarRelacion() {
+		this.setPregunta("¿Esta seguro de guardar la relación de comprobantes?");
+	}
 
 	/**
 	 * @return the servicioAgencia
@@ -1375,8 +1379,6 @@ try {
 	
 	public void registrarComprobante(){
 		try {
-			this.getServicioAgencia().setListaDetalleServicio(this.getListadoDetalleServicio());
-			
 			HttpSession session = obtenerSession(false);
 			Usuario usuario = (Usuario) session
 					.getAttribute("usuarioSession");

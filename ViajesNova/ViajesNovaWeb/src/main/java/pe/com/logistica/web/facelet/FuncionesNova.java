@@ -23,7 +23,8 @@ public class FuncionesNova {
 	 * @return
 	 */
 	public static boolean mostrarBotonesVenta1(Integer codigoRol, Integer estadoServicio, Integer tienePagos, boolean guardoComprobantes) {
-		boolean resultado = (codigoRol.intValue() == 3 && estadoServicio.intValue() ==2 && tienePagos.intValue()==0);
+		//boolean resultado = (codigoRol.intValue() == 3 && estadoServicio.intValue() ==2 && tienePagos.intValue()==0);
+		boolean resultado = (codigoRol.intValue() == 3 && estadoServicio.intValue() ==2);
 		
 		resultado = (resultado && !guardoComprobantes);
 		
