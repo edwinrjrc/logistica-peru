@@ -317,9 +317,9 @@
 										<h:panelGrid cellpadding="0" cellspacing="0" border="0"
 											columns="4">
 											<h:outputText value="D:" />
-											<h:selectBooleanCheckbox value="#{row.tieneDetraccion}" />
+											<h:selectBooleanCheckbox value="#{row.tieneDetraccion}" disabled="#{servicioAgenteMBean.servicioAgencia.guardoComprobante}" />
 											<h:outputText value="R:" />
-											<h:selectBooleanCheckbox value="#{row.tieneRetencion}" />
+											<h:selectBooleanCheckbox value="#{row.tieneRetencion}" disabled="#{servicioAgenteMBean.servicioAgencia.guardoComprobante}" />
 										</h:panelGrid>
 									</rich:column>
 									<rich:column style="text-align:right;"
