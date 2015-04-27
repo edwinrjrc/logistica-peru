@@ -1850,6 +1850,8 @@ public class NegocioSession implements NegocioSessionRemote,
 				}
 				
 				servicioNovaViajesDao.actualizarComprobantesServicio(true, servicioAgencia, conn);
+			} catch (SQLException e){
+				throw new ValidacionException(e);
 			} catch (Exception e) {
 				throw new ValidacionException("Excepcion no controlada",e);
 			} finally{
