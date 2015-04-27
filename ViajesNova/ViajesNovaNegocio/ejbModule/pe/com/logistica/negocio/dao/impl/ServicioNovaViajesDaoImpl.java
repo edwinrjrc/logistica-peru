@@ -2000,6 +2000,8 @@ public class ServicioNovaViajesDaoImpl implements ServicioNovaViajesDao {
 				detalleServicio.getServicioProveedor().getProveedor().setApellidoPaterno(UtilJdbc.obtenerCadena(rs, "apellidopaterno"));
 				detalleServicio.getServicioProveedor().getProveedor().setApellidoMaterno(UtilJdbc.obtenerCadena(rs, "apellidomaterno"));
 				detalleServicio.getTipoServicio().setVisible(UtilJdbc.obtenerBoolean(rs, "visible"));
+				detalleServicio.setTieneDetraccion(UtilJdbc.obtenerBoolean(rs, "tieneDetraccion"));
+				detalleServicio.setTieneRetencion(UtilJdbc.obtenerBoolean(rs, "tieneRetencion"));
 				detalleServicio.setIdComprobanteGenerado(UtilJdbc.obtenerNumero(rs, "idComprobante"));
 				detalleServicio.getTipoComprobante().setCodigoEntero(UtilJdbc.obtenerNumero(rs, "tipoComprobante"));
 				detalleServicio.getTipoComprobante().setNombre(UtilJdbc.obtenerCadena(rs, "tipoComprobanteNombre"));

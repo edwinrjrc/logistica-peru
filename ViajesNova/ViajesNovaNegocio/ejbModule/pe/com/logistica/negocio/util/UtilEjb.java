@@ -98,6 +98,8 @@ public class UtilEjb {
 					comprobante = new Comprobante();
 					comprobante.setNumeroComprobante(bean2.getNroComprobante());
 					comprobante.setTipoComprobante(bean2.getTipoComprobante());
+					comprobante.setTieneDetraccion(bean2.isTieneDetraccion());
+					comprobante.setTieneRetencion(bean2.isTieneRetencion());
 					lista.add(comprobante);
 					comprobante = null;
 				}

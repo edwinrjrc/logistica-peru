@@ -255,6 +255,7 @@ public class ServicioAgenteMBean extends BaseMBean {
 
 	public void consultarServicioRegistrado(int idServicio) {
 		try {
+			this.setGuardoComprobantes(false);
 			this.setServicioAgencia(this.negocioServicio
 					.consultarVentaServicio(idServicio));
 
