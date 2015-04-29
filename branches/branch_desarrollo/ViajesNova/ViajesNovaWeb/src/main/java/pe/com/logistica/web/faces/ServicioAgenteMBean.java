@@ -368,7 +368,6 @@ public class ServicioAgenteMBean extends BaseMBean {
 			this.setTipoModal(TIPO_MODAL_ERROR);
 		}
 		
-		System.out.println("servicios: "+this.getListadoDetalleServicio().size());
 	}
 
 	private DetalleServicioAgencia agregarServicioInvisible(
@@ -974,8 +973,6 @@ try {
 
 				boolean destinoNacional = this.soporteServicio
 						.esDestinoNacional(UtilWeb.convertirCadenaEntero(valor));
-
-				System.out.println("es nacional" + destinoNacional);
 
 			}
 		} catch (SQLException ex) {
