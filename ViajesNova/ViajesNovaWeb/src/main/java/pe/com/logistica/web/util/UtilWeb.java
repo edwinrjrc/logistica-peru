@@ -16,6 +16,7 @@ import java.util.regex.Pattern;
 import javax.faces.model.SelectItem;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.log4j.Logger;
 
 import pe.com.logistica.bean.base.BaseVO;
 
@@ -24,6 +25,8 @@ import pe.com.logistica.bean.base.BaseVO;
  *
  */
 public class UtilWeb {
+	
+	private final static Logger logger = Logger.getLogger(UtilWeb.class);
 	
 	/**
 	 * 
@@ -164,7 +167,7 @@ public class UtilWeb {
 			return (numero == null || numero.intValue()==0);
 			
 		} catch (Exception e) {
-			System.out.println("Error validacion numero cero o nullo ::"+e.getMessage());
+			logger.error("Error validacion numero cero o nullo ::"+e.getMessage());
 		}
 		
 		return false;
