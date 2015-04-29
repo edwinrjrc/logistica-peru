@@ -1,0 +1,472 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:nova="http://novaviajes.com.pe/funciones">
+
+	<rich:popupPanel id="idModalventaservicio" modal="true" width="1100"
+		height="600">
+
+		<f:facet name="header">
+			<h:outputText value="Venta Servicio" />
+		</f:facet>
+		<f:facet name="controls">
+			<h:outputLink value="#" style="border:0"
+				onclick="#{rich:component('idModalventaservicio')}.hide(); return false;">
+				<h:graphicImage height="18" width="18"
+					url="/resources/img/close.png" style="border:0" />
+			</h:outputLink>
+		</f:facet>
+
+		<h:form id="idFrVistaVenta">
+			<h:panelGrid columns="2" border="0" cellpadding="0" cellspacing="0"
+				style="width:100%;" id="idGrVentaServicio">
+
+				<rich:tabPanel switchType="client">
+					<rich:tab>
+						<f:facet name="header">
+							<h:outputText value="Informacion Venta" />
+						</f:facet>
+						<h:panelGrid id="idGridFormNovios" border="0" cellpadding="0"
+							cellspacing="0" style="width:100%;" columns="1">
+
+							<h:panelGrid columns="2" border="0" cellpadding="0"
+								cellspacing="0" style="width:100%;"
+								columnClasses="col1form,col3form">
+								<h:outputText value="Cliente" />
+								<h:outputText
+									value="#{servicioAgenteMBean.servicioAgencia.cliente.nombreCompleto}" />
+							</h:panelGrid>
+
+							<h:panelGrid columns="4" border="0" cellpadding="0"
+								cellspacing="0" style="width:100%;"
+								columnClasses="col1form,col2form,col1form,col2form">
+								<h:outputText value="Forma Pago" />
+								<h:outputText
+									value="#{servicioAgenteMBean.servicioAgencia.formaPago.nombre}" />
+
+								<h:outputText value="Fecha Servicio" />
+								<h:outputText
+									value="#{servicioAgenteMBean.servicioAgencia.fechaServicio}">
+									<f:convertDateTime pattern="dd/MM/yyyy" />
+								</h:outputText>
+
+							</h:panelGrid>
+							<h:panelGrid columns="4" border="0" cellpadding="0"
+								cellspacing="0" style="width:100%;"
+								columnClasses="col1form,col2form,col1form,col2form">
+								<h:outputText value="Agente Viajes" />
+								<h:outputText
+									value="#{servicioAgenteMBean.servicioAgencia.vendedor.nombre}" />
+
+								<h:outputText value="" />
+								<h:outputText value="" />
+
+							</h:panelGrid>
+
+							<h:panelGrid columns="4" border="0" cellpadding="0"
+								cellspacing="0" style="width:100%;"
+								columnClasses="col1form,col2form,col1form,col2form">
+
+								<h:outputText value="Tasa Interes (TEA)"
+									rendered="#{servicioAgenteMBean.servicioAgencia.formaPago.codigoEntero == 2}" />
+								<h:outputText value="#{servicioAgenteMBean.servicioAgencia.tea}"
+									rendered="#{servicioAgenteMBean.servicioAgencia.formaPago.codigoEntero == 2}">
+									<f:convertNumber pattern="###,##0.00" locale="en_US" />
+								</h:outputText>
+
+								<h:outputText
+									rendered="#{servicioAgenteMBean.servicioAgencia.formaPago.codigoEntero == 2}"
+									value="Nro Cuotas" />
+								<h:outputText
+									rendered="#{servicioAgenteMBean.servicioAgencia.formaPago.codigoEntero == 2}"
+									value="#{servicioAgenteMBean.servicioAgencia.nroCuotas}" />
+
+								<h:outputText value="Valor Cuota"
+									rendered="#{servicioAgenteMBean.servicioAgencia.formaPago.codigoEntero == 2}" />
+								<h:outputText
+									value="#{servicioAgenteMBean.servicioAgencia.valorCuota}"
+									rendered="#{servicioAgenteMBean.servicioAgencia.formaPago.codigoEntero == 2}">
+									<f:convertNumber pattern="###,##0.00" locale="en_US" />
+								</h:outputText>
+
+								<h:outputText value="Fecha Primer Vencimiento"
+									rendered="#{servicioAgenteMBean.servicioAgencia.formaPago.codigoEntero == 2}" />
+								<h:outputText
+									value="#{servicioAgenteMBean.servicioAgencia.fechaPrimerCuota}">
+									<f:convertDateTime pattern="dd/MM/yyyy" />
+								</h:outputText>
+
+							</h:panelGrid>
+						</h:panelGrid>
+					</rich:tab>
+
+					<rich:tab>
+						<f:facet name="header">
+							<h:outputText value="Servicios" />
+						</f:facet>
+						<h:panelGrid cellpadding="0" cellspacing="0" border="0"
+							style="width:100%;" columns="1">
+							<h:panelGrid columns="1" cellpadding="0" cellspacing="0"
+								border="0" style="width:100%;">
+								<rich:dataTable id="idServVentaVista" var="row"
+									value="#{servicioAgenteMBean.servicioAgencia.listaDetalleServicio}"
+									style="width:100%;">
+									<rich:column style="text-align:right;width: 4%;">
+										<f:facet name="header">
+											<h:panelGrid cellpadding="0" cellspacing="0" border="0"
+												style="text-align:center;">
+												<h:outputText value="Unid." />
+											</h:panelGrid>
+										</f:facet>
+										<h:outputText value="#{row.cantidad}" />
+									</rich:column>
+									<rich:column style="text-align:right;width: 4%;">
+										<f:facet name="header">
+											<h:panelGrid cellpadding="0" cellspacing="0" border="0"
+												style="text-align:center;">
+												<h:outputText value="Fecha Servicio" />
+											</h:panelGrid>
+										</f:facet>
+										<h:outputText value="#{row.fechaIda}">
+											<f:convertDateTime pattern="dd/MM/yyyy" />
+										</h:outputText>
+									</rich:column>
+									<rich:column style="text-align:left;width: 75%;">
+										<f:facet name="header">
+											<h:panelGrid cellpadding="0" cellspacing="0" border="0"
+												style="width:100%; text-align:center;">
+												<h:outputText value="Servicio - Descripcion" />
+											</h:panelGrid>
+										</f:facet>
+										<h:outputText
+											value="#{row.tipoServicio.nombre} - #{row.descripcionServicio}" />
+									</rich:column>
+									<rich:column style="text-align:left;width: 75%;">
+										<f:facet name="header">
+											<h:panelGrid cellpadding="0" cellspacing="0" border="0"
+												style="width:100%; text-align:center;">
+												<h:outputText value="Proveedor" />
+											</h:panelGrid>
+										</f:facet>
+										<h:outputText
+											value="#{row.servicioProveedor.proveedor.nombres}" />
+									</rich:column>
+									<rich:column style="text-align:right;width: 10%;">
+										<f:facet name="header">
+											<h:panelGrid cellpadding="0" cellspacing="0" border="0"
+												style="width:100%; text-align:center;">
+												<h:outputText value="Precio Unitario" />
+											</h:panelGrid>
+										</f:facet>
+										<h:outputText value="#{row.precioUnitario}">
+											<f:convertNumber pattern="###,##0.00" locale="en_US" />
+										</h:outputText>
+									</rich:column>
+									<rich:column style="text-align:right;width: 10%;">
+										<f:facet name="header">
+											<h:panelGrid cellpadding="0" cellspacing="0" border="0"
+												style="width:100%; text-align:center;">
+												<h:outputText value="Total" />
+											</h:panelGrid>
+										</f:facet>
+										<h:outputText value="#{row.totalServicio}">
+											<f:convertNumber pattern="###,##0.00" locale="en_US" />
+										</h:outputText>
+									</rich:column>
+
+									<f:facet name="footer">
+										<rich:dataScroller for="idServVentaVista" />
+									</f:facet>
+								</rich:dataTable>
+								<h:panelGrid columns="2" cellpadding="0" cellspacing="0"
+									border="0" style="width:100%;"
+									columnClasses="col1RSPN,col2RSPN">
+									<h:outputText value="Total Comision" />
+									<h:outputText
+										value="#{servicioAgenteMBean.servicioAgencia.montoTotalComision}">
+										<f:convertNumber pattern="###,##0.00" locale="en_US" />
+									</h:outputText>
+									<h:outputText value="Total IGV" />
+									<h:outputText
+										value="#{servicioAgenteMBean.servicioAgencia.montoTotalIGV}">
+										<f:convertNumber pattern="###,##0.00" locale="en_US" />
+									</h:outputText>
+									<h:outputText value="Total Servicios" />
+									<h:outputText
+										value="#{servicioAgenteMBean.servicioAgencia.montoTotalServicios}">
+										<f:convertNumber pattern="###,##0.00" locale="en_US" />
+									</h:outputText>
+								</h:panelGrid>
+							</h:panelGrid>
+						</h:panelGrid>
+					</rich:tab>
+
+					<rich:tab
+						rendered="#{sessionScope.usuarioSession.rol.codigoEntero == 3}">
+						<f:facet name="header">
+							<h:outputText value="Comprobantes" />
+						</f:facet>
+						<h:panelGrid cellpadding="0" cellspacing="0" border="0"
+							style="width:100%;" columns="1">
+							<h:panelGrid columns="1" cellpadding="0" cellspacing="0"
+								border="0" style="width:100%;">
+								<rich:dataTable id="idServVentaVista2" var="row"
+									value="#{servicioAgenteMBean.servicioAgencia.listaDetalleServicio}"
+									style="width:100%;">
+									<rich:column style="text-align:right;width: 4%;">
+										<f:facet name="header">
+											<h:panelGrid cellpadding="0" cellspacing="0" border="0"
+												style="text-align:center;">
+												<h:outputText value="Unid." />
+											</h:panelGrid>
+										</f:facet>
+										<h:outputText value="#{row.cantidad}" />
+									</rich:column>
+									<rich:column style="text-align:right;width: 4%;">
+										<f:facet name="header">
+											<h:panelGrid cellpadding="0" cellspacing="0" border="0"
+												style="text-align:center;">
+												<h:outputText value="Fecha Servicio" />
+											</h:panelGrid>
+										</f:facet>
+										<h:outputText value="#{row.fechaIda}">
+											<f:convertDateTime pattern="dd/MM/yyyy" />
+										</h:outputText>
+									</rich:column>
+									<rich:column style="text-align:left;width: 75%;">
+										<f:facet name="header">
+											<h:panelGrid cellpadding="0" cellspacing="0" border="0"
+												style="width:100%; text-align:center;">
+												<h:outputText value="Servicio - Descripcion" />
+											</h:panelGrid>
+										</f:facet>
+										<h:outputText
+											value="#{row.tipoServicio.nombre} - #{row.descripcionServicio}" />
+									</rich:column>
+									<rich:column style="text-align:left;width: 75%;">
+										<f:facet name="header">
+											<h:panelGrid cellpadding="0" cellspacing="0" border="0"
+												style="width:100%; text-align:center;">
+												<h:outputText value="Proveedor" />
+											</h:panelGrid>
+										</f:facet>
+										<h:outputText
+											value="#{row.servicioProveedor.proveedor.nombres}" />
+									</rich:column>
+									<rich:column style="text-align:right;width: 10%;">
+										<f:facet name="header">
+											<h:panelGrid cellpadding="0" cellspacing="0" border="0"
+												style="width:100%; text-align:center;">
+												<h:outputText value="Precio Unitario" />
+											</h:panelGrid>
+										</f:facet>
+										<h:outputText value="#{row.precioUnitario}">
+											<f:convertNumber pattern="###,##0.00" locale="en_US" />
+										</h:outputText>
+									</rich:column>
+									<rich:column style="text-align:right;width: 10%;">
+										<f:facet name="header">
+											<h:panelGrid cellpadding="0" cellspacing="0" border="0"
+												style="width:100%; text-align:center;">
+												<h:outputText value="Total" />
+											</h:panelGrid>
+										</f:facet>
+										<h:outputText value="#{row.totalServicio}">
+											<f:convertNumber pattern="###,##0.00" locale="en_US" />
+										</h:outputText>
+									</rich:column>
+
+									<rich:column style="text-align:right;width: 10%;">
+										<f:facet name="header">
+											<h:panelGrid cellpadding="0" cellspacing="0" border="0"
+												style="width:100%; text-align:center;">
+												<h:outputText value="Tipo Comprobante" />
+											</h:panelGrid>
+										</f:facet>
+										<h:selectOneMenu
+											readonly="#{servicioAgenteMBean.guardoComprobantes}"
+											value="#{row.tipoComprobante.codigoEntero}"
+											rendered="#{!servicioAgenteMBean.servicioAgencia.guardoComprobante}">
+											<f:selectItems
+												value="#{catalogoMBean.catalogoTipoComprobante}" />
+										</h:selectOneMenu>
+										<h:outputText value="#{row.tipoComprobante.nombre}"
+											rendered="#{servicioAgenteMBean.servicioAgencia.guardoComprobante}" />
+									</rich:column>
+
+									<rich:column style="text-align:right;width: 10%;">
+										<f:facet name="header">
+											<h:panelGrid cellpadding="0" cellspacing="0" border="0"
+												style="width:100%; text-align:center;">
+												<h:outputText value="Numero Comprobante" />
+											</h:panelGrid>
+										</f:facet>
+										<h:inputText
+											rendered="#{!servicioAgenteMBean.servicioAgencia.guardoComprobante}"
+											readonly="#{servicioAgenteMBean.guardoComprobantes}"
+											value="#{row.nroComprobante}" maxlength="20" />
+										<h:outputText value="#{row.nroComprobante}"
+											rendered="#{servicioAgenteMBean.servicioAgencia.guardoComprobante}" />
+									</rich:column>
+									<rich:column style="text-align:right;width: 10%;">
+										<h:panelGrid cellpadding="0" cellspacing="0" border="0"
+											columns="4">
+											<h:outputText value="D:" />
+											<h:selectBooleanCheckbox value="#{row.tieneDetraccion}" disabled="#{servicioAgenteMBean.servicioAgencia.guardoComprobante}" />
+											<h:outputText value="R:" />
+											<h:selectBooleanCheckbox value="#{row.tieneRetencion}" disabled="#{servicioAgenteMBean.servicioAgencia.guardoComprobante}" />
+										</h:panelGrid>
+									</rich:column>
+									<rich:column style="text-align:right;"
+										rendered="#{servicioAgenteMBean.servicioAgencia.guardoComprobante}">
+										<f:facet name="header">
+											<h:panelGrid cellpadding="0" cellspacing="0" border="0"
+												style="width:100%; text-align:center;">
+												<h:outputText value="Obligacion por Pagar" />
+											</h:panelGrid>
+										</f:facet>
+										<h:panelGrid cellpadding="0" cellspacing="0" border="0"
+											columns="2">
+											<h:inputText
+												value="#{row.comprobanteAsociado.numeroComprobante}"
+												readonly="true" />
+											<a4j:commandLink
+												action="#{servicioAgenteMBean.enviaDetalle(row)}"
+												oncomplete="mostrarModal3('idModalbusqobligacion')">
+												<h:graphicImage style="border:0px;"
+													value="#{facesContext.externalContext.requestContextPath}/../resources/img/iconoLupa.gif" />
+											</a4j:commandLink>
+										</h:panelGrid>
+									</rich:column>
+								</rich:dataTable>
+								<h:panelGrid columns="2" cellpadding="0" cellspacing="0"
+									border="0" style="width:100%;"
+									columnClasses="col1RSPN,col2RSPN">
+									<h:outputText value="Total Comision" />
+									<h:outputText
+										value="#{servicioAgenteMBean.servicioAgencia.montoTotalComision}">
+										<f:convertNumber pattern="###,##0.00" locale="en_US" />
+									</h:outputText>
+									<h:outputText value="Total IGV" />
+									<h:outputText
+										value="#{servicioAgenteMBean.servicioAgencia.montoTotalIGV}">
+										<f:convertNumber pattern="###,##0.00" locale="en_US" />
+									</h:outputText>
+									<h:outputText value="Total Servicios" />
+									<h:outputText
+										value="#{servicioAgenteMBean.servicioAgencia.montoTotalServicios}">
+										<f:convertNumber pattern="###,##0.00" locale="en_US" />
+									</h:outputText>
+								</h:panelGrid>
+							</h:panelGrid>
+						</h:panelGrid>
+					</rich:tab>
+					<rich:tab
+						rendered="#{servicioAgenteMBean.servicioAgencia.formaPago.codigoEntero == 2}">
+						<f:facet name="header">
+							<h:outputText value="Cronograma" />
+						</f:facet>
+
+						<rich:dataTable id="idTablaCronogramaVista"
+							value="#{servicioAgenteMBean.servicioAgencia.cronogramaPago}"
+							var="cuota" style="width: 100%;" rows="10">
+							<f:facet name="header">
+								<h:outputText value="Cronograma de Pagos" />
+							</f:facet>
+							<rich:column style="text-align:right;">
+								<f:facet name="header">
+									<h:outputText value="Nro Cuota" />
+								</f:facet>
+								<h:outputText value="#{cuota.nroCuota}" />
+							</rich:column>
+							<rich:column style="text-align:center;">
+								<f:facet name="header">
+									<h:outputText value="Fecha Vencimiento" />
+								</f:facet>
+								<h:outputText value="#{cuota.fechaVencimiento}">
+									<f:convertDateTime pattern="dd/MM/yyyy" />
+								</h:outputText>
+							</rich:column>
+							<rich:column style="text-align:right;">
+								<f:facet name="header">
+									<h:outputText value="Capital" />
+								</f:facet>
+								<h:outputText value="#{cuota.capital}">
+									<f:convertNumber pattern="###,##0.00" locale="en_US" />
+								</h:outputText>
+							</rich:column>
+							<rich:column style="text-align:right;">
+								<f:facet name="header">
+									<h:outputText value="Interes" />
+								</f:facet>
+								<h:outputText value="#{cuota.interes}">
+									<f:convertNumber pattern="###,##0.00" locale="en_US" />
+								</h:outputText>
+							</rich:column>
+							<rich:column style="text-align:right;">
+								<f:facet name="header">
+									<h:outputText value="Total Cuota" />
+								</f:facet>
+								<h:outputText value="#{cuota.totalCuota}">
+									<f:convertNumber pattern="###,##0.00" locale="en_US" />
+								</h:outputText>
+							</rich:column>
+							<rich:column style="text-align:center;">
+								<f:facet name="header">
+									<h:outputText value="Estado Pago" />
+								</f:facet>
+								<h:outputText value="#{cuota.estadoCuota.nombre}" />
+							</rich:column>
+							<f:facet name="footer">
+								<rich:dataScroller for="idTablaCronogramaVista"></rich:dataScroller>
+							</f:facet>
+						</rich:dataTable>
+					</rich:tab>
+				</rich:tabPanel>
+
+				<f:facet name="footer">
+					<h:panelGrid cellpadding="0" cellspacing="0" border="0">
+						<h:panelGrid cellpadding="0" cellspacing="0" border="0"
+							columns="3"
+							rendered="#{nova:mostrarBotonesVenta1(sessionScope.usuarioSession.rol.codigoEntero,servicioAgenteMBean.servicioAgencia.estadoServicio.codigoEntero,servicioAgenteMBean.servicioAgencia.tienePagos,servicioAgenteMBean.guardoComprobantes)}">
+							<a4j:commandButton value="Anular Venta"
+								render="idTxtNomTitulo, idTxtSubTitulo, idGrFrObsAnu"
+								action="#{servicioAgenteMBean.preAnularVenta()}"
+								oncomplete="#{rich:component('idModalObsAnu')}.show(); return false;"></a4j:commandButton>
+							<a4j:commandButton value="Anular Venta" style="display:none;"
+								action="#{servicioAgenteMBean.preAnularVenta()}"
+								oncomplete="#{rich:component('idModalConfirma')}.show(); return false;"></a4j:commandButton>
+							<a4j:commandButton value="Grabar Comprobantes"
+								action="#{servicioAgenteMBean.preRegistrarComponente()}"
+								oncomplete="#{rich:component('idModConfimrComp')}.show(); return false;"
+								render="idGrConfirID2" />
+							<a4j:commandButton value="Grabar Comprobantes"
+								style="display:none;" id="idBtnGraComponentes"
+								oncomplete="mostrarModal('idformadmservicios')"
+								action="#{servicioAgenteMBean.registrarComprobante()}"
+								render="idFormHidden,idPanelHidden,idPanelBotones,idModalcorrecto,idModalError,idGrVentaServicio" />
+						</h:panelGrid>
+						<h:panelGrid cellpadding="0" cellspacing="0" border="0"
+							rendered="#{!nova:mostrarBotonesVenta1(sessionScope.usuarioSession.rol.codigoEntero,servicioAgenteMBean.servicioAgencia.estadoServicio.codigoEntero,servicioAgenteMBean.servicioAgencia.tienePagos,servicioAgenteMBean.guardoComprobantes)}">
+							<a4j:commandButton value="Grabar Relacion Comprobantes"
+								render="idGrPreguntaID"
+								action="#{servicioAgenteMBean.preGuardarRelacion()}"
+								oncomplete="#{rich:component('idModConfimrRelacion')}.show(); return false;"></a4j:commandButton>
+							<a4j:commandButton id="idBtnRelaComp"
+								oncomplete="mostrarModal('idformadmservicios')"
+								style="display:none;"
+								action="#{servicioAgenteMBean.guardarRelacionComprobanteObligacion()}"
+								render="idFormHidden,idPanelHidden,idPanelBotones,idModalcorrecto,idModalError,idGrVentaServicio"></a4j:commandButton>
+						</h:panelGrid>
+					</h:panelGrid>
+				</f:facet>
+			</h:panelGrid>
+		</h:form>
+
+	</rich:popupPanel>
+</ui:composition>
