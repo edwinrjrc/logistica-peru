@@ -157,6 +157,7 @@ public class ProveedorDaoImpl implements ProveedorDao {
 		
 		try {
 			conn = UtilConexion.obtenerConexion();
+			System.out.println("SQL::"+sql);
 			cs = conn.prepareCall(sql);
 			rs = cs.executeQuery();
 			

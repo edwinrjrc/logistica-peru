@@ -13,9 +13,7 @@ import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 
-import pe.com.logistica.bean.base.CorreoElectronico;
 import pe.com.logistica.bean.negocio.ClienteCorreo;
-import pe.com.logistica.negocio.util.UtilCorreo;
 
 /**
  * Session Bean implementation class AgenteExcel

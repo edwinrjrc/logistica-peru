@@ -46,7 +46,7 @@
 									<f:selectItems value="#{catalogoMBean.catalogoTipoComprobante}" />
 								</h:selectOneMenu>
 								<h:outputText value="Numero documento" />
-								<h:inputText maxlength="11"
+								<h:inputText maxlength="11" onkeypress="return js_soloEntero(event);"
 									value="#{obligacionPorPagarMBean.comprobanteBusqueda.proveedor.documentoIdentidad.numeroDocumento}" />
 							</h:panelGrid>
 							<h:panelGrid columns="2" border="0" cellpadding="0"

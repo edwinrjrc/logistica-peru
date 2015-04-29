@@ -1509,7 +1509,7 @@ public class ServicioNovaViajesDaoImpl implements ServicioNovaViajesDao {
 	@Override
 	public void registrarPagoServicio(PagoServicio pago) throws SQLException {
 		CallableStatement cs = null;
-		String sql = "{ ? = call negocio.fn_registrarpagoservicio(?,?,?,?,?,?,?,?,?,?)}";
+		String sql = "{ ? = call negocio.fn_registrarpagoservicio(?,?,?,?,?,?,?,?,?,?,?,?)}";
 		Connection conn = null;
 		try {
 			conn = UtilConexion.obtenerConexion();
@@ -1549,6 +1549,18 @@ public class ServicioNovaViajesDaoImpl implements ServicioNovaViajesDao {
 			else {
 				cs.setNull(i++, Types.VARCHAR);
 			}
+			if (StringUtils.isNotBlank(pago.getTipoPago().getCodigoCadena())){
+				cs.setBoolean(i++, "D".equals(pago.getTipoPago().getCodigoCadena()));
+			}
+			else {
+				cs.setNull(i++, Types.BOOLEAN);
+			}
+			if (StringUtils.isNotBlank(pago.getTipoPago().getCodigoCadena())){
+				cs.setBoolean(i++, "R".equals(pago.getTipoPago().getCodigoCadena()));
+			}
+			else {
+				cs.setNull(i++, Types.BOOLEAN);
+			}
 			cs.setString(i++, pago.getUsuarioCreacion());
 			cs.setString(i++, pago.getIpCreacion());
 			cs.execute();
@@ -1574,6 +1586,18 @@ public class ServicioNovaViajesDaoImpl implements ServicioNovaViajesDao {
 				}
 				else {
 					cs.setNull(i++, Types.VARCHAR);
+				}
+				if (StringUtils.isNotBlank(pago.getTipoPago().getCodigoCadena())){
+					cs.setBoolean(i++, "D".equals(pago.getTipoPago().getCodigoCadena()));
+				}
+				else {
+					cs.setNull(i++, Types.BOOLEAN);
+				}
+				if (StringUtils.isNotBlank(pago.getTipoPago().getCodigoCadena())){
+					cs.setBoolean(i++, "R".equals(pago.getTipoPago().getCodigoCadena()));
+				}
+				else {
+					cs.setNull(i++, Types.BOOLEAN);
 				}
 				cs.setString(i++, pago.getUsuarioCreacion());
 				cs.setString(i++, pago.getIpCreacion());
