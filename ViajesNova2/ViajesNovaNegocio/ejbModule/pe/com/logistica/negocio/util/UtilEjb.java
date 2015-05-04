@@ -8,6 +8,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -83,18 +85,17 @@ public class UtilEjb {
 	
 	public static List<Comprobante> obtenerNumeroComprobante(List<DetalleServicioAgencia> listaDetalle){
 		List<Comprobante> lista = new ArrayList<Comprobante>();
+		Comprobante comprobante = new Comprobante();
+		comprobante.setNumeroComprobante(listaDetalle.get(0).getNroComprobante());
+		comprobante.setTipoComprobante(listaDetalle.get(0).getTipoComprobante());
+		comprobante.setTieneDetraccion(listaDetalle.get(0).isTieneDetraccion());
+		comprobante.setTieneRetencion(listaDetalle.get(0).isTieneRetencion());
+		lista.add(comprobante);
 		for (int i=0; i<listaDetalle.size(); i++){
 			DetalleServicioAgencia bean = listaDetalle.get(i);
-			Comprobante comprobante = new Comprobante();
-			comprobante.setNumeroComprobante(bean.getNroComprobante());
-			comprobante.setTipoComprobante(bean.getTipoComprobante());
-			comprobante.setTieneDetraccion(bean.isTieneDetraccion());
-			comprobante.setTieneRetencion(bean.isTieneRetencion());
-			lista.add(comprobante);
-			comprobante = null;
-			for (int j=i; j<listaDetalle.size(); j++){
+			for (int j=0; j<listaDetalle.size(); j++){
 				DetalleServicioAgencia bean2 = listaDetalle.get(j);
-				if (!bean.getNroComprobante().equals(bean2.getNroComprobante())){
+				if (!bean.getNroComprobante().equals(bean2.getNroComprobante()) && !estaEnListado(bean2.getNroComprobante(),lista)){
 					comprobante = new Comprobante();
 					comprobante.setNumeroComprobante(bean2.getNroComprobante());
 					comprobante.setTipoComprobante(bean2.getTipoComprobante());
@@ -104,10 +105,18 @@ public class UtilEjb {
 					comprobante = null;
 				}
 			}
-			break;
 		}
 		
 		return lista;
+	}
+	
+	private static boolean estaEnListado(String numero, List<Comprobante> lista){
+		for (Comprobante comprobante : lista) {
+			if (comprobante.getNumeroComprobante().equals(numero)){
+				return true;
+			}
+		}
+		return false;
 	}
 	
 	public static Comprobante obtenerNumeroComprobante(Comprobante comp, ServicioAgencia servicioAgencia){
@@ -157,5 +166,21 @@ public class UtilEjb {
 			e.printStackTrace();
 		}
 		return comp;
+	}
+	
+	public static boolean correoValido(String correo){
+		try {
+			String patternEmail = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@"
+			        + "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
+			Pattern pattern = Pattern.compile(patternEmail);
+			Matcher matcher = pattern.matcher(correo);
+			
+			boolean resultado = matcher.matches();
+			
+			return resultado;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+        return false;
 	}
 }

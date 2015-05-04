@@ -51,6 +51,7 @@ public class ServicioAgencia extends BaseNegocio{
 	private boolean servicioPagado;
 	private boolean editable;
 	private boolean guardoComprobante;
+	private boolean guardoRelacionComprobantes;
 	
 	private BaseVO aerolinea;
 	
@@ -617,5 +618,23 @@ public class ServicioAgencia extends BaseNegocio{
 	 */
 	public void setGuardoComprobante(boolean guardoComprobante) {
 		this.guardoComprobante = guardoComprobante;
+	}
+
+
+
+	/**
+	 * @return the guardoRelacionComprobantes
+	 */
+	public boolean isGuardoRelacionComprobantes() {
+		return guardoRelacionComprobantes;
+	}
+
+
+
+	/**
+	 * @param guardoRelacionComprobantes the guardoRelacionComprobantes to set
+	 */
+	public void setGuardoRelacionComprobantes(boolean guardoRelacionComprobantes) {
+		this.guardoRelacionComprobantes = guardoRelacionComprobantes;
 	}
 }

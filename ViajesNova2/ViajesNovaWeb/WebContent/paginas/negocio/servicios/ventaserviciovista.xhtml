@@ -163,8 +163,8 @@
 												<h:outputText value="Precio Unitario" />
 											</h:panelGrid>
 										</f:facet>
-										<h:outputText value="#{row.precioUnitario}">
-											<f:convertNumber pattern="###,##0.00" locale="en_US" />
+										<h:outputText
+											value="#{nova:formatearMonto('$',row.precioUnitario)}">
 										</h:outputText>
 									</rich:column>
 									<rich:column style="text-align:right;width: 10%;">
@@ -174,8 +174,8 @@
 												<h:outputText value="Total" />
 											</h:panelGrid>
 										</f:facet>
-										<h:outputText value="#{row.totalServicio}">
-											<f:convertNumber pattern="###,##0.00" locale="en_US" />
+										<h:outputText
+											value="#{nova:formatearMonto('$',row.totalServicio)}">
 										</h:outputText>
 									</rich:column>
 
@@ -188,18 +188,15 @@
 									columnClasses="col1RSPN,col2RSPN">
 									<h:outputText value="Total Comision" />
 									<h:outputText
-										value="#{servicioAgenteMBean.servicioAgencia.montoTotalComision}">
-										<f:convertNumber pattern="###,##0.00" locale="en_US" />
+										value="#{nova:formatearMonto('$',servicioAgenteMBean.servicioAgencia.montoTotalComision)}">
 									</h:outputText>
 									<h:outputText value="Total IGV" />
 									<h:outputText
-										value="#{servicioAgenteMBean.servicioAgencia.montoTotalIGV}">
-										<f:convertNumber pattern="###,##0.00" locale="en_US" />
+										value="#{nova:formatearMonto('$',servicioAgenteMBean.servicioAgencia.montoTotalIGV)}">
 									</h:outputText>
 									<h:outputText value="Total Servicios" />
 									<h:outputText
-										value="#{servicioAgenteMBean.servicioAgencia.montoTotalServicios}">
-										<f:convertNumber pattern="###,##0.00" locale="en_US" />
+										value="#{nova:formatearMonto('$',servicioAgenteMBean.servicioAgencia.montoTotalServicios)}">
 									</h:outputText>
 								</h:panelGrid>
 							</h:panelGrid>
@@ -265,8 +262,8 @@
 												<h:outputText value="Precio Unitario" />
 											</h:panelGrid>
 										</f:facet>
-										<h:outputText value="#{row.precioUnitario}">
-											<f:convertNumber pattern="###,##0.00" locale="en_US" />
+										<h:outputText
+											value="#{nova:formatearMonto('$',row.precioUnitario)}">
 										</h:outputText>
 									</rich:column>
 									<rich:column style="text-align:right;width: 10%;">
@@ -276,8 +273,8 @@
 												<h:outputText value="Total" />
 											</h:panelGrid>
 										</f:facet>
-										<h:outputText value="#{row.totalServicio}">
-											<f:convertNumber pattern="###,##0.00" locale="en_US" />
+										<h:outputText
+											value="#{nova:formatearMonto('$',row.totalServicio)}">
 										</h:outputText>
 									</rich:column>
 
@@ -317,13 +314,15 @@
 										<h:panelGrid cellpadding="0" cellspacing="0" border="0"
 											columns="4">
 											<h:outputText value="D:" />
-											<h:selectBooleanCheckbox value="#{row.tieneDetraccion}" disabled="#{servicioAgenteMBean.servicioAgencia.guardoComprobante}" />
+											<h:selectBooleanCheckbox value="#{row.tieneDetraccion}"
+												disabled="#{servicioAgenteMBean.servicioAgencia.guardoComprobante}" />
 											<h:outputText value="R:" />
-											<h:selectBooleanCheckbox value="#{row.tieneRetencion}" disabled="#{servicioAgenteMBean.servicioAgencia.guardoComprobante}" />
+											<h:selectBooleanCheckbox value="#{row.tieneRetencion}"
+												disabled="#{servicioAgenteMBean.servicioAgencia.guardoComprobante}" />
 										</h:panelGrid>
 									</rich:column>
 									<rich:column style="text-align:right;"
-										rendered="#{servicioAgenteMBean.servicioAgencia.guardoComprobante}">
+										rendered="#{servicioAgenteMBean.servicioAgencia.guardoComprobante and !servicioAgenteMBean.guardoRelacionComprobantes}">
 										<f:facet name="header">
 											<h:panelGrid cellpadding="0" cellspacing="0" border="0"
 												style="width:100%; text-align:center;">
@@ -343,24 +342,37 @@
 											</a4j:commandLink>
 										</h:panelGrid>
 									</rich:column>
+									<rich:column style="text-align:right;"
+										rendered="#{servicioAgenteMBean.guardoRelacionComprobantes}">
+										<f:facet name="header">
+											<h:panelGrid cellpadding="0" cellspacing="0" border="0"
+												style="width:100%; text-align:center;">
+												<h:outputText value="Obligacion por Pagar" />
+											</h:panelGrid>
+										</f:facet>
+										<h:panelGrid cellpadding="0" cellspacing="0" border="0"
+											columns="3">
+											<h:outputText
+												value="#{row.comprobanteAsociado.tipoComprobante.nombre}" />-
+											<h:outputText
+												value="#{row.comprobanteAsociado.numeroComprobante}" />
+										</h:panelGrid>
+									</rich:column>
 								</rich:dataTable>
 								<h:panelGrid columns="2" cellpadding="0" cellspacing="0"
 									border="0" style="width:100%;"
 									columnClasses="col1RSPN,col2RSPN">
 									<h:outputText value="Total Comision" />
 									<h:outputText
-										value="#{servicioAgenteMBean.servicioAgencia.montoTotalComision}">
-										<f:convertNumber pattern="###,##0.00" locale="en_US" />
+										value="#{nova:formatearMonto('$',servicioAgenteMBean.servicioAgencia.montoTotalComision)}">
 									</h:outputText>
 									<h:outputText value="Total IGV" />
 									<h:outputText
-										value="#{servicioAgenteMBean.servicioAgencia.montoTotalIGV}">
-										<f:convertNumber pattern="###,##0.00" locale="en_US" />
+										value="#{nova:formatearMonto('$',servicioAgenteMBean.servicioAgencia.montoTotalIGV)}">
 									</h:outputText>
 									<h:outputText value="Total Servicios" />
 									<h:outputText
-										value="#{servicioAgenteMBean.servicioAgencia.montoTotalServicios}">
-										<f:convertNumber pattern="###,##0.00" locale="en_US" />
+										value="#{nova:formatearMonto('$',servicioAgenteMBean.servicioAgencia.montoTotalServicios)}">
 									</h:outputText>
 								</h:panelGrid>
 							</h:panelGrid>
@@ -452,7 +464,7 @@
 								render="idFormHidden,idPanelHidden,idPanelBotones,idModalcorrecto,idModalError,idGrVentaServicio" />
 						</h:panelGrid>
 						<h:panelGrid cellpadding="0" cellspacing="0" border="0"
-							rendered="#{!nova:mostrarBotonesVenta1(sessionScope.usuarioSession.rol.codigoEntero,servicioAgenteMBean.servicioAgencia.estadoServicio.codigoEntero,servicioAgenteMBean.servicioAgencia.tienePagos,servicioAgenteMBean.guardoComprobantes)}">
+							rendered="#{!servicioAgenteMBean.guardoRelacionComprobantes  and servicioAgenteMBean.guardoComprobantes}">
 							<a4j:commandButton value="Grabar Relacion Comprobantes"
 								render="idGrPreguntaID"
 								action="#{servicioAgenteMBean.preGuardarRelacion()}"

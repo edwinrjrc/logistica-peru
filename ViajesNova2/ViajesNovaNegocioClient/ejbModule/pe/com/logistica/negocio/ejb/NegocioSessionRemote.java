@@ -205,5 +205,6 @@ public interface NegocioSessionRemote {
 	void registrarRelacionComproObligacion(
 			ServicioAgencia servicioAgencia) throws SQLException,
 			Exception;
-
+	
+	public List<DetalleServicioAgencia> consultarDetServComprobanteObligacion(Integer idServicio) throws SQLException, Exception;
 }

@@ -108,6 +108,7 @@ public class ServicioAgenteMBean extends BaseMBean {
 	private boolean vendedor;
 	private boolean calculadorIGV;
 	private boolean guardoComprobantes;
+	private boolean guardoRelacionComprobantes;
 	private boolean consultoProveedor;
 
 	private ParametroServicio parametroServicio;
@@ -256,6 +257,7 @@ public class ServicioAgenteMBean extends BaseMBean {
 	public void consultarServicioRegistrado(int idServicio) {
 		try {
 			this.setGuardoComprobantes(false);
+			this.setGuardoRelacionComprobantes(false);
 			this.setServicioAgencia(this.negocioServicio
 					.consultarVentaServicio(idServicio));
 
@@ -265,10 +267,16 @@ public class ServicioAgenteMBean extends BaseMBean {
 			this.setListadoDetalleServicio(this.getServicioAgencia()
 					.getListaDetalleServicio());
 			
-			if (this.getServicioAgencia().isGuardoComprobante()){
+			if (this.getServicioAgencia().isGuardoRelacionComprobantes()){
+				this.setGuardoComprobantes(true);
+				this.setGuardoRelacionComprobantes(true);
+				this.getServicioAgencia().setListaDetalleServicio(this.negocioServicio.consultarDetServComprobanteObligacion(this.getServicioAgencia().getCodigoEntero()));
+			}
+			else if (this.getServicioAgencia().isGuardoComprobante()){
 				this.setGuardoComprobantes(true);
 				this.getServicioAgencia().setListaDetalleServicio(this.negocioServicio.consultarDetalleComprobantes(this.getServicioAgencia().getCodigoEntero()));
 			}
+			
 			
 			this.setDetalleServicio(null);
 
@@ -1465,6 +1473,7 @@ try {
 	}
 	
 	public void enviaDetalle(DetalleServicioAgencia detalle){
+		this.setListaComprobantes(null);
 		this.setDetalleServicio2(detalle);
 	}
 	
@@ -1487,16 +1496,28 @@ try {
 	
 	public void guardarRelacionComprobanteObligacion(){
 		try {
+			this.setGuardoRelacionComprobantes(false);
+			
 			HttpSession session = obtenerSession(false);
 			Usuario usuario = (Usuario) session
 					.getAttribute("usuarioSession");
 			
+			this.getServicioAgencia().setUsuarioCreacion(usuario.getUsuario());
+			this.getServicioAgencia().setIpCreacion(obtenerRequest().getRemoteAddr());
+			this.getServicioAgencia().setUsuarioModificacion(usuario.getUsuario());
+			this.getServicioAgencia().setIpModificacion(obtenerRequest().getRemoteAddr());
 			for (DetalleServicioAgencia detalle : this.getServicioAgencia().getListaDetalleServicio()){
 				detalle.setUsuarioCreacion(usuario.getUsuario());
 				detalle.setIpCreacion(obtenerRequest().getRemoteAddr());
+				detalle.setUsuarioModificacion(usuario.getUsuario());
+				detalle.setIpModificacion(obtenerRequest().getRemoteAddr());
 			}
 			
 			this.negocioServicio.registrarComprobanteObligacion(this.getServicioAgencia());
+			
+			this.setGuardoRelacionComprobantes(true);
+			
+			this.getServicioAgencia().setListaDetalleServicio(this.negocioServicio.consultarDetServComprobanteObligacion(this.getServicioAgencia().getCodigoEntero()));
 			
 			this.setShowModal(true);
 			this.setMensajeModal("Se guardo la relacion entre comprobantes satisfactoriamente");
@@ -2139,6 +2160,20 @@ try {
 	 */
 	public void setDetalleServicio2(DetalleServicioAgencia detalleServicio2) {
 		this.detalleServicio2 = detalleServicio2;
+	}
+
+	/**
+	 * @return the guardoRelacionComprobantes
+	 */
+	public boolean isGuardoRelacionComprobantes() {
+		return guardoRelacionComprobantes;
+	}
+
+	/**
+	 * @param guardoRelacionComprobantes the guardoRelacionComprobantes to set
+	 */
+	public void setGuardoRelacionComprobantes(boolean guardoRelacionComprobantes) {
+		this.guardoRelacionComprobantes = guardoRelacionComprobantes;
 	}
 
 }

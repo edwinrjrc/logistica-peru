@@ -3,6 +3,11 @@
  */
 package pe.com.logistica.web.facelet;
 
+import java.math.BigDecimal;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.util.Locale;
+
 import org.apache.commons.lang3.StringUtils;
 
 /**
@@ -30,4 +35,15 @@ public class FuncionesNova {
 		
         return resultado;
     }
+	
+	public static String formatearMonto(String simboloMoneda, Object monto){
+		String formateado = "";
+		DecimalFormat formateador = new DecimalFormat("###,###,##0.00", new DecimalFormatSymbols(Locale.ENGLISH));
+		if (monto instanceof BigDecimal){
+			formateado = formateador.format(((BigDecimal) monto).doubleValue());
+			formateado =  simboloMoneda + " " + formateado;
+		}
+		
+		return formateado;
+	}
 }
