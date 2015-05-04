@@ -408,6 +408,11 @@ public class NegocioServicioImpl implements NegocioServicio {
 	}
 	
 	@Override
+	public List<DetalleServicioAgencia> consultarDetServComprobanteObligacion(Integer idServicio) throws SQLException, Exception{
+		return ejbSession.consultarDetServComprobanteObligacion(idServicio);
+	}
+	
+	@Override
 	public boolean registrarObligacionXPagar(Comprobante comprobante) throws SQLException, Exception{
 		return ejbSession.registrarObligacionXPagar(comprobante);
 	}

@@ -27,7 +27,8 @@
 			<table style="width: 70%;" align="center" border="0">
 				<tr>
 					<td align="center"><rich:dataTable
-							value="#{clienteMBean.listaClientesCumples}" var="fila" style="width:100%;">
+							value="#{clienteMBean.listaClientesCumples}" var="fila"
+							style="width:100%;">
 							<f:facet name="noData">
 								<h:outputText value="No hay clientes cumpleañeros" />
 							</f:facet>
@@ -52,10 +53,11 @@
 
 						</rich:dataTable></td>
 				</tr>
-
 			</table>
-
 		</h:panelGrid>
+		<script type="text/javascript">
+		mostrarModal('idformadmservicios');
+		</script>
 	</ui:define>
 </ui:composition>
 </html>

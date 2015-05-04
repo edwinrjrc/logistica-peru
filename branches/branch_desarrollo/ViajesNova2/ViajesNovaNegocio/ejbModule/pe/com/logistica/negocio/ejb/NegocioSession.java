@@ -1286,7 +1286,7 @@ public class NegocioSession implements NegocioSessionRemote,
 			UtilCorreo utilCorreo = new UtilCorreo();
 			for (CorreoClienteMasivo envio : correoMasivo.getListaCorreoMasivo()) {
 				try{
-					if (envio.isEnviarCorreo()){
+					if (envio.isEnviarCorreo() && UtilEjb.correoValido(envio.getCorreoElectronico().getDireccion())){
 						if (!correoMasivo.isArchivoCargado()){
 							utilCorreo.enviarCorreo(envio.getCorreoElectronico().getDireccion(), correoMasivo.getAsunto(), correoMasivo.getContenidoCorreo());
 						}
@@ -1872,6 +1872,12 @@ public class NegocioSession implements NegocioSessionRemote,
 	public List<DetalleServicioAgencia> consultarDetalleServicioComprobante(Integer idServicio) throws SQLException, Exception{
 		ServicioNovaViajesDao servicioNovaViajesDao = new ServicioNovaViajesDaoImpl();
 		return servicioNovaViajesDao.consultaServicioDetalleComprobante(idServicio);
+	}
+	
+	@Override
+	public List<DetalleServicioAgencia> consultarDetServComprobanteObligacion(Integer idServicio) throws SQLException, Exception{
+		ServicioNovaViajesDao servicioNovaViajesDao = new ServicioNovaViajesDaoImpl();
+		return servicioNovaViajesDao.consultaServDetComprobanteObligacion(idServicio);
 	}
 	
 	@Override

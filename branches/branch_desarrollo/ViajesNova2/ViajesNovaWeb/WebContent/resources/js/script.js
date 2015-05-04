@@ -22,6 +22,10 @@ function mostrarModal(idform) {
 	}
 }
 
+function mostrarModal2(){
+	
+}
+
 function mostrarModalCC(idform) {
 	var mostrarModal = document.getElementById('idFormHiddenCC:idShowModal').value;
 	var tipoModal = document.getElementById('idFormHiddenCC:idTipoModal').value;
