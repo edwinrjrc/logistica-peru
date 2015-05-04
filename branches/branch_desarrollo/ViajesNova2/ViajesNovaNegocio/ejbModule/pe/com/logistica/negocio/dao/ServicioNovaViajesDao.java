@@ -118,4 +118,7 @@ public interface ServicioNovaViajesDao {
 	void actualizarRelacionComprobantes(boolean relacionComprobantes,
 			ServicioAgencia servicio, Connection conn) throws SQLException,
 			Exception;
+
+	List<DetalleServicioAgencia> consultaServDetComprobanteObligacion(
+			int idServicio) throws SQLException;
 }

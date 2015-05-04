@@ -200,4 +200,7 @@ public interface NegocioServicio {
 			ServicioAgencia servicioAgencia) throws SQLException,
 			Exception;
 
+	List<DetalleServicioAgencia> consultarDetServComprobanteObligacion(
+			Integer idServicio) throws SQLException, Exception;
+
 }

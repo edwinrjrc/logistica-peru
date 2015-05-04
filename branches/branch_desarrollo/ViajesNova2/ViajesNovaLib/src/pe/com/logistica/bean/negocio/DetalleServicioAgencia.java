@@ -496,6 +496,9 @@ public class DetalleServicioAgencia extends BaseNegocio {
 	 * @return the comprobanteAsociado
 	 */
 	public Comprobante getComprobanteAsociado() {
+		if (comprobanteAsociado == null){
+			comprobanteAsociado = new Comprobante();
+		}
 		return comprobanteAsociado;
 	}
 

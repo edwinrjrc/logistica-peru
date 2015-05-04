@@ -17,4 +17,11 @@
         <function-class>pe.com.logistica.web.facelet.FuncionesNova</function-class>
         <function-signature>boolean mostrarBotonesVenta1(java.lang.Integer, java.lang.Integer, java.lang.Integer, boolean)</function-signature>
     </function>
+    
+    <function>
+        <function-name>formatearMonto</function-name>
+        <function-class>pe.com.logistica.web.facelet.FuncionesNova</function-class>
+        <function-signature>java.lang.String formatearMonto(java.lang.String, java.lang.Object)</function-signature>
+    </function>
+    
 </facelet-taglib>
