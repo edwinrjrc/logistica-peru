@@ -83,4 +83,8 @@ public class SeguridadServicioImpl implements SeguridadServicio{
 	public List<Usuario> listarVendedores() throws SQLException {
 		return ejbSession.listarVendedores();
 	}
+	@Override
+	public boolean actualizarCredencialVencida(Usuario usuario) throws SQLException, Exception {
+		return ejbSession.actualizarCredencialVencida(usuario);
+	}
 }

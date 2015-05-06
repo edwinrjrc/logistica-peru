@@ -187,6 +187,37 @@ public class UsuarioMBean extends BaseMBean {
 			logger.error(e.getMessage(), e);
 		}
 	}
+	
+	public void cambiarClaveVencida() {
+		try {
+			if (validarClave()) {
+				if (getUsuario().getCredencial().equals(getUsuario().getCredencialNueva())){
+					throw new ValidacionException("La contraseña nueva no puede ser igual a la vencida");
+				}
+				this.seguridadServicio.actualizarCredencialVencida(getUsuario());
+				
+				this.setShowModal(true);
+				this.setTipoModal("1");
+				this.setMensajeModal("Se renovaron las credenciales satisfactoriamente");
+				
+				getUsuario().setCredencialVencida(false);
+			}
+		} catch (ValidacionException e){
+			this.setTipoModal("2");
+			this.setShowModal(true);
+			this.setMensajeModal(e.getMessage());
+		} catch (SQLException e) {
+			this.setTipoModal("2");
+			this.setShowModal(true);
+			this.setMensajeModal(e.getMessage());
+			logger.error(e.getMessage(), e);
+		} catch (Exception e) {
+			this.setTipoModal("2");
+			this.setShowModal(true);
+			this.setMensajeModal(e.getMessage());
+			logger.error(e.getMessage(), e);
+		}
+	}
 
 	public void actualizarClave() {
 		try {
