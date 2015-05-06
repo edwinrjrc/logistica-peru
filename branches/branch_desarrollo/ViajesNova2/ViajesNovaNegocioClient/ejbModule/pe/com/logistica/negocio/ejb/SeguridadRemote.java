@@ -21,4 +21,6 @@ public interface SeguridadRemote {
 	boolean cambiarClaveUsuario(Usuario usuario) throws SQLException, Exception;
 	public boolean actualizarClaveUsuario(Usuario usuario) throws SQLException, Exception;
 	public List<Usuario> listarVendedores() throws SQLException;
+	boolean actualizarCredencialVencida(Usuario usuario) throws SQLException,
+			Exception;
 }

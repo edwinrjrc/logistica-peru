@@ -21,4 +21,5 @@ public interface SeguridadLocal {
 	boolean cambiarClaveUsuario(Usuario usuario) throws SQLException, Exception;
 	boolean actualizarClaveUsuario(Usuario usuario) throws SQLException, Exception;
 	public List<Usuario> listarVendedores() throws SQLException;
+	boolean actualizarCredencialVencida(Usuario usuario) throws SQLException,Exception;
 }
