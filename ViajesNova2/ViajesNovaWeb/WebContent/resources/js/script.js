@@ -11,14 +11,13 @@ function mostrarModal(idform) {
 		var tipoModal = document.getElementById('idFormHidden:idTipoModal').value;
 
 		if (tipoModal == "1" && eval(mostrarModal)) {
-
 			document.getElementById(idform + ':idBotonModalCorrecto').click();
 		} else if (tipoModal == "2" && eval(mostrarModal)) {
 			document.getElementById(idform + ':idBotonModalError').click();
 		}
 	}
 	catch (e){
-		alert(e);
+		//alert("ERROR JS::"+e);
 	}
 }
 
@@ -102,4 +101,13 @@ function mostrarModal3(idmodal) {
 	} catch (e) {
 
 	}
+}
+
+function mostrarModalCredencial(idmodal){
+	var credencialvendida = document.getElementById('idFrInicio:idTxtHidCredvencida').value;
+	
+	if (eval(credencialvendida)){
+		mostrarModal3(idmodal);
+	}
+
 }

@@ -37,11 +37,11 @@
 
 				<f:facet name="footer">
 					<h:panelGrid width="100%" style="text-align:center;">
-						<a4j:commandButton value="Aceptar" rendered="#{idModalForm != null}"
-							onclick="#{rich:component('#{idModalForm}')}.hide(); return false;"
+						<a4j:commandButton value="Aceptar 1" rendered="#{idModalForm != null}"
+							onclick="cerrarModal('#{idModalForm}');"
 							render="#{idrender}"
 							oncomplete="#{rich:component('idModalcorrecto')}.hide(); return false;" />
-						<a4j:commandButton value="Aceptar" rendered="#{idModalForm == null}"
+						<a4j:commandButton value="Aceptar 2" rendered="#{idModalForm == null}"
 							render="#{idrender}"
 							oncomplete="#{rich:component('idModalcorrecto')}.hide(); return false;" />
 					</h:panelGrid>

@@ -10,6 +10,8 @@ import javax.faces.event.PhaseId;
 import javax.faces.event.PhaseListener;
 import javax.servlet.http.HttpSession;
 
+import org.apache.log4j.Logger;
+
 import pe.com.logistica.bean.negocio.Usuario;
 
 /**
@@ -18,6 +20,8 @@ import pe.com.logistica.bean.negocio.Usuario;
  */
 public class AuthorizationListener implements PhaseListener {
 
+	private final static Logger logger = Logger.getLogger(AuthorizationListener.class);
+	
 	/**
 	 * 
 	 */
@@ -38,28 +42,7 @@ public class AuthorizationListener implements PhaseListener {
 	 */
 	@Override
 	public void afterPhase(PhaseEvent event) {
-		FacesContext facesContext = event.getFacesContext();
-		String currentPage = facesContext.getViewRoot().getViewId();
-
-		boolean isLoginPage = (currentPage.lastIndexOf("index.xhtml") > -1);
-		HttpSession session = (HttpSession) facesContext.getExternalContext()
-				.getSession(false);
-
-		if (session == null) {
-			NavigationHandler nh = facesContext.getApplication()
-					.getNavigationHandler();
-			nh.handleNavigation(facesContext, null, "irInicioSistema");
-		}
-
-		else {
-			Usuario currentUser = (Usuario)session.getAttribute("usuarioSession");
-
-			if (!isLoginPage && (currentUser == null)) {
-				NavigationHandler nh = facesContext.getApplication()
-						.getNavigationHandler();
-				nh.handleNavigation(facesContext, null, "irInicioSistema");
-			}
-		}
+		redirigir(event);
 	}
 
 	/*
@@ -69,9 +52,8 @@ public class AuthorizationListener implements PhaseListener {
 	 * javax.faces.event.PhaseListener#beforePhase(javax.faces.event.PhaseEvent)
 	 */
 	@Override
-	public void beforePhase(PhaseEvent arg0) {
-		// TODO Auto-generated method stub
-
+	public void beforePhase(PhaseEvent event) {
+		//redirigir(event);
 	}
 
 	/*
@@ -82,6 +64,36 @@ public class AuthorizationListener implements PhaseListener {
 	@Override
 	public PhaseId getPhaseId() {
 		return PhaseId.RESTORE_VIEW;
+	}
+
+	private void redirigir(PhaseEvent event) {
+		try {
+			FacesContext facesContext = event.getFacesContext();
+			String currentPage = facesContext.getViewRoot().getViewId();
+
+			boolean isLoginPage = (currentPage.lastIndexOf("index.xhtml") > -1);
+			HttpSession session = (HttpSession) facesContext.getExternalContext()
+					.getSession(false);
+
+			if (session == null) {
+				NavigationHandler nh = facesContext.getApplication()
+						.getNavigationHandler();
+				nh.handleNavigation(facesContext, null, "irInicioSistema");
+			}
+
+			else {
+				Usuario currentUser = (Usuario) session
+						.getAttribute("usuarioSession");
+
+				if (!isLoginPage && (currentUser == null)) {
+					NavigationHandler nh = facesContext.getApplication()
+							.getNavigationHandler();
+					nh.handleNavigation(facesContext, null, "irInicioSistema");
+				}
+			}
+		} catch (Exception e) {
+			logger.error("NO SE ENCONTRO PAGINA EN LA FASE");
+		}
 	}
 
 }
