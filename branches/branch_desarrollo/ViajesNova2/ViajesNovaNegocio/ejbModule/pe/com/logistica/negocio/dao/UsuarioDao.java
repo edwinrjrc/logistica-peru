@@ -25,5 +25,7 @@ public interface UsuarioDao {
 	boolean cambiarClaveUsuario(Usuario usuario) throws SQLException, ErrorEncriptacionException;
 	boolean actualizarClaveUsuario(Usuario usuario) throws SQLException, ErrorEncriptacionException;
 	List<Usuario> listarVendedores() throws SQLException;
+	boolean actualizarCredencialVencida(Usuario usuario) throws SQLException,
+			ErrorEncriptacionException;
 	
 }

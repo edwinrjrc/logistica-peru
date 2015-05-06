@@ -89,4 +89,17 @@ public class SeguridadSession implements SeguridadRemote, SeguridadLocal {
 		usuarioDao = new UsuarioDaoImpl();
 		return usuarioDao.listarVendedores();
 	}
+	
+	@Override
+	public boolean actualizarCredencialVencida(Usuario usuario) throws SQLException, Exception {
+		usuarioDao = new UsuarioDaoImpl();
+		
+		Usuario usuarioLocal = usuarioDao.inicioSesion2(usuario);
+		
+		if (usuarioLocal.isEncontrado()){
+			
+		}
+				
+    	return usuarioDao.actualizarCredencialVencida(usuario);
+	}
 }

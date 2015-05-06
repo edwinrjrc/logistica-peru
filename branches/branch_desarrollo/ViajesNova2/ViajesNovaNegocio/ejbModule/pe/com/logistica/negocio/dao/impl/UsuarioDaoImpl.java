@@ -9,6 +9,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import pe.com.logistica.bean.negocio.Usuario;
@@ -293,7 +294,7 @@ public class UsuarioDaoImpl implements UsuarioDao{
 		Connection conn = null;
 		CallableStatement cs = null;
 		ResultSet rs = null;
-		String sql = "select id, usuario, credencial, id_rol, nombre, nombres, apepaterno, apematerno" +
+		String sql = "select id, usuario, credencial, id_rol, nombre, nombres, apepaterno, apematerno, cambiarclave, feccaducacredencial" +
 				" from seguridad.vw_listarusuarios where upper(usuario) = ?";
 
 		try {
@@ -314,6 +315,16 @@ public class UsuarioDaoImpl implements UsuarioDao{
 				resultado.setApellidoMaterno(UtilJdbc.obtenerCadena(rs,"apematerno"));
 				String credencial = UtilJdbc.obtenerCadena(rs,"credencial");
 				resultado.setEncontrado(UtilEncripta.desencriptaCadena(credencial).equals(usuario.getCredencial()));
+				boolean caducaCredencial = UtilJdbc.obtenerBoolean(rs, "cambiarclave");
+				Date fechaVctoCredencial = UtilJdbc.obtenerFecha(rs, "feccaducacredencial");
+				
+				resultado.setCredencialVencida(caducaCredencial);
+				if (fechaVctoCredencial != null){
+					resultado.setCredencialVencida((new Date()).after(fechaVctoCredencial));
+				}
+				else {
+					resultado.setCredencialVencida(true);
+				}
 			}
 		} catch (SQLException e) {
 			resultado = null;
@@ -485,6 +496,50 @@ public class UsuarioDaoImpl implements UsuarioDao{
 				}
 			}
 		}
+		
+		return resultado;
+	}
+	
+	@Override
+	public boolean actualizarCredencialVencida(Usuario usuario) throws SQLException, ErrorEncriptacionException {
+		boolean resultado = false;
+		Connection conn = null;
+		CallableStatement cs = null;
+		String sql = "{? = call seguridad.fn_actualizarcredencialvencida(?,?)}";
+		
+		try {
+			conn = UtilConexion.obtenerConexion();
+			cs = conn.prepareCall(sql);
+			int i=1;
+			cs.registerOutParameter(i++, Types.BOOLEAN);
+			cs.setInt(i++, usuario.getCodigoEntero());
+			cs.setString(i++, UtilEncripta.encriptaCadena(usuario.getCredencialNueva()));
+			cs.execute();
+			
+			resultado = cs.getBoolean(1);
+		} catch (SQLException e) {
+			resultado = false;
+			throw new SQLException(e);
+		} finally{
+			try {
+				if (cs != null){
+					cs.close();
+				}
+				if (conn != null){
+					conn.close();
+				}
+			} catch (SQLException e) {
+				try {
+					if (conn != null){
+						conn.close();
+					}
+					throw new SQLException(e);
+				} catch (SQLException e1) {
+					throw new SQLException(e);
+				}
+			}
+		}
+		
 		
 		return resultado;
 	}
