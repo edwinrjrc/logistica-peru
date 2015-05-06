@@ -23,6 +23,7 @@ public class Usuario extends Persona {
 	private BaseVO rol;
 	private boolean encontrado;
 	private boolean vendedor;
+	private boolean credencialVencida;
 	
 	/**
 	 * 
@@ -119,6 +120,20 @@ public class Usuario extends Persona {
 	 */
 	public void setVendedor(boolean vendedor) {
 		this.vendedor = vendedor;
+	}
+
+	/**
+	 * @return the credencialVencida
+	 */
+	public boolean isCredencialVencida() {
+		return credencialVencida;
+	}
+
+	/**
+	 * @param credencialVencida the credencialVencida to set
+	 */
+	public void setCredencialVencida(boolean credencialVencida) {
+		this.credencialVencida = credencialVencida;
 	}
 
 }
