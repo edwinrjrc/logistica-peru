@@ -319,11 +319,13 @@ public class UsuarioDaoImpl implements UsuarioDao{
 				Date fechaVctoCredencial = UtilJdbc.obtenerFecha(rs, "feccaducacredencial");
 				
 				resultado.setCredencialVencida(caducaCredencial);
-				if (fechaVctoCredencial != null){
-					resultado.setCredencialVencida((new Date()).after(fechaVctoCredencial));
-				}
-				else {
-					resultado.setCredencialVencida(true);
+				if (!caducaCredencial){
+					if (fechaVctoCredencial != null){
+						resultado.setCredencialVencida((new Date()).after(fechaVctoCredencial));
+					}
+					else {
+						resultado.setCredencialVencida(true);
+					}
 				}
 			}
 		} catch (SQLException e) {
