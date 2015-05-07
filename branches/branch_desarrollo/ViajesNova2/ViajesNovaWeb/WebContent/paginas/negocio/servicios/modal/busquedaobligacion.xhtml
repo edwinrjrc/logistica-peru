@@ -69,7 +69,7 @@
 					<f:facet name="footer">
 						<h:panelGrid cellpadding="0" cellspacing="0" border="0"
 							columns="1" style="width:100%; text-align:center;">
-							<a4j:commandButton value="Buscar" render="idTabla"
+							<a4j:commandButton value="Buscar" render="idTablaObligacion"
 								action="#{servicioAgenteMBean.buscarComprobante()}" />
 						</h:panelGrid>
 					</f:facet>
@@ -84,7 +84,7 @@
 							<hr />
 						</h:panelGrid>
 					</f:facet>
-					<rich:dataTable var="row" id="idTabla" rows="10"
+					<rich:dataTable var="row" id="idTablaObligacion" rows="10"
 						value="#{servicioAgenteMBean.listaComprobantes}"
 						style="width:100%;">
 						<f:facet name="noData">
