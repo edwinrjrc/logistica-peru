@@ -334,7 +334,7 @@
 											<h:inputText
 												value="#{row.comprobanteAsociado.numeroComprobante}"
 												readonly="true" />
-											<a4j:commandLink
+											<a4j:commandLink render="idTablaObligacion"
 												action="#{servicioAgenteMBean.enviaDetalle(row)}"
 												oncomplete="mostrarModal3('idModalbusqobligacion')">
 												<h:graphicImage style="border:0px;"
