@@ -856,6 +856,7 @@ public class ServicioNovaViajesDaoImpl implements ServicioNovaViajesDao {
 				detalleServicio.getServicioProveedor().getProveedor().setApellidoPaterno(UtilJdbc.obtenerCadena(rs, "apellidopaterno"));
 				detalleServicio.getServicioProveedor().getProveedor().setApellidoMaterno(UtilJdbc.obtenerCadena(rs, "apellidomaterno"));
 				detalleServicio.getTipoServicio().setVisible(UtilJdbc.obtenerBoolean(rs, "visible"));
+				detalleServicio.getServicioPadre().setCodigoEntero(idServicio);
 				
 				resultado.add(detalleServicio);
 			}
@@ -2031,6 +2032,7 @@ public class ServicioNovaViajesDaoImpl implements ServicioNovaViajesDao {
 				detalleServicio.getTipoComprobante().setCodigoEntero(UtilJdbc.obtenerNumero(rs, "tipoComprobante"));
 				detalleServicio.getTipoComprobante().setNombre(UtilJdbc.obtenerCadena(rs, "tipoComprobanteNombre"));
 				detalleServicio.setNroComprobante(UtilJdbc.obtenerCadena(rs, "numeroComprobante"));
+				detalleServicio.getServicioPadre().setCodigoEntero(idServicio);
 				
 				resultado.add(detalleServicio);
 			}
@@ -2109,6 +2111,7 @@ public class ServicioNovaViajesDaoImpl implements ServicioNovaViajesDao {
 				detalleServicio.setNroComprobante(UtilJdbc.obtenerCadena(rs, "numeroComprobante"));
 				detalleServicio.getComprobanteAsociado().getTipoComprobante().setNombre(UtilJdbc.obtenerCadena(rs, "tipoObligacion"));
 				detalleServicio.getComprobanteAsociado().setNumeroComprobante(UtilJdbc.obtenerCadena(rs, "numeroObligacion"));
+				detalleServicio.getServicioPadre().setCodigoEntero(idServicio);
 				
 				resultado.add(detalleServicio);
 			}
@@ -2360,12 +2363,14 @@ public class ServicioNovaViajesDaoImpl implements ServicioNovaViajesDao {
 		String sql = "";
 		boolean resultado = false;
 		try{
-			sql = "{ ? = call negocio.fn_registrarcomprobanteobligacion(?,?,?,?)}";
+			sql = "{ ? = call negocio.fn_registrarcomprobanteobligacion(?,?,?,?,?,?)}";
 			cs = conn.prepareCall(sql);
 			int i=1;
 			cs.registerOutParameter(i++, Types.BOOLEAN);
 			cs.setInt(i++, detalle.getIdComprobanteGenerado().intValue());
 			cs.setInt(i++, detalle.getComprobanteAsociado().getCodigoEntero().intValue());
+			cs.setInt(i++, detalle.getCodigoEntero().intValue());
+			cs.setInt(i++, detalle.getServicioPadre().getCodigoEntero().intValue());
 			cs.setString(i++, detalle.getUsuarioCreacion());
 			cs.setString(i++, detalle.getIpCreacion());
 			
