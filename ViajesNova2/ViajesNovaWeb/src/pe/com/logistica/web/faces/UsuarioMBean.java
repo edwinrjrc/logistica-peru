@@ -273,7 +273,12 @@ public class UsuarioMBean extends BaseMBean {
 	}
 
 	public void consultarCambioClave(Integer id) {
-		this.setIdModalPopup("idModalfrcambioclaveusuario");
+		try {
+			this.setIdModalPopup("idModalfrcambioclaveusuario");
+			this.setUsuario(this.seguridadServicio.consultarUsuario(id));
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 
 	/**
