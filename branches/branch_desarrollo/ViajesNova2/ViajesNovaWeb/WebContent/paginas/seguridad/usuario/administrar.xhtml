@@ -87,7 +87,7 @@
 											<h:graphicImage height="25" width="20"
 												url="/resources/img/editar2.png" style="border:0" />
 										</a4j:commandLink>
-										<a4j:commandLink
+										<a4j:commandLink 
 											action="#{usuarioMBean.consultarCambioClave(row.codigoEntero)}"
 											oncomplete="#{rich:component('idModalfrcambioclaveusuario')}.show()"
 											render="idGrFrcambioclaveusu, idNomModalCCusu"
