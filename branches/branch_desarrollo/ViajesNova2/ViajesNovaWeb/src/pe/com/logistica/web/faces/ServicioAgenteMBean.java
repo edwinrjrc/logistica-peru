@@ -103,6 +103,7 @@ public class ServicioAgenteMBean extends BaseMBean {
 	public boolean nuevaVenta;
 	public boolean editarVenta;
 	private boolean servicioFee;
+	private boolean servicioFee2;
 	private boolean busquedaRealizada;
 	private boolean editarComision;
 	private boolean vendedor;
@@ -120,6 +121,8 @@ public class ServicioAgenteMBean extends BaseMBean {
 	private String nombreTitulo;
 	private Integer tipoEvento;
 	private String idModales;
+	
+	private int serviciosFee;
 
 	/**
 	 * 
@@ -326,7 +329,7 @@ public class ServicioAgenteMBean extends BaseMBean {
 		}
 
 		this.getServicioAgencia().setFechaServicio(new Date());
-		
+		this.setServiciosFee(0);
 	}
 
 	public void agregarServicio() {
@@ -356,6 +359,10 @@ public class ServicioAgenteMBean extends BaseMBean {
 
 				calcularTotales();
 
+				if (this.isServicioFee2()){
+					this.setServiciosFee(this.serviciosFee++);
+				}
+				this.setServicioFee2(false);
 				this.setServicioFee(false);
 				this.setListadoEmpresas(null);
 			}
@@ -551,17 +558,16 @@ public class ServicioAgenteMBean extends BaseMBean {
 	}
 
 	private void validarFee() throws ErrorRegistroDataException {
-		boolean tieneFee = false;
+		int fees = 0;
 
 		for (DetalleServicioAgencia detalle : this.getListadoDetalleServicio()) {
 			if (detalle.getTipoServicio().isEsFee()) {
-				tieneFee = true;
-				break;
+				fees++;
 			}
 		}
 
-		if (!tieneFee) {
-			throw new ErrorRegistroDataException("No se agrego el Fee de Venta");
+		if (this.serviciosFee != fees) {
+			throw new ErrorRegistroDataException("Debe agregar los Fee de Venta");
 		}
 	}
 
@@ -1053,6 +1059,7 @@ try {
 					}
 				}
 
+				this.setServicioFee2(maestroServicio.isEsFee());
 				this.setServicioFee(maestroServicio.isEsFee()
 						|| maestroServicio.isEsImpuesto());
 
@@ -2174,6 +2181,34 @@ try {
 	 */
 	public void setGuardoRelacionComprobantes(boolean guardoRelacionComprobantes) {
 		this.guardoRelacionComprobantes = guardoRelacionComprobantes;
+	}
+
+	/**
+	 * @return the serviciosFee
+	 */
+	public int getServiciosFee() {
+		return serviciosFee;
+	}
+
+	/**
+	 * @param serviciosFee the serviciosFee to set
+	 */
+	public void setServiciosFee(int serviciosFee) {
+		this.serviciosFee = serviciosFee;
+	}
+
+	/**
+	 * @return the servicioFee2
+	 */
+	public boolean isServicioFee2() {
+		return servicioFee2;
+	}
+
+	/**
+	 * @param servicioFee2 the servicioFee2 to set
+	 */
+	public void setServicioFee2(boolean servicioFee2) {
+		this.servicioFee2 = servicioFee2;
 	}
 
 }

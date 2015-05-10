@@ -90,6 +90,13 @@
 						</rich:column>
 						<rich:column>
 							<f:facet name="header">
+								<h:outputText value="Tipo Pago" />
+							</f:facet>
+							<h:outputText value="#{fila.tipoPago.nombre}">
+							</h:outputText>
+						</rich:column>
+						<rich:column>
+							<f:facet name="header">
 								<h:outputText value="Sustento" />
 							</f:facet>
 							<a4j:commandButton value="Ver" action="#{servicioAgenteMBean.verArchivo(fila.codigoEntero)}"
