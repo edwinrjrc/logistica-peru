@@ -3,10 +3,12 @@
  */
 package pe.com.logistica.web.faces;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.util.Date;
 import java.util.List;
+import java.util.StringTokenizer;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
@@ -14,10 +16,15 @@ import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.naming.NamingException;
 import javax.servlet.ServletContext;
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
+import org.richfaces.event.FileUploadEvent;
+import org.richfaces.model.UploadedFile;
 
 import pe.com.logistica.bean.negocio.Comprobante;
 import pe.com.logistica.bean.negocio.PagoServicio;
@@ -252,6 +259,55 @@ public class ObligacionPorPagarMBean extends BaseMBean {
 	
 	public void registrarNuevoPago(){
 		this.setPagoComprobante(null);
+	}
+	
+	public void listener(FileUploadEvent event) throws Exception {
+		UploadedFile item = event.getUploadedFile();
+
+		String nombre = item.getName();
+		StringTokenizer stk = new StringTokenizer(nombre,".");
+		String archivoNombre = stk.nextToken();
+		if (stk.hasMoreTokens()){
+			archivoNombre = stk.nextToken();
+		}
+		byte[] arregloDatos = IOUtils.toByteArray(item.getInputStream());
+		this.getPagoComprobante().setNombreArchivo(nombre);
+		this.getPagoComprobante().setExtensionArchivo(archivoNombre);
+		this.getPagoComprobante().setSustentoPagoByte(arregloDatos);
+		this.getPagoComprobante().setTipoContenido(item.getContentType());
+	}
+	
+	public void verArchivo(Integer codigoPago){
+		for (PagoServicio pago : this.listaPagos ){
+			if (pago.getCodigoEntero().intValue() == codigoPago.intValue()){
+				this.setPagoComprobante(pago);
+				break;
+			}
+		}
+	}
+	
+	public void exportarArchivo(){
+		try {
+			HttpServletResponse response = obtenerResponse();
+			response.setContentType(pagoComprobante.getTipoContenido());
+			response.setHeader("Content-disposition",
+					"attachment;filename="+this.getPagoComprobante().getNombreArchivo());
+			response.setHeader("Content-Transfer-Encoding", "binary");
+			
+			FacesContext facesContext = obtenerContexto();
+			
+			ServletOutputStream respuesta = response.getOutputStream();
+			if (this.getPagoComprobante()!=null && this.getPagoComprobante().getSustentoPagoByte()!=null){
+				respuesta.write(this.getPagoComprobante().getSustentoPagoByte());
+			}
+			
+			respuesta.close();
+			respuesta.flush();
+			
+			facesContext.responseComplete();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	/**

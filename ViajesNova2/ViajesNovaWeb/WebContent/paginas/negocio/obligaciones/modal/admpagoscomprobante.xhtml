@@ -90,11 +90,18 @@
 						</rich:column>
 						<rich:column>
 							<f:facet name="header">
+								<h:outputText value="Tipo Pago" />
+							</f:facet>
+							<h:outputText value="#{fila.tipoPago.nombre}">
+							</h:outputText>
+						</rich:column>
+						<rich:column>
+							<f:facet name="header">
 								<h:outputText value="Sustento" />
 							</f:facet>
-							<a4j:commandButton value="Ver" action="#{servicioAgenteMBean.verArchivo(fila.codigoEntero)}"
+							<a4j:commandButton value="Ver" action="#{obligacionPorPagarMBean.verArchivo(fila.codigoEntero)}"
 							rendered="#{fila.tieneSustento}"
-							oncomplete="document.getElementById('idformadmservicios:idbtnExportarArchivo').click();">
+							oncomplete="document.getElementById('idformadmobligatorios:idbtnExportarArchivo').click();">
 							</a4j:commandButton>
 						</rich:column>
 						<f:facet name="header">

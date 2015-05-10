@@ -16,6 +16,7 @@ import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 
 import pe.com.logistica.bean.Util.UtilParse;
+import pe.com.logistica.bean.base.BaseVO;
 import pe.com.logistica.bean.negocio.Comprobante;
 import pe.com.logistica.bean.negocio.CuotaPago;
 import pe.com.logistica.bean.negocio.DetalleComprobante;
@@ -1659,6 +1660,13 @@ public class ServicioNovaViajesDaoImpl implements ServicioNovaViajesDao {
 				pago.setNombreArchivo(UtilJdbc.obtenerCadena(rs, "nombrearchivo"));
 				pago.setExtensionArchivo(UtilJdbc.obtenerCadena(rs, "extensionarchivo"));
 				pago.setTipoContenido(UtilJdbc.obtenerCadena(rs, "tipocontenido"));
+				boolean esDetraccion = UtilJdbc.obtenerBoolean(rs, "espagodetraccion");
+				boolean esRetencion = UtilJdbc.obtenerBoolean(rs, "espagoretencion");
+				
+				BaseVO tipoPago = new BaseVO();
+				tipoPago.setCodigoCadena((esDetraccion?"D":(esRetencion?"R":"")));
+				tipoPago.setNombre((esDetraccion?"Detracción":(esRetencion?"Retención":"Normal")));
+				pago.setTipoPago(tipoPago);
 				resultado.add(pago);
 			}
 			
@@ -1720,6 +1728,14 @@ public class ServicioNovaViajesDaoImpl implements ServicioNovaViajesDao {
 				pago.setNombreArchivo(UtilJdbc.obtenerCadena(rs, "nombrearchivo"));
 				pago.setExtensionArchivo(UtilJdbc.obtenerCadena(rs, "extensionarchivo"));
 				pago.setTipoContenido(UtilJdbc.obtenerCadena(rs, "tipocontenido"));
+				
+				boolean esDetraccion = UtilJdbc.obtenerBoolean(rs, "espagodetraccion");
+				boolean esRetencion = UtilJdbc.obtenerBoolean(rs, "espagoretencion");
+				
+				BaseVO tipoPago = new BaseVO();
+				tipoPago.setCodigoCadena((esDetraccion?"D":(esRetencion?"R":"")));
+				tipoPago.setNombre((esDetraccion?"Detracción":(esRetencion?"Retención":"Normal")));
+				pago.setTipoPago(tipoPago);
 				resultado.add(pago);
 			}
 			

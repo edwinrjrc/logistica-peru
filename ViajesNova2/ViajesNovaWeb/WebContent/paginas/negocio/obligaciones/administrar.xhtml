@@ -157,6 +157,9 @@
 								<a4j:commandButton id="idBotonModalError" style="display:none;"
 									type="button"
 									oncomplete="#{rich:component('idModalError')}.show();" />
+								<h:commandButton value="Exportar" style="display:none"
+									id="idbtnExportarArchivo"
+									action="#{obligacionPorPagarMBean.exportarArchivo()}" />
 							</h:panelGrid>
 						</h:panelGroup>
 					</f:facet>
