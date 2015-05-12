@@ -376,6 +376,11 @@
 										<rich:message for="idPrecUnitario" showDetail="false"
 											showSummary="true" ajaxRendered="true" />
 									</h:panelGrid>
+									
+									<h:outputText value=""
+										rendered="#{servicioAgenteMBean.detalleServicio.configuracionTipoServicio.muestraPrecioBase}" />
+									<h:outputText value=""
+										rendered="#{servicioAgenteMBean.detalleServicio.configuracionTipoServicio.muestraPrecioBase}" />
 								</h:panelGrid>
 
 								<h:panelGrid columns="4" cellpadding="0" cellspacing="0"
@@ -391,11 +396,16 @@
 										<rich:message for="idFecServicio" showDetail="false"
 											showSummary="true" ajaxRendered="true"></rich:message>
 									</h:panelGrid>
+									
 									<h:outputText value="Fecha Regreso"
 										rendered="#{servicioAgenteMBean.detalleServicio.configuracionTipoServicio.muestraFechaRegreso}" />
 									<rich:calendar datePattern="dd/MM/yyyy"
 										rendered="#{servicioAgenteMBean.detalleServicio.configuracionTipoServicio.muestraFechaRegreso}"
 										value="#{servicioAgenteMBean.detalleServicio.fechaRegreso}"></rich:calendar>
+										
+									<h:outputText value="" rendered="#{servicioAgenteMBean.detalleServicio.configuracionTipoServicio.muestraFechaServicio}" />
+									<h:outputText value="" rendered="#{servicioAgenteMBean.detalleServicio.configuracionTipoServicio.muestraFechaServicio}" />
+									
 								</h:panelGrid>
 
 								<h:panelGrid columns="4" cellpadding="0" cellspacing="0"
@@ -524,15 +534,15 @@
 								<h:panelGrid columns="2" cellpadding="0" cellspacing="0"
 									border="0" style="width:100%;" id="idTotalesServicios"
 									columnClasses="col1RSPN,col2RSPN">
-									<h:outputText value="Total Comision" />
+									<h:outputText value="Total Comision (Inc. IGV)" />
 									<h:outputText
 										value="#{servicioAgenteMBean.servicioAgencia.montoTotalComision}">
 										<f:convertNumber pattern="###,##0.00" locale="en_US" />
 									</h:outputText>
 
-									<h:outputText value="Total IGV" />
+									<h:outputText value="Total Fee" />
 									<h:outputText
-										value="#{servicioAgenteMBean.servicioAgencia.montoTotalIGV}">
+										value="#{servicioAgenteMBean.servicioAgencia.montoTotalFee}">
 										<f:convertNumber pattern="###,##0.00" locale="en_US" />
 									</h:outputText>
 

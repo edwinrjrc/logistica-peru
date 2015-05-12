@@ -103,7 +103,7 @@ public class ServicioAgenteMBean extends BaseMBean {
 	public boolean nuevaVenta;
 	public boolean editarVenta;
 	private boolean servicioFee;
-	private boolean servicioFee2;
+	private boolean requiereFee;
 	private boolean busquedaRealizada;
 	private boolean editarComision;
 	private boolean vendedor;
@@ -359,10 +359,10 @@ public class ServicioAgenteMBean extends BaseMBean {
 
 				calcularTotales();
 
-				if (this.isServicioFee2()){
-					this.setServiciosFee(this.serviciosFee++);
+				if (this.isRequiereFee()){
+					this.serviciosFee++;
 				}
-				this.setServicioFee2(false);
+				this.setRequiereFee(false);
 				this.setServicioFee(false);
 				this.setListadoEmpresas(null);
 			}
@@ -567,7 +567,7 @@ public class ServicioAgenteMBean extends BaseMBean {
 		}
 
 		if (this.serviciosFee != fees) {
-			throw new ErrorRegistroDataException("Debe agregar los Fee de Venta");
+			throw new ErrorRegistroDataException("Debe agregar Los Fee de Venta");
 		}
 	}
 
@@ -1058,8 +1058,9 @@ try {
 						break;
 					}
 				}
-
-				this.setServicioFee2(maestroServicio.isEsFee());
+				
+				this.setRequiereFee(maestroServicio.isRequiereFee());
+				
 				this.setServicioFee(maestroServicio.isEsFee()
 						|| maestroServicio.isEsImpuesto());
 
@@ -1142,9 +1143,27 @@ try {
 					this.listadoDetalleServicio.remove(i);
 				}
 			}
+			if (detalleServicio.getTipoServicio().isRequiereFee()){
+				borrarServiciosFee();
+				this.setServiciosFee(0);
+			}
+			if (detalleServicio.getTipoServicio().isEsFee()){
+				this.serviciosFee--;
+			}
+			
 		}
 
 		calcularTotales();
+	}
+	
+	private void borrarServiciosFee(){
+		for (int i = 0; i < listadoDetalleServicio.size(); i++){
+			DetalleServicioAgencia detalleFee = listadoDetalleServicio.get(i);
+			if (detalleFee.getTipoServicio().isEsFee()){
+				listadoDetalleServicio.remove(i);
+				borrarServiciosFee();
+			}
+		}
 	}
 
 	public void buscarDestino() {
@@ -2198,17 +2217,17 @@ try {
 	}
 
 	/**
-	 * @return the servicioFee2
+	 * @return the requiereFee
 	 */
-	public boolean isServicioFee2() {
-		return servicioFee2;
+	public boolean isRequiereFee() {
+		return requiereFee;
 	}
 
 	/**
-	 * @param servicioFee2 the servicioFee2 to set
+	 * @param requiereFee the requiereFee to set
 	 */
-	public void setServicioFee2(boolean servicioFee2) {
-		this.servicioFee2 = servicioFee2;
+	public void setRequiereFee(boolean requiereFee) {
+		this.requiereFee = requiereFee;
 	}
 
 }
