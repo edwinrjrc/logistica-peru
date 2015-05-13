@@ -7,6 +7,7 @@ import java.io.Serializable;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.application.FacesMessage.Severity;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -149,6 +150,10 @@ public class BaseMBean implements Serializable {
 	public HttpServletResponse obtenerResponse() {
 		return (HttpServletResponse) obtenerContexto().getExternalContext()
 				.getResponse();
+	}
+	
+	public ExternalContext obtenerContextoExterno(){
+		return obtenerContexto().getExternalContext();
 	}
 
 	public void agregarMensaje(String idComponente, String mensajeSuma,
