@@ -378,6 +378,51 @@
 							</h:panelGrid>
 						</h:panelGrid>
 					</rich:tab>
+					<rich:tab>
+						<f:facet name="header">
+							<h:outputText value="Documentos Adicionales" />
+						</f:facet>
+						<rich:dataTable id="idTablaDocAdicional"
+							value="#{servicioAgenteMBean.listaDocumentosAdicionales}"
+							var="fila" style="width:100%;">
+							<rich:column>
+								<f:facet name="header">
+									<h:outputText value="Documento" />
+								</f:facet>
+								<h:selectOneMenu value="#{fila.codigoEntero}">
+									<f:selectItem itemLabel="-Seleccione-" />
+									<f:selectItems
+										value="#{catalogoMBean.catalogoDocumentosAdicionales}"></f:selectItems>
+								</h:selectOneMenu>
+							</rich:column>
+							<rich:column>
+								<f:facet name="header">
+									<h:outputText value="Archivo" />
+								</f:facet>
+								<rich:fileUpload maxFilesQuantity="1" id="idUploadAdicional"
+									doneLabel="Archivo Adjuntado"
+									fileUploadListener="#{servicioAgenteMBean.listenerAdicional}"
+									acceptedTypes="jpg, gif, png, jpeg, pdf, JPG, GIF, PNG, JPEG, PDF"
+									ontyperejected="alert('Only JPG, GIF, PNG, PDF files are accepted');"
+									style="height:80px; width:400px;">
+									<a4j:ajax event="uploadcomplete" execute="@none" />
+								</rich:fileUpload>
+							</rich:column>
+							<rich:column>
+								<a4j:commandLink render="idTablaDocAdicional">
+									<h:graphicImage style="border:0px;"
+										value="#{facesContext.externalContext.requestContextPath}/../resources/img/tacho.gif" />
+								</a4j:commandLink>
+							</rich:column>
+							<f:facet name="header">
+								<h:panelGrid border="0" cellpadding="0" cellspacing="0"
+									style="width:100%;text-align:right;">
+									<a4j:commandButton value="Agregar" render="idTablaDocAdicional"
+										action="#{servicioAgenteMBean.agregarDocumentoAdicional()}"></a4j:commandButton>
+								</h:panelGrid>
+							</f:facet>
+						</rich:dataTable>
+					</rich:tab>
 					<rich:tab
 						rendered="#{servicioAgenteMBean.servicioAgencia.formaPago.codigoEntero == 2}">
 						<f:facet name="header">

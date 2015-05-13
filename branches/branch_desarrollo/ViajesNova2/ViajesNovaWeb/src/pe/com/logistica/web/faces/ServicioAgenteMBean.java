@@ -36,6 +36,7 @@ import pe.com.logistica.bean.negocio.Cliente;
 import pe.com.logistica.bean.negocio.Comprobante;
 import pe.com.logistica.bean.negocio.Destino;
 import pe.com.logistica.bean.negocio.DetalleServicioAgencia;
+import pe.com.logistica.bean.negocio.DocumentoAdicional;
 import pe.com.logistica.bean.negocio.EventoObsAnu;
 import pe.com.logistica.bean.negocio.MaestroServicio;
 import pe.com.logistica.bean.negocio.PagoServicio;
@@ -99,6 +100,7 @@ public class ServicioAgenteMBean extends BaseMBean {
 	private List<PagoServicio> listaPagosComprobante;
 	private List<Comprobante> listaComprobantes;
 	private List<Proveedor> listadoProveedores;
+	private List<DocumentoAdicional> listaDocumentosAdicionales;
 	
 	public boolean nuevaVenta;
 	public boolean editarVenta;
@@ -1145,9 +1147,6 @@ try {
 			}
 			if (detalleServicio.getTipoServicio().isRequiereFee()){
 				borrarServiciosFee();
-				this.setServiciosFee(0);
-			}
-			if (detalleServicio.getTipoServicio().isEsFee()){
 				this.serviciosFee--;
 			}
 			
@@ -1560,7 +1559,19 @@ try {
 			e.printStackTrace();
 		}
 	}
+	
+	public void agregarDocumentoAdicional(){
+		this.getListaDocumentosAdicionales().add(new DocumentoAdicional());
+	}
+	
+	public void listenerAdicional(FileUploadEvent event){
+		
+	}
 
+	/**
+	 * ===================================================================================================
+	 */
+	
 	/**
 	 * @param listadoServicioAgencia
 	 *            the listadoServicioAgencia to set
@@ -2228,6 +2239,24 @@ try {
 	 */
 	public void setRequiereFee(boolean requiereFee) {
 		this.requiereFee = requiereFee;
+	}
+
+	/**
+	 * @return the listaDocumentosAdicionales
+	 */
+	public List<DocumentoAdicional> getListaDocumentosAdicionales() {
+		if (listaDocumentosAdicionales == null){
+			listaDocumentosAdicionales = new ArrayList<DocumentoAdicional>();
+		}
+		return listaDocumentosAdicionales;
+	}
+
+	/**
+	 * @param listaDocumentosAdicionales the listaDocumentosAdicionales to set
+	 */
+	public void setListaDocumentosAdicionales(
+			List<DocumentoAdicional> listaDocumentosAdicionales) {
+		this.listaDocumentosAdicionales = listaDocumentosAdicionales;
 	}
 
 }
