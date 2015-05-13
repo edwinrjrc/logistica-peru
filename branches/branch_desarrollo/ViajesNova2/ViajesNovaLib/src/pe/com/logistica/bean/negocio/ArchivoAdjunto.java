@@ -24,6 +24,7 @@ public class ArchivoAdjunto extends Base{
 	private String tipoContenido;
 	private String content;
 	private byte[] datos;
+	private String extensionArchivo;
 	
 	
 	public ArchivoAdjunto() {
@@ -101,6 +102,20 @@ public class ArchivoAdjunto extends Base{
 	 */
 	public void setContent(String content) {
 		this.content = content;
+	}
+
+	/**
+	 * @return the extensionArchivo
+	 */
+	public String getExtensionArchivo() {
+		return extensionArchivo;
+	}
+
+	/**
+	 * @param extensionArchivo the extensionArchivo to set
+	 */
+	public void setExtensionArchivo(String extensionArchivo) {
+		this.extensionArchivo = extensionArchivo;
 	}
 
 }

@@ -405,7 +405,8 @@
 									acceptedTypes="jpg, gif, png, jpeg, pdf, JPG, GIF, PNG, JPEG, PDF"
 									ontyperejected="alert('Only JPG, GIF, PNG, PDF files are accepted');"
 									style="height:80px; width:400px;">
-									<a4j:ajax event="uploadcomplete" execute="@none" />
+									<a4j:ajax event="uploadcomplete" execute="@none"  />
+									<f:param name="tipo" value="12"></f:param>
 								</rich:fileUpload>
 							</rich:column>
 							<rich:column>

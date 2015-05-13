@@ -10,11 +10,13 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.StringTokenizer;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.SelectItem;
@@ -1565,7 +1567,32 @@ try {
 	}
 	
 	public void listenerAdicional(FileUploadEvent event){
+		UploadedFile item = event.getUploadedFile();
 		
+		String tipo = obtenerRequest().getParameter("tipo");
+		
+		Map<String, String> parametros = obtenerContextoExterno().getRequestParameterMap();
+		
+		System.out.println("tipo ::"+tipo);
+		System.out.println("tipo2 ::"+parametros.get("tipo"));
+
+		try {
+			String nombre = item.getName();
+			StringTokenizer stk = new StringTokenizer(nombre,".");
+			String archivoNombre = stk.nextToken();
+			if (stk.hasMoreTokens()){
+				archivoNombre = stk.nextToken();
+			}
+			byte[] arregloDatos = IOUtils.toByteArray(item.getInputStream());
+			DocumentoAdicional documento = new DocumentoAdicional(); 
+			
+			documento.getArchivo().setNombreArchivo(nombre);
+			documento.getArchivo().setExtensionArchivo(archivoNombre);
+			documento.getArchivo().setDatos(arregloDatos);
+			documento.getArchivo().setTipoContenido(item.getContentType());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	/**
