@@ -23,6 +23,7 @@ import pe.com.logistica.bean.negocio.CorreoMasivo;
 import pe.com.logistica.bean.negocio.CuotaPago;
 import pe.com.logistica.bean.negocio.DetalleServicioAgencia;
 import pe.com.logistica.bean.negocio.Direccion;
+import pe.com.logistica.bean.negocio.DocumentoAdicional;
 import pe.com.logistica.bean.negocio.EventoObsAnu;
 import pe.com.logistica.bean.negocio.MaestroServicio;
 import pe.com.logistica.bean.negocio.PagoServicio;
@@ -430,6 +431,16 @@ public class NegocioServicioImpl implements NegocioServicio {
 	@Override
 	public void registrarComprobanteObligacion(ServicioAgencia servicioAgencia) throws SQLException, Exception{
 		ejbSession.registrarRelacionComproObligacion(servicioAgencia);
+	}
+	
+	@Override
+	public boolean grabarDocumentosAdicionales(List<DocumentoAdicional> lista) throws ErrorRegistroDataException, SQLException, Exception{
+		return ejbSession.grabarDocumentosAdicionales(lista);
+	}
+	
+	@Override
+	public List<DocumentoAdicional> listarDocumentosAdicionales(Integer idServicio) throws SQLException{
+		return ejbSession.listarDocumentosAdicionales(idServicio);
 	}
 }
 	
