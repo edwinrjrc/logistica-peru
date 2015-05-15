@@ -32,6 +32,7 @@ import pe.com.logistica.bean.negocio.CuotaPago;
 import pe.com.logistica.bean.negocio.Destino;
 import pe.com.logistica.bean.negocio.DetalleServicioAgencia;
 import pe.com.logistica.bean.negocio.Direccion;
+import pe.com.logistica.bean.negocio.DocumentoAdicional;
 import pe.com.logistica.bean.negocio.EventoObsAnu;
 import pe.com.logistica.bean.negocio.Maestro;
 import pe.com.logistica.bean.negocio.MaestroServicio;
@@ -2191,5 +2192,44 @@ public class NegocioSession implements NegocioSessionRemote,
 				conn.close();
 			}
 		}
+	}
+	
+	@Override
+	public boolean grabarDocumentosAdicionales(List<DocumentoAdicional> listaDocumentos) throws ErrorRegistroDataException, SQLException, Exception{
+		
+		Connection conn = null;
+		ServicioNovaViajesDao servicioNovaViajesDao = new ServicioNovaViajesDaoImpl();
+		try{
+			conn = UtilConexion.obtenerConexion();
+			for (DocumentoAdicional documentoAdicional : listaDocumentos) {
+				boolean resultado = servicioNovaViajesDao.grabarDocumentoAdicional(documentoAdicional, conn);
+				if (!resultado){
+					throw new ErrorRegistroDataException("No se pudo completar el registro de documentos adicionales");
+				}
+			}
+			
+			return true;
+		}
+		catch (ErrorRegistroDataException e){
+			throw new ErrorRegistroDataException(e);
+		}
+		catch (SQLException e){
+			throw new SQLException(e);
+		}
+		catch (Exception e){
+			throw new Exception(e);
+		} 
+		finally{
+			if (conn != null){
+				conn.close();
+			}
+		}
+		
+	}
+	
+	@Override
+	public List<DocumentoAdicional> listarDocumentosAdicionales(Integer idServicio) throws SQLException{
+		ServicioNovaViajesDao servicioNovaViajesDao = new ServicioNovaViajesDaoImpl();
+		return servicioNovaViajesDao.listarDocumentosAdicionales(idServicio);
 	}
 }
