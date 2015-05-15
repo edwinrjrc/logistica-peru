@@ -21,6 +21,7 @@ import pe.com.logistica.bean.negocio.Comprobante;
 import pe.com.logistica.bean.negocio.CuotaPago;
 import pe.com.logistica.bean.negocio.DetalleComprobante;
 import pe.com.logistica.bean.negocio.DetalleServicioAgencia;
+import pe.com.logistica.bean.negocio.DocumentoAdicional;
 import pe.com.logistica.bean.negocio.EventoObsAnu;
 import pe.com.logistica.bean.negocio.PagoServicio;
 import pe.com.logistica.bean.negocio.ServicioAgencia;
@@ -1971,7 +1972,6 @@ public class ServicioNovaViajesDaoImpl implements ServicioNovaViajesDao {
 	public void actualizarComprobantesServicio(boolean generoComprobantes, ServicioAgencia servicio, Connection conn) throws SQLException, Exception{
 		CallableStatement cs = null;
 		String sql = "{ ? = call negocio.fn_actualizarcomprobanteservicio(?,?,?,?)}";
-		int resultado = 0;
 		try {
 			
 			cs = conn.prepareCall(sql);
@@ -2434,6 +2434,94 @@ public class ServicioNovaViajesDaoImpl implements ServicioNovaViajesDao {
 			}
 		}
 		
+	}
+	
+	@Override
+	public boolean grabarDocumentoAdicional(DocumentoAdicional documento, Connection conn) throws SQLException{
+		CallableStatement cs = null;
+		String sql = "{ ? = call negocio.fn_registrardocumentosustentoservicio(?,?,?,?,?,?,?,?)}";
+		try {
+			conn = UtilConexion.obtenerConexion();
+			cs = conn.prepareCall(sql);
+			int i=1;
+			cs.registerOutParameter(i++, Types.BOOLEAN);
+			cs.setInt(i++, documento.getIdServicio().intValue());
+			cs.setInt(i++, documento.getDocumento().getCodigoEntero().intValue());
+			cs.setBinaryStream(i++, new ByteArrayInputStream(documento.getArchivo().getDatos()), documento.getArchivo().getDatos().length);
+			cs.setString(i++, documento.getArchivo().getNombreArchivo());
+			cs.setString(i++, documento.getArchivo().getExtensionArchivo());
+			cs.setString(i++, documento.getArchivo().getContent());
+			cs.setString(i++, documento.getUsuarioCreacion());
+			cs.setString(i++, documento.getIpCreacion());
+			cs.execute();
+			
+			return cs.getBoolean(1);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (cs != null) {
+					cs.close();
+				}
+			} catch (SQLException e) {
+				throw new SQLException(e);
+			}
+		}
+		return false;
+	}
+	
+	@Override
+	public List<DocumentoAdicional> listarDocumentosAdicionales(Integer idServicio) throws SQLException{
+		List<DocumentoAdicional> resultado = null;
+		CallableStatement cs = null;
+		String sql = "{ ? = call negocio.fn_listardocumentosadicionales(?)}";
+		Connection conn = null;
+		ResultSet rs = null;
+		try {
+			conn = UtilConexion.obtenerConexion();
+			cs = conn.prepareCall(sql);
+			int i=1;
+			cs.registerOutParameter(i++, Types.OTHER);
+			cs.setInt(i++, idServicio.intValue());
+			cs.execute();
+			
+			rs = (ResultSet) cs.getObject(1);
+			resultado = new ArrayList<DocumentoAdicional>();
+			DocumentoAdicional documento = null;
+			while (rs.next()){
+				documento = new DocumentoAdicional();
+				
+				documento.setCodigoEntero(UtilJdbc.obtenerNumero(rs, "id"));
+				documento.setIdServicio(UtilJdbc.obtenerNumero(rs, "idservicio"));
+				documento.getDocumento().setCodigoEntero(UtilJdbc.obtenerNumero(rs, "idtipodocumento"));
+				documento.getDocumento().setNombre(UtilJdbc.obtenerCadena(rs, "nombredocumento"));
+				byte[] sustento = rs.getBytes("archivo");
+				documento.getArchivo().setDatos(sustento);
+				documento.getArchivo().setNombreArchivo(UtilJdbc.obtenerCadena(rs, "nombrearchivo"));
+				documento.getArchivo().setContent(UtilJdbc.obtenerCadena(rs, "tipocontenido"));
+				documento.getArchivo().setExtensionArchivo(UtilJdbc.obtenerCadena(rs, "extensionarchivo"));
+				
+				resultado.add(documento);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (rs != null){
+					rs.close();
+				}
+				if (cs != null) {
+					cs.close();
+				}
+				if (conn != null){
+					conn.close();
+				}
+			} catch (SQLException e) {
+				throw new SQLException(e);
+			}
+		}
+		
+		return resultado;
 	}
 }
 

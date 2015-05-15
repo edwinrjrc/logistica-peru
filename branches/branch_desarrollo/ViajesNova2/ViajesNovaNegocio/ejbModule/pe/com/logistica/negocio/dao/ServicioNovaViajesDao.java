@@ -12,6 +12,7 @@ import pe.com.logistica.bean.negocio.Comprobante;
 import pe.com.logistica.bean.negocio.CuotaPago;
 import pe.com.logistica.bean.negocio.DetalleComprobante;
 import pe.com.logistica.bean.negocio.DetalleServicioAgencia;
+import pe.com.logistica.bean.negocio.DocumentoAdicional;
 import pe.com.logistica.bean.negocio.EventoObsAnu;
 import pe.com.logistica.bean.negocio.PagoServicio;
 import pe.com.logistica.bean.negocio.ServicioAgencia;
@@ -22,9 +23,10 @@ import pe.com.logistica.bean.negocio.ServicioAgenciaBusqueda;
  *
  */
 public interface ServicioNovaViajesDao {
-	
-	Integer ingresarCabeceraServicio(ServicioAgencia servicioAgencia) throws SQLException;
-	
+
+	Integer ingresarCabeceraServicio(ServicioAgencia servicioAgencia)
+			throws SQLException;
+
 	Integer ingresarCabeceraServicio(ServicioAgencia servicioAgencia,
 			Connection conn) throws SQLException;
 
@@ -42,8 +44,9 @@ public interface ServicioNovaViajesDao {
 
 	public ServicioAgencia consultarServiciosVenta2(int idServicio)
 			throws SQLException;
-	
-	public List<DetalleServicioAgencia> consultaServicioDetalle(int idServicio) throws SQLException;
+
+	public List<DetalleServicioAgencia> consultaServicioDetalle(int idServicio)
+			throws SQLException;
 
 	List<ServicioAgencia> consultarServiciosVenta(
 			ServicioAgenciaBusqueda servicioAgencia) throws SQLException;
@@ -74,14 +77,15 @@ public interface ServicioNovaViajesDao {
 
 	List<DetalleServicioAgencia> consultaServicioDetalleHijos(int idServicio,
 			int idSerPadre, Connection conn) throws SQLException;
-	
+
 	void registrarSaldosServicio(ServicioAgencia servicioAgencia,
 			Connection conn) throws SQLException;
-	
+
 	void registrarPagoServicio(PagoServicio pago) throws SQLException;
-	
-	List<PagoServicio> listarPagosServicio(Integer idServicio) throws SQLException;
-	
+
+	List<PagoServicio> listarPagosServicio(Integer idServicio)
+			throws SQLException;
+
 	BigDecimal consultarSaldoServicio(Integer idServicio) throws SQLException;
 
 	void actualizarServicioVenta(ServicioAgencia servicioAgencia)
@@ -92,8 +96,10 @@ public interface ServicioNovaViajesDao {
 
 	Integer registrarComprobante(Comprobante comprobante, Connection conn)
 			throws SQLException, Exception;
-	
-	public Integer registrarDetalleComprobante(List<DetalleComprobante> listaDetalle, Integer idComprobante, Connection conn) throws SQLException, Exception;
+
+	public Integer registrarDetalleComprobante(
+			List<DetalleComprobante> listaDetalle, Integer idComprobante,
+			Connection conn) throws SQLException, Exception;
 
 	void actualizarComprobantesServicio(boolean generoComprobantes,
 			ServicioAgencia servicio, Connection conn) throws SQLException,
@@ -105,7 +111,8 @@ public interface ServicioNovaViajesDao {
 	List<Comprobante> consultaObligacionXPagar(Comprobante comprobante)
 			throws SQLException;
 
-	boolean registrarObligacionXPagar(Comprobante comprobante) throws SQLException;
+	boolean registrarObligacionXPagar(Comprobante comprobante)
+			throws SQLException;
 
 	void registrarPagoObligacion(PagoServicio pago) throws SQLException;
 
@@ -121,4 +128,10 @@ public interface ServicioNovaViajesDao {
 
 	List<DetalleServicioAgencia> consultaServDetComprobanteObligacion(
 			int idServicio) throws SQLException;
+
+	boolean grabarDocumentoAdicional(DocumentoAdicional documento,
+			Connection conn) throws SQLException;
+
+	List<DocumentoAdicional> listarDocumentosAdicionales(Integer idServicio)
+			throws SQLException;
 }

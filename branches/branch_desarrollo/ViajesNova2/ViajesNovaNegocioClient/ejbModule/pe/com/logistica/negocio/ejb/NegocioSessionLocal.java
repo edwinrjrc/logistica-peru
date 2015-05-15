@@ -16,6 +16,7 @@ import pe.com.logistica.bean.negocio.CorreoMasivo;
 import pe.com.logistica.bean.negocio.CuotaPago;
 import pe.com.logistica.bean.negocio.DetalleServicioAgencia;
 import pe.com.logistica.bean.negocio.Direccion;
+import pe.com.logistica.bean.negocio.DocumentoAdicional;
 import pe.com.logistica.bean.negocio.EventoObsAnu;
 import pe.com.logistica.bean.negocio.MaestroServicio;
 import pe.com.logistica.bean.negocio.PagoServicio;
@@ -207,4 +208,10 @@ public interface NegocioSessionLocal {
 			Exception;
 
 	public List<DetalleServicioAgencia> consultarDetServComprobanteObligacion(Integer idServicio) throws SQLException, Exception;
+
+	boolean grabarDocumentosAdicionales(List<DocumentoAdicional> listaDocumentos)
+			throws ErrorRegistroDataException, SQLException, Exception;
+
+	List<DocumentoAdicional> listarDocumentosAdicionales(Integer idServicio)
+			throws SQLException;
 }
