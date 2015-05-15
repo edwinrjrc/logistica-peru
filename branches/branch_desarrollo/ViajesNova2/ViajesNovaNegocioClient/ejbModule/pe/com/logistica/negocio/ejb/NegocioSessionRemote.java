@@ -16,6 +16,7 @@ import pe.com.logistica.bean.negocio.CorreoMasivo;
 import pe.com.logistica.bean.negocio.CuotaPago;
 import pe.com.logistica.bean.negocio.DetalleServicioAgencia;
 import pe.com.logistica.bean.negocio.Direccion;
+import pe.com.logistica.bean.negocio.DocumentoAdicional;
 import pe.com.logistica.bean.negocio.EventoObsAnu;
 import pe.com.logistica.bean.negocio.MaestroServicio;
 import pe.com.logistica.bean.negocio.PagoServicio;
@@ -82,8 +83,8 @@ public interface NegocioSessionRemote {
 			throws SQLException, Exception;
 
 	DetalleServicioAgencia agregarServicioVenta(
-			DetalleServicioAgencia detalleServicio) throws ErrorRegistroDataException, SQLException,
-			Exception;
+			DetalleServicioAgencia detalleServicio)
+			throws ErrorRegistroDataException, SQLException, Exception;
 
 	public List<DetalleServicioAgencia> ordenarServiciosVenta(
 			List<DetalleServicioAgencia> listaServicio) throws SQLException,
@@ -99,7 +100,8 @@ public interface NegocioSessionRemote {
 			throws SQLException, Exception;
 
 	public List<ServicioAgencia> listarServicioVenta(
-			ServicioAgenciaBusqueda servicioAgencia) throws SQLException, Exception;
+			ServicioAgenciaBusqueda servicioAgencia) throws SQLException,
+			Exception;
 
 	public ServicioAgencia consultarServicioVenta(int idServicio)
 			throws SQLException, Exception;
@@ -155,37 +157,47 @@ public interface NegocioSessionRemote {
 	List<MaestroServicio> listarMaestroServicioAdm() throws SQLException,
 			Exception;
 
-	public List<BaseVO> consultaServiciosDependientes(Integer idServicio) throws SQLException, Exception;
+	public List<BaseVO> consultaServiciosDependientes(Integer idServicio)
+			throws SQLException, Exception;
 
 	boolean ingresarConsolidador(Consolidador consolidador)
 			throws SQLException, Exception;
-	
-	public boolean actualizarConsolidador(Consolidador consolidador) throws SQLException, Exception;
-	
-	public List<Consolidador> listarConsolidador() throws SQLException, Exception;
-	
-	public Consolidador consultarConsolidador(Consolidador consolidador) throws SQLException, Exception;
+
+	public boolean actualizarConsolidador(Consolidador consolidador)
+			throws SQLException, Exception;
+
+	public List<Consolidador> listarConsolidador() throws SQLException,
+			Exception;
+
+	public Consolidador consultarConsolidador(Consolidador consolidador)
+			throws SQLException, Exception;
 
 	public BigDecimal calculaPorcentajeComision(
-			DetalleServicioAgencia detalleServicio) throws SQLException, Exception;
-	
+			DetalleServicioAgencia detalleServicio) throws SQLException,
+			Exception;
+
 	public void registrarPago(PagoServicio pago) throws SQLException, Exception;
-	
-	public List<PagoServicio> listarPagosServicio(Integer idServicio) throws SQLException, Exception;
-	
-	public BigDecimal consultarSaldoServicio(Integer idServicio) throws SQLException, Exception;
+
+	public List<PagoServicio> listarPagosServicio(Integer idServicio)
+			throws SQLException, Exception;
+
+	public BigDecimal consultarSaldoServicio(Integer idServicio)
+			throws SQLException, Exception;
 
 	void cerrarVenta(ServicioAgencia servicioAgencia) throws SQLException,
 			Exception;
 
-	public void anularVenta(ServicioAgencia servicioAgencia) throws SQLException, Exception;
-	
-	public void registrarEventoObservacion(EventoObsAnu evento) throws SQLException, Exception;
-	
-	public void registrarEventoAnulacion(EventoObsAnu evento) throws SQLException, Exception;
+	public void anularVenta(ServicioAgencia servicioAgencia)
+			throws SQLException, Exception;
 
-	public boolean registrarComprobantes(
-			ServicioAgencia servicioAgencia) throws ValidacionException, SQLException, Exception;
+	public void registrarEventoObservacion(EventoObsAnu evento)
+			throws SQLException, Exception;
+
+	public void registrarEventoAnulacion(EventoObsAnu evento)
+			throws SQLException, Exception;
+
+	public boolean registrarComprobantes(ServicioAgencia servicioAgencia)
+			throws ValidacionException, SQLException, Exception;
 
 	List<DetalleServicioAgencia> consultarDetalleServicioComprobante(
 			Integer idServicio) throws SQLException, Exception;
@@ -202,9 +214,16 @@ public interface NegocioSessionRemote {
 	List<PagoServicio> listarPagosObligacion(Integer idObligacion)
 			throws SQLException, Exception;
 
-	void registrarRelacionComproObligacion(
-			ServicioAgencia servicioAgencia) throws SQLException,
-			Exception;
-	
-	public List<DetalleServicioAgencia> consultarDetServComprobanteObligacion(Integer idServicio) throws SQLException, Exception;
+	void registrarRelacionComproObligacion(ServicioAgencia servicioAgencia)
+			throws SQLException, Exception;
+
+	public List<DetalleServicioAgencia> consultarDetServComprobanteObligacion(
+			Integer idServicio) throws SQLException, Exception;
+
+	public boolean grabarDocumentosAdicionales(
+			List<DocumentoAdicional> listaDocumentos)
+			throws ErrorRegistroDataException, SQLException, Exception;
+
+	public List<DocumentoAdicional> listarDocumentosAdicionales(
+			Integer idServicio) throws SQLException;
 }
