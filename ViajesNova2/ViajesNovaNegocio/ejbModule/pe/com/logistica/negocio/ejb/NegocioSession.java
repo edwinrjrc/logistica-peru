@@ -2201,6 +2201,11 @@ public class NegocioSession implements NegocioSessionRemote,
 		ServicioNovaViajesDao servicioNovaViajesDao = new ServicioNovaViajesDaoImpl();
 		try{
 			conn = UtilConexion.obtenerConexion();
+			
+			if (!servicioNovaViajesDao.eliminarDocumentoAdicional(listaDocumentos.get(0), conn)){
+				throw new ErrorRegistroDataException("No se pudo eliminar los documentos adicionales");
+			}
+			
 			for (DocumentoAdicional documentoAdicional : listaDocumentos) {
 				boolean resultado = servicioNovaViajesDao.grabarDocumentoAdicional(documentoAdicional, conn);
 				if (!resultado){

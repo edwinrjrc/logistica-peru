@@ -2441,7 +2441,6 @@ public class ServicioNovaViajesDaoImpl implements ServicioNovaViajesDao {
 		CallableStatement cs = null;
 		String sql = "{ ? = call negocio.fn_registrardocumentosustentoservicio(?,?,?,?,?,?,?,?)}";
 		try {
-			conn = UtilConexion.obtenerConexion();
 			cs = conn.prepareCall(sql);
 			int i=1;
 			cs.registerOutParameter(i++, Types.BOOLEAN);
@@ -2522,6 +2521,34 @@ public class ServicioNovaViajesDaoImpl implements ServicioNovaViajesDao {
 		}
 		
 		return resultado;
+	}
+	
+	@Override
+	public boolean eliminarDocumentoAdicional(DocumentoAdicional documento, Connection conn) throws SQLException{
+		CallableStatement cs = null;
+		String sql = "{ ? = call negocio.fn_eliminardocumentosustentoservicio(?,?,?)}";
+		try {
+			cs = conn.prepareCall(sql);
+			int i=1;
+			cs.registerOutParameter(i++, Types.BOOLEAN);
+			cs.setInt(i++, documento.getIdServicio().intValue());
+			cs.setString(i++, documento.getUsuarioModificacion());
+			cs.setString(i++, documento.getIpModificacion());
+			cs.execute();
+			
+			return cs.getBoolean(1);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (cs != null) {
+					cs.close();
+				}
+			} catch (SQLException e) {
+				throw new SQLException(e);
+			}
+		}
+		return false;
 	}
 }
 
