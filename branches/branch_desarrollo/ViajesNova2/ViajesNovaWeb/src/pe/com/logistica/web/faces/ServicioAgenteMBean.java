@@ -86,6 +86,7 @@ public class ServicioAgenteMBean extends BaseMBean {
 	private Comprobante comprobanteBusqueda;
 	private BaseVO tipoServicio;
 	private Proveedor proveedorBusqueda;
+	private DocumentoAdicional documentoAdicional;
 	
 	private BigDecimal saldoServicio;
 
@@ -281,6 +282,8 @@ public class ServicioAgenteMBean extends BaseMBean {
 				this.setGuardoComprobantes(true);
 				this.getServicioAgencia().setListaDetalleServicio(this.negocioServicio.consultarDetalleComprobantes(this.getServicioAgencia().getCodigoEntero()));
 			}
+			
+			this.setListaDocumentosAdicionales(this.negocioServicio.listarDocumentosAdicionales(idServicio));
 			
 			
 			this.setDetalleServicio(null);
@@ -1588,7 +1591,78 @@ try {
 	}
 	
 	public void grabarDocumentos(){
+		try {
+			HttpSession session = obtenerSession(false);
+			Usuario usuario = (Usuario) session
+					.getAttribute("usuarioSession");
+			
+			for (DocumentoAdicional documento : getListaDocumentosAdicionales()){
+				documento.setIdServicio(getServicioAgencia().getCodigoEntero());
+				documento.setUsuarioCreacion(usuario.getUsuario());
+				documento.setIpCreacion(obtenerRequest().getRemoteAddr());
+				documento.setUsuarioModificacion(usuario.getUsuario());
+				documento.setIpModificacion(obtenerRequest().getRemoteAddr());
+			}
+			
+			this.negocioServicio.grabarDocumentosAdicionales(getListaDocumentosAdicionales());
+			
+			this.setListaDocumentosAdicionales(this.negocioServicio.listarDocumentosAdicionales(getServicioAgencia().getCodigoEntero()));
+			
+			this.setShowModal(true);
+			this.setMensajeModal("Se guardaron los documentos satisfactoriamente");
+			this.setTipoModal(TIPO_MODAL_EXITO);
+		} catch (ErrorRegistroDataException e) {
+			this.setShowModal(true);
+			this.setMensajeModal(e.getMessage());
+			this.setTipoModal(TIPO_MODAL_ERROR);
+			logger.error(e.getMessage(), e);
+		} catch (SQLException e) {
+			this.setShowModal(true);
+			this.setMensajeModal(e.getMessage());
+			this.setTipoModal(TIPO_MODAL_ERROR);
+			logger.error(e.getMessage(), e);
+		} catch (Exception e) {
+			this.setShowModal(true);
+			this.setMensajeModal(e.getMessage());
+			this.setTipoModal(TIPO_MODAL_ERROR);
+			logger.error(e.getMessage(), e);
+		}
 		
+	}
+	
+	public void seleccionarDocumentoAdicional(Integer idDoc){
+		
+		for (DocumentoAdicional documento : this.getListaDocumentosAdicionales()) {
+			if (documento.getCodigoEntero().equals(idDoc)){
+				this.setDocumentoAdicional(documento);
+				break;
+			}
+		}
+		
+	}
+	
+	public void exportarArchivoDocumento (){
+		try {
+			HttpServletResponse response = obtenerResponse();
+			response.setContentType(getDocumentoAdicional().getArchivo().getContent());
+			response.setHeader("Content-disposition",
+					"attachment;filename="+getDocumentoAdicional().getArchivo().getNombreArchivo());
+			response.setHeader("Content-Transfer-Encoding", "binary");
+			
+			FacesContext facesContext = obtenerContexto();
+			
+			ServletOutputStream respuesta = response.getOutputStream();
+			if (getDocumentoAdicional().getArchivo().getDatos()!=null){
+				respuesta.write(getDocumentoAdicional().getArchivo().getDatos());
+			}
+			
+			respuesta.close();
+			respuesta.flush();
+			
+			facesContext.responseComplete();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	/**
@@ -2280,6 +2354,20 @@ try {
 	public void setListaDocumentosAdicionales(
 			List<DocumentoAdicional> listaDocumentosAdicionales) {
 		this.listaDocumentosAdicionales = listaDocumentosAdicionales;
+	}
+
+	/**
+	 * @return the documentoAdicional
+	 */
+	public DocumentoAdicional getDocumentoAdicional() {
+		return documentoAdicional;
+	}
+
+	/**
+	 * @param documentoAdicional the documentoAdicional to set
+	 */
+	public void setDocumentoAdicional(DocumentoAdicional documentoAdicional) {
+		this.documentoAdicional = documentoAdicional;
 	}
 
 }
