@@ -2439,13 +2439,14 @@ public class ServicioNovaViajesDaoImpl implements ServicioNovaViajesDao {
 	@Override
 	public boolean grabarDocumentoAdicional(DocumentoAdicional documento, Connection conn) throws SQLException{
 		CallableStatement cs = null;
-		String sql = "{ ? = call negocio.fn_registrardocumentosustentoservicio(?,?,?,?,?,?,?,?)}";
+		String sql = "{ ? = call negocio.fn_registrardocumentosustentoservicio(?,?,?,?,?,?,?,?,?)}";
 		try {
 			cs = conn.prepareCall(sql);
 			int i=1;
 			cs.registerOutParameter(i++, Types.BOOLEAN);
 			cs.setInt(i++, documento.getIdServicio().intValue());
 			cs.setInt(i++, documento.getDocumento().getCodigoEntero().intValue());
+			cs.setString(i++, documento.getDescripcionArchivo());
 			cs.setBinaryStream(i++, new ByteArrayInputStream(documento.getArchivo().getDatos()), documento.getArchivo().getDatos().length);
 			cs.setString(i++, documento.getArchivo().getNombreArchivo());
 			cs.setString(i++, documento.getArchivo().getExtensionArchivo());
@@ -2494,11 +2495,13 @@ public class ServicioNovaViajesDaoImpl implements ServicioNovaViajesDao {
 				documento.setIdServicio(UtilJdbc.obtenerNumero(rs, "idservicio"));
 				documento.getDocumento().setCodigoEntero(UtilJdbc.obtenerNumero(rs, "idtipodocumento"));
 				documento.getDocumento().setNombre(UtilJdbc.obtenerCadena(rs, "nombredocumento"));
+				documento.setDescripcionArchivo(UtilJdbc.obtenerCadena(rs, "descripciondocumento"));
 				byte[] sustento = rs.getBytes("archivo");
 				documento.getArchivo().setDatos(sustento);
 				documento.getArchivo().setNombreArchivo(UtilJdbc.obtenerCadena(rs, "nombrearchivo"));
 				documento.getArchivo().setContent(UtilJdbc.obtenerCadena(rs, "tipocontenido"));
 				documento.getArchivo().setExtensionArchivo(UtilJdbc.obtenerCadena(rs, "extensionarchivo"));
+				documento.setEditarDocumento(false);
 				
 				resultado.add(documento);
 			}
