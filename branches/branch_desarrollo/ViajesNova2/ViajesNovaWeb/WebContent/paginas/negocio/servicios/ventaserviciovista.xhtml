@@ -392,11 +392,19 @@
 									<f:facet name="header">
 										<h:outputText value="Documento" />
 									</f:facet>
-									<h:selectOneMenu value="#{fila.documento.codigoEntero}">
+									<h:selectOneMenu value="#{fila.documento.codigoEntero}" rendered="#{fila.editarDocumento}">
 										<f:selectItem itemLabel="-Seleccione-" />
 										<f:selectItems
 											value="#{catalogoMBean.catalogoDocumentosAdicionales}"></f:selectItems>
 									</h:selectOneMenu>
+									<h:outputText value="#{fila.documento.nombre}" rendered="#{!fila.editarDocumento}" />
+								</rich:column>
+								<rich:column>
+									<f:facet name="header">
+										<h:outputText value="Descripcion Documento" />
+									</f:facet>
+									<h:inputText value="#{fila.descripcionArchivo}" maxlength="140" size="80" rendered="#{fila.editarDocumento}" />
+									<h:outputText value="#{fila.descripcionArchivo}" rendered="#{!fila.editarDocumento}" />
 								</rich:column>
 								<rich:column>
 									<f:facet name="header">
@@ -414,7 +422,7 @@
 								<f:facet name="header">
 									<h:panelGrid cellpadding="0" cellspacing="0" border="0"
 										style="text-align:right;" columns="2">
-										<a4j:commandButton value="Eliminar Todo"
+										<a4j:commandButton value="Eliminar Adjuntados"
 											action="#{servicioAgenteMBean.limpiarArchivos()}"
 											render="idTablaDocAdicional,idUploadAdicional"></a4j:commandButton>
 										<a4j:commandButton value="Adjuntar Archivos"
