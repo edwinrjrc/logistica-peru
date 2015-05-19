@@ -2207,9 +2207,11 @@ public class NegocioSession implements NegocioSessionRemote,
 			}
 			
 			for (DocumentoAdicional documentoAdicional : listaDocumentos) {
-				boolean resultado = servicioNovaViajesDao.grabarDocumentoAdicional(documentoAdicional, conn);
-				if (!resultado){
-					throw new ErrorRegistroDataException("No se pudo completar el registro de documentos adicionales");
+				if (documentoAdicional.getCodigoEntero()==null || documentoAdicional.getCodigoEntero().intValue()==0){
+					boolean resultado = servicioNovaViajesDao.grabarDocumentoAdicional(documentoAdicional, conn);
+					if (!resultado){
+						throw new ErrorRegistroDataException("No se pudo completar el registro de documentos adicionales");
+					}
 				}
 			}
 			

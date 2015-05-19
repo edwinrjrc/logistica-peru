@@ -17,7 +17,9 @@ public class DocumentoAdicional extends BaseNegocio {
 	 */
 	private static final long serialVersionUID = 1L;
 	
+	private boolean editarDocumento;
 	private Integer idServicio;
+	private String descripcionArchivo;
 	private BaseVO documento;
 	private ArchivoAdjunto archivo;
 	
@@ -63,6 +65,30 @@ public class DocumentoAdicional extends BaseNegocio {
 	 */
 	public void setDocumento(BaseVO documento) {
 		this.documento = documento;
+	}
+	/**
+	 * @return the editarDocumento
+	 */
+	public boolean isEditarDocumento() {
+		return editarDocumento;
+	}
+	/**
+	 * @param editarDocumento the editarDocumento to set
+	 */
+	public void setEditarDocumento(boolean editarDocumento) {
+		this.editarDocumento = editarDocumento;
+	}
+	/**
+	 * @return the descripcionArchivo
+	 */
+	public String getDescripcionArchivo() {
+		return descripcionArchivo;
+	}
+	/**
+	 * @param descripcionArchivo the descripcionArchivo to set
+	 */
+	public void setDescripcionArchivo(String descripcionArchivo) {
+		this.descripcionArchivo = descripcionArchivo;
 	}
 
 }

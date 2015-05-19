@@ -1582,12 +1582,19 @@ try {
 		documento.getArchivo().setExtensionArchivo(archivoNombre);
 		documento.getArchivo().setDatos(item.getData());
 		documento.getArchivo().setTipoContenido(item.getContentType());
+		documento.getArchivo().setContent(item.getContentType());
+		documento.setEditarDocumento(true);
 		
 		this.getListaDocumentosAdicionales().add(documento);
 	}
 	
 	public void limpiarArchivos(){
-		this.setListaDocumentosAdicionales(null);
+		for (int i=0; i<this.getListaDocumentosAdicionales().size();i++) {
+			DocumentoAdicional documento = this.getListaDocumentosAdicionales().get(i);
+			if (documento.isEditarDocumento()){
+				this.listaDocumentosAdicionales.remove(i);
+			}
+		}
 	}
 	
 	public void grabarDocumentos(){
