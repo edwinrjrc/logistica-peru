@@ -321,6 +321,7 @@ public class ServicioAgenteMBean extends BaseMBean {
 		consultarTasaPredeterminada();
 		this.setListadoEmpresas(null);
 		this.setListadoDetalleServicio(null);
+		this.setListaDocumentosAdicionales(null);
 
 		this.setVendedor(false);
 		HttpSession session = obtenerSession(false);
@@ -747,6 +748,18 @@ public class ServicioAgenteMBean extends BaseMBean {
 												.consultarCronogramaPago(getServicioAgencia()));
 						this.setTransaccionExito(true);
 					}
+					
+					
+					for (DocumentoAdicional documento : getListaDocumentosAdicionales()) {
+						documento.setIdServicio(idServicio);
+						documento.setUsuarioCreacion(usuario.getUsuario());
+						documento.setIpCreacion(obtenerRequest().getRemoteAddr());
+						documento.setUsuarioModificacion(usuario.getUsuario());
+						documento.setIpModificacion(obtenerRequest().getRemoteAddr());
+					}
+					this.negocioServicio.grabarDocumentosAdicionales(getListaDocumentosAdicionales());
+					
+					this.setListaDocumentosAdicionales(this.negocioServicio.listarDocumentosAdicionales(idServicio));
 
 					this.setShowModal(true);
 					this.setMensajeModal("Servicio Venta registrado satisfactoriamente");

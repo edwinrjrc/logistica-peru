@@ -371,18 +371,21 @@
 											style="text-align:right;"
 											value="#{servicioAgenteMBean.detalleServicio.precioUnitario}"
 											size="10" maxlength="8" />
-										<h:selectBooleanCheckbox rendered="#{servicioAgenteMBean.calculadorIGV}" value="#{servicioAgenteMBean.detalleServicio.conIGV}" />
-										<h:outputText value="(Con IGV)" rendered="#{servicioAgenteMBean.calculadorIGV}"	 />
+										<h:selectBooleanCheckbox
+											rendered="#{servicioAgenteMBean.calculadorIGV}"
+											value="#{servicioAgenteMBean.detalleServicio.conIGV}" />
+										<h:outputText value="(Con IGV)"
+											rendered="#{servicioAgenteMBean.calculadorIGV}" />
 										<rich:message for="idPrecUnitario" showDetail="false"
 											showSummary="true" ajaxRendered="true" />
 									</h:panelGrid>
-									
+
 									<h:outputText value=""
 										rendered="#{servicioAgenteMBean.detalleServicio.configuracionTipoServicio.muestraPrecioBase}" />
 									<h:outputText value=""
 										rendered="#{servicioAgenteMBean.detalleServicio.configuracionTipoServicio.muestraPrecioBase}" />
-										
-									
+
+
 								</h:panelGrid>
 
 								<h:panelGrid columns="4" cellpadding="0" cellspacing="0"
@@ -398,16 +401,18 @@
 										<rich:message for="idFecServicio" showDetail="false"
 											showSummary="true" ajaxRendered="true"></rich:message>
 									</h:panelGrid>
-									
+
 									<h:outputText value="Fecha Regreso"
 										rendered="#{servicioAgenteMBean.detalleServicio.configuracionTipoServicio.muestraFechaRegreso}" />
 									<rich:calendar datePattern="dd/MM/yyyy"
 										rendered="#{servicioAgenteMBean.detalleServicio.configuracionTipoServicio.muestraFechaRegreso}"
 										value="#{servicioAgenteMBean.detalleServicio.fechaRegreso}"></rich:calendar>
-										
-									<h:outputText value="" rendered="#{servicioAgenteMBean.detalleServicio.configuracionTipoServicio.muestraFechaServicio}" />
-									<h:outputText value="" rendered="#{servicioAgenteMBean.detalleServicio.configuracionTipoServicio.muestraFechaServicio}" />
-									
+
+									<h:outputText value=""
+										rendered="#{servicioAgenteMBean.detalleServicio.configuracionTipoServicio.muestraFechaServicio}" />
+									<h:outputText value=""
+										rendered="#{servicioAgenteMBean.detalleServicio.configuracionTipoServicio.muestraFechaServicio}" />
+
 								</h:panelGrid>
 
 								<h:panelGrid columns="4" cellpadding="0" cellspacing="0"
@@ -557,6 +562,67 @@
 							</h:panelGrid>
 						</h:panelGrid>
 					</rich:tab>
+					<rich:tab>
+						<f:facet name="header">
+							<h:outputText value="Documentos Adicionales" />
+						</f:facet>
+						<h:panelGrid cellpadding="0" cellspacing="0" border="0"
+							columns="1" style="width:100%;">
+
+							<rich:dataTable id="idTablaDocAdicionalR"
+								value="#{servicioAgenteMBean.listaDocumentosAdicionales}"
+								var="fila" style="width:100%;">
+								<rich:column>
+									<f:facet name="header">
+										<h:outputText value="Documento" />
+									</f:facet>
+									<h:selectOneMenu value="#{fila.documento.codigoEntero}"
+										rendered="#{fila.editarDocumento}">
+										<f:selectItem itemLabel="-Seleccione-" />
+										<f:selectItems
+											value="#{catalogoMBean.catalogoDocumentosAdicionales}"></f:selectItems>
+									</h:selectOneMenu>
+									<h:outputText value="#{fila.documento.nombre}"
+										rendered="#{!fila.editarDocumento}" />
+								</rich:column>
+								<rich:column>
+									<f:facet name="header">
+										<h:outputText value="Descripcion Documento" />
+									</f:facet>
+									<h:inputText value="#{fila.descripcionArchivo}" maxlength="140"
+										size="80" rendered="#{fila.editarDocumento}" />
+									<h:outputText value="#{fila.descripcionArchivo}"
+										rendered="#{!fila.editarDocumento}" />
+								</rich:column>
+								<rich:column>
+									<f:facet name="header">
+										<h:outputText value="Archivo" />
+									</f:facet>
+									<h:outputText value="#{fila.archivo.nombreArchivo}" />
+								</rich:column>
+								<rich:column>
+									<f:facet name="header">
+										<h:outputText value="Ver" />
+									</f:facet>
+									<a4j:commandButton rendered="#{fila.codigoEntero != null}"
+										value="Ver Archivos"
+										action="#{servicioAgenteMBean.seleccionarDocumentoAdicional(fila.codigoEntero)}"
+										oncomplete="clicBoton('idformadmservicios:idbtnExportarArchivoDocumento')"></a4j:commandButton>
+								</rich:column>
+								<f:facet name="header">
+									<h:panelGrid cellpadding="0" cellspacing="0" border="0"
+										style="text-align:right;" columns="2">
+										<a4j:commandButton value="Eliminar Adjuntados"
+											action="#{servicioAgenteMBean.limpiarArchivos()}"
+											render="idTablaDocAdicionalR,idUploadAdicional"></a4j:commandButton>
+										<a4j:commandButton value="Adjuntar Archivos"
+											oncomplete="mostrarModal3('idModalAdjuntarArchivos')"></a4j:commandButton>
+									</h:panelGrid>
+								</f:facet>
+							</rich:dataTable>
+
+						</h:panelGrid>
+					</rich:tab>
 					<rich:tab
 						rendered="#{servicioAgenteMBean.servicioAgencia.formaPago.codigoEntero == 2 and servicioAgenteMBean.transaccionExito}">
 						<f:facet name="header">
@@ -636,13 +702,14 @@
 							rendered="#{servicioAgenteMBean.transaccionExito}"
 							render="idGrTabVenServicios"
 							oncomplete="#{rich:component('idModalfrventaservicio')}.hide(); return false;" />
-							
+
 						<a4j:commandButton value="Cerrar Venta" render="idGrConfir"
-							actionListener="#{servicioAgenteMBean.preCerrarVenta()}" 
+							actionListener="#{servicioAgenteMBean.preCerrarVenta()}"
 							rendered="#{servicioAgenteMBean.servicioAgencia.codigoEntero!=null and servicioAgenteMBean.servicioAgencia.estadoServicio.codigoEntero==1}"
 							oncomplete="#{rich:component('idModalConfirma')}.show(); return false;" />
-							
-						<a4j:commandButton value="Cerrar Venta" style="display:none;" id="idBtnCerrarVenta"
+
+						<a4j:commandButton value="Cerrar Venta" style="display:none;"
+							id="idBtnCerrarVenta"
 							actionListener="#{servicioAgenteMBean.cerrarVenta()}"
 							render="idFormHidden,idPanelHidden,idPanelBotones,idModalcorrecto,idModalError,idGrRegisVenServicio"
 							oncomplete="mostrarModal('idformadmservicios')" />
