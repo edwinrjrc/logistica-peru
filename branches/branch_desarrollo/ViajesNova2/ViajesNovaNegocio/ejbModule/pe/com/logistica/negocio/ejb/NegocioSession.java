@@ -2202,7 +2202,8 @@ public class NegocioSession implements NegocioSessionRemote,
 		try{
 			conn = UtilConexion.obtenerConexion();
 			
-			if (!servicioNovaViajesDao.eliminarDocumentoAdicional(listaDocumentos.get(0), conn)){
+			DocumentoAdicional documento = listaDocumentos.get(0);
+			if (documento.getIdServicio()!=null && !servicioNovaViajesDao.eliminarDocumentoAdicional(documento, conn)){
 				throw new ErrorRegistroDataException("No se pudo eliminar los documentos adicionales");
 			}
 			
