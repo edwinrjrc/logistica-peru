@@ -718,6 +718,7 @@ public class ServicioNovaViajesDaoImpl implements ServicioNovaViajesDao {
 				servicioAgencia2.getVendedor().setNombre(nombreVendedor);
 				servicioAgencia2.setGuardoComprobante(UtilJdbc.obtenerBoolean(rs, "generocomprobantes"));
 				servicioAgencia2.setGuardoRelacionComprobantes(UtilJdbc.obtenerBoolean(rs, "guardorelacioncomprobantes"));
+				servicioAgencia2.setObservaciones(UtilJdbc.obtenerCadena(rs, "observaciones"));
 			}
 		} catch (SQLException e) {
 			throw new SQLException(e);
