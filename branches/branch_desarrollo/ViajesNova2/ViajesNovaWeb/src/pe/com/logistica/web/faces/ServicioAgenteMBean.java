@@ -102,6 +102,7 @@ public class ServicioAgenteMBean extends BaseMBean {
 	private List<Comprobante> listaComprobantes;
 	private List<Proveedor> listadoProveedores;
 	private List<DocumentoAdicional> listaDocumentosAdicionales;
+	private List<Comprobante> listaComprobantesAdicionales;
 	
 	public boolean nuevaVenta;
 	public boolean editarVenta;
@@ -2388,6 +2389,24 @@ try {
 	 */
 	public void setDocumentoAdicional(DocumentoAdicional documentoAdicional) {
 		this.documentoAdicional = documentoAdicional;
+	}
+
+	/**
+	 * @return the listaComprobantesAdicionales
+	 */
+	public List<Comprobante> getListaComprobantesAdicionales() {
+		if (listaComprobantesAdicionales == null){
+			listaComprobantesAdicionales = new ArrayList<Comprobante>();
+		}
+		return listaComprobantesAdicionales;
+	}
+
+	/**
+	 * @param listaComprobantesAdicionales the listaComprobantesAdicionales to set
+	 */
+	public void setListaComprobantesAdicionales(
+			List<Comprobante> listaComprobantesAdicionales) {
+		this.listaComprobantesAdicionales = listaComprobantesAdicionales;
 	}
 
 }

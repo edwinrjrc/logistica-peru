@@ -388,6 +388,53 @@
 					</rich:tab>
 					<rich:tab>
 						<f:facet name="header">
+							<h:outputText value="Comprobantes Adicionales" />
+						</f:facet>
+
+						<rich:dataTable
+							value="#{servicioAgenteMBean.listaComprobantesAdicionales}"
+							var="fila" style="width:100%;">
+							<rich:column>
+								<f:facet name="header">
+									<h:outputText value="Tipo Comprobante" />
+								</f:facet>
+
+							</rich:column>
+							<rich:column>
+								<f:facet name="header">
+									<h:outputText value="Número Comprobante" />
+								</f:facet>
+
+							</rich:column>
+							<rich:column>
+								<f:facet name="header">
+									<h:outputText value="Fecha Comprobante" />
+								</f:facet>
+
+							</rich:column>
+							<rich:column>
+								<f:facet name="header">
+									<h:outputText value="Detalle Comprobante" />
+								</f:facet>
+
+							</rich:column>
+							<rich:column>
+								<f:facet name="header">
+									<h:outputText value="Total IGV Comprobante" />
+								</f:facet>
+
+							</rich:column>
+							<rich:column>
+								<f:facet name="header">
+									<h:outputText value="Total Comprobante" />
+								</f:facet>
+
+							</rich:column>
+						</rich:dataTable>
+
+					</rich:tab>
+					<rich:tab>
+						<f:facet name="header">
 							<h:outputText value="Documentos Adicionales" />
 						</f:facet>
 						<h:panelGrid cellpadding="0" cellspacing="0" border="0"
@@ -400,19 +447,23 @@
 									<f:facet name="header">
 										<h:outputText value="Documento" />
 									</f:facet>
-									<h:selectOneMenu value="#{fila.documento.codigoEntero}" rendered="#{fila.editarDocumento}">
+									<h:selectOneMenu value="#{fila.documento.codigoEntero}"
+										rendered="#{fila.editarDocumento}">
 										<f:selectItem itemLabel="-Seleccione-" />
 										<f:selectItems
 											value="#{catalogoMBean.catalogoDocumentosAdicionales}"></f:selectItems>
 									</h:selectOneMenu>
-									<h:outputText value="#{fila.documento.nombre}" rendered="#{!fila.editarDocumento}" />
+									<h:outputText value="#{fila.documento.nombre}"
+										rendered="#{!fila.editarDocumento}" />
 								</rich:column>
 								<rich:column>
 									<f:facet name="header">
 										<h:outputText value="Descripcion Documento" />
 									</f:facet>
-									<h:inputText value="#{fila.descripcionArchivo}" maxlength="140" size="80" rendered="#{fila.editarDocumento}" />
-									<h:outputText value="#{fila.descripcionArchivo}" rendered="#{!fila.editarDocumento}" />
+									<h:inputText value="#{fila.descripcionArchivo}" maxlength="140"
+										size="80" rendered="#{fila.editarDocumento}" />
+									<h:outputText value="#{fila.descripcionArchivo}"
+										rendered="#{!fila.editarDocumento}" />
 								</rich:column>
 								<rich:column>
 									<f:facet name="header">
@@ -424,8 +475,10 @@
 									<f:facet name="header">
 										<h:outputText value="Ver" />
 									</f:facet>
-									<a4j:commandButton rendered="#{fila.codigoEntero != null}" value="Ver Archivos" action="#{servicioAgenteMBean.seleccionarDocumentoAdicional(fila.codigoEntero)}"
-											oncomplete="clicBoton('idformadmservicios:idbtnExportarArchivoDocumento')"></a4j:commandButton>
+									<a4j:commandButton rendered="#{fila.codigoEntero != null}"
+										value="Ver Archivos"
+										action="#{servicioAgenteMBean.seleccionarDocumentoAdicional(fila.codigoEntero)}"
+										oncomplete="clicBoton('idformadmservicios:idbtnExportarArchivoDocumento')"></a4j:commandButton>
 								</rich:column>
 								<f:facet name="header">
 									<h:panelGrid cellpadding="0" cellspacing="0" border="0"
