@@ -398,38 +398,50 @@
 								<f:facet name="header">
 									<h:outputText value="Tipo Comprobante" />
 								</f:facet>
-
+								<h:selectOneMenu
+									value="#{fila.tipoComprobante.codigoEntero}">
+									<f:selectItems value="#{catalogoMBean.catalogoTipoComprobante}" />
+								</h:selectOneMenu>
 							</rich:column>
 							<rich:column>
 								<f:facet name="header">
 									<h:outputText value="Número Comprobante" />
 								</f:facet>
-
+								<h:inputText value="#{fila.numeroComprobante}" />
 							</rich:column>
 							<rich:column>
 								<f:facet name="header">
 									<h:outputText value="Fecha Comprobante" />
 								</f:facet>
-
+								<rich:calendar value="#{fila.fechaComprobante}" datePattern="dd/MM/yyyy"></rich:calendar>
 							</rich:column>
 							<rich:column>
 								<f:facet name="header">
 									<h:outputText value="Detalle Comprobante" />
 								</f:facet>
-
+								<h:inputTextarea value="#{fila.detalleTextoComprobante}" rows="7" cols="40" />
 							</rich:column>
 							<rich:column>
 								<f:facet name="header">
 									<h:outputText value="Total IGV Comprobante" />
 								</f:facet>
-
+								<h:inputText value="#{fila.totalIGV}" />
 							</rich:column>
 							<rich:column>
 								<f:facet name="header">
 									<h:outputText value="Total Comprobante" />
 								</f:facet>
-
+								<h:inputText value="#{fila.totalComprobante}" />
 							</rich:column>
+							<rich:column>
+								<f:facet name="header">
+									<h:outputText value="Eliminar" />
+								</f:facet>
+								<a4j:commandButton value="Eliminar"></a4j:commandButton>
+							</rich:column>
+							<f:facet name="header">
+								<a4j:commandButton value="Eliminar"></a4j:commandButton>
+							</f:facet>
 						</rich:dataTable>
 
 					</rich:tab>
