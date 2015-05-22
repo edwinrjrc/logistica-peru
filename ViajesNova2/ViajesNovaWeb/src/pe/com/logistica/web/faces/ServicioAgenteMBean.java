@@ -87,7 +87,7 @@ public class ServicioAgenteMBean extends BaseMBean {
 	private BaseVO tipoServicio;
 	private Proveedor proveedorBusqueda;
 	private DocumentoAdicional documentoAdicional;
-	
+
 	private BigDecimal saldoServicio;
 
 	private List<ServicioAgencia> listadoServicioAgencia;
@@ -103,7 +103,7 @@ public class ServicioAgenteMBean extends BaseMBean {
 	private List<Proveedor> listadoProveedores;
 	private List<DocumentoAdicional> listaDocumentosAdicionales;
 	private List<Comprobante> listaComprobantesAdicionales;
-	
+
 	public boolean nuevaVenta;
 	public boolean editarVenta;
 	private boolean servicioFee;
@@ -119,13 +119,13 @@ public class ServicioAgenteMBean extends BaseMBean {
 	private ParametroServicio parametroServicio;
 	private NegocioServicio negocioServicio;
 	private SoporteServicio soporteServicio;
-	
+
 	private String pregunta;
 	private String nombreCampoTexto;
 	private String nombreTitulo;
 	private Integer tipoEvento;
 	private String idModales;
-	
+
 	private int serviciosFee;
 
 	/**
@@ -246,10 +246,13 @@ public class ServicioAgenteMBean extends BaseMBean {
 		try {
 			HttpSession session = obtenerSession(false);
 			Usuario usuario = (Usuario) session.getAttribute(USUARIO_SESSION);
-			if (Integer.valueOf(2).equals(usuario.getRol().getCodigoEntero()) || Integer.valueOf(4).equals(usuario.getRol().getCodigoEntero())) {
-				getServicioAgenciaBusqueda().getVendedor().setCodigoEntero(usuario.getCodigoEntero());
+			if (Integer.valueOf(2).equals(usuario.getRol().getCodigoEntero())
+					|| Integer.valueOf(4).equals(
+							usuario.getRol().getCodigoEntero())) {
+				getServicioAgenciaBusqueda().getVendedor().setCodigoEntero(
+						usuario.getCodigoEntero());
 			}
-			
+
 			listadoServicioAgencia = this.negocioServicio
 					.listarVentaServicio(getServicioAgenciaBusqueda());
 
@@ -273,26 +276,32 @@ public class ServicioAgenteMBean extends BaseMBean {
 			this.setEditarVenta(true);
 			this.setListadoDetalleServicio(this.getServicioAgencia()
 					.getListaDetalleServicio());
-			
-			if (this.getServicioAgencia().isGuardoRelacionComprobantes()){
+
+			if (this.getServicioAgencia().isGuardoRelacionComprobantes()) {
 				this.setGuardoComprobantes(true);
 				this.setGuardoRelacionComprobantes(true);
-				this.getServicioAgencia().setListaDetalleServicio(this.negocioServicio.consultarDetServComprobanteObligacion(this.getServicioAgencia().getCodigoEntero()));
-			}
-			else if (this.getServicioAgencia().isGuardoComprobante()){
+				this.getServicioAgencia()
+						.setListaDetalleServicio(
+								this.negocioServicio
+										.consultarDetServComprobanteObligacion(this
+												.getServicioAgencia()
+												.getCodigoEntero()));
+			} else if (this.getServicioAgencia().isGuardoComprobante()) {
 				this.setGuardoComprobantes(true);
-				this.getServicioAgencia().setListaDetalleServicio(this.negocioServicio.consultarDetalleComprobantes(this.getServicioAgencia().getCodigoEntero()));
+				this.getServicioAgencia().setListaDetalleServicio(
+						this.negocioServicio.consultarDetalleComprobantes(this
+								.getServicioAgencia().getCodigoEntero()));
 			}
-			
-			this.setListaDocumentosAdicionales(this.negocioServicio.listarDocumentosAdicionales(idServicio));
-			
-			
+
+			this.setListaDocumentosAdicionales(this.negocioServicio
+					.listarDocumentosAdicionales(idServicio));
+
 			this.setDetalleServicio(null);
 
 			borrarInvisibles();
-			
+
 			calcularTotales();
-			
+
 			this.setTransaccionExito(false);
 
 		} catch (SQLException e) {
@@ -356,7 +365,7 @@ public class ServicioAgenteMBean extends BaseMBean {
 						.agregarServicioVenta(getDetalleServicio());
 
 				detalleServicioAgregar = agregarServicioInvisible(detalleServicioAgregar);
-				
+
 				this.getListadoDetalleServicio().add(detalleServicioAgregar);
 
 				this.setListadoDetalleServicio(negocioServicio
@@ -366,14 +375,14 @@ public class ServicioAgenteMBean extends BaseMBean {
 
 				calcularTotales();
 
-				if (this.isRequiereFee()){
+				if (this.isRequiereFee()) {
 					this.serviciosFee++;
 				}
 				this.setRequiereFee(false);
 				this.setServicioFee(false);
 				this.setListadoEmpresas(null);
 			}
-		} catch (ErrorRegistroDataException e){
+		} catch (ErrorRegistroDataException e) {
 			logger.error(e.getMessage(), e);
 			this.setShowModal(true);
 			this.setMensajeModal(e.getMessage());
@@ -389,7 +398,7 @@ public class ServicioAgenteMBean extends BaseMBean {
 			this.setMensajeModal(e.getMessage());
 			this.setTipoModal(TIPO_MODAL_ERROR);
 		}
-		
+
 	}
 
 	private DetalleServicioAgencia agregarServicioInvisible(
@@ -531,7 +540,7 @@ public class ServicioAgenteMBean extends BaseMBean {
 		boolean resultado = false;
 
 		for (DetalleServicioAgencia detalle : this.getListadoDetalleServicio()) {
-			for(DetalleServicioAgencia detalle2 : detalle.getServiciosHijos()){
+			for (DetalleServicioAgencia detalle2 : detalle.getServiciosHijos()) {
 				if (detalle2.getTipoServicio().getCodigoEntero().intValue() == baseVO
 						.getCodigoEntero().intValue()) {
 					resultado = true;
@@ -539,7 +548,7 @@ public class ServicioAgenteMBean extends BaseMBean {
 				}
 			}
 			if (detalle.getTipoServicio().getCodigoEntero().intValue() == baseVO
-					.getCodigoEntero().intValue()){
+					.getCodigoEntero().intValue()) {
 				resultado = true;
 				break;
 			}
@@ -574,7 +583,8 @@ public class ServicioAgenteMBean extends BaseMBean {
 		}
 
 		if (this.serviciosFee != fees) {
-			throw new ErrorRegistroDataException("Debe agregar Los Fee de Venta");
+			throw new ErrorRegistroDataException(
+					"Debe agregar Los Fee de Venta");
 		}
 	}
 
@@ -588,10 +598,10 @@ public class ServicioAgenteMBean extends BaseMBean {
 					"Seleccione el tipo de servicio", "",
 					FacesMessage.SEVERITY_ERROR);
 			resultado = false;
-		}
-		else {
+		} else {
 			if (!this.isServicioFee()) {
-				if (this.getDetalleServicio().getTipoServicio().getCodigoEntero() == null
+				if (this.getDetalleServicio().getTipoServicio()
+						.getCodigoEntero() == null
 						|| this.getDetalleServicio().getTipoServicio()
 								.getCodigoEntero().intValue() == 0) {
 					this.agregarMensaje(idFormulario + ":idSelTipoServicio",
@@ -608,7 +618,8 @@ public class ServicioAgenteMBean extends BaseMBean {
 				}
 				if (this.getDetalleServicio().getCantidad() == 0) {
 					this.agregarMensaje(idFormulario + ":idCantidad",
-							"Ingrese la cantidad", "", FacesMessage.SEVERITY_ERROR);
+							"Ingrese la cantidad", "",
+							FacesMessage.SEVERITY_ERROR);
 					resultado = false;
 				}
 				if (this.getDetalleServicio().getPrecioUnitario() == null
@@ -625,25 +636,30 @@ public class ServicioAgenteMBean extends BaseMBean {
 							FacesMessage.SEVERITY_ERROR);
 					resultado = false;
 				}
-				
-				if (this.getDetalleServicio().getFechaIda()!=null && UtilWeb.fecha1EsMayorIgualFecha2(this.getDetalleServicio()
-						.getFechaIda(), new Date())) {
+
+				if (this.getDetalleServicio().getFechaIda() != null
+						&& UtilWeb
+								.fecha1EsMayorIgualFecha2(this
+										.getDetalleServicio().getFechaIda(),
+										new Date())) {
 					this.agregarMensaje(
 							idFormulario + ":idFecServicio",
 							"La fecha del servicio no puede ser menor que la fecha de actual",
 							"", FacesMessage.SEVERITY_ERROR);
 					resultado = false;
 				} else if (this.getDetalleServicio().getFechaRegreso() != null
-						&& this.getDetalleServicio().getFechaIda()
-								.after(this.getDetalleServicio().getFechaRegreso())) {
+						&& this.getDetalleServicio()
+								.getFechaIda()
+								.after(this.getDetalleServicio()
+										.getFechaRegreso())) {
 					this.agregarMensaje(
 							idFormulario + ":idFecServicio",
 							"La fecha del servicio no puede ser mayor que la fecha de regreso",
 							"", FacesMessage.SEVERITY_ERROR);
 					resultado = false;
 				}
-				if (this.getDetalleServicio().getServicioProveedor().getProveedor()
-						.getCodigoEntero() == null
+				if (this.getDetalleServicio().getServicioProveedor()
+						.getProveedor().getCodigoEntero() == null
 						|| this.getDetalleServicio().getServicioProveedor()
 								.getProveedor().getCodigoEntero().intValue() == 0) {
 					this.agregarMensaje(idFormulario + ":idSelEmpServicio",
@@ -653,17 +669,19 @@ public class ServicioAgenteMBean extends BaseMBean {
 				}
 				/*
 				 * if
-				 * (this.getDetalleServicio().getConsolidador().getCodigoEntero()==
-				 * null ||
+				 * (this.getDetalleServicio().getConsolidador().getCodigoEntero
+				 * ()== null ||
 				 * this.getDetalleServicio().getConsolidador().getCodigoEntero
 				 * ().intValue()==0){ this.agregarMensaje(idFormulario +
-				 * ":idSelconsolidador", "Seleccione el consolidador del servicio",
-				 * "", FacesMessage.SEVERITY_ERROR); resultado = false; }
+				 * ":idSelconsolidador",
+				 * "Seleccione el consolidador del servicio", "",
+				 * FacesMessage.SEVERITY_ERROR); resultado = false; }
 				 */
 			} else {
 				if (this.getDetalleServicio().getPrecioUnitario() == null) {
 					this.agregarMensaje(idFormulario + ":idMonFee",
-							"Ingrese el Monto Fee", "", FacesMessage.SEVERITY_ERROR);
+							"Ingrese el Monto Fee", "",
+							FacesMessage.SEVERITY_ERROR);
 					resultado = false;
 				}
 				if (this.getDetalleServicio().getFechaIda() == null) {
@@ -685,11 +703,9 @@ public class ServicioAgenteMBean extends BaseMBean {
 		BigDecimal montoIgv = BigDecimal.ZERO;
 		try {
 
-			  Parametro param =
-			  this.parametroServicio.consultarParametro(UtilWeb
-			  .obtenerEnteroPropertieMaestro( "codigoParametroIGV",
-			  "aplicacionDatos"));
-			 
+			Parametro param = this.parametroServicio.consultarParametro(UtilWeb
+					.obtenerEnteroPropertieMaestro("codigoParametroIGV",
+							"aplicacionDatos"));
 
 			for (DetalleServicioAgencia detalleServicio : this
 					.getListadoDetalleServicio()) {
@@ -698,8 +714,10 @@ public class ServicioAgenteMBean extends BaseMBean {
 						.getMontoComision());
 				for (DetalleServicioAgencia detalleServicio2 : detalleServicio
 						.getServiciosHijos()) {
-					if (detalleServicio2.getTipoServicio().getCodigoEntero().toString().equals(param.getValor())){
-						montoIgv = montoIgv.add(detalleServicio2.getPrecioUnitario());
+					if (detalleServicio2.getTipoServicio().getCodigoEntero()
+							.toString().equals(param.getValor())) {
+						montoIgv = montoIgv.add(detalleServicio2
+								.getPrecioUnitario());
 					}
 				}
 
@@ -737,7 +755,7 @@ public class ServicioAgenteMBean extends BaseMBean {
 
 					this.getServicioAgencia().setListaDetalleServicio(
 							getListadoDetalleServicio());
-					
+
 					Integer idServicio = this.negocioServicio
 							.registrarVentaServicio(getServicioAgencia());
 
@@ -749,18 +767,21 @@ public class ServicioAgenteMBean extends BaseMBean {
 												.consultarCronogramaPago(getServicioAgencia()));
 						this.setTransaccionExito(true);
 					}
-					
-					
+
 					for (DocumentoAdicional documento : getListaDocumentosAdicionales()) {
 						documento.setIdServicio(idServicio);
 						documento.setUsuarioCreacion(usuario.getUsuario());
-						documento.setIpCreacion(obtenerRequest().getRemoteAddr());
+						documento.setIpCreacion(obtenerRequest()
+								.getRemoteAddr());
 						documento.setUsuarioModificacion(usuario.getUsuario());
-						documento.setIpModificacion(obtenerRequest().getRemoteAddr());
+						documento.setIpModificacion(obtenerRequest()
+								.getRemoteAddr());
 					}
-					this.negocioServicio.grabarDocumentosAdicionales(getListaDocumentosAdicionales());
-					
-					this.setListaDocumentosAdicionales(this.negocioServicio.listarDocumentosAdicionales(idServicio));
+					this.negocioServicio
+							.grabarDocumentosAdicionales(getListaDocumentosAdicionales());
+
+					this.setListaDocumentosAdicionales(this.negocioServicio
+							.listarDocumentosAdicionales(idServicio));
 
 					this.setShowModal(true);
 					this.setMensajeModal("Servicio Venta registrado satisfactoriamente");
@@ -784,11 +805,15 @@ public class ServicioAgenteMBean extends BaseMBean {
 						detalle.setUsuarioModificacion(usuario.getUsuario());
 						detalle.setIpModificacion(obtenerRequest()
 								.getRemoteAddr());
-						if (detalle.getServiciosHijos()!=null){
-							for (DetalleServicioAgencia detalle2 : detalle.getServiciosHijos()) {
-								detalle2.setUsuarioCreacion(usuario.getUsuario());
-								detalle2.setIpCreacion(obtenerRequest().getRemoteAddr());
-								detalle2.setUsuarioModificacion(usuario.getUsuario());
+						if (detalle.getServiciosHijos() != null) {
+							for (DetalleServicioAgencia detalle2 : detalle
+									.getServiciosHijos()) {
+								detalle2.setUsuarioCreacion(usuario
+										.getUsuario());
+								detalle2.setIpCreacion(obtenerRequest()
+										.getRemoteAddr());
+								detalle2.setUsuarioModificacion(usuario
+										.getUsuario());
 								detalle2.setIpModificacion(obtenerRequest()
 										.getRemoteAddr());
 							}
@@ -832,29 +857,26 @@ public class ServicioAgenteMBean extends BaseMBean {
 			logger.error(e.getMessage(), e);
 		}
 	}
-	
-	public void cerrarVenta(){
+
+	public void cerrarVenta() {
 		try {
-			
+
 			HttpSession session = obtenerSession(false);
-			Usuario usuario = (Usuario) session
-					.getAttribute("usuarioSession");
-			getServicioAgencia().setUsuarioCreacion(
-					usuario.getUsuario());
-			getServicioAgencia().setIpCreacion(
-					obtenerRequest().getRemoteAddr());
-			getServicioAgencia().setUsuarioModificacion(
-					usuario.getUsuario());
+			Usuario usuario = (Usuario) session.getAttribute("usuarioSession");
+			getServicioAgencia().setUsuarioCreacion(usuario.getUsuario());
+			getServicioAgencia()
+					.setIpCreacion(obtenerRequest().getRemoteAddr());
+			getServicioAgencia().setUsuarioModificacion(usuario.getUsuario());
 			getServicioAgencia().setIpModificacion(
 					obtenerRequest().getRemoteAddr());
-			
+
 			this.negocioServicio.cerrarVenta(getServicioAgencia());
-			
+
 			this.setTransaccionExito(true);
 			this.setShowModal(true);
 			this.setMensajeModal("Servicio Venta se cerro satisfactoriamente");
 			this.setTipoModal(TIPO_MODAL_EXITO);
-			
+
 		} catch (SQLException e) {
 			this.setShowModal(true);
 			this.setMensajeModal(e.getMessage());
@@ -867,29 +889,26 @@ public class ServicioAgenteMBean extends BaseMBean {
 			logger.error(e.getMessage(), e);
 		}
 	}
-	
-	public void anularVenta(){
-try {
-			
+
+	public void anularVenta() {
+		try {
+
 			HttpSession session = obtenerSession(false);
-			Usuario usuario = (Usuario) session
-					.getAttribute("usuarioSession");
-			getServicioAgencia().setUsuarioCreacion(
-					usuario.getUsuario());
-			getServicioAgencia().setIpCreacion(
-					obtenerRequest().getRemoteAddr());
-			getServicioAgencia().setUsuarioModificacion(
-					usuario.getUsuario());
+			Usuario usuario = (Usuario) session.getAttribute("usuarioSession");
+			getServicioAgencia().setUsuarioCreacion(usuario.getUsuario());
+			getServicioAgencia()
+					.setIpCreacion(obtenerRequest().getRemoteAddr());
+			getServicioAgencia().setUsuarioModificacion(usuario.getUsuario());
 			getServicioAgencia().setIpModificacion(
 					obtenerRequest().getRemoteAddr());
-			
+
 			this.negocioServicio.anularVenta(getServicioAgencia());
-			
+
 			this.setTransaccionExito(true);
 			this.setShowModal(true);
 			this.setMensajeModal("Servicio Venta se cerro satisfactoriamente");
 			this.setTipoModal(TIPO_MODAL_EXITO);
-			
+
 		} catch (SQLException e) {
 			this.setShowModal(true);
 			this.setMensajeModal(e.getMessage());
@@ -902,59 +921,57 @@ try {
 			logger.error(e.getMessage(), e);
 		}
 	}
-	
-	public void preCerrarVenta(){
+
+	public void preCerrarVenta() {
 		this.setPregunta("¿Esta seguro de cerrar el servicio de venta?");
 	}
-	
-	public void preAnularVenta(){
+
+	public void preAnularVenta() {
 		this.setNombreTitulo("Anular Venta");
 		this.setNombreCampoTexto("Comentario Anulación");
 		this.setTipoEvento(EventoObsAnu.EVENTO_ANU);
 	}
-	
-	public void preObservarVenta(){
+
+	public void preObservarVenta() {
 		this.setNombreTitulo("Observar Venta");
 		this.setNombreCampoTexto("Comentario Observación");
 		this.setTipoEvento(EventoObsAnu.EVENTO_OBS);
 	}
-	
-	public void preEvento2(){
+
+	public void preEvento2() {
 		this.setIdModales("idModalventaservicio,idModalObsAnu");
-		
-		if (EventoObsAnu.EVENTO_OBS.equals(this.getTipoEvento())){
+
+		if (EventoObsAnu.EVENTO_OBS.equals(this.getTipoEvento())) {
 			this.setPregunta("¿Esta seguro de observar la venta?");
-		}
-		else {
+		} else {
 			this.setPregunta("¿Esta seguro de anular la venta?");
 		}
-	}	
-	
-	public void registrarEvento(){
+	}
+
+	public void registrarEvento() {
 		try {
-			this.getEventoObsAnu().setIdServicio(this.getServicioAgencia().getCodigoEntero());
+			this.getEventoObsAnu().setIdServicio(
+					this.getServicioAgencia().getCodigoEntero());
 			HttpSession session = obtenerSession(false);
-			Usuario usuario = (Usuario) session
-					.getAttribute("usuarioSession");
-			this.getEventoObsAnu().setUsuarioCreacion(
-					usuario.getUsuario());
+			Usuario usuario = (Usuario) session.getAttribute("usuarioSession");
+			this.getEventoObsAnu().setUsuarioCreacion(usuario.getUsuario());
 			this.getEventoObsAnu().setIpCreacion(
 					obtenerRequest().getRemoteAddr());
-			this.getEventoObsAnu().setUsuarioModificacion(
-					usuario.getUsuario());
+			this.getEventoObsAnu().setUsuarioModificacion(usuario.getUsuario());
 			this.getEventoObsAnu().setIpModificacion(
 					obtenerRequest().getRemoteAddr());
-			
-			if (EventoObsAnu.EVENTO_OBS.equals(this.getTipoEvento())){
-				this.negocioServicio.registrarEventoObservacion(this.getEventoObsAnu());
-				
+
+			if (EventoObsAnu.EVENTO_OBS.equals(this.getTipoEvento())) {
+				this.negocioServicio.registrarEventoObservacion(this
+						.getEventoObsAnu());
+
 				this.setShowModal(true);
 				this.setMensajeModal("Observación registrada satisfactoriamente");
 				this.setTipoModal(TIPO_MODAL_EXITO);
-			}
-			else{
-				this.negocioServicio.registrarEventoAnulacion(this.getEventoObsAnu());
-				
+			} else {
+				this.negocioServicio.registrarEventoAnulacion(this
+						.getEventoObsAnu());
+
 				this.setShowModal(true);
 				this.setMensajeModal("Servicio Venta anulada satisfactoriamente");
 				this.setTipoModal(TIPO_MODAL_EXITO);
@@ -970,7 +987,7 @@ try {
 			this.setMensajeModal(e.getMessage());
 			this.setTipoModal(TIPO_MODAL_ERROR);
 		}
-		
+
 	}
 
 	public void calcularCuota() {
@@ -1050,13 +1067,11 @@ try {
 			if (oe != null) {
 				String valor = oe.toString();
 
-				
-				  Parametro param =
-				  this.parametroServicio.consultarParametro(UtilWeb
-				  .obtenerEnteroPropertieMaestro( "codigoParametroIGV",
-				  "aplicacionDatos"));
-				  this.setServicioFee(valor.equals(param.getValor()));
-				 
+				Parametro param = this.parametroServicio
+						.consultarParametro(UtilWeb
+								.obtenerEnteroPropertieMaestro(
+										"codigoParametroIGV", "aplicacionDatos"));
+				this.setServicioFee(valor.equals(param.getValor()));
 
 				MaestroServicio maestroServicio = this.negocioServicio
 						.consultarMaestroServicio(UtilWeb
@@ -1066,20 +1081,22 @@ try {
 						this.soporteServicio
 								.consultarConfiguracionServicio(UtilWeb
 										.convertirCadenaEntero(valor)));
-				
-				List<BaseVO> listaServicios = this.negocioServicio.consultaServiciosDependientes(UtilWeb
-						.convertirCadenaEntero(valor));
-				
+
+				List<BaseVO> listaServicios = this.negocioServicio
+						.consultaServiciosDependientes(UtilWeb
+								.convertirCadenaEntero(valor));
+
 				this.setCalculadorIGV(false);
 				for (BaseVO baseVO : listaServicios) {
-					if (baseVO.getCodigoEntero().intValue() == UtilWeb.convertirCadenaEntero(param.getValor()) ){
+					if (baseVO.getCodigoEntero().intValue() == UtilWeb
+							.convertirCadenaEntero(param.getValor())) {
 						this.setCalculadorIGV(true);
 						break;
 					}
 				}
-				
+
 				this.setRequiereFee(maestroServicio.isRequiereFee());
-				
+
 				this.setServicioFee(maestroServicio.isEsFee()
 						|| maestroServicio.isEsImpuesto());
 
@@ -1162,20 +1179,20 @@ try {
 					this.listadoDetalleServicio.remove(i);
 				}
 			}
-			if (detalleServicio.getTipoServicio().isRequiereFee()){
+			if (detalleServicio.getTipoServicio().isRequiereFee()) {
 				borrarServiciosFee();
 				this.serviciosFee--;
 			}
-			
+
 		}
 
 		calcularTotales();
 	}
-	
-	private void borrarServiciosFee(){
-		for (int i = 0; i < listadoDetalleServicio.size(); i++){
+
+	private void borrarServiciosFee() {
+		for (int i = 0; i < listadoDetalleServicio.size(); i++) {
 			DetalleServicioAgencia detalleFee = listadoDetalleServicio.get(i);
-			if (detalleFee.getTipoServicio().isEsFee()){
+			if (detalleFee.getTipoServicio().isEsFee()) {
 				listadoDetalleServicio.remove(i);
 				borrarServiciosFee();
 			}
@@ -1184,7 +1201,9 @@ try {
 
 	public void buscarDestino() {
 		try {
-			this.setListaDestinosBusqueda(this.soporteServicio.consultarDestino(this.getDestinoBusqueda().getDescripcion()));
+			this.setListaDestinosBusqueda(this.soporteServicio
+					.consultarDestino(this.getDestinoBusqueda()
+							.getDescripcion()));
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} catch (Exception e) {
@@ -1194,7 +1213,8 @@ try {
 
 	public void buscarOrigen() {
 		try {
-			this.setListaOrigenesBusqueda(this.soporteServicio.consultarOrigen(this.getOrigenBusqueda().getDescripcion()));
+			this.setListaOrigenesBusqueda(this.soporteServicio
+					.consultarOrigen(this.getOrigenBusqueda().getDescripcion()));
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} catch (Exception e) {
@@ -1253,39 +1273,41 @@ try {
 			logger.error(ex.getMessage(), ex);
 		}
 	}
-	
-	public void seleccionarOperadora(){
-		
+
+	public void seleccionarOperadora() {
+
 	}
-	
-	public void registrarNuevoPago(){
+
+	public void registrarNuevoPago() {
 		this.setPagoServicio(null);
 	}
 
 	public void registrarPago() {
 		try {
-			if (validarRegistroPago()){
-				this.getPagoServicio().getServicio().setCodigoEntero(this.getServicioAgencia().getCodigoEntero());
-				
+			if (validarRegistroPago()) {
+				this.getPagoServicio()
+						.getServicio()
+						.setCodigoEntero(
+								this.getServicioAgencia().getCodigoEntero());
+
 				HttpSession session = obtenerSession(false);
 				Usuario usuario = (Usuario) session
 						.getAttribute("usuarioSession");
-				this.getPagoServicio().setUsuarioCreacion(
-						usuario.getUsuario());
+				this.getPagoServicio().setUsuarioCreacion(usuario.getUsuario());
 				this.getPagoServicio().setIpCreacion(
 						obtenerRequest().getRemoteAddr());
 				this.getPagoServicio().setUsuarioModificacion(
 						usuario.getUsuario());
 				this.getPagoServicio().setIpModificacion(
 						obtenerRequest().getRemoteAddr());
-				
+
 				this.negocioServicio.registrarPago(getPagoServicio());
 
 				this.setShowModal(true);
 				this.setMensajeModal("Pago Registrado Satisfactoriamente");
 				this.setTipoModal(TIPO_MODAL_EXITO);
 			}
-			
+
 		} catch (SQLException e) {
 			e.printStackTrace();
 			this.setShowModal(true);
@@ -1298,29 +1320,29 @@ try {
 			this.setTipoModal(TIPO_MODAL_ERROR);
 		}
 	}
-	
+
 	private boolean validarRegistroPago() {
 		boolean resultado = true;
 		String idFormulario = "idFormRegisPago";
-		if (this.getPagoServicio().getMontoPago() == null || BigDecimal.ZERO.equals(this.getPagoServicio().getMontoPago())){
+		if (this.getPagoServicio().getMontoPago() == null
+				|| BigDecimal.ZERO
+						.equals(this.getPagoServicio().getMontoPago())) {
 			this.agregarMensaje(idFormulario + ":idMontoPago",
-					"Ingrese el monto a pagar", "",
-					FacesMessage.SEVERITY_ERROR);
+					"Ingrese el monto a pagar", "", FacesMessage.SEVERITY_ERROR);
 			resultado = false;
 		}
-		if (this.getPagoServicio().getFechaPago() == null){
+		if (this.getPagoServicio().getFechaPago() == null) {
 			this.agregarMensaje(idFormulario + ":idSelFecSer",
-					"Ingrese la fecha de pago", "",
-					FacesMessage.SEVERITY_ERROR);
+					"Ingrese la fecha de pago", "", FacesMessage.SEVERITY_ERROR);
 			resultado = false;
 		}
-		if (StringUtils.length(this.getPagoServicio().getComentario()) > 300){
+		if (StringUtils.length(this.getPagoServicio().getComentario()) > 300) {
 			this.agregarMensaje(idFormulario + ":idTxtComentario",
 					"El comentario no debe ser mayor a 300 caracteres", "",
 					FacesMessage.SEVERITY_ERROR);
 			resultado = false;
 		}
-		
+
 		return resultado;
 	}
 
@@ -1328,9 +1350,9 @@ try {
 		UploadedFile item = event.getUploadedFile();
 
 		String nombre = item.getName();
-		StringTokenizer stk = new StringTokenizer(nombre,".");
+		StringTokenizer stk = new StringTokenizer(nombre, ".");
 		String archivoNombre = stk.nextToken();
-		if (stk.hasMoreTokens()){
+		if (stk.hasMoreTokens()) {
 			archivoNombre = stk.nextToken();
 		}
 		byte[] arregloDatos = IOUtils.toByteArray(item.getInputStream());
@@ -1339,9 +1361,13 @@ try {
 		this.getPagoServicio().setSustentoPagoByte(arregloDatos);
 		this.getPagoServicio().setTipoContenido(item.getContentType());
 	}
-	
+
 	public void preGuardarRelacion() {
 		this.setPregunta("¿Esta seguro de guardar la relación de comprobantes?");
+	}
+	
+	public void agregarComprobanteAdicional(){
+		this.getListaComprobantesAdicionales().add(new Comprobante());
 	}
 
 	/**
@@ -1368,13 +1394,18 @@ try {
 	public List<ServicioAgencia> getListadoServicioAgencia() {
 		try {
 			if (!busquedaRealizada) {
-				
+
 				HttpSession session = obtenerSession(false);
-				Usuario usuario = (Usuario) session.getAttribute(USUARIO_SESSION);
-				if (Integer.valueOf(2).equals(usuario.getRol().getCodigoEntero()) || Integer.valueOf(4).equals(usuario.getRol().getCodigoEntero())) {
-					getServicioAgenciaBusqueda().getVendedor().setCodigoEntero(usuario.getCodigoEntero());
+				Usuario usuario = (Usuario) session
+						.getAttribute(USUARIO_SESSION);
+				if (Integer.valueOf(2).equals(
+						usuario.getRol().getCodigoEntero())
+						|| Integer.valueOf(4).equals(
+								usuario.getRol().getCodigoEntero())) {
+					getServicioAgenciaBusqueda().getVendedor().setCodigoEntero(
+							usuario.getCodigoEntero());
 				}
-				
+
 				listadoServicioAgencia = this.negocioServicio
 						.listarVentaServicio(getServicioAgenciaBusqueda());
 			}
@@ -1387,66 +1418,67 @@ try {
 		}
 		return listadoServicioAgencia;
 	}
-	
-	public void verArchivo(Integer codigoPago){
-		for (PagoServicio pago : this.listaPagosServicios){
-			if (pago.getCodigoEntero().intValue() == codigoPago.intValue()){
+
+	public void verArchivo(Integer codigoPago) {
+		for (PagoServicio pago : this.listaPagosServicios) {
+			if (pago.getCodigoEntero().intValue() == codigoPago.intValue()) {
 				this.setPagoServicio2(pago);
 				break;
 			}
 		}
 	}
-	
-	public void exportarArchivo(){
+
+	public void exportarArchivo() {
 		try {
 			HttpServletResponse response = obtenerResponse();
 			response.setContentType(pagoServicio2.getTipoContenido());
-			response.setHeader("Content-disposition",
-					"attachment;filename="+this.getPagoServicio2().getNombreArchivo());
+			response.setHeader("Content-disposition", "attachment;filename="
+					+ this.getPagoServicio2().getNombreArchivo());
 			response.setHeader("Content-Transfer-Encoding", "binary");
-			
+
 			FacesContext facesContext = obtenerContexto();
-			
+
 			ServletOutputStream respuesta = response.getOutputStream();
-			if (this.getPagoServicio2()!=null && this.getPagoServicio2().getSustentoPagoByte()!=null){
+			if (this.getPagoServicio2() != null
+					&& this.getPagoServicio2().getSustentoPagoByte() != null) {
 				respuesta.write(this.getPagoServicio2().getSustentoPagoByte());
 			}
-			
+
 			respuesta.close();
 			respuesta.flush();
-			
+
 			facesContext.responseComplete();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
-	
-	public void preRegistrarComponente(){
+
+	public void preRegistrarComponente() {
 		this.setPregunta("¿Esta seguro de registrar los comprobantes?");
 	}
-	
-	public void registrarComprobante(){
+
+	public void registrarComprobante() {
 		try {
 			HttpSession session = obtenerSession(false);
-			Usuario usuario = (Usuario) session
-					.getAttribute("usuarioSession");
-			getServicioAgencia().setUsuarioCreacion(
-					usuario.getUsuario());
-			getServicioAgencia().setIpCreacion(
-					obtenerRequest().getRemoteAddr());
-			getServicioAgencia().setUsuarioModificacion(
-					usuario.getUsuario());
+			Usuario usuario = (Usuario) session.getAttribute("usuarioSession");
+			getServicioAgencia().setUsuarioCreacion(usuario.getUsuario());
+			getServicioAgencia()
+					.setIpCreacion(obtenerRequest().getRemoteAddr());
+			getServicioAgencia().setUsuarioModificacion(usuario.getUsuario());
 			getServicioAgencia().setIpModificacion(
 					obtenerRequest().getRemoteAddr());
-			
-			boolean guardo = this.negocioServicio.registrarComprobantes(this.getServicioAgencia());
+
+			boolean guardo = this.negocioServicio.registrarComprobantes(this
+					.getServicioAgencia());
 			this.setGuardoComprobantes(guardo);
 			this.getServicioAgencia().setGuardoComprobante(guardo);
-			
-			if (guardo){
-				this.getServicioAgencia().setListaDetalleServicio(this.negocioServicio.consultarDetalleComprobantes(this.getServicioAgencia().getCodigoEntero()));
+
+			if (guardo) {
+				this.getServicioAgencia().setListaDetalleServicio(
+						this.negocioServicio.consultarDetalleComprobantes(this
+								.getServicioAgencia().getCodigoEntero()));
 			}
-			
+
 			this.setShowModal(true);
 			this.setMensajeModal("Comprobante Registrado Satisfactoriamente");
 			this.setTipoModal(TIPO_MODAL_EXITO);
@@ -1467,19 +1499,20 @@ try {
 			e.printStackTrace();
 		}
 	}
-	
-	public void consultarPagosComprobantes(DetalleServicioAgencia detalle){
+
+	public void consultarPagosComprobantes(DetalleServicioAgencia detalle) {
 		MaestroServicio maestro = detalle.getTipoServicio();
 		this.getTipoServicio().setNombre(maestro.getDescripcion());
-		this.getComprobante().getTipoComprobante().setNombre(detalle.getTipoComprobante().getNombre());
+		this.getComprobante().getTipoComprobante()
+				.setNombre(detalle.getTipoComprobante().getNombre());
 		this.getComprobante().setNumeroComprobante(detalle.getNroComprobante());
 	}
-	
-	public void buscarProveedor(){
+
+	public void buscarProveedor() {
 		try {
 			this.setListadoProveedores(this.negocioServicio
 					.buscarProveedor(getProveedorBusqueda()));
-			
+
 			this.setConsultoProveedor(true);
 		} catch (SQLException e) {
 			logger.error(e.getMessage(), e);
@@ -1487,20 +1520,22 @@ try {
 			e.printStackTrace();
 		}
 	}
-	
-	public void seleccionarProveedor(){
-		for (Proveedor proveedor : this.listadoProveedores){
-			if (proveedor.getCodigoEntero().equals(proveedor.getCodigoSeleccionado())){
+
+	public void seleccionarProveedor() {
+		for (Proveedor proveedor : this.listadoProveedores) {
+			if (proveedor.getCodigoEntero().equals(
+					proveedor.getCodigoSeleccionado())) {
 				this.getComprobanteBusqueda().setProveedor(proveedor);
 				break;
 			}
 		}
 	}
-	
-	public void buscarComprobante(){
+
+	public void buscarComprobante() {
 		try {
-			this.setListaComprobantes(this.negocioServicio.listarObligacionXPagar(getComprobanteBusqueda()));
-			
+			this.setListaComprobantes(this.negocioServicio
+					.listarObligacionXPagar(getComprobanteBusqueda()));
+
 		} catch (SQLException e) {
 			this.setShowModal(true);
 			this.setMensajeModal(e.getMessage());
@@ -1513,54 +1548,63 @@ try {
 			e.printStackTrace();
 		}
 	}
-	
-	public void enviaDetalle(DetalleServicioAgencia detalle){
+
+	public void enviaDetalle(DetalleServicioAgencia detalle) {
 		this.setListaComprobantes(null);
 		this.setDetalleServicio2(detalle);
 	}
-	
-	public void seleccionarComprobante(){
+
+	public void seleccionarComprobante() {
 		Comprobante comprobante1 = null;
-		for (Comprobante comprobante : this.listaComprobantes){
-			if (comprobante.getCodigoEntero().equals(comprobante.getCodigoSeleccionado())){
+		for (Comprobante comprobante : this.listaComprobantes) {
+			if (comprobante.getCodigoEntero().equals(
+					comprobante.getCodigoSeleccionado())) {
 				comprobante1 = comprobante;
 				break;
 			}
 		}
-		
-		for (DetalleServicioAgencia deta : this.getServicioAgencia().getListaDetalleServicio()){
-			if (deta.equals(this.getDetalleServicio2())){
+
+		for (DetalleServicioAgencia deta : this.getServicioAgencia()
+				.getListaDetalleServicio()) {
+			if (deta.equals(this.getDetalleServicio2())) {
 				deta.setComprobanteAsociado(comprobante1);
 				break;
 			}
 		}
 	}
-	
-	public void guardarRelacionComprobanteObligacion(){
+
+	public void guardarRelacionComprobanteObligacion() {
 		try {
 			this.setGuardoRelacionComprobantes(false);
-			
+
 			HttpSession session = obtenerSession(false);
-			Usuario usuario = (Usuario) session
-					.getAttribute("usuarioSession");
-			
+			Usuario usuario = (Usuario) session.getAttribute("usuarioSession");
+
 			this.getServicioAgencia().setUsuarioCreacion(usuario.getUsuario());
-			this.getServicioAgencia().setIpCreacion(obtenerRequest().getRemoteAddr());
-			this.getServicioAgencia().setUsuarioModificacion(usuario.getUsuario());
-			this.getServicioAgencia().setIpModificacion(obtenerRequest().getRemoteAddr());
-			for (DetalleServicioAgencia detalle : this.getServicioAgencia().getListaDetalleServicio()){
+			this.getServicioAgencia().setIpCreacion(
+					obtenerRequest().getRemoteAddr());
+			this.getServicioAgencia().setUsuarioModificacion(
+					usuario.getUsuario());
+			this.getServicioAgencia().setIpModificacion(
+					obtenerRequest().getRemoteAddr());
+			for (DetalleServicioAgencia detalle : this.getServicioAgencia()
+					.getListaDetalleServicio()) {
 				detalle.setUsuarioCreacion(usuario.getUsuario());
 				detalle.setIpCreacion(obtenerRequest().getRemoteAddr());
 				detalle.setUsuarioModificacion(usuario.getUsuario());
 				detalle.setIpModificacion(obtenerRequest().getRemoteAddr());
 			}
-			
-			this.negocioServicio.registrarComprobanteObligacion(this.getServicioAgencia());
-			
+
+			this.negocioServicio.registrarComprobanteObligacion(this
+					.getServicioAgencia());
+
 			this.setGuardoRelacionComprobantes(true);
-			
-			this.getServicioAgencia().setListaDetalleServicio(this.negocioServicio.consultarDetServComprobanteObligacion(this.getServicioAgencia().getCodigoEntero()));
-			
+
+			this.getServicioAgencia().setListaDetalleServicio(
+					this.negocioServicio
+							.consultarDetServComprobanteObligacion(this
+									.getServicioAgencia().getCodigoEntero()));
+
 			this.setShowModal(true);
 			this.setMensajeModal("Se guardo la relacion entre comprobantes satisfactoriamente");
 			this.setTipoModal(TIPO_MODAL_EXITO);
@@ -1576,59 +1620,62 @@ try {
 			e.printStackTrace();
 		}
 	}
-	
-	public void agregarDocumentoAdicional(){
+
+	public void agregarDocumentoAdicional() {
 		this.getListaDocumentosAdicionales().add(new DocumentoAdicional());
 	}
-	
-	public void listenerAdicional(FileUploadEvent event){
+
+	public void listenerAdicional(FileUploadEvent event) {
 		UploadedFile item = event.getUploadedFile();
 
 		String nombre = item.getName();
-		StringTokenizer stk = new StringTokenizer(nombre,".");
+		StringTokenizer stk = new StringTokenizer(nombre, ".");
 		String archivoNombre = stk.nextToken();
-		if (stk.hasMoreTokens()){
+		if (stk.hasMoreTokens()) {
 			archivoNombre = stk.nextToken();
 		}
-		DocumentoAdicional documento = new DocumentoAdicional(); 
-		
+		DocumentoAdicional documento = new DocumentoAdicional();
+
 		documento.getArchivo().setNombreArchivo(nombre);
 		documento.getArchivo().setExtensionArchivo(archivoNombre);
 		documento.getArchivo().setDatos(item.getData());
 		documento.getArchivo().setTipoContenido(item.getContentType());
 		documento.getArchivo().setContent(item.getContentType());
 		documento.setEditarDocumento(true);
-		
+
 		this.getListaDocumentosAdicionales().add(documento);
 	}
-	
-	public void limpiarArchivos(){
-		for (int i=0; i<this.getListaDocumentosAdicionales().size();i++) {
-			DocumentoAdicional documento = this.getListaDocumentosAdicionales().get(i);
-			if (documento.isEditarDocumento()){
+
+	public void limpiarArchivos() {
+		for (int i = 0; i < this.getListaDocumentosAdicionales().size(); i++) {
+			DocumentoAdicional documento = this.getListaDocumentosAdicionales()
+					.get(i);
+			if (documento.isEditarDocumento()) {
 				this.listaDocumentosAdicionales.remove(i);
 			}
 		}
 	}
-	
-	public void grabarDocumentos(){
+
+	public void grabarDocumentos() {
 		try {
 			HttpSession session = obtenerSession(false);
-			Usuario usuario = (Usuario) session
-					.getAttribute("usuarioSession");
-			
-			for (DocumentoAdicional documento : getListaDocumentosAdicionales()){
+			Usuario usuario = (Usuario) session.getAttribute("usuarioSession");
+
+			for (DocumentoAdicional documento : getListaDocumentosAdicionales()) {
 				documento.setIdServicio(getServicioAgencia().getCodigoEntero());
 				documento.setUsuarioCreacion(usuario.getUsuario());
 				documento.setIpCreacion(obtenerRequest().getRemoteAddr());
 				documento.setUsuarioModificacion(usuario.getUsuario());
 				documento.setIpModificacion(obtenerRequest().getRemoteAddr());
 			}
-			
-			this.negocioServicio.grabarDocumentosAdicionales(getListaDocumentosAdicionales());
-			
-			this.setListaDocumentosAdicionales(this.negocioServicio.listarDocumentosAdicionales(getServicioAgencia().getCodigoEntero()));
-			
+
+			this.negocioServicio
+					.grabarDocumentosAdicionales(getListaDocumentosAdicionales());
+
+			this.setListaDocumentosAdicionales(this.negocioServicio
+					.listarDocumentosAdicionales(getServicioAgencia()
+							.getCodigoEntero()));
+
 			this.setShowModal(true);
 			this.setMensajeModal("Se guardaron los documentos satisfactoriamente");
 			this.setTipoModal(TIPO_MODAL_EXITO);
@@ -1648,38 +1695,41 @@ try {
 			this.setTipoModal(TIPO_MODAL_ERROR);
 			logger.error(e.getMessage(), e);
 		}
-		
+
 	}
-	
-	public void seleccionarDocumentoAdicional(Integer idDoc){
-		
-		for (DocumentoAdicional documento : this.getListaDocumentosAdicionales()) {
-			if (documento.getCodigoEntero().equals(idDoc)){
+
+	public void seleccionarDocumentoAdicional(Integer idDoc) {
+
+		for (DocumentoAdicional documento : this
+				.getListaDocumentosAdicionales()) {
+			if (documento.getCodigoEntero().equals(idDoc)) {
 				this.setDocumentoAdicional(documento);
 				break;
 			}
 		}
-		
+
 	}
-	
-	public void exportarArchivoDocumento (){
+
+	public void exportarArchivoDocumento() {
 		try {
 			HttpServletResponse response = obtenerResponse();
-			response.setContentType(getDocumentoAdicional().getArchivo().getContent());
-			response.setHeader("Content-disposition",
-					"attachment;filename="+getDocumentoAdicional().getArchivo().getNombreArchivo());
+			response.setContentType(getDocumentoAdicional().getArchivo()
+					.getContent());
+			response.setHeader("Content-disposition", "attachment;filename="
+					+ getDocumentoAdicional().getArchivo().getNombreArchivo());
 			response.setHeader("Content-Transfer-Encoding", "binary");
-			
+
 			FacesContext facesContext = obtenerContexto();
-			
+
 			ServletOutputStream respuesta = response.getOutputStream();
-			if (getDocumentoAdicional().getArchivo().getDatos()!=null){
-				respuesta.write(getDocumentoAdicional().getArchivo().getDatos());
+			if (getDocumentoAdicional().getArchivo().getDatos() != null) {
+				respuesta
+						.write(getDocumentoAdicional().getArchivo().getDatos());
 			}
-			
+
 			respuesta.close();
 			respuesta.flush();
-			
+
 			facesContext.responseComplete();
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -1687,9 +1737,10 @@ try {
 	}
 
 	/**
-	 * ===================================================================================================
+	 * ========================================================================
+	 * ===========================
 	 */
-	
+
 	/**
 	 * @param listadoServicioAgencia
 	 *            the listadoServicioAgencia to set
@@ -1805,13 +1856,13 @@ try {
 	public ServicioAgenciaBusqueda getServicioAgenciaBusqueda() {
 		if (servicioAgenciaBusqueda == null) {
 			servicioAgenciaBusqueda = new ServicioAgenciaBusqueda();
-			
+
 			Calendar cal = Calendar.getInstance();
 			servicioAgenciaBusqueda.setFechaHasta(cal.getTime());
 			cal.add(Calendar.DATE, -7);
 			servicioAgenciaBusqueda.setFechaDesde(cal.getTime());
 		}
-		
+
 		return servicioAgenciaBusqueda;
 	}
 
@@ -1991,18 +2042,20 @@ try {
 	 */
 	public List<PagoServicio> getListaPagosServicios() {
 		try {
-			listaPagosServicios = this.negocioServicio.listarPagosServicio(this.getServicioAgencia().getCodigoEntero());
+			listaPagosServicios = this.negocioServicio.listarPagosServicio(this
+					.getServicioAgencia().getCodigoEntero());
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
+
 		return listaPagosServicios;
 	}
 
 	/**
-	 * @param listaPagosServicios the listaPagosServicios to set
+	 * @param listaPagosServicios
+	 *            the listaPagosServicios to set
 	 */
 	public void setListaPagosServicios(List<PagoServicio> listaPagosServicios) {
 		this.listaPagosServicios = listaPagosServicios;
@@ -2012,9 +2065,10 @@ try {
 	 * @return the saldoServicio
 	 */
 	public BigDecimal getSaldoServicio() {
-		
+
 		try {
-			saldoServicio = this.negocioServicio.consultarSaldoServicio(this.getServicioAgencia().getCodigoEntero());
+			saldoServicio = this.negocioServicio.consultarSaldoServicio(this
+					.getServicioAgencia().getCodigoEntero());
 		} catch (SQLException e) {
 			saldoServicio = BigDecimal.ZERO;
 			e.printStackTrace();
@@ -2022,12 +2076,13 @@ try {
 			saldoServicio = BigDecimal.ZERO;
 			e.printStackTrace();
 		}
-		
+
 		return saldoServicio;
 	}
 
 	/**
-	 * @param saldoServicio the saldoServicio to set
+	 * @param saldoServicio
+	 *            the saldoServicio to set
 	 */
 	public void setSaldoServicio(BigDecimal saldoServicio) {
 		this.saldoServicio = saldoServicio;
@@ -2041,7 +2096,8 @@ try {
 	}
 
 	/**
-	 * @param vendedor the vendedor to set
+	 * @param vendedor
+	 *            the vendedor to set
 	 */
 	public void setVendedor(boolean vendedor) {
 		this.vendedor = vendedor;
@@ -2055,7 +2111,8 @@ try {
 	}
 
 	/**
-	 * @param pregunta the pregunta to set
+	 * @param pregunta
+	 *            the pregunta to set
 	 */
 	public void setPregunta(String pregunta) {
 		this.pregunta = pregunta;
@@ -2069,7 +2126,8 @@ try {
 	}
 
 	/**
-	 * @param nombreCampoTexto the nombreCampoTexto to set
+	 * @param nombreCampoTexto
+	 *            the nombreCampoTexto to set
 	 */
 	public void setNombreCampoTexto(String nombreCampoTexto) {
 		this.nombreCampoTexto = nombreCampoTexto;
@@ -2083,7 +2141,8 @@ try {
 	}
 
 	/**
-	 * @param nombreTitulo the nombreTitulo to set
+	 * @param nombreTitulo
+	 *            the nombreTitulo to set
 	 */
 	public void setNombreTitulo(String nombreTitulo) {
 		this.nombreTitulo = nombreTitulo;
@@ -2093,14 +2152,15 @@ try {
 	 * @return the eventoObsAnu
 	 */
 	public EventoObsAnu getEventoObsAnu() {
-		if (eventoObsAnu == null){
+		if (eventoObsAnu == null) {
 			eventoObsAnu = new EventoObsAnu();
 		}
 		return eventoObsAnu;
 	}
 
 	/**
-	 * @param eventoObsAnu the eventoObsAnu to set
+	 * @param eventoObsAnu
+	 *            the eventoObsAnu to set
 	 */
 	public void setEventoObsAnu(EventoObsAnu eventoObsAnu) {
 		this.eventoObsAnu = eventoObsAnu;
@@ -2114,7 +2174,8 @@ try {
 	}
 
 	/**
-	 * @param tipoEvento the tipoEvento to set
+	 * @param tipoEvento
+	 *            the tipoEvento to set
 	 */
 	public void setTipoEvento(Integer tipoEvento) {
 		this.tipoEvento = tipoEvento;
@@ -2128,7 +2189,8 @@ try {
 	}
 
 	/**
-	 * @param idModales the idModales to set
+	 * @param idModales
+	 *            the idModales to set
 	 */
 	public void setIdModales(String idModales) {
 		this.idModales = idModales;
@@ -2142,7 +2204,8 @@ try {
 	}
 
 	/**
-	 * @param calculadorIGV the calculadorIGV to set
+	 * @param calculadorIGV
+	 *            the calculadorIGV to set
 	 */
 	public void setCalculadorIGV(boolean calculadorIGV) {
 		this.calculadorIGV = calculadorIGV;
@@ -2152,14 +2215,15 @@ try {
 	 * @return the pagoServicio2
 	 */
 	public PagoServicio getPagoServicio2() {
-		if (pagoServicio2 == null){
+		if (pagoServicio2 == null) {
 			pagoServicio2 = new PagoServicio();
 		}
 		return pagoServicio2;
 	}
 
 	/**
-	 * @param pagoServicio2 the pagoServicio2 to set
+	 * @param pagoServicio2
+	 *            the pagoServicio2 to set
 	 */
 	public void setPagoServicio2(PagoServicio pagoServicio2) {
 		this.pagoServicio2 = pagoServicio2;
@@ -2173,7 +2237,8 @@ try {
 	}
 
 	/**
-	 * @param guardoComprobantes the guardoComprobantes to set
+	 * @param guardoComprobantes
+	 *            the guardoComprobantes to set
 	 */
 	public void setGuardoComprobantes(boolean guardoComprobantes) {
 		this.guardoComprobantes = guardoComprobantes;
@@ -2183,14 +2248,15 @@ try {
 	 * @return the comprobante
 	 */
 	public Comprobante getComprobante() {
-		if (comprobante == null){
+		if (comprobante == null) {
 			comprobante = new Comprobante();
 		}
 		return comprobante;
 	}
 
 	/**
-	 * @param comprobante the comprobante to set
+	 * @param comprobante
+	 *            the comprobante to set
 	 */
 	public void setComprobante(Comprobante comprobante) {
 		this.comprobante = comprobante;
@@ -2200,14 +2266,15 @@ try {
 	 * @return the tipoServicio
 	 */
 	public BaseVO getTipoServicio() {
-		if (tipoServicio == null){
+		if (tipoServicio == null) {
 			tipoServicio = new BaseVO();
 		}
 		return tipoServicio;
 	}
 
 	/**
-	 * @param tipoServicio the tipoServicio to set
+	 * @param tipoServicio
+	 *            the tipoServicio to set
 	 */
 	public void setTipoServicio(BaseVO tipoServicio) {
 		this.tipoServicio = tipoServicio;
@@ -2221,9 +2288,11 @@ try {
 	}
 
 	/**
-	 * @param listaPagosComprobante the listaPagosComprobante to set
+	 * @param listaPagosComprobante
+	 *            the listaPagosComprobante to set
 	 */
-	public void setListaPagosComprobante(List<PagoServicio> listaPagosComprobante) {
+	public void setListaPagosComprobante(
+			List<PagoServicio> listaPagosComprobante) {
 		this.listaPagosComprobante = listaPagosComprobante;
 	}
 
@@ -2231,14 +2300,15 @@ try {
 	 * @return the comprobanteBusqueda
 	 */
 	public Comprobante getComprobanteBusqueda() {
-		if (comprobanteBusqueda == null){
+		if (comprobanteBusqueda == null) {
 			comprobanteBusqueda = new Comprobante();
 		}
 		return comprobanteBusqueda;
 	}
 
 	/**
-	 * @param comprobanteBusqueda the comprobanteBusqueda to set
+	 * @param comprobanteBusqueda
+	 *            the comprobanteBusqueda to set
 	 */
 	public void setComprobanteBusqueda(Comprobante comprobanteBusqueda) {
 		this.comprobanteBusqueda = comprobanteBusqueda;
@@ -2252,7 +2322,8 @@ try {
 	}
 
 	/**
-	 * @param listaComprobantes the listaComprobantes to set
+	 * @param listaComprobantes
+	 *            the listaComprobantes to set
 	 */
 	public void setListaComprobantes(List<Comprobante> listaComprobantes) {
 		this.listaComprobantes = listaComprobantes;
@@ -2262,14 +2333,15 @@ try {
 	 * @return the proveedorBusqueda
 	 */
 	public Proveedor getProveedorBusqueda() {
-		if (proveedorBusqueda == null){
+		if (proveedorBusqueda == null) {
 			proveedorBusqueda = new Proveedor();
 		}
 		return proveedorBusqueda;
 	}
 
 	/**
-	 * @param proveedorBusqueda the proveedorBusqueda to set
+	 * @param proveedorBusqueda
+	 *            the proveedorBusqueda to set
 	 */
 	public void setProveedorBusqueda(Proveedor proveedorBusqueda) {
 		this.proveedorBusqueda = proveedorBusqueda;
@@ -2283,7 +2355,8 @@ try {
 	}
 
 	/**
-	 * @param listadoProveedores the listadoProveedores to set
+	 * @param listadoProveedores
+	 *            the listadoProveedores to set
 	 */
 	public void setListadoProveedores(List<Proveedor> listadoProveedores) {
 		this.listadoProveedores = listadoProveedores;
@@ -2297,7 +2370,8 @@ try {
 	}
 
 	/**
-	 * @param consultoProveedor the consultoProveedor to set
+	 * @param consultoProveedor
+	 *            the consultoProveedor to set
 	 */
 	public void setConsultoProveedor(boolean consultoProveedor) {
 		this.consultoProveedor = consultoProveedor;
@@ -2311,7 +2385,8 @@ try {
 	}
 
 	/**
-	 * @param detalleServicio2 the detalleServicio2 to set
+	 * @param detalleServicio2
+	 *            the detalleServicio2 to set
 	 */
 	public void setDetalleServicio2(DetalleServicioAgencia detalleServicio2) {
 		this.detalleServicio2 = detalleServicio2;
@@ -2325,7 +2400,8 @@ try {
 	}
 
 	/**
-	 * @param guardoRelacionComprobantes the guardoRelacionComprobantes to set
+	 * @param guardoRelacionComprobantes
+	 *            the guardoRelacionComprobantes to set
 	 */
 	public void setGuardoRelacionComprobantes(boolean guardoRelacionComprobantes) {
 		this.guardoRelacionComprobantes = guardoRelacionComprobantes;
@@ -2339,7 +2415,8 @@ try {
 	}
 
 	/**
-	 * @param serviciosFee the serviciosFee to set
+	 * @param serviciosFee
+	 *            the serviciosFee to set
 	 */
 	public void setServiciosFee(int serviciosFee) {
 		this.serviciosFee = serviciosFee;
@@ -2353,7 +2430,8 @@ try {
 	}
 
 	/**
-	 * @param requiereFee the requiereFee to set
+	 * @param requiereFee
+	 *            the requiereFee to set
 	 */
 	public void setRequiereFee(boolean requiereFee) {
 		this.requiereFee = requiereFee;
@@ -2363,14 +2441,15 @@ try {
 	 * @return the listaDocumentosAdicionales
 	 */
 	public List<DocumentoAdicional> getListaDocumentosAdicionales() {
-		if (listaDocumentosAdicionales == null){
+		if (listaDocumentosAdicionales == null) {
 			listaDocumentosAdicionales = new ArrayList<DocumentoAdicional>();
 		}
 		return listaDocumentosAdicionales;
 	}
 
 	/**
-	 * @param listaDocumentosAdicionales the listaDocumentosAdicionales to set
+	 * @param listaDocumentosAdicionales
+	 *            the listaDocumentosAdicionales to set
 	 */
 	public void setListaDocumentosAdicionales(
 			List<DocumentoAdicional> listaDocumentosAdicionales) {
@@ -2385,7 +2464,8 @@ try {
 	}
 
 	/**
-	 * @param documentoAdicional the documentoAdicional to set
+	 * @param documentoAdicional
+	 *            the documentoAdicional to set
 	 */
 	public void setDocumentoAdicional(DocumentoAdicional documentoAdicional) {
 		this.documentoAdicional = documentoAdicional;
@@ -2395,14 +2475,15 @@ try {
 	 * @return the listaComprobantesAdicionales
 	 */
 	public List<Comprobante> getListaComprobantesAdicionales() {
-		if (listaComprobantesAdicionales == null){
+		if (listaComprobantesAdicionales == null) {
 			listaComprobantesAdicionales = new ArrayList<Comprobante>();
 		}
 		return listaComprobantesAdicionales;
 	}
 
 	/**
-	 * @param listaComprobantesAdicionales the listaComprobantesAdicionales to set
+	 * @param listaComprobantesAdicionales
+	 *            the listaComprobantesAdicionales to set
 	 */
 	public void setListaComprobantesAdicionales(
 			List<Comprobante> listaComprobantesAdicionales) {
