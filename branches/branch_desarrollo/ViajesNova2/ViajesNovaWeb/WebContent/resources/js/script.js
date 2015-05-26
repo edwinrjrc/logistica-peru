@@ -21,7 +21,9 @@ function mostrarModal(idform) {
 	}
 }
 
-function mostrarModal2(){
+function mostrarModalP(idform, boton){
+	document.getElementById(boton).click();
+	mostrarModal(idform);
 	
 }
 

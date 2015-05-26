@@ -187,7 +187,7 @@
 							<h:outputText value="Servicios" />
 						</f:facet>
 						<h:panelGrid cellpadding="0" cellspacing="0" border="0"
-							style="width:100%;" columns="1">
+							style="width:100%;" columns="1" id="idGrdPanel">
 							<h:panelGrid cellpadding="0" cellspacing="0" border="0"
 								style="width:100%;" id="idFrNuevServicio">
 								<h:panelGrid columns="4" cellpadding="0" cellspacing="0"
@@ -385,7 +385,6 @@
 									<h:outputText value=""
 										rendered="#{servicioAgenteMBean.detalleServicio.configuracionTipoServicio.muestraPrecioBase}" />
 
-
 								</h:panelGrid>
 
 								<h:panelGrid columns="4" cellpadding="0" cellspacing="0"
@@ -401,6 +400,15 @@
 										<rich:message for="idFecServicio" showDetail="false"
 											showSummary="true" ajaxRendered="true"></rich:message>
 									</h:panelGrid>
+
+									<h:outputText value="Servicio Padre"
+										rendered="#{!servicioAgenteMBean.detalleServicio.tipoServicio.servicioPadre}" />
+									<h:selectOneMenu
+										rendered="#{!servicioAgenteMBean.detalleServicio.tipoServicio.servicioPadre}"
+										value="#{servicioAgenteMBean.detalleServicio.servicioPadre.codigoEntero}">
+										<f:selectItems
+											value="#{servicioAgenteMBean.listadoServiciosPadre}"></f:selectItems>
+									</h:selectOneMenu>
 
 									<h:outputText value="Fecha Regreso"
 										rendered="#{servicioAgenteMBean.detalleServicio.configuracionTipoServicio.muestraFechaRegreso}" />
@@ -452,92 +460,93 @@
 								<f:facet name="footer">
 									<h:panelGrid cellpadding="0" cellspacing="0" border="0"
 										style="width:100%;text-align:center;" columns="1">
-										<a4j:commandButton value="Agregar"
-											render="idServVenta,idFrNuevServicio,idTotalesServicios,idfrcred,idPanelHidden,idPanelBotones,idModalcorrecto,idModalError"
+										<a4j:commandButton value="Agregar" type="button"
+											render="idGrdTabla, idServVenta, idDetalleTabla, idGrdPanel, idFrNuevServicio, idTotalesServicios, idfrcred, idPanelHidden, idPanelBotones, idModalcorrecto, idModalError"
 											action="#{servicioAgenteMBean.agregarServicio()}"
-											oncomplete="mostrarModal('idformadmservicios')" />
+											oncomplete="mostrarModal('idformadmservicios')" >
+										</a4j:commandButton>
 									</h:panelGrid>
 								</f:facet>
 							</h:panelGrid>
 							<h:panelGrid columns="1" cellpadding="0" cellspacing="0"
-								border="0" style="width:100%;">
-								<rich:dataTable id="idServVenta" var="row"
+								border="0" style="width:100%;" id="idGrdTabla">
+
+								<rich:dataTable id="idServVenta" var="fila"
 									value="#{servicioAgenteMBean.listadoDetalleServicio}"
-									style="width:100%;">
-									<rich:column style="text-align:right;width: 4%;">
-										<f:facet name="header">
-											<h:panelGrid cellpadding="0" cellspacing="0" border="0"
-												style="text-align:center;">
+									style="width:100%;" >
+									<f:facet name="header">
+										<rich:columnGroup>
+											<rich:column colspan="7">
+												<h:outputText value="Servicios Agregados" />
+											</rich:column>
+											<rich:column breakRowBefore="true"
+												style="text-align:right;width: 4%;">
 												<h:outputText value="Unid." />
-											</h:panelGrid>
-										</f:facet>
-										<h:outputText value="#{row.cantidad}" />
-									</rich:column>
-									<rich:column style="text-align:right;width: 4%;">
-										<f:facet name="header">
-											<h:panelGrid cellpadding="0" cellspacing="0" border="0"
-												style="text-align:center;">
+											</rich:column>
+											<rich:column style="text-align:right;width: 4%;">
 												<h:outputText value="Fecha Servicio" />
-											</h:panelGrid>
-										</f:facet>
-										<h:outputText value="#{row.fechaIda}">
-											<f:convertDateTime pattern="dd/MM/yyyy" />
-										</h:outputText>
-									</rich:column>
-									<rich:column style="text-align:left;width: 75%;">
-										<f:facet name="header">
-											<h:panelGrid cellpadding="0" cellspacing="0" border="0"
-												style="width:100%; text-align:center;">
-												<h:outputText value="Servicio - Descripcion" />
-											</h:panelGrid>
-										</f:facet>
-										<h:outputText
-											value="#{row.tipoServicio.nombre} - #{row.descripcionServicio}" />
-									</rich:column>
-									<rich:column style="text-align:left;width: 75%;">
-										<f:facet name="header">
-											<h:panelGrid cellpadding="0" cellspacing="0" border="0"
-												style="width:100%; text-align:center;">
+											</rich:column>
+											<rich:column style="text-align:left;width: 40%;">
+												<h:outputText value="Servicio - Descripción" />
+											</rich:column>
+											<rich:column style="text-align:left;width: 16%;">
 												<h:outputText value="Proveedor" />
-											</h:panelGrid>
-										</f:facet>
-										<h:outputText
-											value="#{row.servicioProveedor.proveedor.nombres}" />
-									</rich:column>
-									<rich:column style="text-align:right;width: 10%;">
-										<f:facet name="header">
-											<h:panelGrid cellpadding="0" cellspacing="0" border="0"
-												style="width:100%; text-align:center;">
+											</rich:column>
+											<rich:column style="text-align:right;width: 15%;">
 												<h:outputText value="Precio Unitario" />
-											</h:panelGrid>
-										</f:facet>
-										<h:outputText value="#{row.precioUnitario}">
-											<f:convertNumber pattern="###,##0.00" locale="en_US" />
-										</h:outputText>
-									</rich:column>
-									<rich:column style="text-align:right;width: 10%;">
-										<f:facet name="header">
-											<h:panelGrid cellpadding="0" cellspacing="0" border="0"
-												style="width:100%; text-align:center;">
+											</rich:column>
+											<rich:column style="text-align:right;width: 20%;">
 												<h:outputText value="Total" />
-											</h:panelGrid>
-										</f:facet>
-										<h:outputText value="#{row.totalServicio}">
-											<f:convertNumber pattern="###,##0.00" locale="en_US" />
-										</h:outputText>
-									</rich:column>
-									<rich:column style="text-align:center;width: 1%;">
-										<a4j:commandLink
-											action="#{servicioAgenteMBean.eliminarServicio(row)}"
-											render="idServVenta,idFrNuevServicio,idTotalesServicios,idfrcred">
-											<h:graphicImage style="border:0px;"
-												value="#{facesContext.externalContext.requestContextPath}/../resources/img/tacho.gif" />
-										</a4j:commandLink>
-									</rich:column>
-									<f:facet name="footer">
-										<rich:dataScroller for="idServVenta" />
+											</rich:column>
+											<rich:column style="text-align:center;width: 1%;">
+												<h:outputText value="Total" />
+											</rich:column>
+										</rich:columnGroup>
 									</f:facet>
+									<rich:column colspan="7">
+										<rich:collapsibleSubTableToggler for="idDetalleTabla" />
+										<h:outputText value="#{fila.descripcionServicio}" />
+									</rich:column>
+									<rich:collapsibleSubTable value="#{fila.serviciosHijos}"
+										var="filaHija" id="idDetalleTabla" expandMode="ajax" >
+										<rich:column style="text-align:right;width: 4%;">
+											<h:outputText value="#{filaHija.cantidad}" />
+										</rich:column>
+										<rich:column style="text-align:right;width: 4%;">
+											<h:outputText value="#{filaHija.fechaIda}">
+												<f:convertDateTime pattern="dd/MM/yyyy" />
+											</h:outputText>
+										</rich:column>
+										<rich:column style="text-align:left;width: 40%;">
+											<h:outputText
+												value="#{filaHija.tipoServicio.nombre} - #{filaHija.descripcionServicio}" />
+										</rich:column>
+										<rich:column style="text-align:left;width: 16%;">
+											<h:outputText
+												value="#{filaHija.servicioProveedor.proveedor.nombres}" />
+										</rich:column>
+										<rich:column style="text-align:right;width: 15%;">
+											<h:outputText value="#{filaHija.precioUnitario}">
+												<f:convertNumber pattern="###,##0.00" locale="en_US" />
+											</h:outputText>
+										</rich:column>
+										<rich:column style="text-align:right;width: 20%;">
+											<h:outputText value="#{filaHija.totalServicio}">
+												<f:convertNumber pattern="###,##0.00" locale="en_US" />
+											</h:outputText>
+										</rich:column>
+										<rich:column style="text-align:center;width: 1%;">
+											<a4j:commandLink
+												action="#{servicioAgenteMBean.eliminarServicio(row)}"
+												render="idServVenta,idFrNuevServicio,idTotalesServicios,idfrcred">
+												<h:graphicImage style="border:0px;"
+													value="#{facesContext.externalContext.requestContextPath}/../resources/img/tacho.gif" />
+											</a4j:commandLink>
+										</rich:column>
+									</rich:collapsibleSubTable>
 								</rich:dataTable>
+
+
 								<h:panelGrid columns="2" cellpadding="0" cellspacing="0"
 									border="0" style="width:100%;" id="idTotalesServicios"
 									columnClasses="col1RSPN,col2RSPN">

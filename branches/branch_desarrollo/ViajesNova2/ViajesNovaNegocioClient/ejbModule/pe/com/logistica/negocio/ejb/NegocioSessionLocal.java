@@ -81,13 +81,9 @@ public interface NegocioSessionLocal {
 	ServicioNovios agregarServicio(ServicioNovios servicioNovios)
 			throws SQLException, Exception;
 
-	DetalleServicioAgencia agregarServicioVenta(
-			DetalleServicioAgencia detalleServicio) throws ErrorRegistroDataException, SQLException,
-			Exception;
-
-	public List<DetalleServicioAgencia> ordenarServiciosVenta(
-			List<DetalleServicioAgencia> listaServicio) throws SQLException,
-			Exception;
+	List<DetalleServicioAgencia> agregarServicioVenta(List<DetalleServicioAgencia> listaServiciosVenta,
+			DetalleServicioAgencia detalleServicio)
+			throws ErrorRegistroDataException, SQLException, Exception;
 
 	public BigDecimal calcularValorCuota(ServicioAgencia servicioAgencia)
 			throws SQLException, Exception;
@@ -99,7 +95,8 @@ public interface NegocioSessionLocal {
 			throws SQLException, Exception;
 
 	public List<ServicioAgencia> listarServicioVenta(
-			ServicioAgenciaBusqueda servicioAgencia) throws SQLException, Exception;
+			ServicioAgenciaBusqueda servicioAgencia) throws SQLException,
+			Exception;
 
 	public ServicioAgencia consultarServicioVenta(int idServicio)
 			throws SQLException, Exception;
@@ -148,10 +145,6 @@ public interface NegocioSessionLocal {
 	public List<MaestroServicio> listarMaestroServicioIgv()
 			throws SQLException, Exception;
 
-	public List<DetalleServicioAgencia> agregarServicioVentaInvisible(
-			DetalleServicioAgencia detalleServicio2)
-			throws ErrorConsultaDataException, Exception;
-
 	List<MaestroServicio> listarMaestroServicioAdm() throws SQLException,
 			Exception;
 
@@ -160,58 +153,71 @@ public interface NegocioSessionLocal {
 
 	boolean ingresarConsolidador(Consolidador consolidador)
 			throws SQLException, Exception;
-	
-	public boolean actualizarConsolidador(Consolidador consolidador) throws SQLException, Exception;
-	
-	public List<Consolidador> listarConsolidador() throws SQLException, Exception;
-	
-	public Consolidador consultarConsolidador(Consolidador consolidador) throws SQLException, Exception;
-	
-	public BigDecimal calculaPorcentajeComision(
-			DetalleServicioAgencia detalleServicio) throws SQLException, Exception;
-	
-	public void registrarPago(PagoServicio pago) throws SQLException, Exception;
-	
-	public List<PagoServicio> listarPagosServicio(Integer idServicio) throws SQLException, Exception;
-	
-	public BigDecimal consultarSaldoServicio(Integer idServicio) throws SQLException, Exception;
-	
-	void cerrarVenta(ServicioAgencia servicioAgencia) throws SQLException,
-	Exception;
-	
-	public void anularVenta(ServicioAgencia servicioAgencia) throws SQLException, Exception;
 
-	public void registrarEventoObservacion(EventoObsAnu evento) throws SQLException, Exception;
-	
-	public void registrarEventoAnulacion(EventoObsAnu evento) throws SQLException, Exception;
-	
-	public boolean registrarComprobantes(
-			ServicioAgencia servicioAgencia) throws ValidacionException, SQLException, Exception;
-	
+	public boolean actualizarConsolidador(Consolidador consolidador)
+			throws SQLException, Exception;
+
+	public List<Consolidador> listarConsolidador() throws SQLException,
+			Exception;
+
+	public Consolidador consultarConsolidador(Consolidador consolidador)
+			throws SQLException, Exception;
+
+	public BigDecimal calculaPorcentajeComision(
+			DetalleServicioAgencia detalleServicio) throws SQLException,
+			Exception;
+
+	public void registrarPago(PagoServicio pago) throws SQLException, Exception;
+
+	public List<PagoServicio> listarPagosServicio(Integer idServicio)
+			throws SQLException, Exception;
+
+	public BigDecimal consultarSaldoServicio(Integer idServicio)
+			throws SQLException, Exception;
+
+	void cerrarVenta(ServicioAgencia servicioAgencia) throws SQLException,
+			Exception;
+
+	public void anularVenta(ServicioAgencia servicioAgencia)
+			throws SQLException, Exception;
+
+	public void registrarEventoObservacion(EventoObsAnu evento)
+			throws SQLException, Exception;
+
+	public void registrarEventoAnulacion(EventoObsAnu evento)
+			throws SQLException, Exception;
+
+	public boolean registrarComprobantes(ServicioAgencia servicioAgencia)
+			throws ValidacionException, SQLException, Exception;
+
 	List<DetalleServicioAgencia> consultarDetalleServicioComprobante(
 			Integer idServicio) throws SQLException, Exception;
-	
+
 	boolean registrarObligacionXPagar(Comprobante comprobante)
 			throws SQLException, Exception;
 
 	List<Comprobante> listarObligacionXPagar(Comprobante comprobante)
 			throws SQLException, Exception;
-	
+
 	void registrarPagoObligacion(PagoServicio pago) throws SQLException,
-	Exception;
-	
-	List<PagoServicio> listarPagosObligacion(Integer idObligacion)
-			throws SQLException, Exception;
-	
-	void registrarRelacionComproObligacion(
-			ServicioAgencia servicioAgencia) throws SQLException,
 			Exception;
 
-	public List<DetalleServicioAgencia> consultarDetServComprobanteObligacion(Integer idServicio) throws SQLException, Exception;
+	List<PagoServicio> listarPagosObligacion(Integer idObligacion)
+			throws SQLException, Exception;
+
+	void registrarRelacionComproObligacion(ServicioAgencia servicioAgencia)
+			throws SQLException, Exception;
+
+	public List<DetalleServicioAgencia> consultarDetServComprobanteObligacion(
+			Integer idServicio) throws SQLException, Exception;
 
 	boolean grabarDocumentosAdicionales(List<DocumentoAdicional> listaDocumentos)
 			throws ErrorRegistroDataException, SQLException, Exception;
 
 	List<DocumentoAdicional> listarDocumentosAdicionales(Integer idServicio)
 			throws SQLException;
+
+	public void registrarComprobantesAdicionales(
+			List<Comprobante> listaComprobantesAdicionales)
+			throws ErrorRegistroDataException, SQLException, Exception;
 }

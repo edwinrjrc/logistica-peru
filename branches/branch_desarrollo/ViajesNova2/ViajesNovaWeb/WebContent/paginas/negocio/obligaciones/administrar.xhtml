@@ -175,8 +175,8 @@
 			src="/paginas/negocio/obligaciones/modal/admpagoscomprobante.xhtml" />
 		<ui:include src="/resources/includes/includemensaje.xhtml">
 			<ui:param name="backBean" value="#{obligacionPorPagarMBean}" />
-			<ui:param name="idModalForm" value="#{null}" />
-			<ui:param name="idrender" value="#{null}" />
+			<ui:param name="idModalForm" value="idModalformobligacion" />
+			<ui:param name="idrender" value="idTabla" />
 		</ui:include>
 		<script type="text/javascript">
 		mostrarModal('idformadmobligatorios');

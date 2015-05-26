@@ -4,8 +4,12 @@
 package pe.com.logistica.negocio.util;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.regex.Matcher;
@@ -13,14 +17,25 @@ import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.StringUtils;
 
+import pe.com.logistica.bean.Util.UtilParse;
 import pe.com.logistica.bean.base.BaseVO;
 import pe.com.logistica.bean.negocio.Comprobante;
 import pe.com.logistica.bean.negocio.DetalleComprobante;
 import pe.com.logistica.bean.negocio.DetalleServicioAgencia;
+import pe.com.logistica.bean.negocio.MaestroServicio;
 import pe.com.logistica.bean.negocio.Parametro;
+import pe.com.logistica.bean.negocio.Proveedor;
 import pe.com.logistica.bean.negocio.ServicioAgencia;
+import pe.com.logistica.negocio.dao.ComunDao;
+import pe.com.logistica.negocio.dao.DestinoDao;
+import pe.com.logistica.negocio.dao.MaestroServicioDao;
 import pe.com.logistica.negocio.dao.ParametroDao;
+import pe.com.logistica.negocio.dao.ProveedorDao;
+import pe.com.logistica.negocio.dao.impl.ComunDaoImpl;
+import pe.com.logistica.negocio.dao.impl.DestinoDaoImpl;
+import pe.com.logistica.negocio.dao.impl.MaestroServicioDaoImpl;
 import pe.com.logistica.negocio.dao.impl.ParametroDaoImpl;
+import pe.com.logistica.negocio.dao.impl.ProveedorDaoImpl;
 
 /**
  * @author Edwin
@@ -182,5 +197,28 @@ public class UtilEjb {
 			e.printStackTrace();
 		}
         return false;
+	}
+	
+	public static List<DetalleServicioAgencia> ordenarServiciosVenta(
+			List<DetalleServicioAgencia> listaServicio) throws SQLException,
+			Exception {
+
+		Collections.sort(listaServicio,
+				new Comparator<DetalleServicioAgencia>() {
+					@Override
+					public int compare(DetalleServicioAgencia s1,
+							DetalleServicioAgencia s2) {
+
+						if (s1.getFechaIda().before(s2.getFechaIda())) {
+							return -1;
+						}
+						if (s1.getFechaIda().after(s2.getFechaIda())) {
+							return 1;
+						}
+						return 0;
+					}
+				});
+
+		return listaServicio;
 	}
 }

@@ -392,62 +392,78 @@
 							<h:outputText value="Comprobantes Adicionales" />
 						</f:facet>
 
-						<rich:dataTable id="idTablaComprobantesAdd"
-							value="#{servicioAgenteMBean.listaComprobantesAdicionales}"
-							var="fila" style="width:100%;">
-							<rich:column>
+						<h:panelGrid cellpadding="0" cellspacing="0" border="0"
+							columns="1">
+							<rich:dataTable id="idTablaComprobantesAdd"
+								value="#{servicioAgenteMBean.listaComprobantesAdicionales}"
+								var="fila" style="width:100%;">
+								<rich:column>
+									<f:facet name="header">
+										<h:outputText value="Tipo Comprobante" />
+									</f:facet>
+									<h:selectOneMenu value="#{fila.tipoComprobante.codigoEntero}">
+										<f:selectItems
+											value="#{catalogoMBean.catalogoTipoComprobante}" />
+									</h:selectOneMenu>
+								</rich:column>
+								<rich:column>
+									<f:facet name="header">
+										<h:outputText value="Número Comprobante" />
+									</f:facet>
+									<h:inputText value="#{fila.numeroComprobante}" />
+								</rich:column>
+								<rich:column>
+									<f:facet name="header">
+										<h:outputText value="Fecha Comprobante" />
+									</f:facet>
+									<rich:calendar value="#{fila.fechaComprobante}"
+										datePattern="dd/MM/yyyy"></rich:calendar>
+								</rich:column>
+								<rich:column>
+									<f:facet name="header">
+										<h:outputText value="Detalle Comprobante" />
+									</f:facet>
+									<h:inputTextarea value="#{fila.detalleTextoComprobante}"
+										rows="4" cols="20" />
+								</rich:column>
+								<rich:column>
+									<f:facet name="header">
+										<h:outputText value="Total IGV Comprobante" />
+									</f:facet>
+									<h:inputText value="#{fila.totalIGV}" />
+								</rich:column>
+								<rich:column>
+									<f:facet name="header">
+										<h:outputText value="Total Comprobante" />
+									</f:facet>
+									<h:inputText value="#{fila.totalComprobante}" />
+								</rich:column>
+								<rich:column>
+									<f:facet name="header">
+										<h:outputText value="Eliminar" />
+									</f:facet>
+									<a4j:commandButton value="Eliminar"></a4j:commandButton>
+								</rich:column>
 								<f:facet name="header">
-									<h:outputText value="Tipo Comprobante" />
+									<h:panelGrid cellpadding="0" cellspacing="0" border="0"
+										style="width:100%;text-align:right;">
+										<a4j:commandButton
+											action="#{servicioAgenteMBean.agregarComprobanteAdicional()}"
+											value="Agregar" render="idTablaComprobantesAdd"></a4j:commandButton>
+									</h:panelGrid>
 								</f:facet>
-								<h:selectOneMenu value="#{fila.tipoComprobante.codigoEntero}">
-									<f:selectItems value="#{catalogoMBean.catalogoTipoComprobante}" />
-								</h:selectOneMenu>
-							</rich:column>
-							<rich:column>
-								<f:facet name="header">
-									<h:outputText value="Número Comprobante" />
-								</f:facet>
-								<h:inputText value="#{fila.numeroComprobante}" />
-							</rich:column>
-							<rich:column>
-								<f:facet name="header">
-									<h:outputText value="Fecha Comprobante" />
-								</f:facet>
-								<rich:calendar value="#{fila.fechaComprobante}"
-									datePattern="dd/MM/yyyy"></rich:calendar>
-							</rich:column>
-							<rich:column>
-								<f:facet name="header">
-									<h:outputText value="Detalle Comprobante" />
-								</f:facet>
-								<h:inputTextarea value="#{fila.detalleTextoComprobante}"
-									rows="4" cols="20" />
-							</rich:column>
-							<rich:column>
-								<f:facet name="header">
-									<h:outputText value="Total IGV Comprobante" />
-								</f:facet>
-								<h:inputText value="#{fila.totalIGV}" />
-							</rich:column>
-							<rich:column>
-								<f:facet name="header">
-									<h:outputText value="Total Comprobante" />
-								</f:facet>
-								<h:inputText value="#{fila.totalComprobante}" />
-							</rich:column>
-							<rich:column>
-								<f:facet name="header">
-									<h:outputText value="Eliminar" />
-								</f:facet>
-								<a4j:commandButton value="Eliminar"></a4j:commandButton>
-							</rich:column>
-							<f:facet name="header">
+							</rich:dataTable>
+
+							<f:facet name="footer">
 								<h:panelGrid cellpadding="0" cellspacing="0" border="0"
-									style="width:100%;text-align:right;">
-									<a4j:commandButton action="#{servicioAgenteMBean.agregarComprobanteAdicional()}" value="Agregar" render="idTablaComprobantesAdd"></a4j:commandButton>
+									columns="1" style="width:100%;text-align:center;">
+									<a4j:commandButton value="Grabar Comprobantes"
+										action="#{servicioAgenteMBean.grabarComprobantesAdicionales()}"
+										oncomplete="mostrarModal('idformadmservicios')"
+										render="idFormHidden,idPanelHidden,idPanelBotones,idModalcorrecto,idModalError,idGrVentaServicio"></a4j:commandButton>
 								</h:panelGrid>
 							</f:facet>
-						</rich:dataTable>
+						</h:panelGrid>
 
 					</rich:tab>
 					<rich:tab>
