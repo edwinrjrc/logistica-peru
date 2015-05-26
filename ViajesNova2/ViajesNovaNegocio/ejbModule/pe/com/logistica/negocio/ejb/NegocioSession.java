@@ -98,13 +98,6 @@ import pe.com.logistica.negocio.util.UtilJdbc;
 public class NegocioSession implements NegocioSessionRemote,
 		NegocioSessionLocal {
 
-	/**
-	 * Default constructor.
-	 */
-	public NegocioSession() {
-		// TODO Auto-generated constructor stub
-	}
-
 	@Override
 	public Direccion agregarDireccion(Direccion direccion) throws SQLException,
 			Exception {
@@ -1146,17 +1139,18 @@ public class NegocioSession implements NegocioSessionRemote,
 
 			detalleServicio.setMontoComision(comision);
 			
-			int idPadre = comunDao.obtenerSiguienteSecuencia(conn);
-			DetalleServicioAgencia detalleServicioPadre = null;
-			boolean nuevo = false;
+			int idDetServicio = comunDao.obtenerSiguienteSecuencia(conn);
+			detalleServicio.setCodigoEntero(idDetServicio);
+			listaServiciosVenta.add(detalleServicio);
+			/*DetalleServicioAgencia detalleServicioPadre = null;
 			if (detalleServicio.getTipoServicio().isServicioPadre()){
 				detalleServicioPadre = new DetalleServicioAgencia();
-				detalleServicioPadre.setCodigoEntero(idPadre);
+				detalleServicioPadre.setCodigoEntero(idDetServicio);
 				detalleServicioPadre.setTipoServicio(detalleServicio.getTipoServicio());
 				detalleServicioPadre.setOrigen(detalleServicio.getOrigen());
 				detalleServicioPadre.setDestino(detalleServicio.getDestino());
 				detalleServicioPadre.setDescripcionServicio(detalleServicio.getTipoServicio().getDescripcion() + " "+detalleServicio.getOrigen().getCodigoIATA()+" --> "+detalleServicio.getDestino().getCodigoIATA());
-				nuevo = true;
+				listaServiciosVenta.add(detalleServicioPadre);
 			}
 			else{
 				if (listaServiciosVenta == null){
@@ -1168,16 +1162,30 @@ public class NegocioSession implements NegocioSessionRemote,
 						break;
 					}
 				}
+				detalleServicio.setCodigoEntero(idDetServicio);
+				listaServiciosVenta.add(detalleServicio);
+			}*/
+			List<DetalleServicioAgencia> listaInvisibles = null;
+			if (detalleServicio.getTipoServicio().isServicioPadre()){
+				listaInvisibles = agregarServicioVentaInvisible(idDetServicio, detalleServicio, calcularIGV);
+			}
+			else{
+				listaInvisibles = agregarServicioVentaInvisible(detalleServicio.getServicioPadre().getCodigoEntero(), detalleServicio, calcularIGV);
 			}
 			
-			detalleServicio.setCodigoEntero(comunDao
+			if (listaInvisibles != null){
+				listaServiciosVenta.addAll(listaInvisibles);
+			}
+			
+			listaServiciosVenta = UtilEjb.ordenarServiciosVenta(listaServiciosVenta);
+			/*detalleServicio.setCodigoEntero(comunDao
 					.obtenerSiguienteSecuencia(conn));
 			detalleServicioPadre.getServiciosHijos().add(detalleServicio);
 			detalleServicioPadre.setServiciosHijos(agregarServicioVentaInvisible(detalleServicioPadre, detalleServicio, calcularIGV));
 			UtilEjb.ordenarServiciosVenta(detalleServicioPadre.getServiciosHijos());
 			if (nuevo){
 				listaServiciosVenta.add(detalleServicioPadre);
-			}
+			}*/
 
 			return listaServiciosVenta;
 		} catch (Exception e) {
@@ -1789,7 +1797,6 @@ public class NegocioSession implements NegocioSessionRemote,
 				throw new ErrorRegistroDataException(
 						"No se enviaron los servicios de los novios");
 			}
-
 			programaNovios.setIdServicio(idServicio);
 
 			Integer idnovios = servicioNoviosDao.actualizarNovios(
@@ -1812,7 +1819,6 @@ public class NegocioSession implements NegocioSessionRemote,
 					}
 				}
 			}
-
 			return idnovios;
 		} catch (ErrorRegistroDataException e) {
 			throw new ErrorRegistroDataException(e.getMensajeError(), e);
@@ -1838,15 +1844,15 @@ public class NegocioSession implements NegocioSessionRemote,
 		return clienteDao.listarClienteCumpleanieros();
 	}
 
-	private List<DetalleServicioAgencia> agregarServicioVentaInvisible(DetalleServicioAgencia detalleServicioPadre,
+	private List<DetalleServicioAgencia> agregarServicioVentaInvisible(Integer idServicioPadre,
 			DetalleServicioAgencia detalleServicio2, boolean calcularIGV)
 			throws ErrorConsultaDataException, Exception {
 
+		List<DetalleServicioAgencia> listaServicios = new ArrayList<DetalleServicioAgencia>();
 		try {
 			if (calcularIGV){
+				
 				MaestroServicioDao maestroServicioDao = new MaestroServicioDaoImpl();
-				//ComunDao comunDao = new ComunDaoImpl();
-
 				List<MaestroServicio> lista = maestroServicioDao
 						.consultarServiciosInvisibles(detalleServicio2
 								.getTipoServicio().getCodigoEntero());
@@ -1862,7 +1868,7 @@ public class NegocioSession implements NegocioSessionRemote,
 					detalle.getTipoServicio()
 							.setNombre(maestroServicio.getNombre());
 					detalle.setFechaIda(new Date());
-					detalle.getServicioPadre().setCodigoEntero(detalleServicioPadre.getCodigoEntero());
+					detalle.getServicioPadre().setCodigoEntero(idServicioPadre);
 
 					try {
 						BigDecimal cantidad = BigDecimal.valueOf(Double
@@ -1880,17 +1886,17 @@ public class NegocioSession implements NegocioSessionRemote,
 
 						detalle.setMontoIGV(igvServicio);
 						detalle.setPrecioUnitario(igvServicio);
-						detalleServicioPadre.getServiciosHijos().add(detalle);
+						listaServicios.add(detalle);
 					} catch (Exception e) {
 						detalle.setMontoIGV(BigDecimal.ZERO);
 						detalle.setPrecioUnitario(BigDecimal.ZERO);
-						detalleServicioPadre.getServiciosHijos().add(detalle);
+						listaServicios.add(detalle);
 						e.printStackTrace();
 					}
 				}
 			}
 
-			return detalleServicioPadre.getServiciosHijos();
+			return listaServicios;
 		} catch (SQLException e) {
 			throw new ErrorConsultaDataException(
 					"Error en Consulta de Servicios Ocultos", e);
@@ -2285,6 +2291,5 @@ public class NegocioSession implements NegocioSessionRemote,
 				conn.close();
 			}
 		}
-		
 	}
 }
