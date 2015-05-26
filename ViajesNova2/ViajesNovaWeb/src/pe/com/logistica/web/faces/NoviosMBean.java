@@ -728,17 +728,8 @@ public class NoviosMBean extends BaseMBean {
 				getServicioNovios().getServicioProveedor().setEditoComision(
 						this.isEditarComision());
 
-				DetalleServicioAgencia detalleServicioAgregar = negocioServicio
-						.agregarServicioVenta(getServicioNovios());
-
-				detalleServicioAgregar = agregarServicioInvisible(detalleServicioAgregar);
-
-				this.getListadoDetalleServicio().add(detalleServicioAgregar);
-				this.getListadoDetalleServicioTotal().add(
-						detalleServicioAgregar);
-
 				this.setListadoDetalleServicio(negocioServicio
-						.ordenarServiciosVenta(getListadoDetalleServicio()));
+						.agregarServicioVenta(this.getListadoDetalleServicio(),getServicioNovios()));
 
 				this.setServicioNovios(null);
 
@@ -856,26 +847,6 @@ public class NoviosMBean extends BaseMBean {
 		}
 
 		return resultado;
-	}
-
-	private DetalleServicioAgencia agregarServicioInvisible(
-			DetalleServicioAgencia detalleServicio2)
-			throws ErrorConsultaDataException, Exception {
-		List<DetalleServicioAgencia> lista = negocioServicio
-				.agregarServicioVentaInvisible(detalleServicio2);
-		HttpSession session = obtenerSession(false);
-		Usuario usuario = (Usuario) session.getAttribute("usuarioSession");
-		for (DetalleServicioAgencia detalleServicioAgencia : lista) {
-			detalleServicioAgencia.setUsuarioCreacion(usuario.getUsuario());
-			detalleServicioAgencia.setUsuarioModificacion(usuario.getUsuario());
-			detalleServicioAgencia.setIpCreacion(obtenerRequest()
-					.getRemoteAddr());
-			detalleServicioAgencia.setIpModificacion(obtenerRequest()
-					.getRemoteAddr());
-		}
-		detalleServicio2.setServiciosHijos(lista);
-
-		return detalleServicio2;
 	}
 
 	public void eliminarServicio(ServicioNovios servicioNovios) {

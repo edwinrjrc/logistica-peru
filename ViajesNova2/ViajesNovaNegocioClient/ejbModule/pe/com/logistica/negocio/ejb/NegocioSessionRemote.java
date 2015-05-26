@@ -82,13 +82,9 @@ public interface NegocioSessionRemote {
 	ServicioNovios agregarServicio(ServicioNovios servicioNovios)
 			throws SQLException, Exception;
 
-	DetalleServicioAgencia agregarServicioVenta(
+	List<DetalleServicioAgencia> agregarServicioVenta(List<DetalleServicioAgencia> listaServiciosVenta,
 			DetalleServicioAgencia detalleServicio)
 			throws ErrorRegistroDataException, SQLException, Exception;
-
-	public List<DetalleServicioAgencia> ordenarServiciosVenta(
-			List<DetalleServicioAgencia> listaServicio) throws SQLException,
-			Exception;
 
 	public BigDecimal calcularValorCuota(ServicioAgencia servicioAgencia)
 			throws SQLException, Exception;
@@ -149,10 +145,6 @@ public interface NegocioSessionRemote {
 
 	public List<MaestroServicio> listarMaestroServicioIgv()
 			throws SQLException, Exception;
-
-	public List<DetalleServicioAgencia> agregarServicioVentaInvisible(
-			DetalleServicioAgencia detalleServicio2)
-			throws ErrorConsultaDataException, Exception;
 
 	List<MaestroServicio> listarMaestroServicioAdm() throws SQLException,
 			Exception;
@@ -226,4 +218,8 @@ public interface NegocioSessionRemote {
 
 	public List<DocumentoAdicional> listarDocumentosAdicionales(
 			Integer idServicio) throws SQLException;
+
+	void registrarComprobantesAdicionales(
+			List<Comprobante> listaComprobantesAdicionales)
+			throws ErrorRegistroDataException, SQLException, Exception;
 }

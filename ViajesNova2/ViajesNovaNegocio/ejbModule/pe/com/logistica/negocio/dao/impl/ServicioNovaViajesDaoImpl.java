@@ -36,13 +36,6 @@ import pe.com.logistica.negocio.util.UtilJdbc;
  */
 public class ServicioNovaViajesDaoImpl implements ServicioNovaViajesDao {
 
-	/**
-	 * 
-	 */
-	public ServicioNovaViajesDaoImpl() {
-		// TODO Auto-generated constructor stub
-	}
-
 	@Override
 	public Integer ingresarCabeceraServicio(ServicioAgencia servicioAgencia)
 			throws SQLException {
@@ -2555,5 +2548,3 @@ public class ServicioNovaViajesDaoImpl implements ServicioNovaViajesDao {
 		return false;
 	}
 }
-
-

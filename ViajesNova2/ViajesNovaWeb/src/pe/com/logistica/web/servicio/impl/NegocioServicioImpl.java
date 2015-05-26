@@ -35,7 +35,6 @@ import pe.com.logistica.bean.negocio.ServicioNovios;
 import pe.com.logistica.bean.negocio.ServicioProveedor;
 import pe.com.logistica.negocio.ejb.NegocioSessionRemote;
 import pe.com.logistica.negocio.exception.EnvioCorreoException;
-import pe.com.logistica.negocio.exception.ErrorConsultaDataException;
 import pe.com.logistica.negocio.exception.ErrorRegistroDataException;
 import pe.com.logistica.negocio.exception.ResultadoCeroDaoException;
 import pe.com.logistica.web.servicio.NegocioServicio;
@@ -169,16 +168,10 @@ public class NegocioServicioImpl implements NegocioServicio {
 	}
 	
 	@Override
-	public DetalleServicioAgencia agregarServicioVenta(DetalleServicioAgencia detalleServicio)
+	public List<DetalleServicioAgencia> agregarServicioVenta(List<DetalleServicioAgencia> listaServiciosVenta, DetalleServicioAgencia detalleServicio)
 			throws ErrorRegistroDataException, SQLException,
 			Exception {
-		return ejbSession.agregarServicioVenta(detalleServicio);
-	}
-	
-	@Override
-	public List<DetalleServicioAgencia> ordenarServiciosVenta(List<DetalleServicioAgencia> listaServicio)
-			throws SQLException, Exception {
-		return ejbSession.ordenarServiciosVenta(listaServicio);
+		return ejbSession.agregarServicioVenta(listaServiciosVenta, detalleServicio);
 	}
 
 	@Override
@@ -308,13 +301,6 @@ public class NegocioServicioImpl implements NegocioServicio {
 
 		return ejbSession.listarMaestroServicioIgv();
 	}
-
-	@Override
-	public List<DetalleServicioAgencia> agregarServicioVentaInvisible(
-			DetalleServicioAgencia detalleServicio2) throws ErrorConsultaDataException, Exception {
-		
-		return ejbSession.agregarServicioVentaInvisible(detalleServicio2);
-	}
 	
 	@Override
 	public List<BaseVO> consultaServiciosDependientes(Integer idServicio) throws SQLException, Exception{
@@ -441,6 +427,11 @@ public class NegocioServicioImpl implements NegocioServicio {
 	@Override
 	public List<DocumentoAdicional> listarDocumentosAdicionales(Integer idServicio) throws SQLException{
 		return ejbSession.listarDocumentosAdicionales(idServicio);
+	}
+	
+	@Override
+	public void registrarComprobantesAdicionales(List<Comprobante> lista) throws ErrorRegistroDataException, SQLException, Exception{
+		ejbSession.registrarComprobantesAdicionales(lista);
 	}
 }
 	

@@ -37,6 +37,7 @@ public class MaestroServicio extends BaseNegocio {
 	private boolean esImpuesto;
 	private boolean esFee;
 	private boolean visible;
+	private boolean servicioPadre;
 	
 	private List<BaseVO> listaServicioDepende;
 	private BaseVO parametroAsociado;
@@ -335,6 +336,20 @@ public class MaestroServicio extends BaseNegocio {
 	 */
 	public void setValorParametro(String valorParametro) {
 		this.valorParametro = valorParametro;
+	}
+
+	/**
+	 * @return the servicioPadre
+	 */
+	public boolean isServicioPadre() {
+		return servicioPadre;
+	}
+
+	/**
+	 * @param servicioPadre the servicioPadre to set
+	 */
+	public void setServicioPadre(boolean servicioPadre) {
+		this.servicioPadre = servicioPadre;
 	}
 
 }

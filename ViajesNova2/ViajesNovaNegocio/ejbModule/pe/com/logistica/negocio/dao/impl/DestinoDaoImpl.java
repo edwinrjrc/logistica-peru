@@ -266,6 +266,9 @@ public class DestinoDaoImpl implements DestinoDao {
 				destino.setCodigoIATA(UtilJdbc.obtenerCadena(rs, "codigoiata"));
 				destino.getTipoDestino().setCodigoEntero(UtilJdbc.obtenerNumero(rs, "idtipodestino"));
 				destino.setDescripcion(UtilJdbc.obtenerCadena(rs, "descdestino"));
+				destino.getPais().setCodigoEntero(UtilJdbc.obtenerNumero(rs, "idpais"));
+				destino.getPais().setDescripcion(UtilJdbc.obtenerCadena(rs, "descpais"));
+				destino.getPais().setAbreviado(UtilJdbc.obtenerCadena(rs, "abreviado"));
 			}
 			
 		} catch (SQLException e) {

@@ -134,9 +134,9 @@
 						<h:outputText value="Total IGV" />
 						<h:panelGrid columns="1" border="0" cellpadding="0"
 							cellspacing="0">
-							<h:inputText id="idTotalIGV" required="true" requiredMessage="Ingrese el total de IGV"
+							<h:inputText id="idTotalIGV"
 								value="#{obligacionPorPagarMBean.comprobante.totalIGV}" onkeypress="return js_soloDecimal(event);" />
-							<rich:message for="idTxtDetalleComprobante" ajaxRendered="true"
+							<rich:message for="idTotalIGV" ajaxRendered="true"
 								showSummary="true" showDetail="false"></rich:message>
 						</h:panelGrid>
 
