@@ -28,7 +28,6 @@ import pe.com.logistica.bean.negocio.ServicioAgenciaBusqueda;
 import pe.com.logistica.bean.negocio.ServicioNovios;
 import pe.com.logistica.bean.negocio.ServicioProveedor;
 import pe.com.logistica.negocio.exception.EnvioCorreoException;
-import pe.com.logistica.negocio.exception.ErrorConsultaDataException;
 import pe.com.logistica.negocio.exception.ErrorRegistroDataException;
 import pe.com.logistica.negocio.exception.ResultadoCeroDaoException;
 
@@ -84,7 +83,7 @@ public interface NegocioServicio {
 	ServicioNovios agregarServicioNovios(ServicioNovios servicioNovios)
 			throws SQLException, Exception;
 
-	DetalleServicioAgencia agregarServicioVenta(
+	List<DetalleServicioAgencia> agregarServicioVenta(List<DetalleServicioAgencia> listaServiciosVenta,
 			DetalleServicioAgencia detalleServicio)
 			throws ErrorRegistroDataException, SQLException, Exception;
 
@@ -96,10 +95,6 @@ public interface NegocioServicio {
 
 	Integer registrarVentaServicio(ServicioAgencia servicioAgencia)
 			throws ErrorRegistroDataException, SQLException, Exception;
-
-	List<DetalleServicioAgencia> ordenarServiciosVenta(
-			List<DetalleServicioAgencia> listaServicio) throws SQLException,
-			Exception;
 
 	List<Cliente> consultarCliente2(Cliente cliente) throws SQLException,
 			Exception;
@@ -154,10 +149,6 @@ public interface NegocioServicio {
 
 	List<MaestroServicio> listarMaestroServicioIgv() throws SQLException,
 			Exception;
-
-	public List<DetalleServicioAgencia> agregarServicioVentaInvisible(
-			DetalleServicioAgencia detalleServicio2)
-			throws ErrorConsultaDataException, Exception;
 
 	List<MaestroServicio> listarMaestroServicioAdm() throws SQLException,
 			Exception;
@@ -230,5 +221,8 @@ public interface NegocioServicio {
 
 	List<DocumentoAdicional> listarDocumentosAdicionales(Integer idServicio)
 			throws SQLException;
+
+	void registrarComprobantesAdicionales(List<Comprobante> lista)
+			throws ErrorRegistroDataException, SQLException, Exception;
 
 }

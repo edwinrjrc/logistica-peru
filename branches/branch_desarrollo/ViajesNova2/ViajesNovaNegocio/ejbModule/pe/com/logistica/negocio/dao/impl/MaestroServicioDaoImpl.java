@@ -25,13 +25,6 @@ import pe.com.logistica.negocio.util.UtilJdbc;
  */
 public class MaestroServicioDaoImpl implements MaestroServicioDao {
 
-	/**
-	 * 
-	 */
-	public MaestroServicioDaoImpl() {
-		// TODO Auto-generated constructor stub
-	}
-
 	/* (non-Javadoc)
 	 * @see pe.com.logistica.negocio.dao.MaestroServicioDao#listarMaestroServicios()
 	 */
@@ -62,6 +55,7 @@ public class MaestroServicioDaoImpl implements MaestroServicioDao {
 				bean.setRequiereFee(UtilJdbc.obtenerBoolean(rs, "requierefee"));
 				bean.setPagaImpto(UtilJdbc.obtenerBoolean(rs, "pagaimpto"));
 				bean.setCargaComision(UtilJdbc.obtenerBoolean(rs, "cargacomision"));
+				bean.setServicioPadre(UtilJdbc.obtenerBoolean(rs, "esserviciopadre"));
 				resultado.add(bean);
 			}
 		} catch (SQLException e) {
@@ -271,7 +265,7 @@ public class MaestroServicioDaoImpl implements MaestroServicioDao {
 			throws SQLException {
 		Connection conn = null;
 		CallableStatement cs = null;
-		String sql = "{ ? = call negocio.fn_ingresarservicio(?,?,?,?,?,?,?,?,?,?,?,?,?,?) }";
+		String sql = "{ ? = call negocio.fn_ingresarservicio(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) }";
 		Integer resultado = null;
 
 		try {
@@ -324,6 +318,7 @@ public class MaestroServicioDaoImpl implements MaestroServicioDao {
 				cs.setNull(i++, Types.INTEGER);
 			}
 			cs.setBoolean(i++, true);
+			cs.setBoolean(i++, servicio.isServicioPadre());
 			cs.execute();
 
 			resultado = cs.getInt(1);
@@ -361,7 +356,7 @@ public class MaestroServicioDaoImpl implements MaestroServicioDao {
 			throws SQLException {
 		Connection conn = null;
 		CallableStatement cs = null;
-		String sql = "{ ? = call negocio.fn_actualizarservicio(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) }";
+		String sql = "{ ? = call negocio.fn_actualizarservicio(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) }";
 		boolean resultado = false;
 
 		try {
@@ -409,6 +404,7 @@ public class MaestroServicioDaoImpl implements MaestroServicioDao {
 				cs.setNull(i++, Types.INTEGER);
 			}
 			cs.setBoolean(i++, servicio.isVisible());
+			cs.setBoolean(i++, servicio.isServicioPadre());
 			cs.execute();
 
 			resultado = cs.getBoolean(1);
@@ -473,6 +469,7 @@ public class MaestroServicioDaoImpl implements MaestroServicioDao {
 				resultado.setEsFee(UtilJdbc.obtenerBoolean(rs, "esfee"));
 				resultado.getParametroAsociado().setCodigoEntero(UtilJdbc.obtenerNumero(rs, "idparametroasociado"));
 				resultado.setVisible(UtilJdbc.obtenerBoolean(rs, "visible"));
+				resultado.setServicioPadre(UtilJdbc.obtenerBoolean(rs, "esserviciopadre"));
 			}
 		} catch (SQLException e) {
 			throw new SQLException(e);
@@ -533,6 +530,7 @@ public class MaestroServicioDaoImpl implements MaestroServicioDao {
 				resultado.setEsFee(UtilJdbc.obtenerBoolean(rs, "esfee"));
 				resultado.getParametroAsociado().setCodigoEntero(UtilJdbc.obtenerNumero(rs, "idparametroasociado"));
 				resultado.setVisible(UtilJdbc.obtenerBoolean(rs, "visible"));
+				resultado.setServicioPadre(UtilJdbc.obtenerBoolean(rs, "esserviciopadre"));
 			}
 		} catch (SQLException e) {
 			throw new SQLException(e);
