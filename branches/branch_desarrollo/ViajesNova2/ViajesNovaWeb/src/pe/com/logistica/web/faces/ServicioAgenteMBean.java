@@ -651,27 +651,23 @@ public class ServicioAgenteMBean extends BaseMBean {
 					.obtenerEnteroPropertieMaestro("codigoParametroIGV",
 							"aplicacionDatos"));
 
-			for (DetalleServicioAgencia detalleServicioPadre : this
+			for (DetalleServicioAgencia detalleServicio : this
 					.getListadoDetalleServicio()) {
 				
-				for (DetalleServicioAgencia detalleServicioHijo : detalleServicioPadre.getServiciosHijos()){
-					montoTotal = montoTotal.add(detalleServicioHijo.getTotalServicio());
-					montoComision = montoComision.add(detalleServicioHijo
-							.getMontoComision());
-					if (detalleServicioHijo.getTipoServicio().getCodigoEntero()
-							.toString().equals(param.getValor())) {
-						montoIgv = montoIgv.add(detalleServicioHijo
-								.getPrecioUnitario());
-					}
+				montoTotal = montoTotal.add(detalleServicio.getTotalServicio());
+				montoComision = montoComision.add(detalleServicio
+						.getMontoComision());
+				if (detalleServicio.getTipoServicio().getCodigoEntero()
+						.toString().equals(param.getValor())) {
+					montoIgv = montoIgv.add(detalleServicio
+							.getPrecioUnitario());
+				}
 
-					if (detalleServicioHijo.getTipoServicio().getCodigoEntero() != null
-							&& detalleServicioHijo.getTipoServicio().isEsFee()) {
-						montoFee = montoFee.add(detalleServicioHijo.getTotalServicio());
-					}
+				if (detalleServicio.getTipoServicio().getCodigoEntero() != null
+						&& detalleServicio.getTipoServicio().isEsFee()) {
+					montoFee = montoFee.add(detalleServicio.getTotalServicio());
 				}
 			}
-
-			montoTotal = montoTotal.add(montoIgv);
 
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
