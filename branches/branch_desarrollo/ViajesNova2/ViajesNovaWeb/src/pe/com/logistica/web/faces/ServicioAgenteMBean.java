@@ -47,7 +47,6 @@ import pe.com.logistica.bean.negocio.ServicioAgencia;
 import pe.com.logistica.bean.negocio.ServicioAgenciaBusqueda;
 import pe.com.logistica.bean.negocio.ServicioProveedor;
 import pe.com.logistica.bean.negocio.Usuario;
-import pe.com.logistica.negocio.exception.ErrorConsultaDataException;
 import pe.com.logistica.negocio.exception.ErrorRegistroDataException;
 import pe.com.logistica.negocio.exception.ValidacionException;
 import pe.com.logistica.web.servicio.NegocioServicio;
@@ -350,13 +349,6 @@ public class ServicioAgenteMBean extends BaseMBean {
 	public void agregarServicio() {
 		try {
 			if (validarServicioVenta()) {
-				HttpSession session = obtenerSession(false);
-				Usuario usuario = (Usuario) session
-						.getAttribute("usuarioSession");
-				getDetalleServicio().setUsuarioCreacion(usuario.getUsuario());
-				getDetalleServicio().setIpCreacion(
-						obtenerRequest().getRemoteAddr());
-
 				getDetalleServicio().getServicioProveedor().setEditoComision(
 						this.isEditarComision());
 
@@ -394,19 +386,21 @@ public class ServicioAgenteMBean extends BaseMBean {
 		SelectItem si = null;
 		this.setListadoServiciosPadre(null);
 		for (DetalleServicioAgencia detalle : this.getListadoDetalleServicio()){
-			si = new SelectItem();
-			si.setValue(detalle.getCodigoEntero());
-			String etiqueta = ""
-					+ detalle.getTipoServicio()
-							.getNombre()
-					+ " "
-					+ detalle.getOrigen()
-							.getCodigoIATA()
-					+ " --> "
-					+ detalle.getDestino()
-							.getCodigoIATA();
-			si.setLabel(etiqueta);
-			this.getListadoServiciosPadre().add(si);
+			if (detalle.getTipoServicio().isServicioPadre()){
+				si = new SelectItem();
+				si.setValue(detalle.getCodigoEntero());
+				String etiqueta = ""
+						+ detalle.getTipoServicio()
+								.getNombre()
+						+ " "
+						+ detalle.getOrigen()
+								.getCodigoIATA()
+						+ " --> "
+						+ detalle.getDestino()
+								.getCodigoIATA();
+				si.setLabel(etiqueta);
+				this.getListadoServiciosPadre().add(si);
+			}
 		}
 	}
 
@@ -691,7 +685,13 @@ public class ServicioAgenteMBean extends BaseMBean {
 							usuario.getUsuario());
 					getServicioAgencia().setIpCreacion(
 							obtenerRequest().getRemoteAddr());
-
+					
+					for (DetalleServicioAgencia detalleServicio : getListadoDetalleServicio()) {
+						detalleServicio.setUsuarioCreacion(usuario.getUsuario());
+						detalleServicio.setUsuarioModificacion(usuario.getUsuario());
+						detalleServicio.setIpCreacion(obtenerRequest().getRemoteAddr());
+						detalleServicio.setIpModificacion(obtenerRequest().getRemoteAddr());
+					}
 					this.getServicioAgencia().setListaDetalleServicio(
 							getListadoDetalleServicio());
 
