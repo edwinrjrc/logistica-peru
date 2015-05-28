@@ -975,7 +975,8 @@ public class NegocioSession implements NegocioSessionRemote,
 	}
 
 	@Override
-	public List<DetalleServicioAgencia> agregarServicioVenta(List<DetalleServicioAgencia> listaServiciosVenta,
+	public List<DetalleServicioAgencia> agregarServicioVenta(
+			List<DetalleServicioAgencia> listaServiciosVenta,
 			DetalleServicioAgencia detalleServicio)
 			throws ErrorRegistroDataException, SQLException, Exception {
 
@@ -988,7 +989,7 @@ public class NegocioSession implements NegocioSessionRemote,
 			DestinoDao destinoDao = new DestinoDaoImpl();
 			ProveedorDao proveedorDao = new ProveedorDaoImpl();
 			ComunDao comunDao = new ComunDaoImpl();
-			
+
 			detalleServicio.setTipoServicio(maestroServicioDao
 					.consultarMaestroServicio(detalleServicio.getTipoServicio()
 							.getCodigoEntero(), conn));
@@ -1061,21 +1062,26 @@ public class NegocioSession implements NegocioSessionRemote,
 			if (detalleServicio.getCantidad() == 0) {
 				detalleServicio.setCantidad(1);
 			}
-			
-			if (detalleServicio.getOrigen().getCodigoEntero() != null){
-				detalleServicio.setOrigen(destinoDao.consultarDestino(detalleServicio.getOrigen().getCodigoEntero(),conn));
-				detalleServicio.setDestino(destinoDao.consultarDestino(detalleServicio.getDestino().getCodigoEntero(),conn));
+
+			if (detalleServicio.getOrigen().getCodigoEntero() != null) {
+				detalleServicio.setOrigen(destinoDao.consultarDestino(
+						detalleServicio.getOrigen().getCodigoEntero(), conn));
+				detalleServicio.setDestino(destinoDao.consultarDestino(
+						detalleServicio.getDestino().getCodigoEntero(), conn));
 			}
 
 			boolean calcularIGV = false;
-			calcularIGV = ("PE".equalsIgnoreCase(detalleServicio.getOrigen().getPais().getAbreviado()) || "PE".equalsIgnoreCase(detalleServicio.getDestino().getPais().getAbreviado()));
-				
+			calcularIGV = ("PE".equalsIgnoreCase(detalleServicio.getOrigen()
+					.getPais().getAbreviado()) || "PE"
+					.equalsIgnoreCase(detalleServicio.getDestino().getPais()
+							.getAbreviado()));
+
 			if (detalleServicio.getPrecioUnitario() != null) {
 				BigDecimal total = detalleServicio.getPrecioUnitario()
 						.multiply(
 								UtilParse.parseIntABigDecimal(detalleServicio
 										.getCantidad()));
-				if (calcularIGV){
+				if (calcularIGV) {
 					if (detalleServicio.isConIGV()) {
 						ParametroDao parametroDao = new ParametroDaoImpl();
 						BigDecimal valorParametro = BigDecimal.ZERO;
@@ -1097,16 +1103,16 @@ public class NegocioSession implements NegocioSessionRemote,
 							}
 						}
 						valorParametro = valorParametro.add(BigDecimal.ONE);
-						BigDecimal precioBase = detalleServicio.getPrecioUnitario()
-								.divide(valorParametro, 4, RoundingMode.HALF_DOWN);
-						total = precioBase
-								.multiply(UtilParse
-										.parseIntABigDecimal(detalleServicio
-												.getCantidad()));
+						BigDecimal precioBase = detalleServicio
+								.getPrecioUnitario().divide(valorParametro, 4,
+										RoundingMode.HALF_DOWN);
+						total = precioBase.multiply(UtilParse
+								.parseIntABigDecimal(detalleServicio
+										.getCantidad()));
 						detalleServicio.setPrecioUnitario(precioBase);
 					}
 				}
-				
+
 				totalVenta = totalVenta.add(total);
 			}
 
@@ -1125,7 +1131,7 @@ public class NegocioSession implements NegocioSessionRemote,
 				valorParametroIGV = UtilEjb.convertirCadenaDecimal(paramIGV
 						.getValor());
 				valorParametroIGV = valorParametroIGV.add(BigDecimal.ONE);
-				
+
 				comision = comision.multiply(valorParametroIGV);
 			}
 
@@ -1138,54 +1144,62 @@ public class NegocioSession implements NegocioSessionRemote,
 			}
 
 			detalleServicio.setMontoComision(comision);
-			
+
 			int idDetServicio = comunDao.obtenerSiguienteSecuencia(conn);
 			detalleServicio.setCodigoEntero(idDetServicio);
 			listaServiciosVenta.add(detalleServicio);
-			/*DetalleServicioAgencia detalleServicioPadre = null;
-			if (detalleServicio.getTipoServicio().isServicioPadre()){
-				detalleServicioPadre = new DetalleServicioAgencia();
-				detalleServicioPadre.setCodigoEntero(idDetServicio);
-				detalleServicioPadre.setTipoServicio(detalleServicio.getTipoServicio());
-				detalleServicioPadre.setOrigen(detalleServicio.getOrigen());
-				detalleServicioPadre.setDestino(detalleServicio.getDestino());
-				detalleServicioPadre.setDescripcionServicio(detalleServicio.getTipoServicio().getDescripcion() + " "+detalleServicio.getOrigen().getCodigoIATA()+" --> "+detalleServicio.getDestino().getCodigoIATA());
-				listaServiciosVenta.add(detalleServicioPadre);
-			}
-			else{
-				if (listaServiciosVenta == null){
-					listaServiciosVenta = new ArrayList<DetalleServicioAgencia>();
-				}
-				for (DetalleServicioAgencia detalleServicioAgencia : listaServiciosVenta) {
-					if (detalleServicioAgencia.getCodigoEntero().intValue() == detalleServicio.getServicioPadre().getCodigoEntero().intValue()){
-						detalleServicioPadre = detalleServicioAgencia;
-						break;
-					}
-				}
-				detalleServicio.setCodigoEntero(idDetServicio);
-				listaServiciosVenta.add(detalleServicio);
-			}*/
+			/*
+			 * DetalleServicioAgencia detalleServicioPadre = null; if
+			 * (detalleServicio.getTipoServicio().isServicioPadre()){
+			 * detalleServicioPadre = new DetalleServicioAgencia();
+			 * detalleServicioPadre.setCodigoEntero(idDetServicio);
+			 * detalleServicioPadre
+			 * .setTipoServicio(detalleServicio.getTipoServicio());
+			 * detalleServicioPadre.setOrigen(detalleServicio.getOrigen());
+			 * detalleServicioPadre.setDestino(detalleServicio.getDestino());
+			 * detalleServicioPadre
+			 * .setDescripcionServicio(detalleServicio.getTipoServicio
+			 * ().getDescripcion() +
+			 * " "+detalleServicio.getOrigen().getCodigoIATA
+			 * ()+" --> "+detalleServicio.getDestino().getCodigoIATA());
+			 * listaServiciosVenta.add(detalleServicioPadre); } else{ if
+			 * (listaServiciosVenta == null){ listaServiciosVenta = new
+			 * ArrayList<DetalleServicioAgencia>(); } for
+			 * (DetalleServicioAgencia detalleServicioAgencia :
+			 * listaServiciosVenta) { if
+			 * (detalleServicioAgencia.getCodigoEntero().intValue() ==
+			 * detalleServicio.getServicioPadre().getCodigoEntero().intValue()){
+			 * detalleServicioPadre = detalleServicioAgencia; break; } }
+			 * detalleServicio.setCodigoEntero(idDetServicio);
+			 * listaServiciosVenta.add(detalleServicio); }
+			 */
 			List<DetalleServicioAgencia> listaInvisibles = null;
-			if (detalleServicio.getTipoServicio().isServicioPadre()){
-				listaInvisibles = agregarServicioVentaInvisible(idDetServicio, detalleServicio, calcularIGV);
+			if (detalleServicio.getTipoServicio().isServicioPadre()) {
+				listaInvisibles = agregarServicioVentaInvisible(idDetServicio,
+						detalleServicio, calcularIGV);
+			} else {
+				listaInvisibles = agregarServicioVentaInvisible(detalleServicio
+						.getServicioPadre().getCodigoEntero(), detalleServicio,
+						calcularIGV);
 			}
-			else{
-				listaInvisibles = agregarServicioVentaInvisible(detalleServicio.getServicioPadre().getCodigoEntero(), detalleServicio, calcularIGV);
-			}
-			
-			if (listaInvisibles != null){
+
+			if (listaInvisibles != null) {
 				listaServiciosVenta.addAll(listaInvisibles);
 			}
-			
-			listaServiciosVenta = UtilEjb.ordenarServiciosVenta(listaServiciosVenta);
-			/*detalleServicio.setCodigoEntero(comunDao
-					.obtenerSiguienteSecuencia(conn));
-			detalleServicioPadre.getServiciosHijos().add(detalleServicio);
-			detalleServicioPadre.setServiciosHijos(agregarServicioVentaInvisible(detalleServicioPadre, detalleServicio, calcularIGV));
-			UtilEjb.ordenarServiciosVenta(detalleServicioPadre.getServiciosHijos());
-			if (nuevo){
-				listaServiciosVenta.add(detalleServicioPadre);
-			}*/
+
+			listaServiciosVenta = UtilEjb
+					.ordenarServiciosVenta(listaServiciosVenta);
+			/*
+			 * detalleServicio.setCodigoEntero(comunDao
+			 * .obtenerSiguienteSecuencia(conn));
+			 * detalleServicioPadre.getServiciosHijos().add(detalleServicio);
+			 * detalleServicioPadre
+			 * .setServiciosHijos(agregarServicioVentaInvisible
+			 * (detalleServicioPadre, detalleServicio, calcularIGV));
+			 * UtilEjb.ordenarServiciosVenta
+			 * (detalleServicioPadre.getServiciosHijos()); if (nuevo){
+			 * listaServiciosVenta.add(detalleServicioPadre); }
+			 */
 
 			return listaServiciosVenta;
 		} catch (Exception e) {
@@ -1197,7 +1211,7 @@ public class NegocioSession implements NegocioSessionRemote,
 			}
 		}
 	}
-	
+
 	@Override
 	public BigDecimal calcularValorCuota(ServicioAgencia servicioAgencia)
 			throws SQLException, Exception {
@@ -1255,23 +1269,34 @@ public class NegocioSession implements NegocioSessionRemote,
 					&& !servicioAgencia.getListaDetalleServicio().isEmpty()) {
 				for (DetalleServicioAgencia detalleServicio : servicioAgencia
 						.getListaDetalleServicio()) {
-					Integer resultado = servicioNovaViajesDao
-							.ingresarDetalleServicio(detalleServicio,
-									idServicio, conexion);
-					if (resultado == null || resultado.intValue() == 0) {
-						throw new ErrorRegistroDataException(
-								"No se pudo registrar los servicios de la venta");
-					} else {
-						for (DetalleServicioAgencia detalleServicio2 : detalleServicio
-								.getServiciosHijos()) {
-							detalleServicio2.getServicioPadre()
-									.setCodigoEntero(resultado);
-							resultado = servicioNovaViajesDao
-									.ingresarDetalleServicio(detalleServicio2,
-											idServicio, conexion);
-							if (resultado == null || resultado.intValue() == 0) {
-								throw new ErrorRegistroDataException(
-										"No se pudo registrar los servicios de la venta");
+
+					if (detalleServicio.getTipoServicio().isServicioPadre()) {
+						Integer idSerDetaPadre = servicioNovaViajesDao
+								.ingresarDetalleServicio(detalleServicio,
+										idServicio, conexion);
+						if (idSerDetaPadre == null || idSerDetaPadre.intValue() == 0) {
+							throw new ErrorRegistroDataException(
+									"No se pudo registrar los servicios de la venta");
+						} else {
+							for (DetalleServicioAgencia detalleServicio2 : servicioAgencia
+									.getListaDetalleServicio()) {
+								if (!detalleServicio2.getTipoServicio().isServicioPadre()) {
+									if (detalleServicio2.getServicioPadre()
+											.getCodigoEntero().intValue() == detalleServicio
+											.getCodigoEntero().intValue()) {
+										detalleServicio2.getServicioPadre()
+												.setCodigoEntero(idSerDetaPadre);
+										Integer resultado = servicioNovaViajesDao
+												.ingresarDetalleServicio(
+														detalleServicio2,
+														idServicio, conexion);
+										if (resultado == null
+												|| resultado.intValue() == 0) {
+											throw new ErrorRegistroDataException(
+													"No se pudo registrar los servicios de la venta");
+										}
+									}
+								}
 							}
 						}
 					}
@@ -1844,29 +1869,30 @@ public class NegocioSession implements NegocioSessionRemote,
 		return clienteDao.listarClienteCumpleanieros();
 	}
 
-	private List<DetalleServicioAgencia> agregarServicioVentaInvisible(Integer idServicioPadre,
-			DetalleServicioAgencia detalleServicio2, boolean calcularIGV)
-			throws ErrorConsultaDataException, Exception {
+	private List<DetalleServicioAgencia> agregarServicioVentaInvisible(
+			Integer idServicioPadre, DetalleServicioAgencia detalleServicio2,
+			boolean calcularIGV) throws ErrorConsultaDataException, Exception {
 
 		List<DetalleServicioAgencia> listaServicios = new ArrayList<DetalleServicioAgencia>();
 		try {
-			if (calcularIGV){
-				
+			if (calcularIGV) {
+				ComunDao comunDao = new ComunDaoImpl();
 				MaestroServicioDao maestroServicioDao = new MaestroServicioDaoImpl();
 				List<MaestroServicio> lista = maestroServicioDao
 						.consultarServiciosInvisibles(detalleServicio2
 								.getTipoServicio().getCodigoEntero());
-				
+
 				DetalleServicioAgencia detalle = null;
 				for (MaestroServicio maestroServicio : lista) {
 					detalle = new DetalleServicioAgencia();
-					detalle.setCodigoEntero(maestroServicio.getCodigoEntero());
+					detalle.setCodigoEntero(comunDao
+							.obtenerSiguienteSecuencia());
 					detalle.setDescripcionServicio(maestroServicio.getNombre());
 					detalle.setCantidad(1);
 					detalle.getTipoServicio().setCodigoEntero(
 							maestroServicio.getCodigoEntero());
-					detalle.getTipoServicio()
-							.setNombre(maestroServicio.getNombre());
+					detalle.getTipoServicio().setNombre(
+							maestroServicio.getNombre());
 					detalle.setFechaIda(new Date());
 					detalle.getServicioPadre().setCodigoEntero(idServicioPadre);
 
@@ -2199,7 +2225,12 @@ public class NegocioSession implements NegocioSessionRemote,
 			conn = UtilConexion.obtenerConexion();
 			for (DetalleServicioAgencia detalleServicioAgencia : servicioAgencia
 					.getListaDetalleServicio()) {
-				if (detalleServicioAgencia.getIdComprobanteGenerado() != null && detalleServicioAgencia.getComprobanteAsociado().getCodigoEntero()!=null && detalleServicioAgencia.getCodigoEntero()!=null && detalleServicioAgencia.getServicioPadre().getCodigoEntero()!=null){
+				if (detalleServicioAgencia.getIdComprobanteGenerado() != null
+						&& detalleServicioAgencia.getComprobanteAsociado()
+								.getCodigoEntero() != null
+						&& detalleServicioAgencia.getCodigoEntero() != null
+						&& detalleServicioAgencia.getServicioPadre()
+								.getCodigoEntero() != null) {
 					servicioNovaViajesDao.guardarRelacionComproObligacion(
 							detalleServicioAgencia, conn);
 				}
@@ -2217,77 +2248,86 @@ public class NegocioSession implements NegocioSessionRemote,
 			}
 		}
 	}
-	
+
 	@Override
-	public boolean grabarDocumentosAdicionales(List<DocumentoAdicional> listaDocumentos) throws ErrorRegistroDataException, SQLException, Exception{
-		
+	public boolean grabarDocumentosAdicionales(
+			List<DocumentoAdicional> listaDocumentos)
+			throws ErrorRegistroDataException, SQLException, Exception {
+
 		Connection conn = null;
 		ServicioNovaViajesDao servicioNovaViajesDao = new ServicioNovaViajesDaoImpl();
-		try{
+		try {
 			conn = UtilConexion.obtenerConexion();
-			
-			if (listaDocumentos != null && !listaDocumentos.isEmpty()){
+
+			if (listaDocumentos != null && !listaDocumentos.isEmpty()) {
 				DocumentoAdicional documento = listaDocumentos.get(0);
-				if (documento.getIdServicio()!=null && !servicioNovaViajesDao.eliminarDocumentoAdicional(documento, conn)){
-					throw new ErrorRegistroDataException("No se pudo eliminar los documentos adicionales");
+				if (documento.getIdServicio() != null
+						&& !servicioNovaViajesDao.eliminarDocumentoAdicional(
+								documento, conn)) {
+					throw new ErrorRegistroDataException(
+							"No se pudo eliminar los documentos adicionales");
 				}
-				
+
 				for (DocumentoAdicional documentoAdicional : listaDocumentos) {
-					if (documentoAdicional.getCodigoEntero()==null || documentoAdicional.getCodigoEntero().intValue()==0){
-						boolean resultado = servicioNovaViajesDao.grabarDocumentoAdicional(documentoAdicional, conn);
-						if (!resultado){
-							throw new ErrorRegistroDataException("No se pudo completar el registro de documentos adicionales");
+					if (documentoAdicional.getCodigoEntero() == null
+							|| documentoAdicional.getCodigoEntero().intValue() == 0) {
+						boolean resultado = servicioNovaViajesDao
+								.grabarDocumentoAdicional(documentoAdicional,
+										conn);
+						if (!resultado) {
+							throw new ErrorRegistroDataException(
+									"No se pudo completar el registro de documentos adicionales");
 						}
 					}
 				}
-				
+
 				return true;
 			}
-			
-		}
-		catch (ErrorRegistroDataException e){
+
+		} catch (ErrorRegistroDataException e) {
 			throw new ErrorRegistroDataException(e);
-		}
-		catch (SQLException e){
+		} catch (SQLException e) {
 			throw new SQLException(e);
-		}
-		catch (Exception e){
+		} catch (Exception e) {
 			throw new Exception(e);
-		} 
-		finally{
-			if (conn != null){
+		} finally {
+			if (conn != null) {
 				conn.close();
 			}
 		}
 		return false;
 	}
-	
+
 	@Override
-	public List<DocumentoAdicional> listarDocumentosAdicionales(Integer idServicio) throws SQLException{
+	public List<DocumentoAdicional> listarDocumentosAdicionales(
+			Integer idServicio) throws SQLException {
 		ServicioNovaViajesDao servicioNovaViajesDao = new ServicioNovaViajesDaoImpl();
 		return servicioNovaViajesDao.listarDocumentosAdicionales(idServicio);
 	}
-	
+
 	@Override
-	public void registrarComprobantesAdicionales(List<Comprobante> listaComprobantesAdicionales) throws ErrorRegistroDataException, SQLException, Exception{
-		
+	public void registrarComprobantesAdicionales(
+			List<Comprobante> listaComprobantesAdicionales)
+			throws ErrorRegistroDataException, SQLException, Exception {
+
 		Connection conn = null;
-		
+
 		try {
 			conn = UtilConexion.obtenerConexion();
-			
+
 			ComprobanteNovaViajesDao comprobanteNovaViajesDao = new ComprobanteNovaViajesDaoImpl();
-			
+
 			for (Comprobante comprobante : listaComprobantesAdicionales) {
-				comprobanteNovaViajesDao.registrarComprobanteAdicional(comprobante, conn);
+				comprobanteNovaViajesDao.registrarComprobanteAdicional(
+						comprobante, conn);
 			}
-			
+
 		} catch (SQLException e) {
 			throw new ErrorRegistroDataException(e);
-		} catch (Exception e){
+		} catch (Exception e) {
 			throw new ErrorRegistroDataException(e);
 		} finally {
-			if (conn != null){
+			if (conn != null) {
 				conn.close();
 			}
 		}
