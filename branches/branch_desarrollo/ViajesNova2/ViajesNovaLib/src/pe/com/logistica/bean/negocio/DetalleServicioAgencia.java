@@ -59,12 +59,10 @@ public class DetalleServicioAgencia extends BaseNegocio {
 	private Integer idComprobanteGenerado;
 	
 	private Comprobante comprobanteAsociado;
-	/**
-	 * 
-	 */
-	public DetalleServicioAgencia() {
-		// TODO Auto-generated constructor stub
-	}
+	
+	private boolean agrupado;
+	private int cantidadAgrupados;
+	private BigDecimal totalAgrupados;
 
 	/**
 	 * @return the tipoServicio
@@ -549,6 +547,48 @@ public class DetalleServicioAgencia extends BaseNegocio {
 	 */
 	public void setTieneRetencion(boolean tieneRetencion) {
 		this.tieneRetencion = tieneRetencion;
+	}
+
+	/**
+	 * @return the agrupado
+	 */
+	public boolean isAgrupado() {
+		return agrupado;
+	}
+
+	/**
+	 * @param agrupado the agrupado to set
+	 */
+	public void setAgrupado(boolean agrupado) {
+		this.agrupado = agrupado;
+	}
+
+	/**
+	 * @return the cantidadAgrupados
+	 */
+	public int getCantidadAgrupados() {
+		return cantidadAgrupados;
+	}
+
+	/**
+	 * @param cantidadAgrupados the cantidadAgrupados to set
+	 */
+	public void setCantidadAgrupados(int cantidadAgrupados) {
+		this.cantidadAgrupados = cantidadAgrupados;
+	}
+
+	/**
+	 * @return the totalAgrupados
+	 */
+	public BigDecimal getTotalAgrupados() {
+		return totalAgrupados;
+	}
+
+	/**
+	 * @param totalAgrupados the totalAgrupados to set
+	 */
+	public void setTotalAgrupados(BigDecimal totalAgrupados) {
+		this.totalAgrupados = totalAgrupados;
 	}
 
 }

@@ -125,27 +125,29 @@
 									value="#{servicioAgenteMBean.servicioAgencia.listaDetalleServicio}"
 									style="width:100%;">
 									<f:facet name="header">
-										<rich:column colspan="6">
-											<h:outputText value="Servicios" />
-										</rich:column>
-										<rich:column breakRowBefore="true">
-											<h:outputText value="Unid." />
-										</rich:column>
-										<rich:column>
-											<h:outputText value="Fecha" />
-										</rich:column>
-										<rich:column>
-											<h:outputText value="Descripcion" />
-										</rich:column>
-										<rich:column>
-											<h:outputText value="Proveedor" />
-										</rich:column>
-										<rich:column>
-											<h:outputText value="Precio Unitario" />
-										</rich:column>
-										<rich:column>
-											<h:outputText value="Total" />
-										</rich:column>
+										<rich:columnGroup>
+											<rich:column colspan="6">
+												<h:outputText value="Servicios" />
+											</rich:column>
+											<rich:column breakRowBefore="true">
+												<h:outputText value="Unid." />
+											</rich:column>
+											<rich:column>
+												<h:outputText value="Fecha" />
+											</rich:column>
+											<rich:column>
+												<h:outputText value="Descripcion" />
+											</rich:column>
+											<rich:column>
+												<h:outputText value="Proveedor" />
+											</rich:column>
+											<rich:column>
+												<h:outputText value="Precio Unitario" />
+											</rich:column>
+											<rich:column>
+												<h:outputText value="Total" />
+											</rich:column>
+										</rich:columnGroup>
 									</f:facet>
 									<rich:column colspan="6">
 										<rich:collapsibleSubTableToggler for="idServHijos" />
@@ -210,152 +212,125 @@
 							style="width:100%;" columns="1">
 							<h:panelGrid columns="1" cellpadding="0" cellspacing="0"
 								border="0" style="width:100%;">
-								<rich:dataTable id="idServVentaVista2" var="row"
-									value="#{servicioAgenteMBean.servicioAgencia.listaDetalleServicio}"
+								<rich:dataTable id="idServVentaVista2" var="fila"
+									value="#{servicioAgenteMBean.listadoDetalleServicioAgrupado}"
 									style="width:100%;">
-									<rich:column style="text-align:right;width: 4%;">
-										<f:facet name="header">
-											<h:panelGrid cellpadding="0" cellspacing="0" border="0"
-												style="text-align:center;">
+									<f:facet name="header">
+										<rich:columnGroup>
+											<rich:column
+												colspan="#{servicioAgenteMBean.columnasComprobantes}">
+												<h:outputText value="Servicios" />
+											</rich:column>
+											<rich:column breakRowBefore="true">
 												<h:outputText value="Unid." />
-											</h:panelGrid>
-										</f:facet>
-										<h:outputText value="#{row.cantidad}" />
-									</rich:column>
-									<rich:column style="text-align:right;width: 4%;">
-										<f:facet name="header">
-											<h:panelGrid cellpadding="0" cellspacing="0" border="0"
-												style="text-align:center;">
-												<h:outputText value="Fecha Servicio" />
-											</h:panelGrid>
-										</f:facet>
-										<h:outputText value="#{row.fechaIda}">
-											<f:convertDateTime pattern="dd/MM/yyyy" />
-										</h:outputText>
-									</rich:column>
-									<rich:column style="text-align:left;width: 75%;">
-										<f:facet name="header">
-											<h:panelGrid cellpadding="0" cellspacing="0" border="0"
-												style="width:100%; text-align:center;">
-												<h:outputText value="Servicio - Descripcion" />
-											</h:panelGrid>
-										</f:facet>
-										<h:outputText
-											value="#{row.tipoServicio.nombre} - #{row.descripcionServicio}" />
-									</rich:column>
-									<rich:column style="text-align:left;width: 75%;">
-										<f:facet name="header">
-											<h:panelGrid cellpadding="0" cellspacing="0" border="0"
-												style="width:100%; text-align:center;">
+											</rich:column>
+											<rich:column>
+												<h:outputText value="Fecha" />
+											</rich:column>
+											<rich:column>
+												<h:outputText value="Descripcion" />
+											</rich:column>
+											<rich:column>
 												<h:outputText value="Proveedor" />
-											</h:panelGrid>
-										</f:facet>
-										<h:outputText
-											value="#{row.servicioProveedor.proveedor.nombres}" />
-									</rich:column>
-									<rich:column style="text-align:right;width: 10%;">
-										<f:facet name="header">
-											<h:panelGrid cellpadding="0" cellspacing="0" border="0"
-												style="width:100%; text-align:center;">
+											</rich:column>
+											<rich:column>
 												<h:outputText value="Precio Unitario" />
-											</h:panelGrid>
-										</f:facet>
-										<h:outputText
-											value="#{nova:formatearMonto('$',row.precioUnitario)}">
-										</h:outputText>
-									</rich:column>
-									<rich:column style="text-align:right;width: 10%;">
-										<f:facet name="header">
-											<h:panelGrid cellpadding="0" cellspacing="0" border="0"
-												style="width:100%; text-align:center;">
+											</rich:column>
+											<rich:column>
 												<h:outputText value="Total" />
-											</h:panelGrid>
-										</f:facet>
-										<h:outputText
-											value="#{nova:formatearMonto('$',row.totalServicio)}">
-										</h:outputText>
-									</rich:column>
-
-									<rich:column style="text-align:right;width: 10%;">
-										<f:facet name="header">
-											<h:panelGrid cellpadding="0" cellspacing="0" border="0"
-												style="width:100%; text-align:center;">
+											</rich:column>
+											<rich:column>
 												<h:outputText value="Tipo Comprobante" />
-											</h:panelGrid>
-										</f:facet>
-										<h:selectOneMenu
-											readonly="#{servicioAgenteMBean.guardoComprobantes}"
-											value="#{row.tipoComprobante.codigoEntero}"
-											rendered="#{!servicioAgenteMBean.servicioAgencia.guardoComprobante}">
-											<f:selectItems
-												value="#{catalogoMBean.catalogoTipoComprobante}" />
-										</h:selectOneMenu>
-										<h:outputText value="#{row.tipoComprobante.nombre}"
-											rendered="#{servicioAgenteMBean.servicioAgencia.guardoComprobante}" />
-									</rich:column>
-
-									<rich:column style="text-align:right;width: 10%;">
-										<f:facet name="header">
-											<h:panelGrid cellpadding="0" cellspacing="0" border="0"
-												style="width:100%; text-align:center;">
+											</rich:column>
+											<rich:column>
 												<h:outputText value="Numero Comprobante" />
-											</h:panelGrid>
-										</f:facet>
-										<h:inputText
-											rendered="#{!servicioAgenteMBean.servicioAgencia.guardoComprobante}"
-											readonly="#{servicioAgenteMBean.guardoComprobantes}"
-											value="#{row.nroComprobante}" maxlength="20" />
-										<h:outputText value="#{row.nroComprobante}"
-											rendered="#{servicioAgenteMBean.servicioAgencia.guardoComprobante}" />
+											</rich:column>
+											<rich:column>
+												<h:outputText value="" />
+											</rich:column>
+											<rich:column rendered="#{servicioAgenteMBean.guardoRelacionComprobantes}">
+												<h:outputText value="Obligacion" />
+											</rich:column>
+										</rich:columnGroup>
+									</f:facet>
+									<rich:column
+										colspan="#{servicioAgenteMBean.columnasComprobantes}">
+										<rich:collapsibleSubTableToggler for="idServHijos2" />
+										<h:outputText value="#{fila.descripcionServicio}" />
 									</rich:column>
-									<rich:column style="text-align:right;width: 10%;">
-										<h:panelGrid cellpadding="0" cellspacing="0" border="0"
-											columns="4">
-											<h:outputText value="D:" />
-											<h:selectBooleanCheckbox value="#{row.tieneDetraccion}"
-												disabled="#{servicioAgenteMBean.servicioAgencia.guardoComprobante}" />
-											<h:outputText value="R:" />
-											<h:selectBooleanCheckbox value="#{row.tieneRetencion}"
-												disabled="#{servicioAgenteMBean.servicioAgencia.guardoComprobante}" />
-										</h:panelGrid>
-									</rich:column>
-									<rich:column style="text-align:right;"
-										rendered="#{servicioAgenteMBean.servicioAgencia.guardoComprobante and !servicioAgenteMBean.guardoRelacionComprobantes}">
-										<f:facet name="header">
-											<h:panelGrid cellpadding="0" cellspacing="0" border="0"
-												style="width:100%; text-align:center;">
-												<h:outputText value="Obligacion por Pagar" />
-											</h:panelGrid>
-										</f:facet>
-										<h:panelGrid cellpadding="0" cellspacing="0" border="0"
-											columns="2">
+									<rich:collapsibleSubTable value="#{fila.serviciosHijos}"
+										var="filaDetalle" id="idServHijos2" expandMode="client">
+										<rich:column style="text-align:right;width: 4%;">
+											<h:outputText value="#{filaDetalle.cantidad}" />
+										</rich:column>
+										<rich:column style="text-align:right;width: 4%;">
+											<h:outputText value="#{filaDetalle.fechaIda}">
+												<f:convertDateTime pattern="dd/MM/yyyy" />
+											</h:outputText>
+										</rich:column>
+										<rich:column style="text-align:left;width: 40%;">
+											<h:outputText
+												value="#{filaDetalle.tipoServicio.nombre} - #{filaDetalle.descripcionServicio}" />
+										</rich:column>
+										<rich:column style="text-align:left;width: 20%;">
+											<h:outputText
+												value="#{filaDetalle.servicioProveedor.proveedor.nombres}" />
+										</rich:column>
+										<rich:column style="text-align:right;width: 12%;">
+											<h:outputText
+												value="#{nova:formatearMonto('$',filaDetalle.precioUnitario)}">
+											</h:outputText>
+										</rich:column>
+										<rich:column style="text-align:right;width: 20%;">
+											<h:outputText
+												value="#{nova:formatearMonto('$',filaDetalle.totalServicio)}">
+											</h:outputText>
+										</rich:column>
+										<rich:column>
+											<h:selectOneMenu
+												readonly="#{servicioAgenteMBean.guardoComprobantes}"
+												value="#{filaDetalle.tipoComprobante.codigoEntero}"
+												rendered="#{!servicioAgenteMBean.servicioAgencia.guardoComprobante}">
+												<f:selectItems
+													value="#{catalogoMBean.catalogoTipoComprobante}" />
+											</h:selectOneMenu>
+											<h:outputText value="#{filaDetalle.tipoComprobante.nombre}"
+												rendered="#{servicioAgenteMBean.servicioAgencia.guardoComprobante}" />
+										</rich:column>
+										<rich:column>
 											<h:inputText
-												value="#{row.comprobanteAsociado.numeroComprobante}"
-												readonly="true" />
-											<a4j:commandLink render="idTablaObligacion"
-												action="#{servicioAgenteMBean.enviaDetalle(row)}"
-												oncomplete="mostrarModal3('idModalbusqobligacion')">
-												<h:graphicImage style="border:0px;"
-													value="#{facesContext.externalContext.requestContextPath}/../resources/img/iconoLupa.gif" />
-											</a4j:commandLink>
-										</h:panelGrid>
-									</rich:column>
-									<rich:column style="text-align:right;"
-										rendered="#{servicioAgenteMBean.guardoRelacionComprobantes}">
-										<f:facet name="header">
+												rendered="#{!servicioAgenteMBean.servicioAgencia.guardoComprobante}"
+												readonly="#{servicioAgenteMBean.guardoComprobantes}"
+												value="#{filaDetalle.nroComprobante}" maxlength="20" />
+											<h:outputText value="#{filaDetalle.nroComprobante}"
+												rendered="#{servicioAgenteMBean.servicioAgencia.guardoComprobante}" />
+										</rich:column>
+										<rich:column>
 											<h:panelGrid cellpadding="0" cellspacing="0" border="0"
-												style="width:100%; text-align:center;">
-												<h:outputText value="Obligacion por Pagar" />
+												columns="4">
+												<h:outputText value="D: " />
+												<h:selectBooleanCheckbox
+													value="#{filaDetalle.tieneDetraccion}" />
+												<h:outputText value="R: " />
+												<h:selectBooleanCheckbox
+													value="#{filaDetalle.tieneRetencion}" />
 											</h:panelGrid>
-										</f:facet>
-										<h:panelGrid cellpadding="0" cellspacing="0" border="0"
-											columns="3">
-											<h:outputText
-												value="#{row.comprobanteAsociado.tipoComprobante.nombre}" />-
-											<h:outputText
-												value="#{row.comprobanteAsociado.numeroComprobante}" />
-										</h:panelGrid>
-									</rich:column>
+										</rich:column>
+										<rich:column rendered="#{servicioAgenteMBean.guardoRelacionComprobantes}">
+											<h:panelGrid cellpadding="0" cellspacing="0" border="0"
+												columns="2">
+												<h:inputText
+													value="#{row.comprobanteAsociado.numeroComprobante}"
+													readonly="true" />
+												<a4j:commandLink render="idTablaObligacion"
+													action="#{servicioAgenteMBean.enviaDetalle(row)}"
+													oncomplete="mostrarModal3('idModalbusqobligacion')">
+													<h:graphicImage style="border:0px;"
+														value="#{facesContext.externalContext.requestContextPath}/../resources/img/iconoLupa.gif" />
+												</a4j:commandLink>
+											</h:panelGrid>
+										</rich:column>
+									</rich:collapsibleSubTable>
 								</rich:dataTable>
 								<h:panelGrid columns="2" cellpadding="0" cellspacing="0"
 									border="0" style="width:100%;"
