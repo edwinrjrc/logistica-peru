@@ -52,9 +52,11 @@ import pe.com.logistica.negocio.exception.ValidacionException;
 import pe.com.logistica.web.servicio.NegocioServicio;
 import pe.com.logistica.web.servicio.ParametroServicio;
 import pe.com.logistica.web.servicio.SoporteServicio;
+import pe.com.logistica.web.servicio.UtilNegocioServicio;
 import pe.com.logistica.web.servicio.impl.NegocioServicioImpl;
 import pe.com.logistica.web.servicio.impl.ParametroServicioImpl;
 import pe.com.logistica.web.servicio.impl.SoporteServicioImpl;
+import pe.com.logistica.web.servicio.impl.UtilNegocioServicioImpl;
 import pe.com.logistica.web.util.UtilWeb;
 
 /**
@@ -92,6 +94,7 @@ public class ServicioAgenteMBean extends BaseMBean {
 
 	private List<ServicioAgencia> listadoServicioAgencia;
 	private List<DetalleServicioAgencia> listadoDetalleServicio;
+	private List<DetalleServicioAgencia> listadoDetalleServicioAgrupado;
 	private List<Cliente> listadoClientes;
 	private List<SelectItem> listadoEmpresas;
 	private List<ServicioProveedor> listaProveedores;
@@ -119,12 +122,14 @@ public class ServicioAgenteMBean extends BaseMBean {
 
 	private ParametroServicio parametroServicio;
 	private NegocioServicio negocioServicio;
+	private UtilNegocioServicio utilNegocioServicio;
 	private SoporteServicio soporteServicio;
 
 	private String pregunta;
 	private String nombreCampoTexto;
 	private String nombreTitulo;
 	private Integer tipoEvento;
+	private Integer columnasComprobantes;
 	private String idModales;
 
 	/**
@@ -137,7 +142,7 @@ public class ServicioAgenteMBean extends BaseMBean {
 			parametroServicio = new ParametroServicioImpl(servletContext);
 			negocioServicio = new NegocioServicioImpl(servletContext);
 			soporteServicio = new SoporteServicioImpl(servletContext);
-
+			utilNegocioServicio = new UtilNegocioServicioImpl(servletContext);
 		} catch (NamingException e) {
 			logger.error(e.getMessage(), e);
 		}
@@ -275,21 +280,34 @@ public class ServicioAgenteMBean extends BaseMBean {
 			this.setEditarVenta(true);
 			this.setListadoDetalleServicio(this.getServicioAgencia()
 					.getListaDetalleServicio());
+			
+			
+			HttpSession session = obtenerSession(false);
+			Usuario usuario = (Usuario) session
+					.getAttribute("usuarioSession");
+			
+			this.setColumnasComprobantes(9);
 
-			if (this.getServicioAgencia().isGuardoRelacionComprobantes()) {
-				this.setGuardoComprobantes(true);
-				this.setGuardoRelacionComprobantes(true);
-				this.getServicioAgencia()
-						.setListaDetalleServicio(
-								this.negocioServicio
-										.consultarDetServComprobanteObligacion(this
-												.getServicioAgencia()
-												.getCodigoEntero()));
-			} else if (this.getServicioAgencia().isGuardoComprobante()) {
-				this.setGuardoComprobantes(true);
-				this.getServicioAgencia().setListaDetalleServicio(
-						this.negocioServicio.consultarDetalleComprobantes(this
-								.getServicioAgencia().getCodigoEntero()));
+			if (usuario.getRol().getCodigoEntero().intValue() == 3){
+				if (this.getServicioAgencia().isGuardoRelacionComprobantes()) {
+					this.setGuardoComprobantes(true);
+					this.setGuardoRelacionComprobantes(true);
+					this.getServicioAgencia()
+							.setListaDetalleServicio(
+									this.negocioServicio
+											.consultarDetServComprobanteObligacion(this
+													.getServicioAgencia()
+													.getCodigoEntero()));
+					this.setColumnasComprobantes(10);
+				} else if (this.getServicioAgencia().isGuardoComprobante()) {
+					this.setGuardoComprobantes(true);
+					this.getServicioAgencia().setListaDetalleServicio(
+							this.negocioServicio.consultarDetalleComprobantes(this
+									.getServicioAgencia().getCodigoEntero()));
+					this.setColumnasComprobantes(9);
+				}
+				
+				this.setListadoDetalleServicioAgrupado(this.utilNegocioServicio.agruparServicios(this.getServicioAgencia().getListaDetalleServicio()));
 			}
 
 			this.setListaDocumentosAdicionales(this.negocioServicio
@@ -316,7 +334,6 @@ public class ServicioAgenteMBean extends BaseMBean {
 				this.getListadoDetalleServicio().remove(detalle);
 			}
 		}
-
 	}
 
 	public void registrarNuevaVenta() {
@@ -645,22 +662,25 @@ public class ServicioAgenteMBean extends BaseMBean {
 					.obtenerEnteroPropertieMaestro("codigoParametroIGV",
 							"aplicacionDatos"));
 
-			for (DetalleServicioAgencia detalleServicio : this
+			for (DetalleServicioAgencia ds : this
 					.getListadoDetalleServicio()) {
 				
-				montoTotal = montoTotal.add(detalleServicio.getTotalServicio());
-				montoComision = montoComision.add(detalleServicio
-						.getMontoComision());
-				if (detalleServicio.getTipoServicio().getCodigoEntero()
-						.toString().equals(param.getValor())) {
-					montoIgv = montoIgv.add(detalleServicio
-							.getPrecioUnitario());
-				}
+				for (DetalleServicioAgencia dsh: ds.getServiciosHijos()) {
+					montoTotal = montoTotal.add(dsh.getTotalServicio());
+					montoComision = montoComision.add(dsh
+							.getMontoComision());
+					if (dsh.getTipoServicio().getCodigoEntero()
+							.toString().equals(param.getValor())) {
+						montoIgv = montoIgv.add(dsh
+								.getPrecioUnitario());
+					}
 
-				if (detalleServicio.getTipoServicio().getCodigoEntero() != null
-						&& detalleServicio.getTipoServicio().isEsFee()) {
-					montoFee = montoFee.add(detalleServicio.getTotalServicio());
+					if (dsh.getTipoServicio().getCodigoEntero() != null
+							&& dsh.getTipoServicio().isEsFee()) {
+						montoFee = montoFee.add(dsh.getTotalServicio());
+					}
 				}
+				
 			}
 
 		} catch (Exception e) {
@@ -2501,6 +2521,35 @@ public class ServicioAgenteMBean extends BaseMBean {
 	 */
 	public void setAgregoServicioPadre(boolean agregoServicioPadre) {
 		this.agregoServicioPadre = agregoServicioPadre;
+	}
+
+	/**
+	 * @return the columnasComprobantes
+	 */
+	public Integer getColumnasComprobantes() {
+		return columnasComprobantes;
+	}
+
+	/**
+	 * @param columnasComprobantes the columnasComprobantes to set
+	 */
+	public void setColumnasComprobantes(Integer columnasComprobantes) {
+		this.columnasComprobantes = columnasComprobantes;
+	}
+
+	/**
+	 * @return the listadoDetalleServicioAgrupado
+	 */
+	public List<DetalleServicioAgencia> getListadoDetalleServicioAgrupado() {
+		return listadoDetalleServicioAgrupado;
+	}
+
+	/**
+	 * @param listadoDetalleServicioAgrupado the listadoDetalleServicioAgrupado to set
+	 */
+	public void setListadoDetalleServicioAgrupado(
+			List<DetalleServicioAgencia> listadoDetalleServicioAgrupado) {
+		this.listadoDetalleServicioAgrupado = listadoDetalleServicioAgrupado;
 	}
 
 }
