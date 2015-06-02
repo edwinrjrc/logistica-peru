@@ -63,6 +63,7 @@ public class DetalleServicioAgencia extends BaseNegocio {
 	private boolean agrupado;
 	private int cantidadAgrupados;
 	private BigDecimal totalAgrupados;
+	private List<Integer> codigoEnteroAgrupados;
 
 	/**
 	 * @return the tipoServicio
@@ -589,6 +590,23 @@ public class DetalleServicioAgencia extends BaseNegocio {
 	 */
 	public void setTotalAgrupados(BigDecimal totalAgrupados) {
 		this.totalAgrupados = totalAgrupados;
+	}
+
+	/**
+	 * @return the codigoEnteroAgrupados
+	 */
+	public List<Integer> getCodigoEnteroAgrupados() {
+		if (codigoEnteroAgrupados == null){
+			codigoEnteroAgrupados = new ArrayList<Integer>();
+		}
+		return codigoEnteroAgrupados;
+	}
+
+	/**
+	 * @param codigoEnteroAgrupados the codigoEnteroAgrupados to set
+	 */
+	public void setCodigoEnteroAgrupados(List<Integer> codigoEnteroAgrupados) {
+		this.codigoEnteroAgrupados = codigoEnteroAgrupados;
 	}
 
 }
