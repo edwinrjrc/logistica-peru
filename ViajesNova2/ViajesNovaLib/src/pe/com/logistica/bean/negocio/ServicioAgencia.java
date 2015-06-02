@@ -42,6 +42,7 @@ public class ServicioAgencia extends BaseNegocio{
 	private BigDecimal montoSaldoServicio;
 	
 	private List<DetalleServicioAgencia> listaDetalleServicio;
+	private List<DetalleServicioAgencia> listaDetalleServicioAgrupado;
 	private List<CuotaPago> cronogramaPago;
 	
 	private BaseVO vendedor;
@@ -636,5 +637,27 @@ public class ServicioAgencia extends BaseNegocio{
 	 */
 	public void setGuardoRelacionComprobantes(boolean guardoRelacionComprobantes) {
 		this.guardoRelacionComprobantes = guardoRelacionComprobantes;
+	}
+
+
+
+	/**
+	 * @return the listaDetalleServicioAgrupado
+	 */
+	public List<DetalleServicioAgencia> getListaDetalleServicioAgrupado() {
+		if (listaDetalleServicioAgrupado == null){
+			listaDetalleServicioAgrupado = new ArrayList<DetalleServicioAgencia>();
+		}
+		return listaDetalleServicioAgrupado;
+	}
+
+
+
+	/**
+	 * @param listaDetalleServicioAgrupado the listaDetalleServicioAgrupado to set
+	 */
+	public void setListaDetalleServicioAgrupado(
+			List<DetalleServicioAgencia> listaDetalleServicioAgrupado) {
+		this.listaDetalleServicioAgrupado = listaDetalleServicioAgrupado;
 	}
 }
