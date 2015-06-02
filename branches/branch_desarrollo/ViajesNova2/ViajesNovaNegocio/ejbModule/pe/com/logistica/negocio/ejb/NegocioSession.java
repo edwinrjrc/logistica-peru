@@ -2125,15 +2125,16 @@ public class NegocioSession implements NegocioSessionRemote,
 					.obtenerNumeroComprobante(servicioAgencia
 							.getListaDetalleServicio());
 			for (Comprobante comprobante : listaComprobantes) {
-				for (DetalleServicioAgencia detalle : servicioAgencia
-						.getListaDetalleServicio()) {
-					if (comprobante.getTipoComprobante().getCodigoEntero()
-							.intValue() != detalle.getTipoComprobante()
-							.getCodigoEntero().intValue()
-							&& comprobante.getNumeroComprobante().equals(
-									detalle.getNroComprobante())) {
-						throw new ValidacionException(
-								"Tipo y numero de comprobante diferente");
+				for (DetalleServicioAgencia detallePadre : servicioAgencia.getListaDetalleServicio()){
+					for (DetalleServicioAgencia detalle : detallePadre.getServiciosHijos()) {
+						if (comprobante.getTipoComprobante().getCodigoEntero()
+								.intValue() != detalle.getTipoComprobante()
+								.getCodigoEntero().intValue()
+								&& comprobante.getNumeroComprobante().equals(
+										detalle.getNroComprobante())) {
+							throw new ValidacionException(
+									"Tipo y numero de comprobante diferente");
+						}
 					}
 				}
 			}

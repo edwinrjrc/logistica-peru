@@ -9,6 +9,7 @@ import javax.ejb.Stateless;
 
 import pe.com.logistica.bean.negocio.DetalleServicioAgencia;
 import pe.com.logistica.bean.negocio.MaestroServicio;
+import pe.com.logistica.bean.negocio.ServicioAgencia;
 import pe.com.logistica.negocio.dao.MaestroServicioDao;
 import pe.com.logistica.negocio.dao.impl.MaestroServicioDaoImpl;
 
@@ -61,6 +62,7 @@ public class UtilNegocioSession implements UtilNegocioSessionRemote, UtilNegocio
 						detalle.setOrigen(detalleHijo.getOrigen());
 						detalle.setDestino(detalleHijo.getDestino());*/
 						detalle = detalleHijo;
+						detalle.getCodigoEnteroAgrupados().add(detalleHijo.getCodigoEntero());
 					}
 				}
 				if (agrupados > 1){
@@ -78,5 +80,26 @@ public class UtilNegocioSession implements UtilNegocioSessionRemote, UtilNegocio
 			e.printStackTrace();
 		}
 		return listaServiciosAgrupados;
+	}
+	
+	public ServicioAgencia colocarTipoNumeroComprobante(ServicioAgencia servicioAgencia){
+		for (DetalleServicioAgencia detalle : servicioAgencia.getListaDetalleServicio()){
+			for (DetalleServicioAgencia detalleAgrupado : servicioAgencia.getListaDetalleServicio()){
+				if (detalleAgrupado.isAgrupado()){
+					for (Integer id : detalleAgrupado.getCodigoEnteroAgrupados()){
+						if (detalle.getCodigoEntero().intValue() == id.intValue() ){
+							detalle.setComprobanteAsociado(detalleAgrupado.getComprobanteAsociado());
+						}
+					}
+				}
+				else {
+					if (detalle.getCodigoEntero().intValue() == detalleAgrupado.getCodigoEntero().intValue()){
+						detalle.setComprobanteAsociado(detalleAgrupado.getComprobanteAsociado());
+					}
+				}
+			}
+		}
+		
+		return servicioAgencia;
 	}
 }
