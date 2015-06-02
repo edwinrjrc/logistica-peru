@@ -137,4 +137,10 @@ public interface ServicioNovaViajesDao {
 
 	boolean eliminarDocumentoAdicional(DocumentoAdicional documento,
 			Connection conn) throws SQLException;
+
+	List<DetalleServicioAgencia> consultaServicioDetallePadre(int idServicio,
+			Connection conn) throws SQLException;
+
+	List<DetalleServicioAgencia> consultaServicioDetalleHijo(int idServicio,
+			int idSerDetaPadre, Connection conn) throws SQLException;
 }

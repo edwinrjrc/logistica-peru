@@ -1440,18 +1440,18 @@ public class NegocioSession implements NegocioSessionRemote,
 
 			servicioAgencia = servicioNovaViajesDao.consultarServiciosVenta2(
 					idServicio, conn);
-
-			servicioAgencia.setListaDetalleServicio(servicioNovaViajesDao
-					.consultaServicioDetalle(servicioAgencia.getCodigoEntero(),
-							conn));
-
-			for (DetalleServicioAgencia detalle : servicioAgencia
-					.getListaDetalleServicio()) {
-				List<DetalleServicioAgencia> listaHijos = servicioNovaViajesDao
-						.consultaServicioDetalleHijos(idServicio,
-								detalle.getCodigoEntero(), conn);
-				detalle.setServiciosHijos(listaHijos);
+			
+			List<DetalleServicioAgencia> listaServiciosPadre = servicioNovaViajesDao.consultaServicioDetallePadre(servicioAgencia.getCodigoEntero(),
+					conn);
+			
+			for (DetalleServicioAgencia detalleServicioAgencia : listaServiciosPadre) {
+				detalleServicioAgencia.setDescripcionServicio(detalleServicioAgencia.getTipoServicio().getNombre()+" - "+detalleServicioAgencia.getDescripcionServicio());
+				List<DetalleServicioAgencia> listaHijos = new ArrayList<DetalleServicioAgencia>();
+				listaHijos.add(detalleServicioAgencia);
+				listaHijos.addAll(servicioNovaViajesDao.consultaServicioDetalleHijo(servicioAgencia.getCodigoEntero(), detalleServicioAgencia.getCodigoEntero(), conn));
+				detalleServicioAgencia.setServiciosHijos(listaHijos);
 			}
+			servicioAgencia.setListaDetalleServicio(listaServiciosPadre);
 
 			if (servicioAgencia.getFormaPago().getCodigoEntero().intValue() == 2) {
 				servicioAgencia.setCronogramaPago(servicioNovaViajesDao
