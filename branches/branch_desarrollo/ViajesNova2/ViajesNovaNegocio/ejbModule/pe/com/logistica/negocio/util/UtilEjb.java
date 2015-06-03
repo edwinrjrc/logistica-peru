@@ -4,8 +4,6 @@
 package pe.com.logistica.negocio.util;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -17,38 +15,20 @@ import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.StringUtils;
 
-import pe.com.logistica.bean.Util.UtilParse;
 import pe.com.logistica.bean.base.BaseVO;
 import pe.com.logistica.bean.negocio.Comprobante;
 import pe.com.logistica.bean.negocio.DetalleComprobante;
 import pe.com.logistica.bean.negocio.DetalleServicioAgencia;
-import pe.com.logistica.bean.negocio.MaestroServicio;
 import pe.com.logistica.bean.negocio.Parametro;
-import pe.com.logistica.bean.negocio.Proveedor;
 import pe.com.logistica.bean.negocio.ServicioAgencia;
-import pe.com.logistica.negocio.dao.ComunDao;
-import pe.com.logistica.negocio.dao.DestinoDao;
-import pe.com.logistica.negocio.dao.MaestroServicioDao;
 import pe.com.logistica.negocio.dao.ParametroDao;
-import pe.com.logistica.negocio.dao.ProveedorDao;
-import pe.com.logistica.negocio.dao.impl.ComunDaoImpl;
-import pe.com.logistica.negocio.dao.impl.DestinoDaoImpl;
-import pe.com.logistica.negocio.dao.impl.MaestroServicioDaoImpl;
 import pe.com.logistica.negocio.dao.impl.ParametroDaoImpl;
-import pe.com.logistica.negocio.dao.impl.ProveedorDaoImpl;
 
 /**
  * @author Edwin
  *
  */
 public class UtilEjb {
-
-	/**
-	 * 
-	 */
-	public UtilEjb() {
-		// TODO Auto-generated constructor stub
-	}
 
 	public static String obtenerCadenaPropertieMaestro(String llave,
 			String maestroPropertie) {
@@ -121,7 +101,7 @@ public class UtilEjb {
 				for (int r = 0; r < listaDetalle.size(); r++) {
 					for (int j = 0; j < listaDetalle.get(r).getServiciosHijos()
 							.size(); j++) {
-						DetalleServicioAgencia bean2 = listaDetalle.get(j);
+						DetalleServicioAgencia bean2 = listaDetalle.get(r).getServiciosHijos().get(j);
 						if (!bean.getNroComprobante().equals(
 								bean2.getNroComprobante())
 								&& !estaEnListado(bean2.getNroComprobante(),
@@ -166,10 +146,11 @@ public class UtilEjb {
 							"aplicacionDatosEjb"));
 			BaseVO tipoComprobante = null;
 			DetalleComprobante detalle = null;
+			DetalleServicioAgencia bean = null;
 			for (int s=0;s<servicioAgencia.getListaDetalleServicio().size(); s++){
-				for (int i = 0; i < servicioAgencia.getListaDetalleServicio().get(s).getServiciosHijos().size(); i++) {
-					DetalleServicioAgencia bean = servicioAgencia
-							.getListaDetalleServicio().get(i);
+				for (int i = 0; i < servicioAgencia.getListaDetalleServicioAgrupado().get(s).getServiciosHijos().size(); i++) {
+					bean = servicioAgencia
+							.getListaDetalleServicioAgrupado().get(s).getServiciosHijos().get(i);
 					if (bean.getNroComprobante()
 							.equals(comp.getNumeroComprobante())) {
 						detalle = new DetalleComprobante();
