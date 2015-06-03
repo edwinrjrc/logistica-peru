@@ -12,6 +12,7 @@ import javax.naming.NamingException;
 import javax.servlet.ServletContext;
 
 import pe.com.logistica.bean.negocio.DetalleServicioAgencia;
+import pe.com.logistica.bean.negocio.ServicioAgencia;
 import pe.com.logistica.negocio.ejb.UtilNegocioSessionRemote;
 import pe.com.logistica.web.servicio.UtilNegocioServicio;
 
@@ -51,6 +52,11 @@ public class UtilNegocioServicioImpl implements UtilNegocioServicio {
 			List<DetalleServicioAgencia> listaServicios) {
 		
 		return ejbSession.agruparServiciosHijos(listaServicios);
+	}
+	
+	@Override
+	public ServicioAgencia colocarTipoNumeroComprobante(ServicioAgencia servicioAgencia){
+		return ejbSession.colocarTipoNumeroComprobante(servicioAgencia);
 	}
 
 }

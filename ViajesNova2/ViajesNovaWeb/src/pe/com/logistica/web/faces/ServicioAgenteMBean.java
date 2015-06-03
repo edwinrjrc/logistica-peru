@@ -1425,6 +1425,7 @@ public class ServicioAgenteMBean extends BaseMBean {
 					obtenerRequest().getRemoteAddr());
 
 			this.getServicioAgencia().setListaDetalleServicioAgrupado(getListadoDetalleServicioAgrupado());
+			this.setServicioAgencia(this.utilNegocioServicio.colocarTipoNumeroComprobante(this.getServicioAgencia()));
 			boolean guardo = this.negocioServicio.registrarComprobantes(this
 					.getServicioAgencia());
 			this.setGuardoComprobantes(guardo);
