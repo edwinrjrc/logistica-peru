@@ -1444,12 +1444,14 @@ public class NegocioSession implements NegocioSessionRemote,
 			List<DetalleServicioAgencia> listaServiciosPadre = servicioNovaViajesDao.consultaServicioDetallePadre(servicioAgencia.getCodigoEntero(),
 					conn);
 			
+			List<DetalleServicioAgencia> listaHijos = null;
 			for (DetalleServicioAgencia detalleServicioAgencia : listaServiciosPadre) {
 				detalleServicioAgencia.setDescripcionServicio(detalleServicioAgencia.getTipoServicio().getNombre()+" - "+detalleServicioAgencia.getDescripcionServicio());
-				List<DetalleServicioAgencia> listaHijos = new ArrayList<DetalleServicioAgencia>();
+				listaHijos = new ArrayList<DetalleServicioAgencia>();
 				listaHijos.add(detalleServicioAgencia);
 				listaHijos.addAll(servicioNovaViajesDao.consultaServicioDetalleHijo(servicioAgencia.getCodigoEntero(), detalleServicioAgencia.getCodigoEntero(), conn));
 				detalleServicioAgencia.setServiciosHijos(listaHijos);
+				listaHijos = null;
 			}
 			servicioAgencia.setListaDetalleServicio(listaServiciosPadre);
 
