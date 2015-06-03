@@ -1445,15 +1445,19 @@ public class NegocioSession implements NegocioSessionRemote,
 					conn);
 			
 			List<DetalleServicioAgencia> listaHijos = null;
-			for (DetalleServicioAgencia detalleServicioAgencia : listaServiciosPadre) {
+			DetalleServicioAgencia detalleServicioAgencia = null;
+			List<DetalleServicioAgencia> listaServiciosPadreNueva = new ArrayList<DetalleServicioAgencia>();
+			for (int i=0; i<listaServiciosPadre.size(); i++) {
+				detalleServicioAgencia = (DetalleServicioAgencia) listaServiciosPadre.get(i); 
 				detalleServicioAgencia.setDescripcionServicio(detalleServicioAgencia.getTipoServicio().getNombre()+" - "+detalleServicioAgencia.getDescripcionServicio());
 				listaHijos = new ArrayList<DetalleServicioAgencia>();
 				listaHijos.add(detalleServicioAgencia);
 				listaHijos.addAll(servicioNovaViajesDao.consultaServicioDetalleHijo(servicioAgencia.getCodigoEntero(), detalleServicioAgencia.getCodigoEntero(), conn));
 				detalleServicioAgencia.setServiciosHijos(listaHijos);
 				listaHijos = null;
+				listaServiciosPadreNueva.add(detalleServicioAgencia);
 			}
-			servicioAgencia.setListaDetalleServicio(listaServiciosPadre);
+			servicioAgencia.setListaDetalleServicio(listaServiciosPadreNueva);
 
 			if (servicioAgencia.getFormaPago().getCodigoEntero().intValue() == 2) {
 				servicioAgencia.setCronogramaPago(servicioNovaViajesDao
@@ -2125,9 +2129,9 @@ public class NegocioSession implements NegocioSessionRemote,
 		try {
 			List<Comprobante> listaComprobantes = UtilEjb
 					.obtenerNumeroComprobante(servicioAgencia
-							.getListaDetalleServicio());
+							.getListaDetalleServicioAgrupado());
 			for (Comprobante comprobante : listaComprobantes) {
-				for (DetalleServicioAgencia detallePadre : servicioAgencia.getListaDetalleServicio()){
+				for (DetalleServicioAgencia detallePadre : servicioAgencia.getListaDetalleServicioAgrupado()){
 					for (DetalleServicioAgencia detalle : detallePadre.getServiciosHijos()) {
 						if (comprobante.getTipoComprobante().getCodigoEntero()
 								.intValue() != detalle.getTipoComprobante()
