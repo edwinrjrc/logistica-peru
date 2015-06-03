@@ -154,27 +154,47 @@ public class UtilEjb {
 					if (bean.getNroComprobante()
 							.equals(comp.getNumeroComprobante())) {
 						detalle = new DetalleComprobante();
-						total = total.add(bean.getTotalServicio());
-						tipoComprobante = bean.getTipoComprobante();
-						detalle.setIdServicioDetalle(bean.getCodigoEntero());
-						detalle.setCantidad(bean.getCantidad());
-						detalle.setPrecioUnitario(bean.getPrecioUnitario());
-						detalle.setTotalDetalle(bean.getTotalServicio());
-						detalle.setConcepto(bean.getDescripcionServicio());
-						detalle.setUsuarioCreacion(servicioAgencia
-								.getUsuarioCreacion());
-						detalle.setIpCreacion(servicioAgencia.getIpCreacion());
-						comp.getDetalleComprobante().add(detalle);
-						if (bean.getServiciosHijos() != null) {
-							for (int x = 0; x < bean.getServiciosHijos().size(); x++) {
-								DetalleServicioAgencia hijo = bean
-										.getServiciosHijos().get(x);
-								if (hijo.getTipoServicio().getCodigoEntero()
-										.intValue() == UtilEjb
-										.convertirCadenaEntero(param.getValor())) {
-									totalIGV = totalIGV.add(hijo
-											.getPrecioUnitario());
-								}
+						if (bean.isAgrupado()){
+							for (Integer id : bean.getCodigoEnteroAgrupados()){
+								total = total.add(bean.getTotalServicio());
+								tipoComprobante = bean.getTipoComprobante();
+								//TODO AQUI ME QUEDE AGREGAR LOS HIJOS DEL SERVICIO AGRUPADO
+								detalle = null;
+								detalle = new DetalleComprobante();
+								detalle.setIdServicioDetalle(id);
+								detalle.setCantidad(bean.getCantidad());
+								detalle.setPrecioUnitario(bean.getPrecioUnitario());
+								detalle.setTotalDetalle(bean.getTotalServicio());
+								detalle.setConcepto(bean.getDescripcionServicio());
+								detalle.setUsuarioCreacion(servicioAgencia
+										.getUsuarioCreacion());
+								detalle.setIpCreacion(servicioAgencia.getIpCreacion());
+								comp.getDetalleComprobante().add(detalle);
+							}
+							if (bean.getTipoServicio().getCodigoEntero()
+									.intValue() == UtilEjb
+									.convertirCadenaEntero(param.getValor())) {
+								totalIGV = totalIGV.add(bean
+										.getPrecioUnitario());
+							}
+						}
+						else{
+							total = total.add(bean.getTotalServicio());
+							tipoComprobante = bean.getTipoComprobante();
+							detalle.setIdServicioDetalle(bean.getCodigoEntero());
+							detalle.setCantidad(bean.getCantidad());
+							detalle.setPrecioUnitario(bean.getPrecioUnitario());
+							detalle.setTotalDetalle(bean.getTotalServicio());
+							detalle.setConcepto(bean.getDescripcionServicio());
+							detalle.setUsuarioCreacion(servicioAgencia
+									.getUsuarioCreacion());
+							detalle.setIpCreacion(servicioAgencia.getIpCreacion());
+							comp.getDetalleComprobante().add(detalle);
+							if (bean.getTipoServicio().getCodigoEntero()
+									.intValue() == UtilEjb
+									.convertirCadenaEntero(param.getValor())) {
+								totalIGV = totalIGV.add(bean
+										.getPrecioUnitario());
 							}
 						}
 					}
