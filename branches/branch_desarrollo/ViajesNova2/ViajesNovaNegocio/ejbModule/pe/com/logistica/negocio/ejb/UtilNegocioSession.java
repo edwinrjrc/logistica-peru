@@ -49,19 +49,31 @@ public class UtilNegocioSession implements UtilNegocioSessionRemote, UtilNegocio
 			DetalleServicioAgencia detalle = null;
 			for (MaestroServicio maestroServicio : listaTiposServicio) {
 				detalle = null;
+				detalle = new DetalleServicioAgencia();
 				agrupados = 0;
 				montoAgrupado = BigDecimal.ZERO;
 				for (DetalleServicioAgencia detalleHijo : listaServicios){
 					if (detalleHijo.getTipoServicio().getCodigoEntero().intValue() == maestroServicio.getCodigoEntero().intValue()){
 						montoAgrupado = montoAgrupado.add(detalleHijo.getTotalServicio());
 						agrupados++;
-						/*detalle.setTipoServicio(maestroServicio);
+						detalle.setCodigoEntero(detalleHijo.getCodigoEntero());
+						detalle.setTipoServicio(maestroServicio);
 						detalle.setFechaServicio(detalleHijo.getFechaServicio());
 						detalle.setCantidad(detalleHijo.getCantidad());
 						detalle.setPrecioUnitario(detalleHijo.getPrecioUnitario());
 						detalle.setOrigen(detalleHijo.getOrigen());
-						detalle.setDestino(detalleHijo.getDestino());*/
-						detalle = detalleHijo;
+						detalle.setDestino(detalleHijo.getDestino());
+						detalle.setDescripcionServicio(detalleHijo.getDescripcionServicio());
+						detalle.setServicioProveedor(detalleHijo.getServicioProveedor());
+						detalle.setAerolinea(detalleHijo.getAerolinea());
+						detalle.setHotel(detalleHijo.getHotel());
+						detalle.setTieneDetraccion(detalleHijo.isTieneDetraccion());
+						detalle.setTieneRetencion(detalleHijo.isTieneRetencion());
+						detalle.setTarifaNegociada(detalleHijo.isTarifaNegociada());
+						detalle.setConfiguracionTipoServicio(detalleHijo.getConfiguracionTipoServicio());
+						detalle.setMontoComision(detalleHijo.getMontoComision());
+						System.out.println("tipo servicio ::"+detalleHijo.getTipoServicio().getCodigoEntero());
+						System.out.println("id servicio ::"+detalleHijo.getCodigoEntero());
 						detalle.getCodigoEnteroAgrupados().add(detalleHijo.getCodigoEntero());
 					}
 				}
@@ -69,14 +81,14 @@ public class UtilNegocioSession implements UtilNegocioSessionRemote, UtilNegocio
 					detalle.setDescripcionServicio("Servicios agrupados :: "+agrupados);
 					detalle.setAgrupado(true);
 					detalle.setCantidadAgrupados(agrupados);
-					detalle.setPrecioUnitario(montoAgrupado); 	
-				}
-				if (detalle != null){
+					detalle.setPrecioUnitario(montoAgrupado);
 					listaServiciosAgrupados.add(detalle);
 				}
-				
+				else if (agrupados > 0) {
+					listaServiciosAgrupados.add(detalle);
+				}
 			}
-		} catch (SQLException e) {
+		} catch (SQLException e) {	
 			e.printStackTrace();
 		}
 		return listaServiciosAgrupados;
