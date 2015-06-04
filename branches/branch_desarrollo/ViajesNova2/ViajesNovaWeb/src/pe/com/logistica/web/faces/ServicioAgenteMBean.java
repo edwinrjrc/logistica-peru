@@ -664,23 +664,19 @@ public class ServicioAgenteMBean extends BaseMBean {
 
 			for (DetalleServicioAgencia ds : this
 					.getListadoDetalleServicio()) {
-				
-				for (DetalleServicioAgencia dsh: ds.getServiciosHijos()) {
-					montoTotal = montoTotal.add(dsh.getTotalServicio());
-					montoComision = montoComision.add(dsh
-							.getMontoComision());
-					if (dsh.getTipoServicio().getCodigoEntero()
-							.toString().equals(param.getValor())) {
-						montoIgv = montoIgv.add(dsh
-								.getPrecioUnitario());
-					}
-
-					if (dsh.getTipoServicio().getCodigoEntero() != null
-							&& dsh.getTipoServicio().isEsFee()) {
-						montoFee = montoFee.add(dsh.getTotalServicio());
-					}
+				montoTotal = montoTotal.add(ds.getTotalServicio());
+				montoComision = montoComision.add(ds
+						.getMontoComision());
+				if (ds.getTipoServicio().getCodigoEntero()
+						.toString().equals(param.getValor())) {
+					montoIgv = montoIgv.add(ds
+							.getPrecioUnitario());
 				}
-				
+
+				if (ds.getTipoServicio().getCodigoEntero() != null
+						&& ds.getTipoServicio().isEsFee()) {
+					montoFee = montoFee.add(ds.getTotalServicio());
+				}
 			}
 
 		} catch (Exception e) {
