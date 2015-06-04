@@ -158,7 +158,6 @@ public class UtilEjb {
 							for (Integer id : bean.getCodigoEnteroAgrupados()){
 								total = total.add(bean.getTotalServicio());
 								tipoComprobante = bean.getTipoComprobante();
-								//TODO AQUI ME QUEDE AGREGAR LOS HIJOS DEL SERVICIO AGRUPADO
 								detalle = null;
 								detalle = new DetalleComprobante();
 								detalle.setIdServicioDetalle(id);
