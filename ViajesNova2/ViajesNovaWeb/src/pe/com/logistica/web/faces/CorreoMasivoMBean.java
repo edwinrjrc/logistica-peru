@@ -130,17 +130,17 @@ public class CorreoMasivoMBean extends BaseMBean {
 			}
 			
 			this.setShowModal(true);
-			this.setTipoModal(this.TIPO_MODAL_EXITO);
+			this.setTipoModal(TIPO_MODAL_EXITO);
 			this.setMensajeModal(msje);
 		} catch (EnvioCorreoException e) {
 			e.printStackTrace();
 			this.setShowModal(true);
-			this.setTipoModal(this.TIPO_MODAL_ERROR);
+			this.setTipoModal(TIPO_MODAL_ERROR);
 			this.setMensajeModal(e.getMessage());
 		} catch (Exception e) {
 			e.printStackTrace();
 			this.setShowModal(true);
-			this.setTipoModal(this.TIPO_MODAL_ERROR);
+			this.setTipoModal(TIPO_MODAL_ERROR);
 			this.setMensajeModal(e.getMessage());
 		}
 	}

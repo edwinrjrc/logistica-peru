@@ -13,8 +13,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.log4j.Logger;
-
 /**
  * @author Edwin
  * 
@@ -22,8 +20,6 @@ import org.apache.log4j.Logger;
 
 public class BaseMBean implements Serializable {
 	
-	private final static Logger logger = Logger.getLogger(BaseMBean.class);
-
 	/**
 	 * 
 	 */
@@ -175,5 +171,17 @@ public class BaseMBean implements Serializable {
 	 */
 	public void setTransaccionExito(boolean transaccionExito) {
 		this.transaccionExito = transaccionExito;
+	}
+	
+	public void mostrarMensajeError(String mensaje){
+		this.setShowModal(true);
+		this.setMensajeModal(mensaje);
+		this.setTipoModal(TIPO_MODAL_ERROR);
+	}
+	
+	public void mostrarMensajeExito(String mensaje){
+		this.setShowModal(true);
+		this.setMensajeModal(mensaje);
+		this.setTipoModal(TIPO_MODAL_EXITO);
 	}
 }
