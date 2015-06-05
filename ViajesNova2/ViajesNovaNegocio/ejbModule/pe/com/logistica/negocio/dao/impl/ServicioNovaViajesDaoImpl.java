@@ -2283,9 +2283,8 @@ public class ServicioNovaViajesDaoImpl implements ServicioNovaViajesDao {
 	
 	
 	@Override
-	public List<DetalleServicioAgencia> consultaServDetComprobanteObligacion(int idServicio)
+	public List<DetalleServicioAgencia> consultaServDetComprobanteObligacion(int idServicio, Connection conn)
 			throws SQLException {
-		Connection conn = null;
 		List<DetalleServicioAgencia> resultado = null;
 		CallableStatement cs = null;
 		ResultSet rs = null;
@@ -2348,8 +2347,81 @@ public class ServicioNovaViajesDaoImpl implements ServicioNovaViajesDao {
 				if (cs != null) {
 					cs.close();
 				}
-				if (conn != null){
-					conn.close();
+				
+			} catch (SQLException e) {
+				throw new SQLException(e);
+				
+			}
+		}
+		
+		return resultado;
+	}
+	
+	@Override
+	public List<DetalleServicioAgencia> consultaServDetComprobanteObligacionHijo(int idServicio, int idDetaServicio, Connection conn)
+			throws SQLException {
+		List<DetalleServicioAgencia> resultado = null;
+		CallableStatement cs = null;
+		ResultSet rs = null;
+		String sql = "{ ? = call negocio.fn_consultarcompbtobligcnservdethijo(?,?)}";
+		
+		try {
+			conn = UtilConexion.obtenerConexion();
+			cs = conn.prepareCall(sql);
+			int i=1;
+			cs.registerOutParameter(i++, Types.OTHER);
+			cs.setInt(i++, idServicio);
+			cs.setInt(i++, idDetaServicio);
+			cs.execute();
+			
+			rs = (ResultSet)cs.getObject(1);
+			DetalleServicioAgencia detalleServicio = null;
+			resultado = new ArrayList<DetalleServicioAgencia>();
+			while (rs.next()){
+				detalleServicio = new DetalleServicioAgencia();
+
+				detalleServicio.setCodigoEntero(UtilJdbc.obtenerNumero(rs, "idSerdetalle"));
+				detalleServicio.getTipoServicio().setCodigoEntero(UtilJdbc.obtenerNumero(rs, "idtiposervicio"));
+				detalleServicio.getTipoServicio().setNombre(UtilJdbc.obtenerCadena(rs, "nomtipservicio"));
+				detalleServicio.getTipoServicio().setDescripcion(UtilJdbc.obtenerCadena(rs, "descservicio"));
+				detalleServicio.getTipoServicio().setRequiereFee(UtilJdbc.obtenerBoolean(rs, "requierefee"));
+				detalleServicio.getTipoServicio().setPagaImpto(UtilJdbc.obtenerBoolean(rs, "pagaimpto"));
+				detalleServicio.getTipoServicio().setCargaComision(UtilJdbc.obtenerBoolean(rs, "cargacomision"));
+				detalleServicio.getTipoServicio().setEsImpuesto(UtilJdbc.obtenerBoolean(rs, "esimpuesto"));
+				detalleServicio.getTipoServicio().setEsFee(UtilJdbc.obtenerBoolean(rs, "esfee"));
+				detalleServicio.setDescripcionServicio(UtilJdbc.obtenerCadena(rs, "descripcionservicio"));
+				detalleServicio.setFechaIda(UtilJdbc.obtenerFecha(rs, "fechaida"));
+				detalleServicio.setFechaRegreso(UtilJdbc.obtenerFecha(rs, "fecharegreso"));
+				detalleServicio.setCantidad(UtilJdbc.obtenerNumero(rs, "cantidad"));
+				detalleServicio.setPrecioUnitario(UtilJdbc.obtenerBigDecimal(rs, "preciobase"));
+				detalleServicio.getServicioProveedor().setPorcentajeComision(UtilJdbc.obtenerBigDecimal(rs, "porcencomision"));
+				detalleServicio.setMontoComision(UtilJdbc.obtenerBigDecimal(rs, "montocomision"));
+				detalleServicio.getServicioProveedor().getProveedor().setCodigoEntero(UtilJdbc.obtenerNumero(rs, "idempresaproveedor"));
+				detalleServicio.getServicioProveedor().getProveedor().setNombres(UtilJdbc.obtenerCadena(rs, "nombres"));
+				detalleServicio.getServicioProveedor().getProveedor().setApellidoPaterno(UtilJdbc.obtenerCadena(rs, "apellidopaterno"));
+				detalleServicio.getServicioProveedor().getProveedor().setApellidoMaterno(UtilJdbc.obtenerCadena(rs, "apellidomaterno"));
+				detalleServicio.getTipoServicio().setVisible(UtilJdbc.obtenerBoolean(rs, "visible"));
+				detalleServicio.setTieneDetraccion(UtilJdbc.obtenerBoolean(rs, "tieneDetraccion"));
+				detalleServicio.setTieneRetencion(UtilJdbc.obtenerBoolean(rs, "tieneRetencion"));
+				detalleServicio.setIdComprobanteGenerado(UtilJdbc.obtenerNumero(rs, "idComprobante"));
+				detalleServicio.getTipoComprobante().setCodigoEntero(UtilJdbc.obtenerNumero(rs, "tipoComprobante"));
+				detalleServicio.getTipoComprobante().setNombre(UtilJdbc.obtenerCadena(rs, "tipoComprobanteNombre"));
+				detalleServicio.setNroComprobante(UtilJdbc.obtenerCadena(rs, "numeroComprobante"));
+				detalleServicio.getComprobanteAsociado().getTipoComprobante().setNombre(UtilJdbc.obtenerCadena(rs, "tipoObligacion"));
+				detalleServicio.getComprobanteAsociado().setNumeroComprobante(UtilJdbc.obtenerCadena(rs, "numeroObligacion"));
+				detalleServicio.getServicioPadre().setCodigoEntero(idServicio);
+				
+				resultado.add(detalleServicio);
+			}
+		} catch (SQLException e) {
+			throw new SQLException(e);
+		} finally {
+			try {
+				if (rs != null) {
+					rs.close();
+				}
+				if (cs != null) {
+					cs.close();
 				}
 				
 			} catch (SQLException e) {
