@@ -210,7 +210,7 @@ public interface NegocioSessionRemote {
 			throws SQLException, Exception;
 
 	public List<DetalleServicioAgencia> consultarDetServComprobanteObligacion(
-			Integer idServicio) throws SQLException, Exception;
+			Integer idServicio) throws ErrorConsultaDataException, SQLException, Exception;
 
 	public boolean grabarDocumentosAdicionales(
 			List<DocumentoAdicional> listaDocumentos)
