@@ -1274,17 +1274,20 @@ public class NegocioSession implements NegocioSessionRemote,
 						Integer idSerDetaPadre = servicioNovaViajesDao
 								.ingresarDetalleServicio(detalleServicio,
 										idServicio, conexion);
-						if (idSerDetaPadre == null || idSerDetaPadre.intValue() == 0) {
+						if (idSerDetaPadre == null
+								|| idSerDetaPadre.intValue() == 0) {
 							throw new ErrorRegistroDataException(
 									"No se pudo registrar los servicios de la venta");
 						} else {
 							for (DetalleServicioAgencia detalleServicio2 : servicioAgencia
 									.getListaDetalleServicio()) {
-								if (!detalleServicio2.getTipoServicio().isServicioPadre()) {
+								if (!detalleServicio2.getTipoServicio()
+										.isServicioPadre()) {
 									if (detalleServicio2.getServicioPadre()
 											.getCodigoEntero().intValue() == detalleServicio
 											.getCodigoEntero().intValue()) {
-										detalleServicio2.getServicioPadre()
+										detalleServicio2
+												.getServicioPadre()
 												.setCodigoEntero(idSerDetaPadre);
 										Integer resultado = servicioNovaViajesDao
 												.ingresarDetalleServicio(
@@ -1440,19 +1443,31 @@ public class NegocioSession implements NegocioSessionRemote,
 
 			servicioAgencia = servicioNovaViajesDao.consultarServiciosVenta2(
 					idServicio, conn);
-			
-			List<DetalleServicioAgencia> listaServiciosPadre = servicioNovaViajesDao.consultaServicioDetallePadre(servicioAgencia.getCodigoEntero(),
-					conn);
-			
+
+			List<DetalleServicioAgencia> listaServiciosPadre = servicioNovaViajesDao
+					.consultaServicioDetallePadre(
+							servicioAgencia.getCodigoEntero(), conn);
+
 			List<DetalleServicioAgencia> listaHijos = null;
 			DetalleServicioAgencia detalleServicioAgencia = null;
 			List<DetalleServicioAgencia> listaServiciosPadreNueva = new ArrayList<DetalleServicioAgencia>();
-			for (int i=0; i<listaServiciosPadre.size(); i++) {
-				detalleServicioAgencia = (DetalleServicioAgencia) listaServiciosPadre.get(i); 
-				detalleServicioAgencia.setDescripcionServicio(detalleServicioAgencia.getTipoServicio().getNombre()+" - "+detalleServicioAgencia.getDescripcionServicio());
+			for (int i = 0; i < listaServiciosPadre.size(); i++) {
+				detalleServicioAgencia = (DetalleServicioAgencia) listaServiciosPadre
+						.get(i);
+				detalleServicioAgencia
+						.setDescripcionServicio(detalleServicioAgencia
+								.getTipoServicio().getNombre()
+								+ " - "
+								+ detalleServicioAgencia
+										.getDescripcionServicio());
 				listaHijos = new ArrayList<DetalleServicioAgencia>();
 				listaHijos.add(detalleServicioAgencia);
-				listaHijos.addAll(servicioNovaViajesDao.consultaServicioDetalleHijo(servicioAgencia.getCodigoEntero(), detalleServicioAgencia.getCodigoEntero(), conn));
+				listaHijos
+						.addAll(servicioNovaViajesDao
+								.consultaServicioDetalleHijo(servicioAgencia
+										.getCodigoEntero(),
+										detalleServicioAgencia
+												.getCodigoEntero(), conn));
 				detalleServicioAgencia.setServiciosHijos(listaHijos);
 				listaHijos = null;
 				listaServiciosPadreNueva.add(detalleServicioAgencia);
@@ -2131,8 +2146,10 @@ public class NegocioSession implements NegocioSessionRemote,
 					.obtenerNumeroComprobante(servicioAgencia
 							.getListaDetalleServicioAgrupado());
 			for (Comprobante comprobante : listaComprobantes) {
-				for (DetalleServicioAgencia detallePadre : servicioAgencia.getListaDetalleServicioAgrupado()){
-					for (DetalleServicioAgencia detalle : detallePadre.getServiciosHijos()) {
+				for (DetalleServicioAgencia detallePadre : servicioAgencia
+						.getListaDetalleServicioAgrupado()) {
+					for (DetalleServicioAgencia detalle : detallePadre
+							.getServiciosHijos()) {
 						if (comprobante.getTipoComprobante().getCodigoEntero()
 								.intValue() != detalle.getTipoComprobante()
 								.getCodigoEntero().intValue()
@@ -2188,8 +2205,20 @@ public class NegocioSession implements NegocioSessionRemote,
 	public List<DetalleServicioAgencia> consultarDetalleServicioComprobante(
 			Integer idServicio) throws SQLException, Exception {
 		ServicioNovaViajesDao servicioNovaViajesDao = new ServicioNovaViajesDaoImpl();
-		return servicioNovaViajesDao
+
+		List<DetalleServicioAgencia> lista = servicioNovaViajesDao
 				.consultaServicioDetalleComprobante(idServicio);
+
+		for (DetalleServicioAgencia detalleServicioAgencia : lista) {
+			detalleServicioAgencia.getServiciosHijos().add(
+					detalleServicioAgencia);
+			List<DetalleServicioAgencia> lista2 = servicioNovaViajesDao
+					.consultaServicioDetalleComprobanteHijo(idServicio,
+							detalleServicioAgencia.getCodigoEntero());
+			detalleServicioAgencia.getServiciosHijos().addAll(lista2);
+		}
+
+		return lista;
 	}
 
 	@Override
