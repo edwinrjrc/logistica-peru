@@ -127,7 +127,7 @@ public interface ServicioNovaViajesDao {
 			Exception;
 
 	List<DetalleServicioAgencia> consultaServDetComprobanteObligacion(
-			int idServicio) throws SQLException;
+			int idServicio, Connection conn) throws SQLException;
 
 	boolean grabarDocumentoAdicional(DocumentoAdicional documento,
 			Connection conn) throws SQLException;
@@ -146,4 +146,8 @@ public interface ServicioNovaViajesDao {
 
 	List<DetalleServicioAgencia> consultaServicioDetalleComprobanteHijo(
 			int idServicio, int idDetaServicio) throws SQLException;
+
+	List<DetalleServicioAgencia> consultaServDetComprobanteObligacionHijo(
+			int idServicio, int idDetaServicio, Connection conn)
+			throws SQLException;
 }

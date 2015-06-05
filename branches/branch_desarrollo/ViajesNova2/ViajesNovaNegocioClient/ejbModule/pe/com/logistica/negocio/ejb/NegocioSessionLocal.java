@@ -209,7 +209,7 @@ public interface NegocioSessionLocal {
 			throws SQLException, Exception;
 
 	public List<DetalleServicioAgencia> consultarDetServComprobanteObligacion(
-			Integer idServicio) throws SQLException, Exception;
+			Integer idServicio) throws ErrorConsultaDataException, SQLException, Exception;
 
 	boolean grabarDocumentosAdicionales(List<DocumentoAdicional> listaDocumentos)
 			throws ErrorRegistroDataException, SQLException, Exception;

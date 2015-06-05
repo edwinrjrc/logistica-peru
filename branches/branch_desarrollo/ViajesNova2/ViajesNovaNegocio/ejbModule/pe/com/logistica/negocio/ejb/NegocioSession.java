@@ -2223,10 +2223,30 @@ public class NegocioSession implements NegocioSessionRemote,
 
 	@Override
 	public List<DetalleServicioAgencia> consultarDetServComprobanteObligacion(
-			Integer idServicio) throws SQLException, Exception {
+			Integer idServicio) throws ErrorConsultaDataException, SQLException, Exception {
 		ServicioNovaViajesDao servicioNovaViajesDao = new ServicioNovaViajesDaoImpl();
-		return servicioNovaViajesDao
-				.consultaServDetComprobanteObligacion(idServicio);
+		List<DetalleServicioAgencia> lista = null;
+		Connection conn = null;
+		
+		try {
+			conn = UtilConexion.obtenerConexion();
+			lista = servicioNovaViajesDao
+					.consultaServDetComprobanteObligacion(idServicio, conn);
+			for (DetalleServicioAgencia detalleServicioAgencia : lista) {
+				detalleServicioAgencia.getServiciosHijos().add(detalleServicioAgencia);
+				detalleServicioAgencia.getServiciosHijos().addAll(servicioNovaViajesDao.consultaServDetComprobanteObligacionHijo(idServicio, detalleServicioAgencia.getCodigoEntero(), conn));
+			}
+			
+			return lista;
+		} catch (SQLException e) {
+			throw new ErrorConsultaDataException(e);
+		} catch (Exception e) {
+			throw new ErrorConsultaDataException(e);
+		} finally{
+			if (conn != null){
+				conn.close();
+			}
+		}
 	}
 
 	@Override
@@ -2261,17 +2281,18 @@ public class NegocioSession implements NegocioSessionRemote,
 			conn = UtilConexion.obtenerConexion();
 			for (DetalleServicioAgencia detalleServicioAgencia : servicioAgencia
 					.getListaDetalleServicio()) {
-				if (detalleServicioAgencia.getIdComprobanteGenerado() != null
-						&& detalleServicioAgencia.getComprobanteAsociado()
-								.getCodigoEntero() != null
-						&& detalleServicioAgencia.getCodigoEntero() != null
-						&& detalleServicioAgencia.getServicioPadre()
-								.getCodigoEntero() != null) {
-					servicioNovaViajesDao.guardarRelacionComproObligacion(
-							detalleServicioAgencia, conn);
+				for(DetalleServicioAgencia detalleHijo : detalleServicioAgencia.getServiciosHijos()){
+					if (detalleHijo.getIdComprobanteGenerado() != null
+							&& detalleHijo.getComprobanteAsociado()
+									.getCodigoEntero() != null
+							&& detalleHijo.getCodigoEntero() != null
+							&& detalleHijo.getServicioPadre()
+									.getCodigoEntero() != null) {
+						servicioNovaViajesDao.guardarRelacionComproObligacion(
+								detalleServicioAgencia, conn);
+					}
 				}
 			}
-
 			servicioNovaViajesDao.actualizarRelacionComprobantes(true,
 					servicioAgencia, conn);
 		} catch (SQLException e) {
