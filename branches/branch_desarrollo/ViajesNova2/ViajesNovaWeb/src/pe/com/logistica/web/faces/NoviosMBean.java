@@ -49,7 +49,6 @@ import pe.com.logistica.bean.negocio.ServicioAgencia;
 import pe.com.logistica.bean.negocio.ServicioNovios;
 import pe.com.logistica.bean.negocio.ServicioProveedor;
 import pe.com.logistica.bean.negocio.Usuario;
-import pe.com.logistica.negocio.exception.ErrorConsultaDataException;
 import pe.com.logistica.negocio.exception.ErrorRegistroDataException;
 import pe.com.logistica.negocio.exception.ValidacionException;
 import pe.com.logistica.web.servicio.NegocioServicio;

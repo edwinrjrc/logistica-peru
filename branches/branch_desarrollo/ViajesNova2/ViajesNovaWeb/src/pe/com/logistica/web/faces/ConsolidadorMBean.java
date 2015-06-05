@@ -13,7 +13,6 @@ import javax.naming.NamingException;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpSession;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 
 import pe.com.logistica.bean.negocio.Consolidador;
@@ -94,14 +93,6 @@ public class ConsolidadorMBean extends BaseMBean {
 			this.setTipoModal("2");
 			this.setMensajeModal(e.getMessage());
 		}
-	}
-	
-	private boolean validarConsolidador() {
-		boolean resultado = true;
-		if (StringUtils.isBlank(this.getConsolidador().getNombre())){
-			
-		}
-		return false;
 	}
 
 	public void consultarConsolidador(Integer idConsolidador){
