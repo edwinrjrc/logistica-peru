@@ -2157,7 +2157,7 @@ public class ServicioNovaViajesDaoImpl implements ServicioNovaViajesDao {
 				detalleServicio.getTipoServicio().setCargaComision(UtilJdbc.obtenerBoolean(rs, "cargacomision"));
 				detalleServicio.getTipoServicio().setEsImpuesto(UtilJdbc.obtenerBoolean(rs, "esimpuesto"));
 				detalleServicio.getTipoServicio().setEsFee(UtilJdbc.obtenerBoolean(rs, "esfee"));
-				detalleServicio.setDescripcionServicio(UtilJdbc.obtenerCadena(rs, "descripcionservicio"));
+				detalleServicio.setDescripcionServicio(detalleServicio.getTipoServicio().getNombre()+" - "+UtilJdbc.obtenerCadena(rs, "descripcionservicio"));
 				detalleServicio.setFechaIda(UtilJdbc.obtenerFecha(rs, "fechaida"));
 				detalleServicio.setFechaRegreso(UtilJdbc.obtenerFecha(rs, "fecharegreso"));
 				detalleServicio.setCantidad(UtilJdbc.obtenerNumero(rs, "cantidad"));
@@ -2204,13 +2204,13 @@ public class ServicioNovaViajesDaoImpl implements ServicioNovaViajesDao {
 	
 	
 	@Override
-	public List<DetalleServicioAgencia> consultaServicioDetalleComprobanteHijo(int idServicio)
+	public List<DetalleServicioAgencia> consultaServicioDetalleComprobanteHijo(int idServicio, int idDetaServicio)
 			throws SQLException {
 		Connection conn = null;
 		List<DetalleServicioAgencia> resultado = null;
 		CallableStatement cs = null;
 		ResultSet rs = null;
-		String sql = "{ ? = call negocio.fn_consultarcomprobantesserviciodetalle(?)}";
+		String sql = "{ ? = call negocio.fn_consultarcompserviciodethijo(?,?)}";
 		
 		try {
 			conn = UtilConexion.obtenerConexion();
@@ -2218,6 +2218,7 @@ public class ServicioNovaViajesDaoImpl implements ServicioNovaViajesDao {
 			int i=1;
 			cs.registerOutParameter(i++, Types.OTHER);
 			cs.setInt(i++, idServicio);
+			cs.setInt(i++, idDetaServicio);
 			cs.execute();
 			
 			rs = (ResultSet)cs.getObject(1);
@@ -2253,7 +2254,7 @@ public class ServicioNovaViajesDaoImpl implements ServicioNovaViajesDao {
 				detalleServicio.getTipoComprobante().setCodigoEntero(UtilJdbc.obtenerNumero(rs, "tipoComprobante"));
 				detalleServicio.getTipoComprobante().setNombre(UtilJdbc.obtenerCadena(rs, "tipoComprobanteNombre"));
 				detalleServicio.setNroComprobante(UtilJdbc.obtenerCadena(rs, "numeroComprobante"));
-				detalleServicio.getServicioPadre().setCodigoEntero(idServicio);
+				detalleServicio.getServicioPadre().setCodigoEntero(idDetaServicio);
 				
 				resultado.add(detalleServicio);
 			}
