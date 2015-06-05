@@ -58,7 +58,9 @@ public class UtilNegocioSession implements UtilNegocioSessionRemote, UtilNegocio
 						agrupados++;
 						detalle.setCodigoEntero(detalleHijo.getCodigoEntero());
 						detalle.setTipoServicio(maestroServicio);
+						detalle.setFechaIda(detalleHijo.getFechaIda());
 						detalle.setFechaServicio(detalleHijo.getFechaServicio());
+						detalle.setFechaRegreso(detalleHijo.getFechaRegreso());
 						detalle.setCantidad(detalleHijo.getCantidad());
 						detalle.setPrecioUnitario(detalleHijo.getPrecioUnitario());
 						detalle.setOrigen(detalleHijo.getOrigen());
@@ -72,9 +74,10 @@ public class UtilNegocioSession implements UtilNegocioSessionRemote, UtilNegocio
 						detalle.setTarifaNegociada(detalleHijo.isTarifaNegociada());
 						detalle.setConfiguracionTipoServicio(detalleHijo.getConfiguracionTipoServicio());
 						detalle.setMontoComision(detalleHijo.getMontoComision());
-						System.out.println("tipo servicio ::"+detalleHijo.getTipoServicio().getCodigoEntero());
-						System.out.println("id servicio ::"+detalleHijo.getCodigoEntero());
 						detalle.getCodigoEnteroAgrupados().add(detalleHijo.getCodigoEntero());
+						detalle.setComprobanteAsociado(detalleHijo.getComprobanteAsociado());
+						detalle.setTipoComprobante(detalleHijo.getTipoComprobante());
+						detalle.setNroComprobante(detalleHijo.getNroComprobante());
 					}
 				}
 				if (agrupados > 1){
