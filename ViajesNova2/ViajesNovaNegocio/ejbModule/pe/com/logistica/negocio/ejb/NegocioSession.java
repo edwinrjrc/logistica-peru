@@ -2280,7 +2280,7 @@ public class NegocioSession implements NegocioSessionRemote,
 		try {
 			conn = UtilConexion.obtenerConexion();
 			for (DetalleServicioAgencia detalleServicioAgencia : servicioAgencia
-					.getListaDetalleServicio()) {
+					.getListaDetalleServicioAgrupado()) {
 				for(DetalleServicioAgencia detalleHijo : detalleServicioAgencia.getServiciosHijos()){
 					if (detalleHijo.getIdComprobanteGenerado() != null
 							&& detalleHijo.getComprobanteAsociado()
@@ -2288,8 +2288,19 @@ public class NegocioSession implements NegocioSessionRemote,
 							&& detalleHijo.getCodigoEntero() != null
 							&& detalleHijo.getServicioPadre()
 									.getCodigoEntero() != null) {
-						servicioNovaViajesDao.guardarRelacionComproObligacion(
-								detalleServicioAgencia, conn);
+						
+						if (detalleHijo.isAgrupado()){
+							for (Integer id : detalleHijo.getCodigoEnteroAgrupados()){
+								detalleHijo.setCodigoEntero(id);
+								servicioNovaViajesDao.guardarRelacionComproObligacion(
+										detalleHijo, conn);
+							}
+						}
+						else{
+							servicioNovaViajesDao.guardarRelacionComproObligacion(
+									detalleHijo, conn);
+						}
+						
 					}
 				}
 			}
