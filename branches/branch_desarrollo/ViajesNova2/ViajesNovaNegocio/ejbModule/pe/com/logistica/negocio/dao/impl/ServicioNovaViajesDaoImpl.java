@@ -2291,7 +2291,6 @@ public class ServicioNovaViajesDaoImpl implements ServicioNovaViajesDao {
 		String sql = "{ ? = call negocio.fn_consultarcomprobantesobligacionservdet(?)}";
 		
 		try {
-			conn = UtilConexion.obtenerConexion();
 			cs = conn.prepareCall(sql);
 			int i=1;
 			cs.registerOutParameter(i++, Types.OTHER);
@@ -2366,7 +2365,6 @@ public class ServicioNovaViajesDaoImpl implements ServicioNovaViajesDao {
 		String sql = "{ ? = call negocio.fn_consultarcompbtobligcnservdethijo(?,?)}";
 		
 		try {
-			conn = UtilConexion.obtenerConexion();
 			cs = conn.prepareCall(sql);
 			int i=1;
 			cs.registerOutParameter(i++, Types.OTHER);

@@ -1489,8 +1489,11 @@ public class ServicioAgenteMBean extends BaseMBean {
 					usuario.getUsuario());
 			this.getServicioAgencia().setIpModificacion(
 					obtenerRequest().getRemoteAddr());
+			
+			this.getServicioAgencia().setListaDetalleServicioAgrupado(getListadoDetalleServicioAgrupado());
+			
 			for (DetalleServicioAgencia detalle : this.getServicioAgencia()
-					.getListaDetalleServicio()) {
+					.getListaDetalleServicioAgrupado()) {
 				detalle.setUsuarioCreacion(usuario.getUsuario());
 				detalle.setIpCreacion(obtenerRequest().getRemoteAddr());
 				detalle.setUsuarioModificacion(usuario.getUsuario());
@@ -1509,6 +1512,7 @@ public class ServicioAgenteMBean extends BaseMBean {
 					this.negocioServicio
 							.consultarDetServComprobanteObligacion(this
 									.getServicioAgencia().getCodigoEntero()));
+			this.setListadoDetalleServicioAgrupado(this.utilNegocioServicio.agruparServicios(this.getServicioAgencia().getListaDetalleServicio()));
 			this.mostrarMensajeExito("Se guardo la relacion entre comprobantes satisfactoriamente");
 		} catch (SQLException e) {
 			this.mostrarMensajeError(e.getMessage());
