@@ -172,9 +172,9 @@ public class ServicioAgenteMBean extends BaseMBean {
 			this.setListaDestinosBusqueda(listaDestinos);
 			this.setListaOrigenesBusqueda(listaDestinos);
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 		}
 	}
 
@@ -202,17 +202,11 @@ public class ServicioAgenteMBean extends BaseMBean {
 							this.negocioServicio.calculaPorcentajeComision(this
 									.getDetalleServicio()));
 		} catch (SQLException e) {
+			this.mostrarMensajeError(e.getMessage());
 			logger.error(e.getMessage(), e);
-			this.setShowModal(true);
-			this.setMensajeModal(e.getMessage());
-			this.setTipoModal(TIPO_MODAL_ERROR);
-			e.printStackTrace();
 		} catch (Exception e) {
+			this.mostrarMensajeError(e.getMessage());
 			logger.error(e.getMessage(), e);
-			this.setShowModal(true);
-			this.setMensajeModal(e.getMessage());
-			this.setTipoModal(TIPO_MODAL_ERROR);
-			e.printStackTrace();
 		}
 	}
 
@@ -226,7 +220,7 @@ public class ServicioAgenteMBean extends BaseMBean {
 			}
 
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 		}
 		return null;
 	}
@@ -262,9 +256,9 @@ public class ServicioAgenteMBean extends BaseMBean {
 
 			this.setBusquedaRealizada(true);
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 		}
 	}
 
@@ -280,7 +274,6 @@ public class ServicioAgenteMBean extends BaseMBean {
 			this.setEditarVenta(true);
 			this.setListadoDetalleServicio(this.getServicioAgencia()
 					.getListaDetalleServicio());
-			
 			
 			HttpSession session = obtenerSession(false);
 			Usuario usuario = (Usuario) session
@@ -314,11 +307,8 @@ public class ServicioAgenteMBean extends BaseMBean {
 					.listarDocumentosAdicionales(idServicio));
 
 			this.setDetalleServicio(null);
-
 			borrarInvisibles();
-
 			calcularTotales();
-
 			this.setTransaccionExito(false);
 
 		} catch (SQLException e) {
@@ -382,19 +372,13 @@ public class ServicioAgenteMBean extends BaseMBean {
 			}
 		} catch (ErrorRegistroDataException e) {
 			logger.error(e.getMessage(), e);
-			this.setShowModal(true);
-			this.setMensajeModal(e.getMessage());
-			this.setTipoModal(TIPO_MODAL_ERROR);
+			this.mostrarMensajeError(e.getMessage());
 		} catch (SQLException e) {
 			logger.error(e.getMessage(), e);
-			this.setShowModal(true);
-			this.setMensajeModal(e.getMessage());
-			this.setTipoModal(TIPO_MODAL_ERROR);
+			this.mostrarMensajeError(e.getMessage());
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
-			this.setShowModal(true);
-			this.setMensajeModal(e.getMessage());
-			this.setTipoModal(TIPO_MODAL_ERROR);
+			this.mostrarMensajeError(e.getMessage());
 		}
 
 	}
@@ -510,9 +494,7 @@ public class ServicioAgenteMBean extends BaseMBean {
 							+ baseVO.getNombre());
 				}
 			}
-
 		}
-
 	}
 
 	private boolean estaEnListaServicios(BaseVO baseVO) {
@@ -641,7 +623,6 @@ public class ServicioAgenteMBean extends BaseMBean {
 		BigDecimal montoFee = BigDecimal.ZERO;
 		BigDecimal montoIgv = BigDecimal.ZERO;
 		try {
-
 			Parametro param = this.parametroServicio.consultarParametro(UtilWeb
 					.obtenerEnteroPropertieMaestro("codigoParametroIGV",
 							"aplicacionDatos"));
@@ -665,6 +646,9 @@ public class ServicioAgenteMBean extends BaseMBean {
 
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
+			montoComision = BigDecimal.ZERO;
+			montoFee = BigDecimal.ZERO;
+			montoIgv = BigDecimal.ZERO;
 			montoTotal = BigDecimal.ZERO;
 		}
 
@@ -724,9 +708,7 @@ public class ServicioAgenteMBean extends BaseMBean {
 					this.setListaDocumentosAdicionales(this.negocioServicio
 							.listarDocumentosAdicionales(idServicio));
 
-					this.setShowModal(true);
-					this.setMensajeModal("Servicio Venta registrado satisfactoriamente");
-					this.setTipoModal(TIPO_MODAL_EXITO);
+					this.mostrarMensajeExito("Servicio Venta registrado satisfactoriamente");
 				} else if (this.isEditarVenta()) {
 					HttpSession session = obtenerSession(false);
 					Usuario usuario = (Usuario) session
@@ -810,14 +792,10 @@ public class ServicioAgenteMBean extends BaseMBean {
 			this.setTipoModal(TIPO_MODAL_EXITO);
 
 		} catch (SQLException e) {
-			this.setShowModal(true);
-			this.setMensajeModal(e.getMessage());
-			this.setTipoModal(TIPO_MODAL_ERROR);
+			this.mostrarMensajeError(e.getMessage());
 			logger.error(e.getMessage(), e);
 		} catch (Exception e) {
-			this.setShowModal(true);
-			this.setMensajeModal(e.getMessage());
-			this.setTipoModal(TIPO_MODAL_ERROR);
+			this.mostrarMensajeError(e.getMessage());
 			logger.error(e.getMessage(), e);
 		}
 	}
@@ -837,36 +815,29 @@ public class ServicioAgenteMBean extends BaseMBean {
 			this.negocioServicio.anularVenta(getServicioAgencia());
 
 			this.setTransaccionExito(true);
-			this.setShowModal(true);
-			this.setMensajeModal("Servicio Venta se cerro satisfactoriamente");
-			this.setTipoModal(TIPO_MODAL_EXITO);
-
+			this.mostrarMensajeExito("Servicio Venta se cerro satisfactoriamente");
 		} catch (SQLException e) {
-			this.setShowModal(true);
-			this.setMensajeModal(e.getMessage());
-			this.setTipoModal(TIPO_MODAL_ERROR);
+			this.mostrarMensajeError(e.getMessage());
 			logger.error(e.getMessage(), e);
 		} catch (Exception e) {
-			this.setShowModal(true);
-			this.setMensajeModal(e.getMessage());
-			this.setTipoModal(TIPO_MODAL_ERROR);
+			this.mostrarMensajeError(e.getMessage());
 			logger.error(e.getMessage(), e);
 		}
 	}
 
 	public void preCerrarVenta() {
-		this.setPregunta("Â¿Esta seguro de cerrar el servicio de venta?");
+		this.setPregunta("¿Esta seguro de cerrar el servicio de venta?");
 	}
 
 	public void preAnularVenta() {
 		this.setNombreTitulo("Anular Venta");
-		this.setNombreCampoTexto("Comentario AnulaciÃ³n");
+		this.setNombreCampoTexto("Comentario Anulación");
 		this.setTipoEvento(EventoObsAnu.EVENTO_ANU);
 	}
 
 	public void preObservarVenta() {
 		this.setNombreTitulo("Observar Venta");
-		this.setNombreCampoTexto("Comentario ObservaciÃ³n");
+		this.setNombreCampoTexto("Comentario Observación");
 		this.setTipoEvento(EventoObsAnu.EVENTO_OBS);
 	}
 
@@ -874,9 +845,9 @@ public class ServicioAgenteMBean extends BaseMBean {
 		this.setIdModales("idModalventaservicio,idModalObsAnu");
 
 		if (EventoObsAnu.EVENTO_OBS.equals(this.getTipoEvento())) {
-			this.setPregunta("Â¿Esta seguro de observar la venta?");
+			this.setPregunta("¿Esta seguro de observar la venta?");
 		} else {
-			this.setPregunta("Â¿Esta seguro de anular la venta?");
+			this.setPregunta("¿Esta seguro de anular la venta?");
 		}
 	}
 
@@ -897,27 +868,18 @@ public class ServicioAgenteMBean extends BaseMBean {
 				this.negocioServicio.registrarEventoObservacion(this
 						.getEventoObsAnu());
 
-				this.setShowModal(true);
-				this.setMensajeModal("ObservaciÃ³n registrada satisfactoriamente");
-				this.setTipoModal(TIPO_MODAL_EXITO);
+				this.mostrarMensajeExito("Observación registrada satisfactoriamente");
 			} else {
 				this.negocioServicio.registrarEventoAnulacion(this
 						.getEventoObsAnu());
-
-				this.setShowModal(true);
-				this.setMensajeModal("Servicio Venta anulada satisfactoriamente");
-				this.setTipoModal(TIPO_MODAL_EXITO);
+				this.mostrarMensajeExito("Servicio Venta anulada satisfactoriamente");
 			}
 		} catch (SQLException e) {
+			this.mostrarMensajeError(e.getMessage());
 			logger.error(e.getMessage(), e);
-			this.setShowModal(true);
-			this.setMensajeModal(e.getMessage());
-			this.setTipoModal(TIPO_MODAL_ERROR);
 		} catch (Exception e) {
+			this.mostrarMensajeError(e.getMessage());
 			logger.error(e.getMessage(), e);
-			this.setShowModal(true);
-			this.setMensajeModal(e.getMessage());
-			this.setTipoModal(TIPO_MODAL_ERROR);
 		}
 
 	}
@@ -1093,7 +1055,6 @@ public class ServicioAgenteMBean extends BaseMBean {
 					this.listadoDetalleServicio.remove(i);
 				}
 			}
-
 		}
 
 		calcularTotales();
@@ -1105,9 +1066,9 @@ public class ServicioAgenteMBean extends BaseMBean {
 					.consultarDestino(this.getDestinoBusqueda()
 							.getDescripcion()));
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 		}
 	}
 
@@ -1116,9 +1077,9 @@ public class ServicioAgenteMBean extends BaseMBean {
 			this.setListaOrigenesBusqueda(this.soporteServicio
 					.consultarOrigen(this.getOrigenBusqueda().getDescripcion()));
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 		}
 	}
 
@@ -1127,11 +1088,8 @@ public class ServicioAgenteMBean extends BaseMBean {
 			this.getDetalleServicio().setOrigen(obtenerOrigenListado());
 
 		} catch (Exception e) {
+			this.mostrarMensajeError(e.getMessage());
 			logger.error(e.getMessage(), e);
-			this.setShowModal(true);
-			this.setMensajeModal(e.getMessage());
-			this.setTipoModal(TIPO_MODAL_ERROR);
-			e.printStackTrace();
 		}
 	}
 
@@ -1145,7 +1103,7 @@ public class ServicioAgenteMBean extends BaseMBean {
 			}
 
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 		}
 		return null;
 	}
@@ -1202,22 +1160,15 @@ public class ServicioAgenteMBean extends BaseMBean {
 						obtenerRequest().getRemoteAddr());
 
 				this.negocioServicio.registrarPago(getPagoServicio());
-
-				this.setShowModal(true);
-				this.setMensajeModal("Pago Registrado Satisfactoriamente");
-				this.setTipoModal(TIPO_MODAL_EXITO);
+				this.mostrarMensajeExito("Pago Registrado Satisfactoriamente");
 			}
 
 		} catch (SQLException e) {
-			e.printStackTrace();
-			this.setShowModal(true);
-			this.setMensajeModal(e.getMessage());
-			this.setTipoModal(TIPO_MODAL_ERROR);
+			this.mostrarMensajeError(e.getMessage());
+			logger.error(e.getMessage(), e);
 		} catch (Exception e) {
-			e.printStackTrace();
-			this.setShowModal(true);
-			this.setMensajeModal(e.getMessage());
-			this.setTipoModal(TIPO_MODAL_ERROR);
+			this.mostrarMensajeError(e.getMessage());
+			logger.error(e.getMessage(), e);
 		}
 	}
 
@@ -1354,7 +1305,7 @@ public class ServicioAgenteMBean extends BaseMBean {
 	}
 
 	public void preRegistrarComponente() {
-		this.setPregunta("Â¿Esta seguro de registrar los comprobantes?");
+		this.setPregunta("¿Esta seguro de registrar los comprobantes?");
 	}
 
 	public void registrarComprobante() {
@@ -1369,35 +1320,27 @@ public class ServicioAgenteMBean extends BaseMBean {
 					obtenerRequest().getRemoteAddr());
 
 			this.getServicioAgencia().setListaDetalleServicioAgrupado(getListadoDetalleServicioAgrupado());
-			boolean guardo = this.negocioServicio.registrarComprobantes(this
-					.getServicioAgencia());
-			this.setGuardoComprobantes(guardo);
-			this.getServicioAgencia().setGuardoComprobante(guardo);
 
-			if (guardo) {
+			if (this.negocioServicio.registrarComprobantes(this
+					.getServicioAgencia())) {
 				this.getServicioAgencia().setListaDetalleServicio(
 						this.negocioServicio.consultarDetalleComprobantes(this
 								.getServicioAgencia().getCodigoEntero()));
-			}
-
-			this.setShowModal(true);
-			this.setMensajeModal("Comprobante Registrado Satisfactoriamente");
-			this.setTipoModal(TIPO_MODAL_EXITO);
+				this.setListadoDetalleServicioAgrupado(this.utilNegocioServicio.agruparServicios(this.getServicioAgencia().getListaDetalleServicio()));
+				this.setGuardoComprobantes(true);
+				this.getServicioAgencia().setGuardoComprobante(true);
+				this.setColumnasComprobantes(10);
+			}	
+			this.mostrarMensajeExito("Comprobante Registrado Satisfactoriamente");
 		} catch (ValidacionException e) {
-			this.setShowModal(true);
-			this.setMensajeModal(e.getMessage());
-			this.setTipoModal(TIPO_MODAL_ERROR);
-			e.printStackTrace();
+			this.mostrarMensajeError(e.getMessage());
+			logger.error(e.getMessage(),e);
 		} catch (SQLException e) {
-			this.setShowModal(true);
-			this.setMensajeModal(e.getMessage());
-			this.setTipoModal(TIPO_MODAL_ERROR);
-			e.printStackTrace();
+			this.mostrarMensajeError(e.getMessage());
+			logger.error(e.getMessage(),e);
 		} catch (Exception e) {
-			this.setShowModal(true);
-			this.setMensajeModal(e.getMessage());
-			this.setTipoModal(TIPO_MODAL_ERROR);
-			e.printStackTrace();
+			this.mostrarMensajeError(e.getMessage());
+			logger.error(e.getMessage(),e);
 		}
 	}
 
@@ -1418,7 +1361,7 @@ public class ServicioAgenteMBean extends BaseMBean {
 		} catch (SQLException e) {
 			logger.error(e.getMessage(), e);
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 		}
 	}
 
@@ -1438,15 +1381,11 @@ public class ServicioAgenteMBean extends BaseMBean {
 					.listarObligacionXPagar(getComprobanteBusqueda()));
 
 		} catch (SQLException e) {
-			this.setShowModal(true);
-			this.setMensajeModal(e.getMessage());
-			this.setTipoModal(TIPO_MODAL_ERROR);
-			e.printStackTrace();
+			this.mostrarMensajeError(e.getMessage());
+			logger.error(e.getMessage(), e);
 		} catch (Exception e) {
-			this.setShowModal(true);
-			this.setMensajeModal(e.getMessage());
-			this.setTipoModal(TIPO_MODAL_ERROR);
-			e.printStackTrace();
+			this.mostrarMensajeError(e.getMessage());
+			logger.error(e.getMessage(), e);
 		}
 	}
 
@@ -1508,6 +1447,7 @@ public class ServicioAgenteMBean extends BaseMBean {
 			this.negocioServicio.registrarComprobanteObligacion(this
 					.getServicioAgencia());
 			this.setGuardoRelacionComprobantes(true);
+			this.getServicioAgencia().setGuardoRelacionComprobantes(true);
 			this.getServicioAgencia().setListaDetalleServicio(
 					this.negocioServicio
 							.consultarDetServComprobanteObligacion(this
@@ -1577,24 +1517,15 @@ public class ServicioAgenteMBean extends BaseMBean {
 			this.setListaDocumentosAdicionales(this.negocioServicio
 					.listarDocumentosAdicionales(getServicioAgencia()
 							.getCodigoEntero()));
-
-			this.setShowModal(true);
-			this.setMensajeModal("Se guardaron los documentos satisfactoriamente");
-			this.setTipoModal(TIPO_MODAL_EXITO);
+			this.mostrarMensajeExito("Se guardaron los documentos satisfactoriamente");
 		} catch (ErrorRegistroDataException e) {
-			this.setShowModal(true);
-			this.setMensajeModal(e.getMessage());
-			this.setTipoModal(TIPO_MODAL_ERROR);
+			this.mostrarMensajeError(e.getMessage());
 			logger.error(e.getMessage(), e);
 		} catch (SQLException e) {
-			this.setShowModal(true);
-			this.setMensajeModal(e.getMessage());
-			this.setTipoModal(TIPO_MODAL_ERROR);
+			this.mostrarMensajeError(e.getMessage());
 			logger.error(e.getMessage(), e);
 		} catch (Exception e) {
-			this.setShowModal(true);
-			this.setMensajeModal(e.getMessage());
-			this.setTipoModal(TIPO_MODAL_ERROR);
+			this.mostrarMensajeError(e.getMessage());
 			logger.error(e.getMessage(), e);
 		}
 
@@ -1609,7 +1540,6 @@ public class ServicioAgenteMBean extends BaseMBean {
 				break;
 			}
 		}
-
 	}
 
 	public void exportarArchivoDocumento() {
@@ -1634,7 +1564,7 @@ public class ServicioAgenteMBean extends BaseMBean {
 
 			facesContext.responseComplete();
 		} catch (IOException e) {
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 		}
 	}
 
@@ -1664,19 +1594,14 @@ public class ServicioAgenteMBean extends BaseMBean {
 			}
 
 		} catch (ErrorRegistroDataException e) {
-			this.setShowModal(true);
-			this.setMensajeModal(e.getMessage());
-			this.setTipoModal(TIPO_MODAL_ERROR);
-			e.printStackTrace();
+			this.mostrarMensajeError(e.getMessage());
+			logger.error(e.getMessage(), e);
 		} catch (SQLException e) {
-			this.setShowModal(true);
-			this.setMensajeModal(e.getMessage());
-			this.setTipoModal(TIPO_MODAL_ERROR);
+			this.mostrarMensajeError(e.getMessage());
+			logger.error(e.getMessage(), e);
 		} catch (Exception e) {
-			this.setShowModal(true);
-			this.setMensajeModal(e.getMessage());
-			this.setTipoModal(TIPO_MODAL_ERROR);
-			e.printStackTrace();
+			this.mostrarMensajeError(e.getMessage());
+			logger.error(e.getMessage(), e);
 		}
 	}
 
@@ -2021,9 +1946,9 @@ public class ServicioAgenteMBean extends BaseMBean {
 			listaPagosServicios = this.negocioServicio.listarPagosServicio(this
 					.getServicioAgencia().getCodigoEntero());
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 		}
 
 		return listaPagosServicios;
@@ -2047,10 +1972,10 @@ public class ServicioAgenteMBean extends BaseMBean {
 					.getServicioAgencia().getCodigoEntero());
 		} catch (SQLException e) {
 			saldoServicio = BigDecimal.ZERO;
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 		} catch (Exception e) {
 			saldoServicio = BigDecimal.ZERO;
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 		}
 
 		return saldoServicio;

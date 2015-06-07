@@ -294,7 +294,7 @@
 												<f:selectItems
 													value="#{catalogoMBean.catalogoTipoComprobante}" />
 											</h:selectOneMenu>
-											<h:outputText value="#{filaDetalle.tipoComprobante.nombre}"
+											<h:outputText value="#{filaDetalle.tipoComprobante.abreviatura}"
 												rendered="#{servicioAgenteMBean.servicioAgencia.guardoComprobante}" />
 										</rich:column>
 										<rich:column>
@@ -329,7 +329,7 @@
 														value="#{facesContext.externalContext.requestContextPath}/../resources/img/iconoLupa.gif" />
 												</a4j:commandLink>
 											</h:panelGrid>
-											<h:outputText rendered="#{servicioAgenteMBean.servicioAgencia.guardoRelacionComprobantes}" value="#{filaDetalle.comprobanteAsociado.tipoComprobante.nombre} - #{filaDetalle.comprobanteAsociado.numeroComprobante}" />
+											<h:outputText rendered="#{servicioAgenteMBean.servicioAgencia.guardoRelacionComprobantes}" value="#{filaDetalle.comprobanteAsociado.tipoComprobante.abreviatura} - #{filaDetalle.comprobanteAsociado.numeroComprobante}" />
 										</rich:column>
 									</rich:collapsibleSubTable>
 								</rich:dataTable>	
@@ -581,12 +581,13 @@
 							<a4j:commandButton value="Grabar Comprobantes"
 								action="#{servicioAgenteMBean.preRegistrarComponente()}"
 								oncomplete="#{rich:component('idModConfimrComp')}.show(); return false;"
-								render="idGrConfirID2" />
+								render="idGrConfirID2,idServVentaVista2" />
 							<a4j:commandButton value="Grabar Comprobantes"
 								style="display:none;" id="idBtnGraComponentes"
 								oncomplete="mostrarModal('idformadmservicios')"
 								action="#{servicioAgenteMBean.registrarComprobante()}"
-								render="idFormHidden,idPanelHidden,idPanelBotones,idModalcorrecto,idModalError,idGrVentaServicio" />
+								render="idFormHidden,idPanelHidden,idPanelBotones,idModalcorrecto,idModalError,idGrVentaServicio,idServVentaVista2" />
+							
 						</h:panelGrid>
 						<h:panelGrid cellpadding="0" cellspacing="0" border="0"
 							rendered="#{!servicioAgenteMBean.guardoRelacionComprobantes  and servicioAgenteMBean.guardoComprobantes}">
