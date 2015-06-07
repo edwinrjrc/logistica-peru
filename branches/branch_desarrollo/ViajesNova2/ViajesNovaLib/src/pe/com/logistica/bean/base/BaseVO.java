@@ -15,6 +15,7 @@ public class BaseVO extends Base {
 	private static final long serialVersionUID = 1L;
 
 	private String nombre;
+	private String abreviatura;
 
 	/**
 	 * 
@@ -44,6 +45,20 @@ public class BaseVO extends Base {
 	 */
 	public void setNombre(String nombre) {
 		this.nombre = nombre;
+	}
+
+	/**
+	 * @return the abreviatura
+	 */
+	public String getAbreviatura() {
+		return abreviatura;
+	}
+
+	/**
+	 * @param abreviatura the abreviatura to set
+	 */
+	public void setAbreviatura(String abreviatura) {
+		this.abreviatura = abreviatura;
 	}
 
 }
