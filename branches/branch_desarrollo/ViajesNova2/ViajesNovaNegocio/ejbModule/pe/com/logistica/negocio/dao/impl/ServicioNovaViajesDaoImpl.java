@@ -2174,6 +2174,7 @@ public class ServicioNovaViajesDaoImpl implements ServicioNovaViajesDao {
 				detalleServicio.setIdComprobanteGenerado(UtilJdbc.obtenerNumero(rs, "idComprobante"));
 				detalleServicio.getTipoComprobante().setCodigoEntero(UtilJdbc.obtenerNumero(rs, "tipoComprobante"));
 				detalleServicio.getTipoComprobante().setNombre(UtilJdbc.obtenerCadena(rs, "tipoComprobanteNombre"));
+				detalleServicio.getTipoComprobante().setAbreviatura(UtilJdbc.obtenerCadena(rs, "tipoComprobanteAbrev"));
 				detalleServicio.setNroComprobante(UtilJdbc.obtenerCadena(rs, "numeroComprobante"));
 				detalleServicio.getServicioPadre().setCodigoEntero(idServicio);
 				
@@ -2253,6 +2254,7 @@ public class ServicioNovaViajesDaoImpl implements ServicioNovaViajesDao {
 				detalleServicio.setIdComprobanteGenerado(UtilJdbc.obtenerNumero(rs, "idComprobante"));
 				detalleServicio.getTipoComprobante().setCodigoEntero(UtilJdbc.obtenerNumero(rs, "tipoComprobante"));
 				detalleServicio.getTipoComprobante().setNombre(UtilJdbc.obtenerCadena(rs, "tipoComprobanteNombre"));
+				detalleServicio.getTipoComprobante().setAbreviatura(UtilJdbc.obtenerCadena(rs, "tipoComprobanteAbrev"));
 				detalleServicio.setNroComprobante(UtilJdbc.obtenerCadena(rs, "numeroComprobante"));
 				detalleServicio.getServicioPadre().setCodigoEntero(idDetaServicio);
 				
@@ -2329,8 +2331,10 @@ public class ServicioNovaViajesDaoImpl implements ServicioNovaViajesDao {
 				detalleServicio.setIdComprobanteGenerado(UtilJdbc.obtenerNumero(rs, "idComprobante"));
 				detalleServicio.getTipoComprobante().setCodigoEntero(UtilJdbc.obtenerNumero(rs, "tipoComprobante"));
 				detalleServicio.getTipoComprobante().setNombre(UtilJdbc.obtenerCadena(rs, "tipoComprobanteNombre"));
+				detalleServicio.getTipoComprobante().setAbreviatura(UtilJdbc.obtenerCadena(rs, "tipoComprobanteAbrev"));
 				detalleServicio.setNroComprobante(UtilJdbc.obtenerCadena(rs, "numeroComprobante"));
 				detalleServicio.getComprobanteAsociado().getTipoComprobante().setNombre(UtilJdbc.obtenerCadena(rs, "tipoObligacion"));
+				detalleServicio.getComprobanteAsociado().getTipoComprobante().setAbreviatura(UtilJdbc.obtenerCadena(rs, "tipoObligacionAbrev"));
 				detalleServicio.getComprobanteAsociado().setNumeroComprobante(UtilJdbc.obtenerCadena(rs, "numeroObligacion"));
 				detalleServicio.getServicioPadre().setCodigoEntero(idServicio);
 				
@@ -2404,8 +2408,10 @@ public class ServicioNovaViajesDaoImpl implements ServicioNovaViajesDao {
 				detalleServicio.setIdComprobanteGenerado(UtilJdbc.obtenerNumero(rs, "idComprobante"));
 				detalleServicio.getTipoComprobante().setCodigoEntero(UtilJdbc.obtenerNumero(rs, "tipoComprobante"));
 				detalleServicio.getTipoComprobante().setNombre(UtilJdbc.obtenerCadena(rs, "tipoComprobanteNombre"));
+				detalleServicio.getTipoComprobante().setAbreviatura(UtilJdbc.obtenerCadena(rs, "tipoComprobanteAbrev"));
 				detalleServicio.setNroComprobante(UtilJdbc.obtenerCadena(rs, "numeroComprobante"));
 				detalleServicio.getComprobanteAsociado().getTipoComprobante().setNombre(UtilJdbc.obtenerCadena(rs, "tipoObligacion"));
+				detalleServicio.getComprobanteAsociado().getTipoComprobante().setAbreviatura(UtilJdbc.obtenerCadena(rs, "tipoObligacionAbrev"));
 				detalleServicio.getComprobanteAsociado().setNumeroComprobante(UtilJdbc.obtenerCadena(rs, "numeroObligacion"));
 				detalleServicio.getServicioPadre().setCodigoEntero(idServicio);
 				
