@@ -76,7 +76,6 @@
 				<rich:menuItem action="#{usuarioMBean.salirSesion}" label="Salir"
 					style="text-align:left" />
 			</rich:dropDownMenu>
-
 			<rich:dropDownMenu mode="ajax" style="width:50px;text-align:center;"
 				rendered="#{sessionScope.usuarioSession.rol.codigoEntero == 2}">
 				<rich:menuItem action="irInicio2Sistema" label="Inicio Sistema"
@@ -194,6 +193,16 @@
 				<rich:menuSeparator />
 				<rich:menuItem action="#{usuarioMBean.salirSesion}" label="Salir"
 					style="text-align:left" />
+			</rich:dropDownMenu>
+			<rich:dropDownMenu mode="ajax" style="width:50px;text-align:center;"
+				rendered="#{sessionScope.usuarioSession.rol.codigoEntero == 3}">
+				<f:facet name="label">
+					<h:outputText value="Reportes" style="width:50px;" />
+				</f:facet>
+				<rich:menuGroup label="Ventas" style="text-align:left">
+					<rich:menuItem action="irReportesVentas1"
+						label="Reportes General Ventas" style="text-align:left" />
+				</rich:menuGroup>
 			</rich:dropDownMenu>
 		</rich:toolbar>
 	</h:form>
