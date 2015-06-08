@@ -1,0 +1,81 @@
+/**
+ * 
+ */
+package pe.com.logistica.negocio.dao.impl;
+
+import java.sql.CallableStatement;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Types;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import pe.com.logistica.bean.negocio.DetalleServicioAgencia;
+import pe.com.logistica.negocio.dao.ReporteVentasDao;
+import pe.com.logistica.negocio.util.UtilConexion;
+import pe.com.logistica.negocio.util.UtilJdbc;
+
+/**
+ * @author Edwin
+ *
+ */
+public class ReporteVentasDaoImpl implements ReporteVentasDao {
+
+	/* (non-Javadoc)
+	 * @see pe.com.logistica.negocio.dao.ReporteVentasDao#reporteGeneralVentas(java.util.Date, java.util.Date)
+	 */
+	@Override
+	public List<DetalleServicioAgencia> reporteGeneralVentas(Date desde,
+			Date hasta) throws SQLException {
+		Connection conn = null;
+		CallableStatement cs = null;
+		ResultSet rs = null;
+		String sql = "{ ? = call reportes.fn_re_generalventas(?,?)}";
+		List<DetalleServicioAgencia> resultado = null;
+		
+		try {
+			conn = UtilConexion.obtenerConexion();
+			cs = conn.prepareCall(sql);
+			int i=1;
+			cs.registerOutParameter(i, Types.OTHER);
+			cs.setDate(i++, UtilJdbc.convertirUtilDateSQLDate(desde));
+			cs.setDate(i++, UtilJdbc.convertirUtilDateSQLDate(hasta));
+			cs.execute();
+			rs = (ResultSet) cs.getObject(1);
+			resultado = new ArrayList<DetalleServicioAgencia>();
+			DetalleServicioAgencia detalle = null;
+			while (rs.next()){
+				detalle = new DetalleServicioAgencia();
+				detalle.getTipoServicio().setCodigoEntero(UtilJdbc.obtenerNumero(rs, "idtiposervicio"));
+				detalle.getTipoServicio().setNombre(UtilJdbc.obtenerCadena(rs, "nombre"));
+				detalle.setCantidad(UtilJdbc.obtenerNumero(rs, "cantidad"));
+				detalle.setTotalAgrupados(UtilJdbc.obtenerBigDecimal(rs, "montototal"));
+				detalle.setMontoComision(UtilJdbc.obtenerBigDecimal(rs, "montocomision"));
+				resultado.add(detalle);
+			}
+			
+		} catch (SQLException e) {
+			throw new SQLException(e);
+		}
+		finally{
+			try {
+				if (rs != null){
+					rs.close();
+				}
+				if (cs != null){
+					cs.close();
+				}
+				if (conn != null){
+					conn.close();
+				}
+			} catch (SQLException e) {
+				throw new SQLException(e);
+			}
+		}
+		
+		return resultado;
+	}
+
+}
