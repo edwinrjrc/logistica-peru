@@ -26,13 +26,6 @@ import pe.com.logistica.negocio.util.UtilJdbc;
  */
 public class ClienteDaoImpl implements ClienteDao {
 
-	/**
-	 * 
-	 */
-	public ClienteDaoImpl() {
-		// TODO Auto-generated constructor stub
-	}
-
 	/*
 	 * (non-Javadoc)
 	 * 
