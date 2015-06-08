@@ -101,6 +101,12 @@
     PATH="/paginas/negocio/obligaciones/administrar.xhtml"
     TARGET="rules:#paginas#negocio#obligaciones#administrar.xhtml"
     TITLE="irAdministracionObliXPagar" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT
+    ID="irReporteGeneralVentas::#paginas#reportes#ventas#reportegeneralventas.xhtml"
+    NAME="output18"
+    PATH="/paginas/reportes/ventas/reportegeneralventas.xhtml"
+    TARGET="rules:#paginas#reportes#ventas#reportegeneralventas.xhtml"
+    TITLE="irReporteGeneralVentas" model-entity="JSFProcessItemOutput"/>
   </PROCESS-ITEM>
  </PROCESS-ITEM>
  <PROCESS-ITEM NAME="rules:#paginas#seguridad#usuario#administrar.xhtml"
@@ -210,4 +216,8 @@
   NAME="rules:#paginas#negocio#obligaciones#administrar.xhtml"
   PATH="/paginas/negocio/obligaciones/administrar.xhtml"
   SHAPE="680,-288,50,25" model-entity="JSFProcessGroup" persistent="true"/>
+ <PROCESS-ITEM
+  NAME="rules:#paginas#reportes#ventas#reportegeneralventas.xhtml"
+  PATH="/paginas/reportes/ventas/reportegeneralventas.xhtml"
+  SHAPE="392,768,50,25" model-entity="JSFProcessGroup"/>
 </PROCESS>

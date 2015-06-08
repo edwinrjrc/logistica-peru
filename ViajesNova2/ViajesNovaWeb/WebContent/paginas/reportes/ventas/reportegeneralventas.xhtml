@@ -13,7 +13,7 @@
 	<ui:define name="cuerpo">
 		<h:form id="idformadmservicios">
 			<h:panelGrid columns="1" border="0" cellpadding="0" cellspacing="0"
-				width="100%;text-align:center;">
+				style="width:100%;">
 				<f:facet name="header">
 					<h:panelGrid width="100%" border="0" cellpadding="0"
 						cellspacing="0" style="text-align: left;vertical-align: top; ">
@@ -25,17 +25,75 @@
 
 				<h:panelGrid cellpadding="0" cellspacing="0" border="0"
 					style="width:100%;" columns="4">
+					<f:facet name="header">
+						<h:panelGrid border="0" cellpadding="0" cellspacing="0"
+							style="text-align: left;vertical-align: top; width: 100%;">
+							<h:outputText value="Filtros de Busqueda" style="height: 100px"
+								styleClass="subtitulo2" />
+							<hr width="100%" />
+						</h:panelGrid>
+					</f:facet>
 					<h:outputText value="Fecha de Compra desde" />
-					<rich:calendar datePattern="dd/MM/yyyy"></rich:calendar>
+					<rich:calendar datePattern="dd/MM/yyyy"
+						value="#{reporteVentasMBean.reporteVentas.fechaDesde}"></rich:calendar>
 					<h:outputText value="Fecha de Compra hasta" />
-					<rich:calendar datePattern="dd/MM/yyyy"></rich:calendar>
+					<rich:calendar datePattern="dd/MM/yyyy"
+						value="#{reporteVentasMBean.reporteVentas.fechaHasta}"></rich:calendar>
 
 					<f:facet name="footer">
 						<h:panelGrid cellpadding="0" cellspacing="0" border="0"
-							style="width:100%;" columns="1">
-							<a4j:commandButton value="Ejecutar Reporte"></a4j:commandButton>
+							style="width:100%;text-align:center;" columns="1">
+							<br /><br />
+							<a4j:commandButton value="Ejecutar Reporte" render="idPgTable"
+								action="#{reporteVentasMBean.consultaReporteGeneralVentas()}"></a4j:commandButton>
 						</h:panelGrid>
 					</f:facet>
+				</h:panelGrid>
+
+				<h:panelGrid cellpadding="0" cellspacing="0" border="0"
+					style="width:100%;" columns="3" id="idPgTable"
+					columnClasses="col1TablaCentro,col2TablaCentro,col3TablaCentro">
+					<f:facet name="header">
+						<h:panelGrid border="0" cellpadding="0" cellspacing="0"
+							style="text-align: left;vertical-align: top; width: 100%;">
+							<h:outputText value="Resultado Busqueda" style="height: 100px"
+								styleClass="subtitulo2" />
+							<hr width="100%" />
+						</h:panelGrid>
+					</f:facet>
+					<h:outputText value="" />
+					<rich:dataTable value="#{reporteVentasMBean.reporteGeneralVentas}"
+						var="fila" rows="10" style="width:100%;">
+						<rich:column>
+							<f:facet name="header">
+								<h:outputText value="Tipo Servicio" />
+							</f:facet>
+							<h:outputText value="#{fila.tipoServicio.nombre}" />
+						</rich:column>
+						<rich:column style="text-align:right;">
+							<f:facet name="header">
+								<h:outputText value="Cantidad" />
+							</f:facet>
+							<h:outputText value="#{fila.cantidad}" />
+						</rich:column>
+						<rich:column style="text-align:right;">
+							<f:facet name="header">
+								<h:outputText value="Total Facturado" />
+							</f:facet>
+							<h:outputText value="#{fila.totalAgrupados}">
+								<f:convertNumber pattern="#,###,##0.00" locale="en_US" />
+							</h:outputText>
+						</rich:column>
+						<rich:column style="text-align:right;">
+							<f:facet name="header">
+								<h:outputText value="Monto Comision" />
+							</f:facet>
+							<h:outputText value="#{fila.montoComision}">
+								<f:convertNumber pattern="#,###,##0.00" locale="en_US" />
+							</h:outputText>
+						</rich:column>
+					</rich:dataTable>
+					<h:outputText value="" />
 				</h:panelGrid>
 			</h:panelGrid>
 		</h:form>
