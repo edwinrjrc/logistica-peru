@@ -6,6 +6,7 @@ package pe.com.logistica.bean.reportes;
 import java.util.Date;
 
 import pe.com.logistica.bean.base.Base;
+import pe.com.logistica.bean.base.BaseVO;
 
 /**
  * @author Edwin
@@ -15,6 +16,7 @@ public class ReporteVentas extends Base {
 
 	private Date fechaDesde;
 	private Date fechaHasta;
+	private BaseVO vendedor;
 	
 	/**
 	 * 
@@ -47,6 +49,23 @@ public class ReporteVentas extends Base {
 	 */
 	public void setFechaHasta(Date fechaHasta) {
 		this.fechaHasta = fechaHasta;
+	}
+
+	/**
+	 * @return the vendedor
+	 */
+	public BaseVO getVendedor() {
+		if (vendedor == null){
+			vendedor = new BaseVO();
+		}
+		return vendedor;
+	}
+
+	/**
+	 * @param vendedor the vendedor to set
+	 */
+	public void setVendedor(BaseVO vendedor) {
+		this.vendedor = vendedor;
 	}
 
 }

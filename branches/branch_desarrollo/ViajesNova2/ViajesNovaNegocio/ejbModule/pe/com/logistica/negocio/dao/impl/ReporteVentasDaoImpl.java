@@ -31,7 +31,7 @@ public class ReporteVentasDaoImpl implements ReporteVentasDao {
 		Connection conn = null;
 		CallableStatement cs = null;
 		ResultSet rs = null;
-		String sql = "{ ? = call reportes.fn_re_generalventas(?,?) }";
+		String sql = "{ ? = call reportes.fn_re_generalventas(?,?,?) }";
 		List<DetalleServicioAgencia> resultado = null;
 		
 		try {
@@ -41,6 +41,12 @@ public class ReporteVentasDaoImpl implements ReporteVentasDao {
 			cs.registerOutParameter(i++, Types.OTHER);
 			cs.setDate(i++, UtilJdbc.convertirUtilDateSQLDate(reporteVentas.getFechaDesde()));
 			cs.setDate(i++, UtilJdbc.convertirUtilDateSQLDate(reporteVentas.getFechaHasta()));
+			if (reporteVentas.getVendedor().getCodigoEntero()!=null && reporteVentas.getVendedor().getCodigoEntero().intValue()!=0){
+				cs.setInt(i++, reporteVentas.getVendedor().getCodigoEntero().intValue());
+			}
+			else{
+				cs.setNull(i++, Types.INTEGER);
+			}
 			cs.execute();
 			rs = (ResultSet) cs.getObject(1);
 			resultado = new ArrayList<DetalleServicioAgencia>();
