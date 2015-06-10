@@ -61,79 +61,93 @@ public class CargaReporteProveedorMBean extends BaseMBean {
 		try {
 			this.setStreamArchivo(archivo.getInputStream());
 			this.setDatosExcel(archivo.getData());
+			
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 
 	public void cargarArchivoExcel() {
+		HSSFWorkbook archivoExcel = null;
 		try {
-			HSSFWorkbook archivoExcel = new HSSFWorkbook(this.getStreamArchivo());
-			HSSFSheet hojaInicial = archivoExcel.getSheetAt(0);
-			int ultimaColumna = hojaInicial.getLastRowNum();
-			System.out.println("ultima ::"+ultimaColumna);
-			Iterator<Row> filas = hojaInicial.rowIterator();
-			HSSFRow fila = null;
-			HSSFCell celda = null;
-			int iCelda = 0;
-			List<String> cabecera = new ArrayList<String>();
-			while (filas.hasNext()){
-				fila = (HSSFRow) filas.next();
-				iCelda = 0;
-				celda = null;
-				while (iCelda < this.getNroColumnas()){
-					celda = fila.getCell(iCelda);
-					cabecera.add(UtilWeb.obtenerDato(celda));
-					iCelda++;
+			if (this.getStreamArchivo() != null){
+				archivoExcel = new HSSFWorkbook(this.getStreamArchivo());
+				HSSFSheet hojaInicial = archivoExcel.getSheetAt(0);
+				int ultimaColumna = hojaInicial.getLastRowNum();
+				System.out.println("ultima ::"+ultimaColumna);
+				Iterator<Row> filas = hojaInicial.rowIterator();
+				HSSFRow fila = null;
+				HSSFCell celda = null;
+				int iCelda = 0;
+				List<String> cabecera = new ArrayList<String>();
+				while (filas.hasNext()){
+					fila = (HSSFRow) filas.next();
+					iCelda = 0;
+					celda = null;
+					while (iCelda < this.getNroColumnas()){
+						celda = fila.getCell(iCelda);
+						cabecera.add(UtilWeb.obtenerDato(celda));
+						iCelda++;
+					}
+					break;
 				}
-				break;
-			}
-			
-			System.out.println("1. Cabecera ::"+cabecera.size());
-			
-			for (int i=this.getFilaInicial(); i<hojaInicial.getLastRowNum(); i++){
-				fila = hojaInicial.getRow(i);
-				iCelda = this.getColumnaInicial();
-				celda = null;
-				while (iCelda < this.getNroColumnas()){
-					celda = fila.getCell(iCelda);
-					cabecera.add(UtilWeb.obtenerDato(celda));
-					iCelda++;
+				
+				System.out.println("1. Cabecera ::"+cabecera.size());
+				
+				for (int i=this.getFilaInicial(); i<hojaInicial.getLastRowNum(); i++){
+					fila = hojaInicial.getRow(i);
+					iCelda = this.getColumnaInicial();
+					celda = null;
+					while (iCelda < this.getNroColumnas()){
+						celda = fila.getCell(iCelda);
+						String dato = UtilWeb.obtenerDato(celda);
+						System.out.println("Celda ::"+iCelda+", valor::"+dato);
+						cabecera.add(dato);
+						iCelda++;
+					}
+					break;
 				}
-			}
-			
-			System.out.println("2. Cabecera ::"+cabecera.size());
-			Method method = null;
-			Method method2 = null;
-			String metodo = "getColumna";
-			String metodo2 = "setNombreColumna";
-			Object ob1 = null;
-			for (int i=0; i<cabecera.size(); i++) {
-				if (StringUtils.isNotBlank(cabecera.get(i))){
-					method = this.getColumnasExcel().getClass().getMethod(metodo+(i+1), null);
-					ob1 = method.invoke(this.getColumnasExcel(), null);
-					method2 = ob1.getClass().getMethod(metodo2, String.class);
-					method2.invoke(ob1, cabecera.get(i));
+				
+				System.out.println("2. Cabecera ::"+cabecera.size());
+				/*for (String string : cabecera) {
+					System.out.println("::"+string);
+				}*/
+				Method method = null;
+				Method method2 = null;
+				String metodo = "getColumna";
+				String metodo2 = "setNombreColumna";
+				Object ob1 = null;
+				for (int i=0; i<cabecera.size(); i++) {
+					if (StringUtils.isNotBlank(cabecera.get(i))){
+						method = this.getColumnasExcel().getClass().getMethod(metodo+(i+1), null);
+						ob1 = method.invoke(this.getColumnasExcel(), null);
+						method2 = ob1.getClass().getMethod(metodo2, String.class);
+						method2.invoke(ob1, cabecera.get(i));
+					}
 				}
 			}
 
 		} catch (IOException e) {
 			logger.error(e.getMessage(), e);
 		} catch (IllegalAccessException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 		} catch (IllegalArgumentException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 		} catch (InvocationTargetException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 		} catch (NoSuchMethodException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 		} catch (SecurityException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
+		} finally{
+			try {
+				if (this.getStreamArchivo() != null){
+					this.getStreamArchivo().reset();
+					this.getStreamArchivo().close();
+				}
+			} catch (IOException e) {
+				logger.error(e.getMessage(), e);
+			}
 		}
 	}
 
