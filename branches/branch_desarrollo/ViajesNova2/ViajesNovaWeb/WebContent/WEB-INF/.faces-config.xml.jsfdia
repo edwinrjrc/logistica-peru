@@ -107,6 +107,12 @@
     PATH="/paginas/reportes/ventas/reportegeneralventas.xhtml"
     TARGET="rules:#paginas#reportes#ventas#reportegeneralventas.xhtml"
     TITLE="irReporteGeneralVentas" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT
+    ID="irCargaDeudaClientes::#paginas#negocio#cargareporteproveedor#cargadeudas.xhtml"
+    NAME="output19"
+    PATH="/paginas/negocio/cargareporteproveedor/cargadeudas.xhtml"
+    TARGET="rules:#paginas#negocio#cargareporteproveedor#cargadeudas.xhtml"
+    TITLE="irCargaDeudaClientes" model-entity="JSFProcessItemOutput"/>
   </PROCESS-ITEM>
  </PROCESS-ITEM>
  <PROCESS-ITEM NAME="rules:#paginas#seguridad#usuario#administrar.xhtml"
@@ -220,4 +226,8 @@
   NAME="rules:#paginas#reportes#ventas#reportegeneralventas.xhtml"
   PATH="/paginas/reportes/ventas/reportegeneralventas.xhtml"
   SHAPE="392,768,50,25" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM
+  NAME="rules:#paginas#negocio#cargareporteproveedor#cargadeudas.xhtml"
+  PATH="/paginas/negocio/cargareporteproveedor/cargadeudas.xhtml"
+  SHAPE="304,753,0,0" model-entity="JSFProcessGroup"/>
 </PROCESS>
