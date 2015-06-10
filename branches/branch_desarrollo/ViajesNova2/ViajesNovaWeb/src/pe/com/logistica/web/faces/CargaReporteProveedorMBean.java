@@ -4,6 +4,7 @@
 package pe.com.logistica.web.faces;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -35,7 +36,7 @@ import pe.com.logistica.web.util.UtilWeb;
 @SessionScoped()
 public class CargaReporteProveedorMBean extends BaseMBean {
 
-	private final static Logger logger = Logger.getLogger(ClienteMBean.class);
+	private final static Logger logger = Logger.getLogger(CargaReporteProveedorMBean.class);
 	/**
 	 * 
 	 */
@@ -47,21 +48,30 @@ public class CargaReporteProveedorMBean extends BaseMBean {
 
 	private List<CeldaExcel> tablaExcelCargada;
 	private ColumnasExcel columnasExcel;
-	private UploadedFile archivo;
+	private InputStream streamArchivo;
+	
+	private byte[] datosExcel;
 
 	public CargaReporteProveedorMBean() {
 		// TODO Auto-generated constructor stub
 	}
 
 	public void listenerExcel(FileUploadEvent event) {
-		this.setArchivo(event.getUploadedFile());
+		UploadedFile archivo = event.getUploadedFile();
+		try {
+			this.setStreamArchivo(archivo.getInputStream());
+			this.setDatosExcel(archivo.getData());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public void cargarArchivoExcel() {
 		try {
-			HSSFWorkbook archivoExcel = new HSSFWorkbook(
-					archivo.getInputStream());
+			HSSFWorkbook archivoExcel = new HSSFWorkbook(this.getStreamArchivo());
 			HSSFSheet hojaInicial = archivoExcel.getSheetAt(0);
+			int ultimaColumna = hojaInicial.getLastRowNum();
+			System.out.println("ultima ::"+ultimaColumna);
 			Iterator<Row> filas = hojaInicial.rowIterator();
 			HSSFRow fila = null;
 			HSSFCell celda = null;
@@ -202,21 +212,6 @@ public class CargaReporteProveedorMBean extends BaseMBean {
 	}
 
 	/**
-	 * @return the archivo
-	 */
-	public UploadedFile getArchivo() {
-		return archivo;
-	}
-
-	/**
-	 * @param archivo
-	 *            the archivo to set
-	 */
-	public void setArchivo(UploadedFile archivo) {
-		this.archivo = archivo;
-	}
-
-	/**
 	 * @return the columnasExcel
 	 */
 	public ColumnasExcel getColumnasExcel() {
@@ -232,5 +227,33 @@ public class CargaReporteProveedorMBean extends BaseMBean {
 	 */
 	public void setColumnasExcel(ColumnasExcel columnasExcel) {
 		this.columnasExcel = columnasExcel;
+	}
+
+	/**
+	 * @return the streamArchivo
+	 */
+	public InputStream getStreamArchivo() {
+		return streamArchivo;
+	}
+
+	/**
+	 * @param streamArchivo the streamArchivo to set
+	 */
+	public void setStreamArchivo(InputStream streamArchivo) {
+		this.streamArchivo = streamArchivo;
+	}
+
+	/**
+	 * @return the datosExcel
+	 */
+	public byte[] getDatosExcel() {
+		return datosExcel;
+	}
+
+	/**
+	 * @param datosExcel the datosExcel to set
+	 */
+	public void setDatosExcel(byte[] datosExcel) {
+		this.datosExcel = datosExcel;
 	}
 }

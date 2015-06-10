@@ -109,6 +109,11 @@
    <to-view-id>/paginas/reportes/ventas/reportegeneralventas.xhtml</to-view-id>
    <redirect/>
   </navigation-case>
+  <navigation-case>
+   <from-outcome>irCargaDeudaClientes</from-outcome>
+   <to-view-id>/paginas/negocio/cargareporteproveedor/cargadeudas.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
  </navigation-rule>
  <navigation-rule>
   <from-view-id>/paginas/soporte/maestro/administrar.xhtml</from-view-id>
