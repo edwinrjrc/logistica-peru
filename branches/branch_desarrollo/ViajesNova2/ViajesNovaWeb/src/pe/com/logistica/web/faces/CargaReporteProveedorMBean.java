@@ -75,12 +75,13 @@ public class CargaReporteProveedorMBean extends BaseMBean {
 				HSSFSheet hojaInicial = archivoExcel.getSheetAt(0);
 				int ultimaColumna = hojaInicial.getLastRowNum();
 				System.out.println("ultima ::"+ultimaColumna);
-				Iterator<Row> filas = hojaInicial.rowIterator();
+				//Iterator<Row> filas = hojaInicial.rowIterator();
 				HSSFRow fila = null;
 				HSSFCell celda = null;
 				int iCelda = 0;
 				List<String> cabecera = new ArrayList<String>();
-				while (filas.hasNext()){
+				List<ColumnasExcel> dataExcel = new ArrayList<ColumnasExcel>();
+				/*while (filas.hasNext()){
 					fila = (HSSFRow) filas.next();
 					iCelda = 0;
 					celda = null;
@@ -90,14 +91,23 @@ public class CargaReporteProveedorMBean extends BaseMBean {
 						iCelda++;
 					}
 					break;
-				}
+				}*/
 				
 				System.out.println("1. Cabecera ::"+cabecera.size());
-				
+				boolean registroCabecera = false;
+				CeldaExcel celdaExcel = null;
 				for (int i=this.getFilaInicial(); i<hojaInicial.getLastRowNum(); i++){
 					fila = hojaInicial.getRow(i);
 					iCelda = this.getColumnaInicial();
 					celda = null;
+					while (!registroCabecera && iCelda < this.getNroColumnas()){
+						celda = fila.getCell(iCelda);
+						String dato = UtilWeb.obtenerDato(celda);
+						System.out.println("Celda ::"+iCelda+", valor::"+dato);
+						cabecera.add(dato);
+						iCelda++;
+					}
+					registroCabecera = (cabecera.size()>0);
 					while (iCelda < this.getNroColumnas()){
 						celda = fila.getCell(iCelda);
 						String dato = UtilWeb.obtenerDato(celda);
@@ -105,7 +115,6 @@ public class CargaReporteProveedorMBean extends BaseMBean {
 						cabecera.add(dato);
 						iCelda++;
 					}
-					break;
 				}
 				
 				System.out.println("2. Cabecera ::"+cabecera.size());
