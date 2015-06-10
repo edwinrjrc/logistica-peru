@@ -4,6 +4,8 @@
 package pe.com.logistica.web.faces;
 
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -11,6 +13,7 @@ import java.util.List;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFRow;
@@ -22,6 +25,7 @@ import org.richfaces.model.UploadedFile;
 
 import pe.com.logistica.bean.cargaexcel.CeldaExcel;
 import pe.com.logistica.bean.cargaexcel.ColumnasExcel;
+import pe.com.logistica.web.util.UtilWeb;
 
 /**
  * @author EDWREB
@@ -59,27 +63,67 @@ public class CargaReporteProveedorMBean extends BaseMBean {
 					archivo.getInputStream());
 			HSSFSheet hojaInicial = archivoExcel.getSheetAt(0);
 			Iterator<Row> filas = hojaInicial.rowIterator();
+			HSSFRow fila = null;
+			HSSFCell celda = null;
+			int iCelda = 0;
+			List<String> cabecera = new ArrayList<String>();
 			while (filas.hasNext()){
-				//TODO ITERAR PARA OBTENER LA INFORMACION
+				fila = (HSSFRow) filas.next();
+				iCelda = 0;
+				celda = null;
+				while (iCelda < this.getNroColumnas()){
+					celda = fila.getCell(iCelda);
+					cabecera.add(UtilWeb.obtenerDato(celda));
+					iCelda++;
+				}
+				break;
 			}
-			HSSFRow fila = hojaInicial.getRow(this.getFilaInicial().intValue());
-			HSSFCell celda = fila.getCell(this.getColumnaInicial());
-			String valor = "";
-			int tipo = celda.getCellType();
-			switch (tipo) {
-			case HSSFCell.CELL_TYPE_BLANK:
-				valor = "";
-				break;
-			case HSSFCell.CELL_TYPE_NUMERIC:
-				valor = String.valueOf(celda.getNumericCellValue());
-				break;
-			case HSSFCell.CELL_TYPE_STRING:
-				valor = celda.getStringCellValue();
-				break;
+			
+			System.out.println("1. Cabecera ::"+cabecera.size());
+			
+			for (int i=this.getFilaInicial(); i<hojaInicial.getLastRowNum(); i++){
+				fila = hojaInicial.getRow(i);
+				iCelda = this.getColumnaInicial();
+				celda = null;
+				while (iCelda < this.getNroColumnas()){
+					celda = fila.getCell(iCelda);
+					cabecera.add(UtilWeb.obtenerDato(celda));
+					iCelda++;
+				}
+			}
+			
+			System.out.println("2. Cabecera ::"+cabecera.size());
+			Method method = null;
+			Method method2 = null;
+			String metodo = "getColumna";
+			String metodo2 = "setNombreColumna";
+			Object ob1 = null;
+			for (int i=0; i<cabecera.size(); i++) {
+				if (StringUtils.isNotBlank(cabecera.get(i))){
+					method = this.getColumnasExcel().getClass().getMethod(metodo+(i+1), null);
+					ob1 = method.invoke(this.getColumnasExcel(), null);
+					method2 = ob1.getClass().getMethod(metodo2, String.class);
+					method2.invoke(ob1, cabecera.get(i));
+				}
 			}
 
 		} catch (IOException e) {
 			logger.error(e.getMessage(), e);
+		} catch (IllegalAccessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IllegalArgumentException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InvocationTargetException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (NoSuchMethodException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SecurityException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 
