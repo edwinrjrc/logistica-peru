@@ -17,6 +17,7 @@ import javax.faces.model.SelectItem;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
+import org.apache.poi.hssf.usermodel.HSSFCell;
 
 import pe.com.logistica.bean.base.BaseVO;
 
@@ -27,14 +28,6 @@ import pe.com.logistica.bean.base.BaseVO;
 public class UtilWeb {
 	
 	private final static Logger logger = Logger.getLogger(UtilWeb.class);
-	
-	/**
-	 * 
-	 */
-	public UtilWeb() {
-		// TODO Auto-generated constructor stub
-	}
-
 	
 	public static List<SelectItem> convertirSelectItem(List<BaseVO> lista){
 		List<SelectItem> listaCombo = new ArrayList<SelectItem>();
@@ -216,5 +209,18 @@ public class UtilWeb {
 			e.printStackTrace();
 		}
 		return null;
+	}
+	
+	public static String obtenerDato(HSSFCell celda){
+		switch (celda.getCellType()) {
+		case HSSFCell.CELL_TYPE_BLANK:
+			return "";
+		case HSSFCell.CELL_TYPE_NUMERIC:
+			return String.valueOf(celda.getNumericCellValue());
+		case HSSFCell.CELL_TYPE_STRING:
+			return celda.getStringCellValue();
+		default:
+			return "";			
+		}
 	}
 }
