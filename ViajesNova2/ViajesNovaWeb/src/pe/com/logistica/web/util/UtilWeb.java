@@ -212,15 +212,18 @@ public class UtilWeb {
 	}
 	
 	public static String obtenerDato(HSSFCell celda){
-		switch (celda.getCellType()) {
-		case HSSFCell.CELL_TYPE_BLANK:
-			return "";
-		case HSSFCell.CELL_TYPE_NUMERIC:
-			return String.valueOf(celda.getNumericCellValue());
-		case HSSFCell.CELL_TYPE_STRING:
-			return celda.getStringCellValue();
-		default:
-			return "";			
+		if (celda != null){
+			switch (celda.getCellType()) {
+			case HSSFCell.CELL_TYPE_BLANK:
+				return "";
+			case HSSFCell.CELL_TYPE_NUMERIC:
+				return String.valueOf(celda.getNumericCellValue());
+			case HSSFCell.CELL_TYPE_STRING:
+				return celda.getStringCellValue();
+			default:
+				return "";			
+			}
 		}
+		return "";
 	}
 }
