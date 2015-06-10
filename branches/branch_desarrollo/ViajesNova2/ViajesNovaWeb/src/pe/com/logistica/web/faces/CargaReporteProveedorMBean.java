@@ -8,7 +8,6 @@ import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import javax.faces.bean.ManagedBean;
@@ -20,7 +19,6 @@ import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.ss.usermodel.Row;
 import org.richfaces.event.FileUploadEvent;
 import org.richfaces.model.UploadedFile;
 
@@ -49,8 +47,8 @@ public class CargaReporteProveedorMBean extends BaseMBean {
 	private List<CeldaExcel> tablaExcelCargada;
 	private ColumnasExcel columnasExcel;
 	private InputStream streamArchivo;
-	
-	private byte[] datosExcel;
+
+	private List<ColumnasExcel> dataExcel = null;
 
 	public CargaReporteProveedorMBean() {
 		// TODO Auto-generated constructor stub
@@ -60,7 +58,6 @@ public class CargaReporteProveedorMBean extends BaseMBean {
 		UploadedFile archivo = event.getUploadedFile();
 		try {
 			this.setStreamArchivo(archivo.getInputStream());
-			this.setDatosExcel(archivo.getData());
 			
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -71,16 +68,15 @@ public class CargaReporteProveedorMBean extends BaseMBean {
 		HSSFWorkbook archivoExcel = null;
 		try {
 			if (this.getStreamArchivo() != null){
+				this.setDataExcel(null);
 				archivoExcel = new HSSFWorkbook(this.getStreamArchivo());
 				HSSFSheet hojaInicial = archivoExcel.getSheetAt(0);
 				int ultimaColumna = hojaInicial.getLastRowNum();
-				System.out.println("ultima ::"+ultimaColumna);
 				//Iterator<Row> filas = hojaInicial.rowIterator();
 				HSSFRow fila = null;
 				HSSFCell celda = null;
 				int iCelda = 0;
 				List<String> cabecera = new ArrayList<String>();
-				List<ColumnasExcel> dataExcel = new ArrayList<ColumnasExcel>();
 				/*while (filas.hasNext()){
 					fila = (HSSFRow) filas.next();
 					iCelda = 0;
@@ -93,9 +89,16 @@ public class CargaReporteProveedorMBean extends BaseMBean {
 					break;
 				}*/
 				
-				System.out.println("1. Cabecera ::"+cabecera.size());
 				boolean registroCabecera = false;
 				CeldaExcel celdaExcel = null;
+				ColumnasExcel columna = null;
+				Method method = null;
+				Method method2 = null;
+				Method method3 = null;
+				String metodo = "getColumna";
+				String metodo2 = "setValorCadena";
+				String metodo3 = "setMostrar";
+				Object ob1 = null;
 				for (int i=this.getFilaInicial(); i<hojaInicial.getLastRowNum(); i++){
 					fila = hojaInicial.getRow(i);
 					iCelda = this.getColumnaInicial();
@@ -103,35 +106,45 @@ public class CargaReporteProveedorMBean extends BaseMBean {
 					while (!registroCabecera && iCelda < this.getNroColumnas()){
 						celda = fila.getCell(iCelda);
 						String dato = UtilWeb.obtenerDato(celda);
-						System.out.println("Celda ::"+iCelda+", valor::"+dato);
 						cabecera.add(dato);
 						iCelda++;
 					}
-					registroCabecera = (cabecera.size()>0);
-					while (iCelda < this.getNroColumnas()){
-						celda = fila.getCell(iCelda);
-						String dato = UtilWeb.obtenerDato(celda);
-						System.out.println("Celda ::"+iCelda+", valor::"+dato);
-						cabecera.add(dato);
-						iCelda++;
+					if (cabecera.size()>0){
+						columna = new ColumnasExcel();
+						registroCabecera = true;
+					}
+					if (i > this.getFilaInicial()){
+						int j=1;
+						while (iCelda < this.getNroColumnas()){
+							celda = fila.getCell(iCelda);
+							String dato = UtilWeb.obtenerDato(celda);
+							
+							method = columna.getClass().getMethod(metodo+(j), null);
+							ob1 = method.invoke(columna, null);
+							method2 = ob1.getClass().getMethod(metodo2, String.class);
+							Object ob2 = method2.invoke(ob1, dato);
+							method3 = ob1.getClass().getMethod(metodo3, boolean.class);
+							method3.invoke(ob1, true);
+							iCelda++;
+							j++;
+						}
+						this.getDataExcel().add(columna);
 					}
 				}
 				
-				System.out.println("2. Cabecera ::"+cabecera.size());
-				/*for (String string : cabecera) {
-					System.out.println("::"+string);
-				}*/
-				Method method = null;
-				Method method2 = null;
-				String metodo = "getColumna";
-				String metodo2 = "setNombreColumna";
-				Object ob1 = null;
+				method = null;
+				method2 = null;
+				metodo = "getColumna";
+				metodo2 = "setNombreColumna";
+				ob1 = null;
 				for (int i=0; i<cabecera.size(); i++) {
 					if (StringUtils.isNotBlank(cabecera.get(i))){
 						method = this.getColumnasExcel().getClass().getMethod(metodo+(i+1), null);
 						ob1 = method.invoke(this.getColumnasExcel(), null);
 						method2 = ob1.getClass().getMethod(metodo2, String.class);
 						method2.invoke(ob1, cabecera.get(i));
+						method3 = ob1.getClass().getMethod(metodo3, boolean.class);
+						method3.invoke(ob1, true);
 					}
 				}
 			}
@@ -267,16 +280,19 @@ public class CargaReporteProveedorMBean extends BaseMBean {
 	}
 
 	/**
-	 * @return the datosExcel
+	 * @return the dataExcel
 	 */
-	public byte[] getDatosExcel() {
-		return datosExcel;
+	public List<ColumnasExcel> getDataExcel() {
+		if (dataExcel == null){
+			dataExcel = new ArrayList<ColumnasExcel>();
+		}
+		return dataExcel;
 	}
 
 	/**
-	 * @param datosExcel the datosExcel to set
+	 * @param dataExcel the dataExcel to set
 	 */
-	public void setDatosExcel(byte[] datosExcel) {
-		this.datosExcel = datosExcel;
+	public void setDataExcel(List<ColumnasExcel> dataExcel) {
+		this.dataExcel = dataExcel;
 	}
 }
