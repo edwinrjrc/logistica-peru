@@ -213,6 +213,8 @@ public class UtilWeb {
 	
 	public static String obtenerDato(HSSFCell celda){
 		if (celda != null){
+			/*
+			
 			switch (celda.getCellType()) {
 			case HSSFCell.CELL_TYPE_BLANK:
 				return "";
@@ -222,7 +224,8 @@ public class UtilWeb {
 				return celda.getStringCellValue();
 			default:
 				return "";			
-			}
+			}*/
+			return celda.toString();
 		}
 		return "";
 	}

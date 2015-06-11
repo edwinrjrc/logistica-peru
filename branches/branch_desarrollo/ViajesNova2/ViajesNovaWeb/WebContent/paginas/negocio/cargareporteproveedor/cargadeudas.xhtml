@@ -47,11 +47,12 @@
 						style="width:100%;" columns="3" id="idPgUpload"
 						columnClasses="col1TablaCentro,col2TablaCentro,col3TablaCentro">
 						<h:outputText value="" />
-						<rich:fileUpload
+						<rich:fileUpload style="width:100%; height:100px;"
 							fileUploadListener="#{cargaReporteProveedorMBean.listenerExcel}"
 							id="idUploadExcel" acceptedTypes="xls, XLS, xlsx, XLSX"
 							ontyperejected="alert('Solo Archivos Excel son permitidos');"
-							maxFilesQuantity="1">
+							maxFilesQuantity="1" render="idBtnCargaArchivo"
+							oncomplete="alert('Hola')">
 						</rich:fileUpload>
 						<h:outputText value="" />
 					</h:panelGrid>
@@ -67,7 +68,6 @@
 					</f:facet>
 				</h:panelGrid>
 
-
 				<h:panelGrid cellpadding="0" cellspacing="0" border="0"
 					style="width:100%;" columns="3" id="idPgTable"
 					columnClasses="col1TablaCentro,col2TablaCentro,col3TablaCentro">
@@ -81,7 +81,14 @@
 					</f:facet>
 					<h:outputText value="" />
 					<rich:dataTable value="#{cargaReporteProveedorMBean.dataExcel}"
-						id="idTableExcel" var="fila" style="width:100%;">
+						id="idTableExcel" var="fila" style="width:100%;"
+						iterationStatusVar="it">
+						<rich:column>
+							<f:facet name="header">
+								<h:outputText value="Nro" />
+							</f:facet>
+						#{it.index + 1}
+						</rich:column>
 						<rich:column
 							rendered="#{cargaReporteProveedorMBean.columnasExcel.columna1.mostrar}">
 							<f:facet name="header">
@@ -242,15 +249,11 @@
 							</f:facet>
 							<h:outputText value="#{fila.columna20.valorCadena}" />
 						</rich:column>
+						<rich:column>
+							<h:selectBooleanCheckbox value="#{fila.seleccionar}" />
+						</rich:column>
 					</rich:dataTable>
 					<h:outputText value="" />
-					<f:facet name="footer">
-						<h:panelGrid cellpadding="0" cellspacing="0" border="0"
-							columns="1" style="width:100%;text-align:center;">
-							<h:commandButton value="Exportar Reporte"
-								action="#{reporteVentasMBean.exportarReporte()}" />
-						</h:panelGrid>
-					</f:facet>
 				</h:panelGrid>
 			</h:panelGrid>
 		</h:form>
