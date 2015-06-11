@@ -71,7 +71,7 @@ public class CargaReporteProveedorMBean extends BaseMBean {
 				this.setDataExcel(null);
 				archivoExcel = new HSSFWorkbook(this.getStreamArchivo());
 				HSSFSheet hojaInicial = archivoExcel.getSheetAt(0);
-				int ultimaColumna = hojaInicial.getLastRowNum();
+				//int ultimaColumna = hojaInicial.getLastRowNum();
 				//Iterator<Row> filas = hojaInicial.rowIterator();
 				HSSFRow fila = null;
 				HSSFCell celda = null;
@@ -99,11 +99,11 @@ public class CargaReporteProveedorMBean extends BaseMBean {
 				String metodo2 = "setValorCadena";
 				String metodo3 = "setMostrar";
 				Object ob1 = null;
-				for (int i=this.getFilaInicial(); i<hojaInicial.getLastRowNum(); i++){
+				for (int i=(this.getFilaInicial()-1); i<hojaInicial.getLastRowNum(); i++){
 					fila = hojaInicial.getRow(i);
 					iCelda = this.getColumnaInicial();
 					celda = null;
-					while (!registroCabecera && iCelda < this.getNroColumnas()){
+					while (!registroCabecera && iCelda < (this.getNroColumnas()-1)){
 						celda = fila.getCell(iCelda);
 						String dato = UtilWeb.obtenerDato(celda);
 						cabecera.add(dato);
