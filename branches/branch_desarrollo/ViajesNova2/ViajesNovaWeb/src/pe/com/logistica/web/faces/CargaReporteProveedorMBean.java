@@ -49,6 +49,8 @@ public class CargaReporteProveedorMBean extends BaseMBean {
 	private InputStream streamArchivo;
 
 	private List<ColumnasExcel> dataExcel = null;
+	
+	private boolean tablaLlena;
 
 	public CargaReporteProveedorMBean() {
 		// TODO Auto-generated constructor stub
@@ -57,8 +59,11 @@ public class CargaReporteProveedorMBean extends BaseMBean {
 	public void listenerExcel(FileUploadEvent event) {
 		UploadedFile archivo = event.getUploadedFile();
 		try {
+			this.setTablaLlena(false);
+			this.setDataExcel(null);
 			this.setStreamArchivo(archivo.getInputStream());
 			
+			this.setTablaLlena(true);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -294,5 +299,19 @@ public class CargaReporteProveedorMBean extends BaseMBean {
 	 */
 	public void setDataExcel(List<ColumnasExcel> dataExcel) {
 		this.dataExcel = dataExcel;
+	}
+
+	/**
+	 * @return the tablaLlena
+	 */
+	public boolean isTablaLlena() {
+		return tablaLlena;
+	}
+
+	/**
+	 * @param tablaLlena the tablaLlena to set
+	 */
+	public void setTablaLlena(boolean tablaLlena) {
+		this.tablaLlena = tablaLlena;
 	}
 }
