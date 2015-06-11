@@ -47,25 +47,28 @@
 						style="width:100%;" columns="3" id="idPgUpload"
 						columnClasses="col1TablaCentro,col2TablaCentro,col3TablaCentro">
 						<h:outputText value="" />
-						<rich:fileUpload style="width:100%; height:100px;"
+						<rich:fileUpload style="width:100%; height:90px;"
+							clearLabel="Limpiar" clearAllLabel="Limpiar Todo"
+							deleteLabel="Borrar" addLabel="Agregar Archivo"
+							uploadLabel="Cargar Archivo"
 							fileUploadListener="#{cargaReporteProveedorMBean.listenerExcel}"
 							id="idUploadExcel" acceptedTypes="xls, XLS, xlsx, XLSX"
 							ontyperejected="alert('Solo Archivos Excel son permitidos');"
 							maxFilesQuantity="1" render="idBtnCargaArchivo"
-							oncomplete="alert('Hola')">
+							sizeExceededLabel="Tamaño de Archivo mayor al permitido"
+							doneLabel="Archivo Cargado Satisfactoriamente" noDuplicate="true">
+							<a4j:ajax event="uploadcomplete" execute="@none"
+								oncomplete="clicBoton('idformcargadeuda:idBtnCargaArchivo')"
+								render="idPgTable" />
 						</rich:fileUpload>
+						<h:outputText value="" />
+						<h:outputText value="" />
+						<a4j:commandButton value="Cargar Archivo" render="idTableExcel"
+							id="idBtnCargaArchivo" style="display:none;"
+							action="#{cargaReporteProveedorMBean.cargarArchivoExcel()}"></a4j:commandButton>
 						<h:outputText value="" />
 					</h:panelGrid>
 
-					<f:facet name="footer">
-						<h:panelGrid cellpadding="0" cellspacing="0" border="0"
-							style="width:100%;text-align:center;" columns="1">
-							<br />
-							<br />
-							<a4j:commandButton value="Cargar Archivo" render="idTableExcel"
-								action="#{cargaReporteProveedorMBean.cargarArchivoExcel()}"></a4j:commandButton>
-						</h:panelGrid>
-					</f:facet>
 				</h:panelGrid>
 
 				<h:panelGrid cellpadding="0" cellspacing="0" border="0"
@@ -82,7 +85,8 @@
 					<h:outputText value="" />
 					<rich:dataTable value="#{cargaReporteProveedorMBean.dataExcel}"
 						id="idTableExcel" var="fila" style="width:100%;"
-						iterationStatusVar="it">
+						iterationStatusVar="it" rows="7"
+						rendered="#{cargaReporteProveedorMBean.tablaLlena}">
 						<rich:column>
 							<f:facet name="header">
 								<h:outputText value="Nro" />
@@ -252,6 +256,9 @@
 						<rich:column>
 							<h:selectBooleanCheckbox value="#{fila.seleccionar}" />
 						</rich:column>
+						<f:facet name="footer">
+							<rich:dataScroller for="idTableExcel"></rich:dataScroller>
+						</f:facet>
 					</rich:dataTable>
 					<h:outputText value="" />
 				</h:panelGrid>
