@@ -35,6 +35,7 @@ public class ColumnasExcel extends Base {
 	private CeldaExcel columna18;
 	private CeldaExcel columna19;
 	private CeldaExcel columna20;
+	private boolean seleccionar;
 
 	/**
 	 * @return the columna1
@@ -394,6 +395,20 @@ public class ColumnasExcel extends Base {
 	 */
 	public void setColumna20(CeldaExcel columna20) {
 		this.columna20 = columna20;
+	}
+
+	/**
+	 * @return the seleccionar
+	 */
+	public boolean isSeleccionar() {
+		return seleccionar;
+	}
+
+	/**
+	 * @param seleccionar the seleccionar to set
+	 */
+	public void setSeleccionar(boolean seleccionar) {
+		this.seleccionar = seleccionar;
 	}
 
 }
