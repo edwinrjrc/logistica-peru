@@ -11,6 +11,7 @@ import pe.com.logistica.bean.negocio.Destino;
 import pe.com.logistica.bean.negocio.Maestro;
 import pe.com.logistica.bean.negocio.Pais;
 import pe.com.logistica.bean.negocio.Proveedor;
+import pe.com.logistica.negocio.exception.ConnectionException;
 import pe.com.logistica.negocio.exception.ErrorConsultaDataException;
 
 @Remote
@@ -30,17 +31,17 @@ public interface SoporteRemote {
 	
 	public boolean actualizarMaestro(Maestro maestro) throws SQLException;
 	
-	public List<BaseVO> listarCatalogoMaestro(int maestro) throws SQLException;
+	public List<BaseVO> listarCatalogoMaestro(int maestro) throws SQLException, ConnectionException;
 
-	public List<BaseVO> listarCatalogoDepartamento() throws SQLException;
+	public List<BaseVO> listarCatalogoDepartamento() throws SQLException, ConnectionException;
 	
 	public List<BaseVO> listarCatalogoProvincia(String idDepartamento)
-			throws SQLException;
+			throws SQLException, ConnectionException;
 	
 	public List<BaseVO> listarCatalogoDistrito(String idDepartamento,
-			String idProvincia) throws SQLException;
+			String idProvincia) throws SQLException, ConnectionException;
 	
-	public List<BaseVO> listarContinentes() throws SQLException;
+	public List<BaseVO> listarContinentes() throws SQLException, ConnectionException;
 	
 	public List<BaseVO> consultarPaisesContinente(int idcontinente) throws SQLException, Exception;
 

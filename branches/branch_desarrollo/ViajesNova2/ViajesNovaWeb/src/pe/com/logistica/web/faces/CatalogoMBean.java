@@ -24,6 +24,7 @@ import pe.com.logistica.bean.negocio.MaestroServicio;
 import pe.com.logistica.bean.negocio.Parametro;
 import pe.com.logistica.bean.negocio.Proveedor;
 import pe.com.logistica.bean.negocio.Usuario;
+import pe.com.logistica.negocio.exception.ConnectionException;
 import pe.com.logistica.web.servicio.NegocioServicio;
 import pe.com.logistica.web.servicio.ParametroServicio;
 import pe.com.logistica.web.servicio.SeguridadServicio;
@@ -99,8 +100,16 @@ public class CatalogoMBean implements Serializable{
 	 * @return the catalogoRoles
 	 */
 	public List<SelectItem> getCatalogoRoles() {
-		List<BaseVO> lista = seguridadServicio.listarRoles();
-		catalogoRoles = UtilWeb.convertirSelectItem(lista);
+		List<BaseVO> lista;
+		try {
+			lista = seguridadServicio.listarRoles();
+			catalogoRoles = UtilWeb.convertirSelectItem(lista);
+		} catch (ConnectionException e) {
+			logger.error(e.getMessage(), e);
+		} catch (SQLException e) {
+			logger.error(e.getMessage(), e);
+		}
+		
 		return catalogoRoles;
 	}
 
@@ -169,6 +178,8 @@ public class CatalogoMBean implements Serializable{
 			List<BaseVO> lista = soporteServicio.listarCatalogoDepartamento();
 			catalogoDepartamento = UtilWeb.convertirSelectItem(lista);
 		} catch (SQLException e) {
+			logger.error(e.getMessage(), e);
+		} catch (ConnectionException e) {
 			logger.error(e.getMessage(), e);
 		}
 		return catalogoDepartamento;

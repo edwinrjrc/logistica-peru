@@ -15,6 +15,7 @@ import javax.servlet.ServletContext;
 import pe.com.logistica.bean.base.BaseVO;
 import pe.com.logistica.bean.negocio.Usuario;
 import pe.com.logistica.negocio.ejb.SeguridadRemote;
+import pe.com.logistica.negocio.exception.ConnectionException;
 import pe.com.logistica.negocio.exception.ErrorEncriptacionException;
 import pe.com.logistica.web.servicio.SeguridadServicio;
 
@@ -56,7 +57,7 @@ public class SeguridadServicioImpl implements SeguridadServicio{
 		return ejbSession.listarUsuarios();
 	}
 	@Override
-	public List<BaseVO> listarRoles() {
+	public List<BaseVO> listarRoles() throws ConnectionException, SQLException {
 		return ejbSession.listarRoles();
 	}
 	@Override
