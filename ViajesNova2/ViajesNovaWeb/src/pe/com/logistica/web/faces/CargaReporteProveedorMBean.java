@@ -24,6 +24,7 @@ import org.richfaces.model.UploadedFile;
 
 import pe.com.logistica.bean.cargaexcel.CeldaExcel;
 import pe.com.logistica.bean.cargaexcel.ColumnasExcel;
+import pe.com.logistica.bean.cargaexcel.ReporteArchivo;
 import pe.com.logistica.web.util.UtilWeb;
 
 /**
@@ -43,6 +44,7 @@ public class CargaReporteProveedorMBean extends BaseMBean {
 	private Integer filaInicial;
 	private Integer columnaInicial;
 	private Integer nroColumnas;
+	private ReporteArchivo reporteArchivo;
 
 	private List<CeldaExcel> tablaExcelCargada;
 	private ColumnasExcel columnasExcel;
@@ -313,5 +315,22 @@ public class CargaReporteProveedorMBean extends BaseMBean {
 	 */
 	public void setTablaLlena(boolean tablaLlena) {
 		this.tablaLlena = tablaLlena;
+	}
+
+	/**
+	 * @return the reporteArchivo
+	 */
+	public ReporteArchivo getReporteArchivo() {
+		if (reporteArchivo == null){
+			reporteArchivo = new ReporteArchivo();
+		}
+		return reporteArchivo;
+	}
+
+	/**
+	 * @param reporteArchivo the reporteArchivo to set
+	 */
+	public void setReporteArchivo(ReporteArchivo reporteArchivo) {
+		this.reporteArchivo = reporteArchivo;
 	}
 }
