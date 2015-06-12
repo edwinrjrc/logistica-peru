@@ -11,6 +11,7 @@ import pe.com.logistica.negocio.dao.CatalogoDao;
 import pe.com.logistica.negocio.dao.UsuarioDao;
 import pe.com.logistica.negocio.dao.impl.CatalogoDaoImpl;
 import pe.com.logistica.negocio.dao.impl.UsuarioDaoImpl;
+import pe.com.logistica.negocio.exception.ConnectionException;
 import pe.com.logistica.negocio.exception.ErrorEncriptacionException;
 
 /**
@@ -41,7 +42,7 @@ public class SeguridadSession implements SeguridadRemote, SeguridadLocal {
 	}
 
 	@Override
-	public List<BaseVO> listarRoles() {
+	public List<BaseVO> listarRoles() throws ConnectionException, SQLException {
 		catalogoDao = new CatalogoDaoImpl();
 		return catalogoDao.listarRoles();
 	}

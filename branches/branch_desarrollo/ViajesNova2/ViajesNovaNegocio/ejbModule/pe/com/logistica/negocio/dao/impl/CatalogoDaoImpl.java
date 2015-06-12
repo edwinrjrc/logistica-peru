@@ -12,6 +12,7 @@ import java.util.List;
 
 import pe.com.logistica.bean.base.BaseVO;
 import pe.com.logistica.negocio.dao.CatalogoDao;
+import pe.com.logistica.negocio.exception.ConnectionException;
 import pe.com.logistica.negocio.util.UtilConexion;
 import pe.com.logistica.negocio.util.UtilJdbc;
 
@@ -28,7 +29,7 @@ public class CatalogoDaoImpl implements CatalogoDao {
 	}
 
 	@Override
-	public List<BaseVO> listarRoles() {
+	public List<BaseVO> listarRoles() throws ConnectionException, SQLException {
 		List<BaseVO> resultado = null;
 		Connection conn = null;
 		CallableStatement cs = null;
@@ -50,7 +51,7 @@ public class CatalogoDaoImpl implements CatalogoDao {
 			}
 		} catch (SQLException e) {
 			resultado = null;
-			e.printStackTrace();
+			throw new SQLException(e);
 		} finally{
 			try {
 				if (rs != null){
@@ -68,7 +69,7 @@ public class CatalogoDaoImpl implements CatalogoDao {
 						conn.close();
 					}
 				} catch (SQLException e1) {
-					e1.printStackTrace();
+					throw new SQLException(e);
 				}
 			}
 		}
@@ -77,7 +78,7 @@ public class CatalogoDaoImpl implements CatalogoDao {
 	}
 
 	@Override
-	public List<BaseVO> listarCatalogoMaestro(int maestro) {
+	public List<BaseVO> listarCatalogoMaestro(int maestro) throws ConnectionException, SQLException {
 		List<BaseVO> resultado = null;
 		Connection conn = null;
 		CallableStatement cs = null;
@@ -100,7 +101,7 @@ public class CatalogoDaoImpl implements CatalogoDao {
 			}
 		} catch (SQLException e) {
 			resultado = null;
-			e.printStackTrace();
+			throw new SQLException(e);
 		} finally{
 			try {
 				if (rs != null){
@@ -118,7 +119,7 @@ public class CatalogoDaoImpl implements CatalogoDao {
 						conn.close();
 					}
 				} catch (SQLException e1) {
-					e1.printStackTrace();
+					throw new SQLException(e);
 				}
 			}
 		}
@@ -127,7 +128,7 @@ public class CatalogoDaoImpl implements CatalogoDao {
 	}
 
 	@Override
-	public List<BaseVO> listaDepartamento() {
+	public List<BaseVO> listaDepartamento() throws ConnectionException, SQLException {
 		List<BaseVO> resultado = null;
 		Connection conn = null;
 		CallableStatement cs = null;
@@ -149,7 +150,7 @@ public class CatalogoDaoImpl implements CatalogoDao {
 			}
 		} catch (SQLException e) {
 			resultado = null;
-			e.printStackTrace();
+			throw new SQLException(e);
 		} finally{
 			try {
 				if (rs != null){
@@ -167,7 +168,7 @@ public class CatalogoDaoImpl implements CatalogoDao {
 						conn.close();
 					}
 				} catch (SQLException e1) {
-					e1.printStackTrace();
+					throw new SQLException(e);
 				}
 			}
 		}
@@ -176,7 +177,7 @@ public class CatalogoDaoImpl implements CatalogoDao {
 	}
 
 	@Override
-	public List<BaseVO> listaProvincia(String idDepartamento) {
+	public List<BaseVO> listaProvincia(String idDepartamento) throws ConnectionException, SQLException {
 		List<BaseVO> resultado = null;
 		Connection conn = null;
 		CallableStatement cs = null;
@@ -199,7 +200,7 @@ public class CatalogoDaoImpl implements CatalogoDao {
 			}
 		} catch (SQLException e) {
 			resultado = null;
-			e.printStackTrace();
+			throw new SQLException(e);
 		} finally{
 			try {
 				if (rs != null){
@@ -217,7 +218,7 @@ public class CatalogoDaoImpl implements CatalogoDao {
 						conn.close();
 					}
 				} catch (SQLException e1) {
-					e1.printStackTrace();
+					throw new SQLException(e);
 				}
 			}
 		}
@@ -226,7 +227,7 @@ public class CatalogoDaoImpl implements CatalogoDao {
 	}
 
 	@Override
-	public List<BaseVO> listaDistrito(String idDepartamento, String idProvincia) {
+	public List<BaseVO> listaDistrito(String idDepartamento, String idProvincia) throws ConnectionException, SQLException {
 		List<BaseVO> resultado = null;
 		Connection conn = null;
 		CallableStatement cs = null;
@@ -250,7 +251,7 @@ public class CatalogoDaoImpl implements CatalogoDao {
 			}
 		} catch (SQLException e) {
 			resultado = null;
-			e.printStackTrace();
+			throw new SQLException(e);
 		} finally{
 			try {
 				if (rs != null){
@@ -268,7 +269,7 @@ public class CatalogoDaoImpl implements CatalogoDao {
 						conn.close();
 					}
 				} catch (SQLException e1) {
-					e1.printStackTrace();
+					throw new SQLException(e);
 				}
 			}
 		}
