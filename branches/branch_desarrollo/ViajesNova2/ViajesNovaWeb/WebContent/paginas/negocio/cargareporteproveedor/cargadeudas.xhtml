@@ -41,6 +41,27 @@
 						<h:inputText value="#{cargaReporteProveedorMBean.columnaInicial}" />
 						<h:outputText value="Numero Columnas"></h:outputText>
 						<h:inputText value="#{cargaReporteProveedorMBean.nroColumnas}" />
+						<h:outputText value="Nombre Reporte"></h:outputText>
+						<h:panelGrid cellpadding="0" cellspacing="0" border="0"
+							columns="1">
+							<h:inputText id="idNomReporte" required="true"
+								requiredMessage="Ingrese el nombre del reporte"
+								value="#{cargaReporteProveedorMBean.reporteArchivo.nombreReporte}" />
+							<rich:message for="idNomReporte" showDetail="false"
+								showSummary="true" ajaxRendered="true"></rich:message>
+						</h:panelGrid>
+						<h:outputText value="Proveedor"></h:outputText>
+						<h:panelGrid cellpadding="0" cellspacing="0" border="0"
+							columns="1">
+							<h:selectOneMenu id="idSelProveedor" required="true"
+								requiredMessage="Seleccione el proveedor del reporte"
+								value="#{cargaReporteProveedorMBean.reporteArchivo.proveedor.codigoEntero}">
+								<f:selectItem itemLabel="-Seleccione-" />
+								<f:selectItems value="#{catalogoMBean.catalogoProveedores}" />
+							</h:selectOneMenu>
+							<rich:message for="idSelProveedor" showDetail="false"
+								showSummary="true" ajaxRendered="true"></rich:message>
+						</h:panelGrid>
 					</h:panelGrid>
 
 					<h:panelGrid cellpadding="0" cellspacing="0" border="0"
@@ -261,6 +282,12 @@
 						</f:facet>
 					</rich:dataTable>
 					<h:outputText value="" />
+					<f:facet name="footer">
+						<h:panelGrid cellpadding="0" cellspacing="0" border="0" columns="1" style="width:100%;text-align:center;">
+							<a4j:commandButton value="Grabar Reporte"></a4j:commandButton>
+							<a4j:commandButton value="Generar Comprobantes"></a4j:commandButton>
+						</h:panelGrid>
+					</f:facet>
 				</h:panelGrid>
 			</h:panelGrid>
 		</h:form>

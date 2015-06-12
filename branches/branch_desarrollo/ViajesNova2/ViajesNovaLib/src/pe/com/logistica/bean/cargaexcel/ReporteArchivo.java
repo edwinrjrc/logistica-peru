@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import pe.com.logistica.bean.base.BaseNegocio;
+import pe.com.logistica.bean.base.BaseVO;
 
 /**
  * @author Edwin
@@ -20,6 +21,7 @@ public class ReporteArchivo extends BaseNegocio {
 	
 	private String nombreArchivo;
 	private String nombreReporte;
+	private BaseVO proveedor;
 	private int numeroColumnas;
 	private int numeroFilas;
 	private ColumnasExcel cabeceraArchivo;
@@ -103,6 +105,21 @@ public class ReporteArchivo extends BaseNegocio {
 	 */
 	public void setCabeceraArchivo(ColumnasExcel cabeceraArchivo) {
 		this.cabeceraArchivo = cabeceraArchivo;
+	}
+	/**
+	 * @return the proveedor
+	 */
+	public BaseVO getProveedor() {
+		if (proveedor == null){
+			proveedor = new BaseVO();
+		}
+		return proveedor;
+	}
+	/**
+	 * @param proveedor the proveedor to set
+	 */
+	public void setProveedor(BaseVO proveedor) {
+		this.proveedor = proveedor;
 	}
 	
 	

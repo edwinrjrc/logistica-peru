@@ -28,7 +28,7 @@ public class ArchivoReporteDaoImpl implements ArchivoReporteDao {
 			ReporteArchivo reporteArchivo, Connection conn) throws SQLException {
 		Integer resultado = 0;
 		CallableStatement cs = null;
-		String sql = "{ ? = call negocio.fn_ingresararchivocargado(?,?,?,?,?,?) }";
+		String sql = "{ ? = call negocio.fn_ingresararchivocargado(?,?,?,?,?,?,?) }";
 		
 		try {
 			cs = conn.prepareCall(sql);
@@ -36,6 +36,7 @@ public class ArchivoReporteDaoImpl implements ArchivoReporteDao {
 			cs.registerOutParameter(i++, Types.INTEGER);
 			cs.setString(i++, reporteArchivo.getNombreArchivo());
 			cs.setString(i++, reporteArchivo.getNombreReporte());
+			cs.setInt(i++, reporteArchivo.getProveedor().getCodigoEntero().intValue());
 			cs.setInt(i++, reporteArchivo.getNumeroFilas());
 			cs.setInt(i++, reporteArchivo.getNumeroColumnas());
 			cs.setString(i++, reporteArchivo.getUsuarioCreacion());
