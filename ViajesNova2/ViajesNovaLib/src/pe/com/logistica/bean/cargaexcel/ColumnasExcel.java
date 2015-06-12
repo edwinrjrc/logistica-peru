@@ -3,18 +3,19 @@
  */
 package pe.com.logistica.bean.cargaexcel;
 
-import pe.com.logistica.bean.base.Base;
+import pe.com.logistica.bean.base.BaseNegocio;
 
 /**
  * @author EDWREB
  *
  */
-public class ColumnasExcel extends Base {
+public class ColumnasExcel extends BaseNegocio {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 4316863308125783036L;
 
+	private Integer idArchivo;
 	private CeldaExcel columna1;
 	private CeldaExcel columna2;
 	private CeldaExcel columna3;
@@ -409,6 +410,20 @@ public class ColumnasExcel extends Base {
 	 */
 	public void setSeleccionar(boolean seleccionar) {
 		this.seleccionar = seleccionar;
+	}
+
+	/**
+	 * @return the idArchivo
+	 */
+	public Integer getIdArchivo() {
+		return idArchivo;
+	}
+
+	/**
+	 * @param idArchivo the idArchivo to set
+	 */
+	public void setIdArchivo(Integer idArchivo) {
+		this.idArchivo = idArchivo;
 	}
 
 }

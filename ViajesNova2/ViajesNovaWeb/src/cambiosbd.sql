@@ -1,11 +1,12 @@
 -- Table: negocio."Consolidador"
 
--- DROP TABLE negocio."Consolidador";
+--DROP TABLE negocio."ArchivoCargado";
 
 CREATE TABLE negocio."ArchivoCargado"
 (
   id integer NOT NULL,
-  nombre character varying(100) NOT NULL,
+  nombrearchivo character varying(100) NOT NULL,
+  nombrereporte character varying(100) NOT NULL,
   numeroFilas integer not null,
   numeroColumnas integer not null,
   usuariocreacion character varying(20) NOT NULL,
@@ -21,7 +22,7 @@ WITH (
   OIDS=FALSE
 );
 
-
+--DROP TABLE negocio."DetalleArchivoCargado";
 CREATE TABLE negocio."DetalleArchivoCargado"
 (
   id integer NOT NULL,
@@ -79,7 +80,7 @@ CREATE SEQUENCE negocio.seq_detallearchivocargado
   
 -- Function: negocio.fn_ingresardireccion(integer, character varying, character varying, character varying, character varying, character varying, character varying, character, character varying, character varying, character varying, character varying)
 
-CREATE OR REPLACE FUNCTION negocio.fn_ingresararchivocargado(p_nombrearchivo character varying, p_numerofilas integer, p_numerocolumnas character varying, 
+CREATE OR REPLACE FUNCTION negocio.fn_ingresararchivocargado(p_nombrearchivo character varying, p_nombrereporte character varying, p_numerofilas integer, p_numerocolumnas character varying, 
 p_usuariocreacion character varying, p_ipcreacion character varying)
   RETURNS integer AS
 $BODY$
@@ -94,9 +95,9 @@ maxid = nextval('negocio.seq_archivocargado');
 select current_timestamp into fechahoy;
 
 INSERT INTO negocio."ArchivoCargado"(
-            id, nombre, numerofilas, numerocolumnas, usuariocreacion, fechacreacion, 
+            id, nombrearchivo, nombrereporte, numerofilas, numerocolumnas, usuariocreacion, fechacreacion, 
             ipcreacion, usuariomodificacion, fechamodificacion, ipmodificacion)
-    VALUES (maxid, p_nombrearchivo, p_numerofilas, p_numerocolumnas, p_usuariocreacion, fechahoy, 
+    VALUES (maxid, p_nombrearchivo, p_nombrereporte, p_numerofilas, p_numerocolumnas, p_usuariocreacion, fechahoy, 
             p_ipcreacion, p_usuariocreacion, fechahoy, p_ipcreacion);
 
 return maxid;

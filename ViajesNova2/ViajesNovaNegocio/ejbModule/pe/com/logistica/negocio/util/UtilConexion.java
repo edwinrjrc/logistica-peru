@@ -16,17 +16,26 @@ import javax.naming.NamingException;
 import javax.sql.DataSource;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.log4j.Logger;
 
 import pe.com.logistica.bean.Util.UtilProperties;
+import pe.com.logistica.negocio.exception.ConnectionException;
 
 /**
  * @author Edwin
  *
  */
 public class UtilConexion {
+	
+	private final static Logger logger = Logger.getLogger(UtilConexion.class);
 
 	private static String JNDI = "java:/jboss/jdbc/novaviajesDS";
 	
+	/**
+	 * 
+	 * @return Connection
+	 * @throws ConnectionException 
+	 */
 	public static Connection obtenerConexion(){
 		
 		try {
@@ -43,20 +52,28 @@ public class UtilConexion {
 			
 			return dataSource.getConnection();
 		} catch (NamingException e) {
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
+			//throw new ConnectionException(e);
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
+			//throw new ConnectionException(e);
 		} catch (FileNotFoundException e) {
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
+			//throw new ConnectionException(e);
 		} catch (IOException e) {
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
+			//throw new ConnectionException(e);
 		}
-		
 		return null;
 	}
 	
-	
-	public static Connection obtenerConexion(String jndi){
+	/**
+	 * 
+	 * @param jndi
+	 * @return Connection
+	 * @throws ConnectionException 
+	 */
+	public static Connection obtenerConexion(String jndi) throws ConnectionException{
 		try {
 			
 			jndi = (StringUtils.isBlank(jndi)?JNDI:jndi);
@@ -66,19 +83,21 @@ public class UtilConexion {
 			
 			return dataSource.getConnection();
 		} catch (NamingException e) {
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
+			throw new ConnectionException(e);
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
+			throw new ConnectionException(e);
 		}
 		
-		return null;
 	}
 
 
 	/**
-	 * @return the jndiProperties
-	 * @throws IOException 
-	 * @throws FileNotFoundException 
+	 * 
+	 * @return String
+	 * @throws FileNotFoundException
+	 * @throws IOException
 	 */
 	public static String getJndiProperties() throws FileNotFoundException, IOException {
 		Properties prop = UtilProperties.cargaArchivo("aplicacionConfiguracion.properties");

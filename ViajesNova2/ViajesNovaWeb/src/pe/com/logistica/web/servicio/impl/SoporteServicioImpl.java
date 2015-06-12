@@ -19,6 +19,7 @@ import pe.com.logistica.bean.negocio.Maestro;
 import pe.com.logistica.bean.negocio.Pais;
 import pe.com.logistica.bean.negocio.Proveedor;
 import pe.com.logistica.negocio.ejb.SoporteRemote;
+import pe.com.logistica.negocio.exception.ConnectionException;
 import pe.com.logistica.negocio.exception.ErrorConsultaDataException;
 import pe.com.logistica.web.servicio.SoporteServicio;
 
@@ -99,29 +100,29 @@ public class SoporteServicioImpl implements SoporteServicio {
 	}
 
 	@Override
-	public List<BaseVO> listarCatalogoMaestro(int idmaestro) throws SQLException {
+	public List<BaseVO> listarCatalogoMaestro(int idmaestro) throws SQLException, ConnectionException {
 		return ejbSession.listarCatalogoMaestro(idmaestro);
 	}
 
 	@Override
-	public List<BaseVO> listarCatalogoDepartamento() throws SQLException {
+	public List<BaseVO> listarCatalogoDepartamento() throws SQLException, ConnectionException {
 		return ejbSession.listarCatalogoDepartamento();
 	}
 
 	@Override
 	public List<BaseVO> listarCatalogoProvincia(String idProvincia)
-			throws SQLException {
+			throws SQLException, ConnectionException {
 		return ejbSession.listarCatalogoProvincia(idProvincia);
 	}
 
 	@Override
 	public List<BaseVO> listarCatalogoDistrito(String idDepartamento,
-			String idProvincia) throws SQLException {
+			String idProvincia) throws SQLException, ConnectionException {
 		return ejbSession.listarCatalogoDistrito(idDepartamento, idProvincia);
 	}
 
 	@Override
-	public List<BaseVO> listarContinentes() throws SQLException {
+	public List<BaseVO> listarContinentes() throws SQLException, ConnectionException {
 		return ejbSession.listarContinentes();
 	}
 	

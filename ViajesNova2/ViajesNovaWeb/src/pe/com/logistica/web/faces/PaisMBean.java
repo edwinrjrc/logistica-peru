@@ -19,6 +19,7 @@ import pe.com.logistica.bean.base.BaseVO;
 import pe.com.logistica.bean.negocio.Maestro;
 import pe.com.logistica.bean.negocio.Pais;
 import pe.com.logistica.bean.negocio.Usuario;
+import pe.com.logistica.negocio.exception.ConnectionException;
 import pe.com.logistica.web.servicio.SoporteServicio;
 import pe.com.logistica.web.servicio.impl.SoporteServicioImpl;
 
@@ -116,6 +117,8 @@ public class PaisMBean extends BaseMBean {
 		try {
 			listaContinente = this.soporteServicio.listarContinentes();
 		} catch (SQLException e) {
+			logger.error(e.getMessage(), e);
+		} catch (ConnectionException e) {
 			logger.error(e.getMessage(), e);
 		}
 		return listaContinente;

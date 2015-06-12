@@ -24,6 +24,7 @@ import pe.com.logistica.negocio.dao.impl.ConfiguracionServicioDaoImpl;
 import pe.com.logistica.negocio.dao.impl.DestinoDaoImpl;
 import pe.com.logistica.negocio.dao.impl.MaestroDaoImpl;
 import pe.com.logistica.negocio.dao.impl.ProveedorDaoImpl;
+import pe.com.logistica.negocio.exception.ConnectionException;
 import pe.com.logistica.negocio.exception.ErrorConsultaDataException;
 import pe.com.logistica.negocio.util.UtilConexion;
 
@@ -86,25 +87,25 @@ public class SoporteSession implements SoporteRemote, SoporteLocal {
 	}
 
 	@Override
-	public List<BaseVO> listarCatalogoMaestro(int maestro) throws SQLException {
+	public List<BaseVO> listarCatalogoMaestro(int maestro) throws SQLException, ConnectionException {
 		catalogoDao = new CatalogoDaoImpl();
 		return catalogoDao.listarCatalogoMaestro(maestro);
 	}
 	
 	@Override
-	public List<BaseVO> listarCatalogoDepartamento() throws SQLException {
+	public List<BaseVO> listarCatalogoDepartamento() throws SQLException, ConnectionException {
 		catalogoDao = new CatalogoDaoImpl();
 		return catalogoDao.listaDepartamento();
 	}
 	
 	@Override
-	public List<BaseVO> listarCatalogoProvincia(String idDepartamento) throws SQLException {
+	public List<BaseVO> listarCatalogoProvincia(String idDepartamento) throws SQLException, ConnectionException {
 		catalogoDao = new CatalogoDaoImpl();
 		return catalogoDao.listaProvincia(idDepartamento);
 	}
 	
 	@Override
-	public List<BaseVO> listarCatalogoDistrito(String idDepartamento, String idProvincia) throws SQLException {
+	public List<BaseVO> listarCatalogoDistrito(String idDepartamento, String idProvincia) throws SQLException, ConnectionException {
 		catalogoDao = new CatalogoDaoImpl();
 		return catalogoDao.listaDistrito(idDepartamento, idProvincia);
 	}
