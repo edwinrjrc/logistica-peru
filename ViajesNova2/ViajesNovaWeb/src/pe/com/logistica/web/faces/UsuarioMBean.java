@@ -19,6 +19,7 @@ import javax.servlet.http.HttpSession;
 import org.apache.log4j.Logger;
 
 import pe.com.logistica.bean.negocio.Usuario;
+import pe.com.logistica.negocio.exception.InicioSesionException;
 import pe.com.logistica.negocio.exception.ValidacionException;
 import pe.com.logistica.web.servicio.SeguridadServicio;
 import pe.com.logistica.web.servicio.impl.SeguridadServicioImpl;
@@ -138,27 +139,21 @@ public class UsuarioMBean extends BaseMBean {
 		try {
 			usuario = seguridadServicio.inicioSesion(usuario);
 
-			if (usuario.isEncontrado()) {
-				HttpSession session = (HttpSession) obtenerSession(true);
-				session.setAttribute("usuarioSession", usuario);
-				return "irInicio";
-			} else {
-				String msje = "El usuario y la contraseña son incorrectas";
-				obtenerRequest().setAttribute("msjeError", msje);
-			}
+			HttpSession session = (HttpSession) obtenerSession(true);
+			session.setAttribute("usuarioSession", usuario);
+			return "irInicio";
+			
+		} catch (InicioSesionException e){
+			this.mostrarMensajeError(e.getMessage());
+			obtenerRequest().setAttribute("msjeError", e.getMessage());
+			logger.error(e.getMessage(), e);
 		} catch (SQLException e) {
-			this.setTipoModal("2");
-			this.setShowModal(true);
-			this.setMensajeModal(e.getMessage());
-			String msje = "No se pudo iniciar sesion";
-			obtenerRequest().setAttribute("msjeError", msje);
+			this.mostrarMensajeError(e.getMessage());
+			obtenerRequest().setAttribute("msjeError", "No se pudo iniciar sesion");
 			logger.error(e.getMessage(), e);
 		} catch (Exception e) {
-			this.setTipoModal("2");
-			this.setShowModal(true);
-			this.setMensajeModal(e.getMessage());
-			String msje = "No se pudo iniciar sesion";
-			obtenerRequest().setAttribute("msjeError", msje);
+			this.mostrarMensajeError(e.getMessage());
+			obtenerRequest().setAttribute("msjeError", "No se pudo iniciar sesion");
 			logger.error(e.getMessage(), e);
 		}
 
