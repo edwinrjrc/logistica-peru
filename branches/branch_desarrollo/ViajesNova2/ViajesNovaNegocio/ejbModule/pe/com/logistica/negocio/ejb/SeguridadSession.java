@@ -3,6 +3,7 @@ package pe.com.logistica.negocio.ejb;
 import java.sql.SQLException;
 import java.util.List;
 
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
 import pe.com.logistica.bean.base.BaseVO;
@@ -13,6 +14,7 @@ import pe.com.logistica.negocio.dao.impl.CatalogoDaoImpl;
 import pe.com.logistica.negocio.dao.impl.UsuarioDaoImpl;
 import pe.com.logistica.negocio.exception.ConnectionException;
 import pe.com.logistica.negocio.exception.ErrorEncriptacionException;
+import pe.com.logistica.negocio.exception.InicioSesionException;
 
 /**
  * Session Bean implementation class Seguridad
@@ -22,12 +24,9 @@ public class SeguridadSession implements SeguridadRemote, SeguridadLocal {
 
 	UsuarioDao usuarioDao = null;
 	CatalogoDao catalogoDao = null;
-    /**
-     * Default constructor. 
-     */
-    public SeguridadSession() {
-    	
-    }
+	
+	@EJB
+	AuditoriaSessionLocal auditoriaSessionLocal;
     
     @Override
     public boolean registrarUsuario(Usuario usuario) throws SQLException, ErrorEncriptacionException{
@@ -60,9 +59,21 @@ public class SeguridadSession implements SeguridadRemote, SeguridadLocal {
 	}
 	
 	@Override
-	public Usuario inicioSesion(Usuario usuario) throws SQLException, Exception {
+	public Usuario inicioSesion(Usuario usuario) throws InicioSesionException, SQLException, Exception {
 		usuarioDao = new UsuarioDaoImpl();
-		return usuarioDao.inicioSesion2(usuario);
+		usuario = usuarioDao.inicioSesion2(usuario);
+		
+		if (!usuario.isEncontrado()) {
+			throw new InicioSesionException("El usuario y la contraseña son incorrectas");
+		}
+		
+		try {
+			auditoriaSessionLocal.registrarEventoInicioSession(usuario);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return usuario;
 	}
 	
 	@Override

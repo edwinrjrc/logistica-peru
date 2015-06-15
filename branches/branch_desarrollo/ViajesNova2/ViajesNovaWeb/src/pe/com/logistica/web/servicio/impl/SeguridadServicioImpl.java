@@ -17,6 +17,7 @@ import pe.com.logistica.bean.negocio.Usuario;
 import pe.com.logistica.negocio.ejb.SeguridadRemote;
 import pe.com.logistica.negocio.exception.ConnectionException;
 import pe.com.logistica.negocio.exception.ErrorEncriptacionException;
+import pe.com.logistica.negocio.exception.InicioSesionException;
 import pe.com.logistica.web.servicio.SeguridadServicio;
 
 /**
@@ -69,7 +70,7 @@ public class SeguridadServicioImpl implements SeguridadServicio{
 		return ejbSession.actualizarUsuario(usuario);
 	}
 	@Override
-	public Usuario inicioSesion(Usuario usuario) throws SQLException, Exception{
+	public Usuario inicioSesion(Usuario usuario) throws InicioSesionException, SQLException, Exception{
 		return ejbSession.inicioSesion(usuario);
 	}
 	@Override
