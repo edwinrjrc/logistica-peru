@@ -51,7 +51,10 @@
 									</f:facet>
 									<h:outputText value="#{row.nombre}" />
 								</rich:column>
-
+								<f:facet name="footer">
+									<rich:dataScroller for="idTabla" boundaryControls="auto"
+										maxPages="5" fastStep="2"></rich:dataScroller>
+								</f:facet>
 							</rich:dataTable></td>
 					</tr>
 				</table>
@@ -81,7 +84,7 @@
 		<ui:include src="/paginas/soporte/destino/pais/formpais.xhtml" />
 		<ui:include src="/resources/includes/includemensaje.xhtml">
 			<ui:param name="backBean" value="#{paisMBean}" />
-			<ui:param name="idModalForm" value="idModalformpaiss" />
+			<ui:param name="idModalForm" value="idModalformpais" />
 			<ui:param name="idrender" value="idTabla" />
 		</ui:include>
 		<script type="text/javascript">

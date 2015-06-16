@@ -370,9 +370,9 @@ public class ServicioNovaViajesDaoImpl implements ServicioNovaViajesDao {
 			cs.setInt(i++, detalleServicio.getTipoServicio().getCodigoEntero().intValue());
 			cs.setString(i++, detalleServicio.getDescripcionServicio());
 			cs.setInt(i++, idServicio);
-			cs.setDate(i++, UtilJdbc.convertirUtilDateSQLDate(detalleServicio.getFechaIda()));
+			cs.setTimestamp(i++, UtilJdbc.convertirUtilDateTimeStamp(detalleServicio.getFechaIda()));
 			if (detalleServicio.getFechaRegreso() != null){
-				cs.setDate(i++, UtilJdbc.convertirUtilDateSQLDate(detalleServicio.getFechaRegreso()));
+				cs.setTimestamp(i++, UtilJdbc.convertirUtilDateTimeStamp(detalleServicio.getFechaRegreso()));
 			}
 			else{
 				cs.setNull(i++, Types.DATE);

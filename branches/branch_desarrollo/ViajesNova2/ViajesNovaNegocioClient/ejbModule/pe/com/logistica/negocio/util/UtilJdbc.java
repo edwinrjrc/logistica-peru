@@ -6,6 +6,7 @@ package pe.com.logistica.negocio.util;
 import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.Date;
 
 import org.apache.commons.lang3.StringUtils;
@@ -15,9 +16,6 @@ import org.apache.commons.lang3.StringUtils;
  * 
  */
 public class UtilJdbc {
-
-	public UtilJdbc() {
-	}
 
 	public static String obtenerCadena(ResultSet rs, String campo) throws SQLException {
 		if (rs != null && StringUtils.isNotBlank(campo)) {
@@ -84,6 +82,10 @@ public class UtilJdbc {
 	
 	public static java.sql.Date convertirUtilDateSQLDate(java.util.Date fecha){
 		return new java.sql.Date(fecha.getTime());
+	}
+	
+	public static Timestamp convertirUtilDateTimeStamp(java.util.Date fecha){
+		return new Timestamp(fecha.getTime());
 	}
 	
 	public static boolean enteroNoNuloNoCero(Integer numero){

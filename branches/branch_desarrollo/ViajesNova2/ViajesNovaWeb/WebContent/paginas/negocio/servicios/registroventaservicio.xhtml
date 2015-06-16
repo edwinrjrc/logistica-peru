@@ -395,7 +395,7 @@
 									<h:outputText value="Fecha Servicio" />
 									<h:panelGrid columns="1" cellpadding="0" cellspacing="0"
 										border="0">
-										<rich:calendar datePattern="dd/MM/yyyy" id="idFecServicio"
+										<rich:calendar datePattern="dd/MM/yyyy HH:mm" id="idFecServicio" showApplyButton="true"
 											value="#{servicioAgenteMBean.detalleServicio.fechaIda}"></rich:calendar>
 										<rich:message for="idFecServicio" showDetail="false"
 											showSummary="true" ajaxRendered="true"></rich:message>
@@ -412,7 +412,7 @@
 
 									<h:outputText value="Fecha Regreso"
 										rendered="#{servicioAgenteMBean.detalleServicio.configuracionTipoServicio.muestraFechaRegreso}" />
-									<rich:calendar datePattern="dd/MM/yyyy"
+									<rich:calendar datePattern="dd/MM/yyyy HH:mm" showApplyButton="true"
 										rendered="#{servicioAgenteMBean.detalleServicio.configuracionTipoServicio.muestraFechaRegreso}"
 										value="#{servicioAgenteMBean.detalleServicio.fechaRegreso}"></rich:calendar>
 
