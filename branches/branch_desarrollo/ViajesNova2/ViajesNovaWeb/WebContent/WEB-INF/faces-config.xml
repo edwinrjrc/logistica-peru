@@ -114,6 +114,11 @@
    <to-view-id>/paginas/negocio/cargareporteproveedor/cargadeudas.xhtml</to-view-id>
    <redirect/>
   </navigation-case>
+  <navigation-case>
+   <from-outcome>irConsultaComprobantesGenerados</from-outcome>
+   <to-view-id>/paginas/negocio/comprobante/administrar.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
  </navigation-rule>
  <navigation-rule>
   <from-view-id>/paginas/soporte/maestro/administrar.xhtml</from-view-id>

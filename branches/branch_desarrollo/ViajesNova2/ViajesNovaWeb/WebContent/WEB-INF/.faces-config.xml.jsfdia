@@ -113,10 +113,17 @@
     PATH="/paginas/negocio/cargareporteproveedor/cargadeudas.xhtml"
     TARGET="rules:#paginas#negocio#cargareporteproveedor#cargadeudas.xhtml"
     TITLE="irCargaDeudaClientes" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT
+    ID="irConsultaComprobantesGenerados::#paginas#negocio#comprobante#administrar.xhtml"
+    NAME="output20"
+    PATH="/paginas/negocio/comprobante/administrar.xhtml"
+    TARGET="rules:#paginas#negocio#comprobante#administrar.xhtml"
+    TITLE="irConsultaComprobantesGenerados" model-entity="JSFProcessItemOutput"/>
   </PROCESS-ITEM>
  </PROCESS-ITEM>
  <PROCESS-ITEM NAME="rules:#paginas#seguridad#usuario#administrar.xhtml"
-  PATH="/paginas/seguridad/usuario/administrar.xhtml" SHAPE="304,33,0,0" model-entity="JSFProcessGroup"/>
+  PATH="/paginas/seguridad/usuario/administrar.xhtml"
+  SHAPE="304,24,50,25" model-entity="JSFProcessGroup"/>
  <PROCESS-ITEM NAME="rules:#paginas#soporte#parametro#administrar.xhtml"
   PATH="/paginas/soporte/parametro/administrar.xhtml"
   SHAPE="304,497,0,0" model-entity="JSFProcessGroup"/>
@@ -230,4 +237,8 @@
   NAME="rules:#paginas#negocio#cargareporteproveedor#cargadeudas.xhtml"
   PATH="/paginas/negocio/cargareporteproveedor/cargadeudas.xhtml"
   SHAPE="304,753,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM
+  NAME="rules:#paginas#negocio#comprobante#administrar.xhtml"
+  PATH="/paginas/negocio/comprobante/administrar.xhtml"
+  SHAPE="304,785,0,0" model-entity="JSFProcessGroup"/>
 </PROCESS>
