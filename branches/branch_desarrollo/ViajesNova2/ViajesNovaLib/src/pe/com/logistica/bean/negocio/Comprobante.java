@@ -38,12 +38,7 @@ public class Comprobante extends BaseNegocio {
 
 	private boolean tieneDetraccion;
 	private boolean tieneRetencion;
-	/**
-	 * 
-	 */
-	public Comprobante() {
-		// TODO Auto-generated constructor stub
-	}
+
 
 	/**
 	 * @return the tipoComprobante

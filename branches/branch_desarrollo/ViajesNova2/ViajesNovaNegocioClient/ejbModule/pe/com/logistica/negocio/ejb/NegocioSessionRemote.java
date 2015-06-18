@@ -9,6 +9,7 @@ import javax.ejb.Remote;
 import pe.com.logistica.bean.base.BaseVO;
 import pe.com.logistica.bean.negocio.Cliente;
 import pe.com.logistica.bean.negocio.Comprobante;
+import pe.com.logistica.bean.negocio.ComprobanteBusqueda;
 import pe.com.logistica.bean.negocio.Consolidador;
 import pe.com.logistica.bean.negocio.Contacto;
 import pe.com.logistica.bean.negocio.CorreoClienteMasivo;
@@ -222,4 +223,6 @@ public interface NegocioSessionRemote {
 	void registrarComprobantesAdicionales(
 			List<Comprobante> listaComprobantesAdicionales)
 			throws ErrorRegistroDataException, SQLException, Exception;
+	
+	public List<Comprobante> consultarComprobantesGenerados(ComprobanteBusqueda comprobanteBusqueda) throws ErrorConsultaDataException;
 }
