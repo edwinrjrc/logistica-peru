@@ -16,6 +16,7 @@ import javax.servlet.ServletContext;
 import pe.com.logistica.bean.base.BaseVO;
 import pe.com.logistica.bean.negocio.Cliente;
 import pe.com.logistica.bean.negocio.Comprobante;
+import pe.com.logistica.bean.negocio.ComprobanteBusqueda;
 import pe.com.logistica.bean.negocio.Consolidador;
 import pe.com.logistica.bean.negocio.Contacto;
 import pe.com.logistica.bean.negocio.CorreoClienteMasivo;
@@ -35,6 +36,7 @@ import pe.com.logistica.bean.negocio.ServicioNovios;
 import pe.com.logistica.bean.negocio.ServicioProveedor;
 import pe.com.logistica.negocio.ejb.NegocioSessionRemote;
 import pe.com.logistica.negocio.exception.EnvioCorreoException;
+import pe.com.logistica.negocio.exception.ErrorConsultaDataException;
 import pe.com.logistica.negocio.exception.ErrorRegistroDataException;
 import pe.com.logistica.negocio.exception.ResultadoCeroDaoException;
 import pe.com.logistica.web.servicio.NegocioServicio;
@@ -432,6 +434,13 @@ public class NegocioServicioImpl implements NegocioServicio {
 	@Override
 	public void registrarComprobantesAdicionales(List<Comprobante> lista) throws ErrorRegistroDataException, SQLException, Exception{
 		ejbSession.registrarComprobantesAdicionales(lista);
+	}
+
+	@Override
+	public List<Comprobante> consultarComprobantesGenerados(
+			ComprobanteBusqueda comprobanteBusqueda)
+			throws ErrorConsultaDataException {
+		return ejbSession.consultarComprobantesGenerados(comprobanteBusqueda);
 	}
 }
 	
