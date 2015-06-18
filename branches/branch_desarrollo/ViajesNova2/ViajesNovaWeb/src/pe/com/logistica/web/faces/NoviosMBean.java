@@ -128,6 +128,7 @@ public class NoviosMBean extends BaseMBean {
 
 	public void buscarProgramaNovios() {
 		try {
+			System.out.println("busca novios");
 			listadoNovios = this.negocioServicio
 					.consultarNovios(getProgramaNoviosBusqueda());
 		} catch (SQLException e) {

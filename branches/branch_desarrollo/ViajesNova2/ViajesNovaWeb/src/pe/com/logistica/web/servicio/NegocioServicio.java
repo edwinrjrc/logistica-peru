@@ -10,6 +10,7 @@ import java.util.List;
 import pe.com.logistica.bean.base.BaseVO;
 import pe.com.logistica.bean.negocio.Cliente;
 import pe.com.logistica.bean.negocio.Comprobante;
+import pe.com.logistica.bean.negocio.ComprobanteBusqueda;
 import pe.com.logistica.bean.negocio.Consolidador;
 import pe.com.logistica.bean.negocio.Contacto;
 import pe.com.logistica.bean.negocio.CorreoClienteMasivo;
@@ -28,6 +29,7 @@ import pe.com.logistica.bean.negocio.ServicioAgenciaBusqueda;
 import pe.com.logistica.bean.negocio.ServicioNovios;
 import pe.com.logistica.bean.negocio.ServicioProveedor;
 import pe.com.logistica.negocio.exception.EnvioCorreoException;
+import pe.com.logistica.negocio.exception.ErrorConsultaDataException;
 import pe.com.logistica.negocio.exception.ErrorRegistroDataException;
 import pe.com.logistica.negocio.exception.ResultadoCeroDaoException;
 
@@ -225,4 +227,5 @@ public interface NegocioServicio {
 	void registrarComprobantesAdicionales(List<Comprobante> lista)
 			throws ErrorRegistroDataException, SQLException, Exception;
 
+	public List<Comprobante> consultarComprobantesGenerados(ComprobanteBusqueda comprobanteBusqueda) throws ErrorConsultaDataException;
 }
