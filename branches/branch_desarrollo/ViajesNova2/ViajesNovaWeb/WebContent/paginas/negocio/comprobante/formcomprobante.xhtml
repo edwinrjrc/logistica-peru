@@ -1,22 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:ui="http://java.sun.com/jsf/facelets">
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich">
 
-<ui:composition template="/templates/plantillainicio.xhtml">
-	<ui:define name="cuerpo">
-		<h:panelGrid columns="1" border="0" cellpadding="0" cellspacing="0"
-			width="100%" id="idGridFormPais">
-			<f:facet name="header">
-				<h:panelGrid width="100%" border="0" cellpadding="0" cellspacing="0"
-					style="text-align: left;vertical-align: top; ">
-					<h:outputText value="Administrar Paises" style="height: 100px"
-						styleClass="subtitulo" />
-					<hr width="100%" />
+	<rich:popupPanel id="idModalfrcomprobante" modal="true" width="1100"
+		height="500">
+		<f:facet name="header">
+			<h:outputText id="idNomModal" value="Envío Correo Masivo" />
+		</f:facet>
+		<f:facet name="controls">
+			<h:outputLink value="#" style="border:0"
+				onclick="#{rich:component('idModalfrcomprobante')}.hide(); return false;">
+				<h:graphicImage height="18" width="18"
+					url="/resources/img/close.png" style="border:0" />
+			</h:outputLink>
+		</f:facet>
+
+		<rich:tabPanel switchType="client">
+
+			<rich:tab>
+				<f:facet name="header">
+					<h:outputText value="Cabecera" />
+				</f:facet>
+
+				<h:panelGrid cellpadding="0" cellspacing="0" border="0"
+					style="width:100%;" columns="1">
+					<h:panelGrid cellpadding="0" cellspacing="0" border="0"
+						style="width:100%;" columns="2"
+						columnClasses="col1fil2proveedor,col2fil2proveedor">
+						<h:outputText value="Id Comprobante" />
+						<h:outputText
+							value="#{comprobanteMBean.comprobanteDetalle.codigoEntero}" />
+					</h:panelGrid>
+					<h:panelGrid cellpadding="0" cellspacing="0" border="0"
+						style="width:100%;" columns="4"
+						columnClasses="col1fil1proveedor,col2fil1proveedor,col3fil1proveedor,col4fil1proveedor">
+						<h:outputText value="Fecha Comprobante" />
+						<h:outputText
+							value="#{comprobanteMBean.comprobanteDetalle.fechaComprobante}">
+							<f:convertDateTime pattern="dd/MM/yyyy" />
+						</h:outputText>
+						
+					</h:panelGrid>
+					<h:panelGrid cellpadding="0" cellspacing="0" border="0"
+						style="width:100%;" columns="2"
+						columnClasses="col1fil2proveedor,col2fil2proveedor">
+						<h:outputText value="Adquiriente" />
+						<h:outputText
+							value="#{comprobanteMBean.comprobanteDetalle.titular.nombreCompleto}" />
+					</h:panelGrid>
+					<h:panelGrid cellpadding="0" cellspacing="0" border="0"
+						style="width:100%;" columns="4"
+						columnClasses="col1fil1proveedor,col2fil1proveedor,col3fil1proveedor,col4fil1proveedor">
+						<h:outputText value="Fecha Comprobante" />
+						<h:outputText
+							value="#{comprobanteMBean.comprobanteDetalle.fechaComprobante}">
+							<f:convertDateTime pattern="dd/MM/yyyy" />
+						</h:outputText>
+						
+					</h:panelGrid>
 				</h:panelGrid>
-			</f:facet>
-		</h:panelGrid>
-	</ui:define>
+
+			</rich:tab>
+			<rich:tab>
+				<f:facet name="header">
+					<h:outputText value="Detalle" />
+				</f:facet>
+
+				<h:panelGrid cellpadding="0" cellspacing="0" border="0"
+					style="width:100%;" columns="1">
+
+				</h:panelGrid>
+			</rich:tab>
+
+		</rich:tabPanel>
+	</rich:popupPanel>
 </ui:composition>
-</html>
