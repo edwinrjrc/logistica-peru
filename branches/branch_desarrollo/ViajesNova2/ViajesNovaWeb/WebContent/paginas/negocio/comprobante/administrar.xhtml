@@ -107,7 +107,7 @@
 						</h:panelGrid>
 					</f:facet>
 					<h:outputText value="" />
-					<rich:dataTable style="width:100%;" id="idTabla"
+					<rich:dataTable style="width:100%;" id="idTabla" rows="8"
 						value="#{comprobanteMBean.listaComprobantes}" var="fila">
 						<f:facet name="noData">
 							<h:outputText value="No se encontraron resultados" />
@@ -116,43 +116,56 @@
 							<f:facet name="header">
 								<h:outputText value="Id" />
 							</f:facet>
+							<h:outputText value="#{fila.codigoEntero}" />
 						</rich:column>
 						<rich:column>
 							<f:facet name="header">
 								<h:outputText value="Tipo Comprobante" />
 							</f:facet>
+							<h:outputText value="#{fila.tipoComprobante.nombre}" />
 						</rich:column>
 						<rich:column>
 							<f:facet name="header">
 								<h:outputText value="Número Comprobante" />
 							</f:facet>
+							<h:outputText value="#{fila.numeroComprobante}" />
 						</rich:column>
 						<rich:column>
 							<f:facet name="header">
 								<h:outputText value="Fecha Comprobante" />
 							</f:facet>
+							<h:outputText value="#{fila.fechaComprobante}">
+								<f:convertDateTime pattern="dd/MM/yyyy" />
+							</h:outputText>
 						</rich:column>
-						<rich:column>
+						<rich:column style="text-align:right;">
 							<f:facet name="header">
-								<h:outputText value="Monto Comprobante" />
+								<h:outputText value="Total Comprobante" />
 							</f:facet>
+							<h:outputText value="#{fila.totalComprobante}">
+								<f:convertNumber locale="en_US" pattern="###,##0.00" />
+							</h:outputText>
 						</rich:column>
 						<rich:column>
 							<f:facet name="header">
 								<h:outputText value="Adquiriente" />
 							</f:facet>
+							<h:outputText value="#{fila.titular.nombreCompleto}" />
 						</rich:column>
 						<rich:column>
 							<f:facet name="header">
 								<h:outputText value="Opcion" />
 							</f:facet>
+							<a4j:commandButton value="Ver"></a4j:commandButton>
 						</rich:column>
+						<f:facet name="footer">
+							<rich:dataScroller for="idTabla"></rich:dataScroller>
+						</f:facet>
 					</rich:dataTable>
 					<h:outputText value="" />
 				</h:panelGrid>
 			</h:panelGrid>
 		</h:form>
-
 		<ui:include
 			src="#{facesContext.externalContext.requestContextPath}/../paginas/negocio/comprobante/modal/busquedaproveedor.xhtml" />
 	</ui:define>

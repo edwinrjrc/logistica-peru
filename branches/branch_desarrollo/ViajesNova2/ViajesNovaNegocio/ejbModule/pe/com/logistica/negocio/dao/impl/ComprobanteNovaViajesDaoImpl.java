@@ -102,25 +102,25 @@ public class ComprobanteNovaViajesDaoImpl implements ComprobanteNovaViajesDao {
 			int i=1;
 			cs.registerOutParameter(i++, Types.OTHER);
 			
-			if (comprobanteBusqueda.getCodigoEntero() != null){
+			if (comprobanteBusqueda.getCodigoEntero() != null && comprobanteBusqueda.getCodigoEntero().intValue()!=0){
 				cs.setInt(i++, comprobanteBusqueda.getCodigoEntero().intValue());
 			}
 			else{
 				cs.setNull(i++, Types.INTEGER);
 			}
-			if (comprobanteBusqueda.getIdServicio() != null){
+			if (comprobanteBusqueda.getIdServicio() != null && comprobanteBusqueda.getIdServicio().intValue()!=0){
 				cs.setInt(i++, comprobanteBusqueda.getIdServicio().intValue());
 			}
 			else{
 				cs.setNull(i++, Types.INTEGER);
 			}
-			if (comprobanteBusqueda.getTitular().getCodigoEntero() != null){
+			if (comprobanteBusqueda.getTitular().getCodigoEntero() != null && comprobanteBusqueda.getTitular().getCodigoEntero().intValue()!=0){
 				cs.setInt(i++, comprobanteBusqueda.getTitular().getCodigoEntero().intValue());
 			}
 			else{
 				cs.setNull(i++, Types.INTEGER);
 			}
-			if (comprobanteBusqueda.getTipoComprobante().getCodigoEntero() != null){
+			if (comprobanteBusqueda.getTipoComprobante().getCodigoEntero() != null && comprobanteBusqueda.getTipoComprobante().getCodigoEntero().intValue()!=0){
 				cs.setInt(i++, comprobanteBusqueda.getTipoComprobante().getCodigoEntero().intValue());
 			}
 			else{
