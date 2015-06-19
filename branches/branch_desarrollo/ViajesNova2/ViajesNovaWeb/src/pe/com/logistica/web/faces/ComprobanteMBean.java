@@ -38,6 +38,7 @@ public class ComprobanteMBean extends BaseMBean {
 	private static final long serialVersionUID = 3796481899238208609L;
 	
 	private ComprobanteBusqueda comprobanteBusqueda;
+	private Comprobante comprobanteDetalle;
 	
 	private Proveedor proveedor;
 	
@@ -162,6 +163,22 @@ public class ComprobanteMBean extends BaseMBean {
 	 */
 	public void setListadoProveedores(List<Proveedor> listadoProveedores) {
 		this.listadoProveedores = listadoProveedores;
+	}
+
+
+	/**
+	 * @return the comprobanteDetalle
+	 */
+	public Comprobante getComprobanteDetalle() {
+		return comprobanteDetalle;
+	}
+
+
+	/**
+	 * @param comprobanteDetalle the comprobanteDetalle to set
+	 */
+	public void setComprobanteDetalle(Comprobante comprobanteDetalle) {
+		this.comprobanteDetalle = comprobanteDetalle;
 	}
 
 }
