@@ -26,12 +26,6 @@ import pe.com.logistica.negocio.util.UtilJdbc;
  */
 public class ServicioNegocioDaoImpl implements ServicioNegocioDao {
 
-	/**
-	 * 
-	 */
-	public ServicioNegocioDaoImpl() {
-		// TODO Auto-generated constructor stub
-	}
 
 	/* (non-Javadoc)
 	 * @see pe.com.logistica.negocio.dao.ServicioNegocioDao#calcularCuota(pe.com.logistica.bean.negocio.ServicioAgencia)
