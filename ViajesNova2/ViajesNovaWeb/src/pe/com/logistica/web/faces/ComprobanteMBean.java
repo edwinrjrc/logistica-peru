@@ -170,6 +170,9 @@ public class ComprobanteMBean extends BaseMBean {
 	 * @return the comprobanteDetalle
 	 */
 	public Comprobante getComprobanteDetalle() {
+		if (comprobanteDetalle == null){
+			comprobanteDetalle = new Comprobante();
+		}
 		return comprobanteDetalle;
 	}
 
