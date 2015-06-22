@@ -106,7 +106,7 @@
 					<h:outputText value="" />
 					<rich:dataTable value="#{cargaReporteProveedorMBean.dataExcel}"
 						id="idTableExcel" var="fila" style="width:100%;"
-						iterationStatusVar="it" rows="7"
+						iterationStatusVar="it"
 						rendered="#{cargaReporteProveedorMBean.tablaLlena}">
 						<rich:column>
 							<f:facet name="header">
@@ -275,15 +275,28 @@
 							<h:outputText value="#{fila.columna20.valorCadena}" />
 						</rich:column>
 						<rich:column>
+							<f:facet name="header">
+								<h:outputText value="Tipo Comprobante" />
+							</f:facet>
+							<h:selectOneMenu value="#{fila.tipoComprobante.codigoEntero}">
+								<f:selectItem itemLabel="-Seleccione-" />
+								<f:selectItems value="#{catalogoMBean.catalogoTipoComprobante}"></f:selectItems>
+							</h:selectOneMenu>
+						</rich:column>
+						<rich:column>
+							<f:facet name="header">
+								<h:outputText value="Número Comprobante" />
+							</f:facet>
+							<h:inputText value="#{fila.numeroComprobante}" />
+						</rich:column>
+						<rich:column>
 							<h:selectBooleanCheckbox value="#{fila.seleccionar}" />
 						</rich:column>
-						<f:facet name="footer">
-							<rich:dataScroller for="idTableExcel"></rich:dataScroller>
-						</f:facet>
 					</rich:dataTable>
 					<h:outputText value="" />
 					<f:facet name="footer">
-						<h:panelGrid cellpadding="0" cellspacing="0" border="0" columns="1" style="width:100%;text-align:center;">
+						<h:panelGrid cellpadding="0" cellspacing="0" border="0"
+							columns="1" style="width:100%;text-align:center;">
 							<a4j:commandButton value="Grabar Reporte"></a4j:commandButton>
 							<a4j:commandButton value="Generar Comprobantes"></a4j:commandButton>
 						</h:panelGrid>
