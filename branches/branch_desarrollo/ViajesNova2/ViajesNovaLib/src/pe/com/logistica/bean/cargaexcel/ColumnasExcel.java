@@ -4,6 +4,7 @@
 package pe.com.logistica.bean.cargaexcel;
 
 import pe.com.logistica.bean.base.BaseNegocio;
+import pe.com.logistica.bean.base.BaseVO;
 
 /**
  * @author EDWREB
@@ -37,6 +38,9 @@ public class ColumnasExcel extends BaseNegocio {
 	private CeldaExcel columna19;
 	private CeldaExcel columna20;
 	private boolean seleccionar;
+	
+	private BaseVO tipoComprobante;
+	private String numeroComprobante;
 
 	/**
 	 * @return the columna1
@@ -424,6 +428,34 @@ public class ColumnasExcel extends BaseNegocio {
 	 */
 	public void setIdArchivo(Integer idArchivo) {
 		this.idArchivo = idArchivo;
+	}
+
+	/**
+	 * @return the tipoComprobante
+	 */
+	public BaseVO getTipoComprobante() {
+		return tipoComprobante;
+	}
+
+	/**
+	 * @param tipoComprobante the tipoComprobante to set
+	 */
+	public void setTipoComprobante(BaseVO tipoComprobante) {
+		this.tipoComprobante = tipoComprobante;
+	}
+
+	/**
+	 * @return the numeroComprobante
+	 */
+	public String getNumeroComprobante() {
+		return numeroComprobante;
+	}
+
+	/**
+	 * @param numeroComprobante the numeroComprobante to set
+	 */
+	public void setNumeroComprobante(String numeroComprobante) {
+		this.numeroComprobante = numeroComprobante;
 	}
 
 }
