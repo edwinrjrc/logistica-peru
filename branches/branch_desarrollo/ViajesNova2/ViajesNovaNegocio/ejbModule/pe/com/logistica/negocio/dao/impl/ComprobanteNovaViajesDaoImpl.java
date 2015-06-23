@@ -15,6 +15,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import pe.com.logistica.bean.negocio.Comprobante;
 import pe.com.logistica.bean.negocio.ComprobanteBusqueda;
+import pe.com.logistica.bean.negocio.DetalleComprobante;
 import pe.com.logistica.negocio.dao.ComprobanteNovaViajesDao;
 import pe.com.logistica.negocio.util.UtilConexion;
 import pe.com.logistica.negocio.util.UtilJdbc;
@@ -132,8 +133,18 @@ public class ComprobanteNovaViajesDaoImpl implements ComprobanteNovaViajesDao {
 			else{
 				cs.setNull(i++, Types.VARCHAR);
 			}
-			cs.setDate(i++, UtilJdbc.convertirUtilDateSQLDate(comprobanteBusqueda.getFechaDesde()));
-			cs.setDate(i++, UtilJdbc.convertirUtilDateSQLDate(comprobanteBusqueda.getFechaHasta()));
+			if (comprobanteBusqueda.getFechaDesde() != null){
+				cs.setDate(i++, UtilJdbc.convertirUtilDateSQLDate(comprobanteBusqueda.getFechaDesde()));
+			}
+			else{
+				cs.setNull(i++, Types.DATE);
+			}
+			if (comprobanteBusqueda.getFechaHasta() != null){
+				cs.setDate(i++, UtilJdbc.convertirUtilDateSQLDate(comprobanteBusqueda.getFechaHasta()));
+			}
+			else{
+				cs.setNull(i++, Types.DATE);
+			}
 			
 			cs.execute();
 			rs = (ResultSet) cs.getObject(1);
@@ -153,6 +164,56 @@ public class ComprobanteNovaViajesDaoImpl implements ComprobanteNovaViajesDao {
 				comprobante.setFechaComprobante(UtilJdbc.obtenerFecha(rs, "fechacomprobante"));
 				comprobante.setTotalComprobante(UtilJdbc.obtenerBigDecimal(rs, "totalcomprobante"));
 				resultado.add(comprobante);
+			}
+		} catch (SQLException e) {
+			throw new SQLException(e);
+		} finally {
+			try {
+				if (rs != null) {
+					rs.close();
+				}
+				if (cs != null) {
+					cs.close();
+				}
+				if (conn != null) {
+					conn.close();
+				}
+			} catch (SQLException e) {
+				throw new SQLException(e);
+			}
+		}
+		return resultado;
+	}
+
+	@Override
+	public List<DetalleComprobante> consultarDetalleComprobante(
+			Integer idComprobante) throws SQLException {
+		List<DetalleComprobante> resultado = null; 
+		Connection conn = null;
+		CallableStatement cs = null;
+		ResultSet rs = null;
+		String sql = "";
+		try {
+			sql = "{ ? = call negocio.fn_consultardetallecomprobantegenerado(?)}";
+			conn = UtilConexion.obtenerConexion();
+			cs = conn.prepareCall(sql);
+			int i=1;
+			cs.registerOutParameter(i++, Types.OTHER);
+			cs.setInt(i++, idComprobante.intValue());
+			
+			cs.execute();
+			rs = (ResultSet) cs.getObject(1);
+			
+			resultado = new ArrayList<DetalleComprobante>();
+			DetalleComprobante detalleComprobante = null;
+			while (rs.next()){
+				detalleComprobante = new DetalleComprobante();
+				detalleComprobante.setCodigoEntero(UtilJdbc.obtenerNumero(rs, "id"));
+				detalleComprobante.setCantidad(UtilJdbc.obtenerNumero(rs, "cantidad"));
+				detalleComprobante.setConcepto(UtilJdbc.obtenerCadena(rs, "detalleconcepto"));
+				detalleComprobante.setPrecioUnitario(UtilJdbc.obtenerBigDecimal(rs, "preciounitario"));
+				detalleComprobante.setTotalDetalle(UtilJdbc.obtenerBigDecimal(rs, "totaldetalle"));
+				resultado.add(detalleComprobante);
 			}
 		} catch (SQLException e) {
 			throw new SQLException(e);

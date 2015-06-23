@@ -228,4 +228,7 @@ public interface NegocioServicio {
 			throws ErrorRegistroDataException, SQLException, Exception;
 
 	public List<Comprobante> consultarComprobantesGenerados(ComprobanteBusqueda comprobanteBusqueda) throws ErrorConsultaDataException;
+
+	Comprobante consultarComprobanteGenerado(Integer idComprobante)
+			throws ErrorConsultaDataException;
 }

@@ -82,6 +82,15 @@ public class ComprobanteMBean extends BaseMBean {
 			}
 		}
 	}
+	
+	public void consultarComprobante(Integer idComprobante){
+		try {
+			this.setComprobanteDetalle(null);
+			this.setComprobanteDetalle(this.negocioServicio.consultarComprobanteGenerado(idComprobante));
+		} catch (ErrorConsultaDataException e) {
+			e.printStackTrace();
+		}
+	}
 	/**
 	 * =======================================================================================================================================
 	 */
