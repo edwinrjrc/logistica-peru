@@ -9,6 +9,7 @@ import java.util.List;
 
 import pe.com.logistica.bean.negocio.Comprobante;
 import pe.com.logistica.bean.negocio.ComprobanteBusqueda;
+import pe.com.logistica.bean.negocio.DetalleComprobante;
 
 /**
  * @author Edwin
@@ -23,5 +24,7 @@ public interface ComprobanteNovaViajesDao {
 	public Integer eliminarComprobantesAdicionales(Integer idServicio) throws SQLException;
 	
 	public List<Comprobante> consultarComprobantes(ComprobanteBusqueda comprobanteBusqueda) throws SQLException;
+	
+	public List<DetalleComprobante> consultarDetalleComprobante (Integer idComprobante) throws SQLException;
 	
 }

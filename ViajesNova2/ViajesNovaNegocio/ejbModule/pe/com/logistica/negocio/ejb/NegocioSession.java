@@ -2413,4 +2413,26 @@ public class NegocioSession implements NegocioSessionRemote,
 			throw new ErrorConsultaDataException(e);
 		}
 	}
+
+	@Override
+	public Comprobante consultarComprobante(Integer idComprobante)
+			throws ErrorConsultaDataException {
+		try {
+			ComprobanteNovaViajesDao comprobanteNovaViajesDao = new ComprobanteNovaViajesDaoImpl();
+			
+			ComprobanteBusqueda comprobanteBusqueda = new ComprobanteBusqueda();
+			comprobanteBusqueda.setCodigoEntero(idComprobante);
+			
+			List<Comprobante> comprobantes = comprobanteNovaViajesDao.consultarComprobantes(comprobanteBusqueda);
+			
+			Comprobante comprobante = comprobantes.get(0);
+			comprobante.setDetalleComprobante(comprobanteNovaViajesDao.consultarDetalleComprobante(idComprobante));
+			
+			return comprobante;
+		} catch (SQLException e) {
+			throw new ErrorConsultaDataException(e);
+		} catch (Exception e){
+			throw new ErrorConsultaDataException(e);
+		}
+	}
 }

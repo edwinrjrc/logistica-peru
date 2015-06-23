@@ -442,5 +442,11 @@ public class NegocioServicioImpl implements NegocioServicio {
 			throws ErrorConsultaDataException {
 		return ejbSession.consultarComprobantesGenerados(comprobanteBusqueda);
 	}
+	
+	@Override
+	public Comprobante consultarComprobanteGenerado(Integer idComprobante)
+			throws ErrorConsultaDataException {
+		return ejbSession.consultarComprobante(idComprobante);
+	}
 }
 	
