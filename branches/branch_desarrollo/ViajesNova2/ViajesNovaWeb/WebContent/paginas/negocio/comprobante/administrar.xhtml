@@ -156,7 +156,10 @@
 							<f:facet name="header">
 								<h:outputText value="Opcion" />
 							</f:facet>
-							<a4j:commandButton value="Ver"></a4j:commandButton>
+							<a4j:commandButton value="Ver"
+								oncomplete="#{rich:component('idModalfrcomprobante')}.show();"
+								action="#{comprobanteMBean.consultarComprobante(fila.codigoEntero)}"
+								render="idTabPnComprobante"></a4j:commandButton>
 						</rich:column>
 						<f:facet name="footer">
 							<rich:dataScroller for="idTabla"></rich:dataScroller>
@@ -166,6 +169,9 @@
 				</h:panelGrid>
 			</h:panelGrid>
 		</h:form>
+
+		<ui:include
+			src="#{facesContext.externalContext.requestContextPath}/../paginas/negocio/comprobante/formcomprobante.xhtml" />
 		<ui:include
 			src="#{facesContext.externalContext.requestContextPath}/../paginas/negocio/comprobante/modal/busquedaproveedor.xhtml" />
 	</ui:define>

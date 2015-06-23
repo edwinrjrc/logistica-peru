@@ -223,4 +223,6 @@ public interface NegocioSessionLocal {
 			throws ErrorRegistroDataException, SQLException, Exception;
 	
 	public List<Comprobante> consultarComprobantesGenerados(ComprobanteBusqueda comprobanteBusqueda) throws ErrorConsultaDataException;
+	
+	public Comprobante consultarComprobante (Integer idComprobante) throws ErrorConsultaDataException;
 }
