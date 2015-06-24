@@ -63,7 +63,7 @@ public class ArchivoReporteDaoImpl implements ArchivoReporteDao {
 			Connection conn) throws SQLException {
 		boolean resultado = false;
 		CallableStatement cs = null;
-		String sql = "{ ? = call negocio.fn_ingresardetallearchivocargado(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) }";
+		String sql = "{ ? = call negocio.fn_ingresardetallearchivocargado(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) }";
 		
 		try {
 			cs = conn.prepareCall(sql);
@@ -191,6 +191,18 @@ public class ArchivoReporteDaoImpl implements ArchivoReporteDao {
 				cs.setNull(i++, Types.VARCHAR);
 			}
 			cs.setBoolean(i++, columnasExcel.isSeleccionar());
+			if (columnasExcel.getTipoComprobante().getCodigoEntero()!=null && columnasExcel.getTipoComprobante().getCodigoEntero().intValue()!=0){
+				cs.setInt(i++, columnasExcel.getTipoComprobante().getCodigoEntero().intValue());
+			}
+			else{
+				cs.setNull(i++, Types.INTEGER);
+			}
+			if (StringUtils.isBlank(columnasExcel.getNumeroComprobante())){
+				cs.setString(i++, columnasExcel.getNumeroComprobante());
+			}
+			else{
+				cs.setNull(i++, Types.VARCHAR);
+			}
 			cs.setString(i++, columnasExcel.getUsuarioCreacion());
 			cs.setString(i++, columnasExcel.getIpCreacion());
 			cs.execute();

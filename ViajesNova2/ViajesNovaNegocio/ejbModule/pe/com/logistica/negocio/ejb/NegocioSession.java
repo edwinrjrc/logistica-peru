@@ -20,6 +20,8 @@ import org.apache.commons.lang3.StringUtils;
 
 import pe.com.logistica.bean.Util.UtilParse;
 import pe.com.logistica.bean.base.BaseVO;
+import pe.com.logistica.bean.cargaexcel.ColumnasExcel;
+import pe.com.logistica.bean.cargaexcel.ReporteArchivo;
 import pe.com.logistica.bean.negocio.Cliente;
 import pe.com.logistica.bean.negocio.Comprobante;
 import pe.com.logistica.bean.negocio.ComprobanteBusqueda;
@@ -45,6 +47,7 @@ import pe.com.logistica.bean.negocio.ServicioNovios;
 import pe.com.logistica.bean.negocio.ServicioProveedor;
 import pe.com.logistica.bean.negocio.Telefono;
 import pe.com.logistica.bean.negocio.Ubigeo;
+import pe.com.logistica.negocio.dao.ArchivoReporteDao;
 import pe.com.logistica.negocio.dao.ClienteDao;
 import pe.com.logistica.negocio.dao.ComprobanteNovaViajesDao;
 import pe.com.logistica.negocio.dao.ComunDao;
@@ -63,6 +66,7 @@ import pe.com.logistica.negocio.dao.ServicioNovaViajesDao;
 import pe.com.logistica.negocio.dao.ServicioNoviosDao;
 import pe.com.logistica.negocio.dao.TelefonoDao;
 import pe.com.logistica.negocio.dao.UbigeoDao;
+import pe.com.logistica.negocio.dao.impl.ArchivoReporteDaoImpl;
 import pe.com.logistica.negocio.dao.impl.ClienteDaoImpl;
 import pe.com.logistica.negocio.dao.impl.ComprobanteNovaViajesDaoImpl;
 import pe.com.logistica.negocio.dao.impl.ComunDaoImpl;
@@ -2433,6 +2437,30 @@ public class NegocioSession implements NegocioSessionRemote,
 			throw new ErrorConsultaDataException(e);
 		} catch (Exception e){
 			throw new ErrorConsultaDataException(e);
+		}
+	}
+	
+	@Override
+	public boolean grabarComprobantesReporte(ReporteArchivo reporteArchivo, ColumnasExcel columnasExcel, List<ColumnasExcel> dataExcel) throws ErrorRegistroDataException, SQLException{
+		ArchivoReporteDao archivoReporteDao = new ArchivoReporteDaoImpl();
+		Connection conn = null;
+		
+		try {
+			conn = UtilConexion.obtenerConexion();
+			archivoReporteDao.registrarArchivoReporteCabecera(reporteArchivo, conn);
+			archivoReporteDao.registrarDetalleArchivoReporte(columnasExcel, conn);
+			
+			for (ColumnasExcel columnasExcel2 : dataExcel) {
+				archivoReporteDao.registrarDetalleArchivoReporte(columnasExcel2, conn);
+			}
+			
+			return true;
+		} catch (SQLException e) {
+			throw new ErrorRegistroDataException(e);
+		} finally{
+			if (conn != null){
+				conn.close();
+			}
 		}
 	}
 }

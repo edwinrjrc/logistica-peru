@@ -434,6 +434,9 @@ public class ColumnasExcel extends BaseNegocio {
 	 * @return the tipoComprobante
 	 */
 	public BaseVO getTipoComprobante() {
+		if (tipoComprobante == null){
+			tipoComprobante = new BaseVO();
+		}
 		return tipoComprobante;
 	}
 

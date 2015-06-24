@@ -7,11 +7,16 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+import javax.faces.context.FacesContext;
+import javax.naming.NamingException;
+import javax.servlet.ServletContext;
+import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
@@ -25,6 +30,10 @@ import org.richfaces.model.UploadedFile;
 import pe.com.logistica.bean.cargaexcel.CeldaExcel;
 import pe.com.logistica.bean.cargaexcel.ColumnasExcel;
 import pe.com.logistica.bean.cargaexcel.ReporteArchivo;
+import pe.com.logistica.bean.negocio.Usuario;
+import pe.com.logistica.negocio.exception.ErrorRegistroDataException;
+import pe.com.logistica.web.servicio.NegocioServicio;
+import pe.com.logistica.web.servicio.impl.NegocioServicioImpl;
 import pe.com.logistica.web.util.UtilWeb;
 
 /**
@@ -53,10 +62,18 @@ public class CargaReporteProveedorMBean extends BaseMBean {
 	private List<ColumnasExcel> dataExcel = null;
 	
 	private boolean tablaLlena;
+	
+	private NegocioServicio negocioServicio;
 
 	public CargaReporteProveedorMBean() {
-		// TODO Auto-generated constructor stub
-	}
+		try {
+			ServletContext servletContext = (ServletContext) FacesContext
+					.getCurrentInstance().getExternalContext().getContext();
+			negocioServicio = new NegocioServicioImpl(servletContext);
+		} catch (NamingException e) {
+			logger.error(e.getMessage(), e);
+		}
+	}	
 
 	public void listenerExcel(FileUploadEvent event) {
 		UploadedFile archivo = event.getUploadedFile();
@@ -64,6 +81,7 @@ public class CargaReporteProveedorMBean extends BaseMBean {
 			this.setTablaLlena(false);
 			this.setDataExcel(null);
 			this.setStreamArchivo(archivo.getInputStream());
+			this.getReporteArchivo().setNombreArchivo(archivo.getName());
 			
 			this.setTablaLlena(true);
 		} catch (IOException e) {
@@ -135,6 +153,8 @@ public class CargaReporteProveedorMBean extends BaseMBean {
 							iCelda++;
 							j++;
 						}
+						columna.getTipoComprobante().setCodigoEntero(this.getReporteArchivo().getTipoComprobante().getCodigoEntero());
+						columna.setNumeroComprobante(this.getReporteArchivo().getNumeroComprobante());
 						this.getDataExcel().add(columna);
 					}
 				}
@@ -177,6 +197,28 @@ public class CargaReporteProveedorMBean extends BaseMBean {
 			} catch (IOException e) {
 				logger.error(e.getMessage(), e);
 			}
+		}
+	}
+	
+	public void grabarReporteProveedor(){
+		try {
+			HttpSession session = obtenerSession(false);
+			Usuario usuario = (Usuario) session
+					.getAttribute("usuarioSession");
+			getReporteArchivo().setUsuarioCreacion(
+					usuario.getUsuario());
+			getReporteArchivo().setIpCreacion(
+					obtenerRequest().getRemoteAddr());
+			
+			this.negocioServicio.grabarComprobantesReporte(getReporteArchivo(), getColumnasExcel(), getDataExcel());
+			
+			this.mostrarMensajeExito("Comprobantes guardados satisfactoriamente");
+		} catch (ErrorRegistroDataException e) {
+			this.mostrarMensajeError(e.getMessage());
+			logger.error(e.getMessage(), e);
+		} catch (SQLException e) {
+			this.mostrarMensajeError(e.getMessage());
+			logger.error(e.getMessage(), e);
 		}
 	}
 

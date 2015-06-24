@@ -26,7 +26,8 @@ public class ReporteArchivo extends BaseNegocio {
 	private int numeroFilas;
 	private ColumnasExcel cabeceraArchivo;
 	private List<ColumnasExcel> dataExcel;
-	
+	private BaseVO tipoComprobante;
+	private String numeroComprobante;
 	
 	/**
 	 * @return the nombreArchivo
@@ -120,6 +121,33 @@ public class ReporteArchivo extends BaseNegocio {
 	 */
 	public void setProveedor(BaseVO proveedor) {
 		this.proveedor = proveedor;
+	}
+	/**
+	 * @return the tipoComprobante
+	 */
+	public BaseVO getTipoComprobante() {
+		if (tipoComprobante == null){
+			tipoComprobante = new BaseVO();
+		}
+		return tipoComprobante;
+	}
+	/**
+	 * @param tipoComprobante the tipoComprobante to set
+	 */
+	public void setTipoComprobante(BaseVO tipoComprobante) {
+		this.tipoComprobante = tipoComprobante;
+	}
+	/**
+	 * @return the numeroComprobante
+	 */
+	public String getNumeroComprobante() {
+		return numeroComprobante;
+	}
+	/**
+	 * @param numeroComprobante the numeroComprobante to set
+	 */
+	public void setNumeroComprobante(String numeroComprobante) {
+		this.numeroComprobante = numeroComprobante;
 	}
 	
 	

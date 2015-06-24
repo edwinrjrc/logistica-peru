@@ -7,6 +7,8 @@ import java.util.List;
 import javax.ejb.Local;
 
 import pe.com.logistica.bean.base.BaseVO;
+import pe.com.logistica.bean.cargaexcel.ColumnasExcel;
+import pe.com.logistica.bean.cargaexcel.ReporteArchivo;
 import pe.com.logistica.bean.negocio.Cliente;
 import pe.com.logistica.bean.negocio.Comprobante;
 import pe.com.logistica.bean.negocio.ComprobanteBusqueda;
@@ -225,4 +227,6 @@ public interface NegocioSessionLocal {
 	public List<Comprobante> consultarComprobantesGenerados(ComprobanteBusqueda comprobanteBusqueda) throws ErrorConsultaDataException;
 	
 	public Comprobante consultarComprobante (Integer idComprobante) throws ErrorConsultaDataException;
+	
+	public boolean grabarComprobantesReporte(ReporteArchivo reporteArchivo, ColumnasExcel columnasExcel, List<ColumnasExcel> dataExcel) throws ErrorRegistroDataException, SQLException;
 }

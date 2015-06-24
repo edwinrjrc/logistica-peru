@@ -14,6 +14,8 @@ import javax.naming.NamingException;
 import javax.servlet.ServletContext;
 
 import pe.com.logistica.bean.base.BaseVO;
+import pe.com.logistica.bean.cargaexcel.ColumnasExcel;
+import pe.com.logistica.bean.cargaexcel.ReporteArchivo;
 import pe.com.logistica.bean.negocio.Cliente;
 import pe.com.logistica.bean.negocio.Comprobante;
 import pe.com.logistica.bean.negocio.ComprobanteBusqueda;
@@ -447,6 +449,13 @@ public class NegocioServicioImpl implements NegocioServicio {
 	public Comprobante consultarComprobanteGenerado(Integer idComprobante)
 			throws ErrorConsultaDataException {
 		return ejbSession.consultarComprobante(idComprobante);
+	}
+
+	@Override
+	public boolean grabarComprobantesReporte(ReporteArchivo reporteArchivo,
+			ColumnasExcel columnasExcel, List<ColumnasExcel> dataExcel)
+			throws ErrorRegistroDataException, SQLException {
+		return ejbSession.grabarComprobantesReporte(reporteArchivo, columnasExcel, dataExcel);
 	}
 }
 	
